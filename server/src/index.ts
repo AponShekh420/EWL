@@ -5,6 +5,10 @@ import express, { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
 import path from "path";
 import { errorHandler, notFoundHandler } from "./middleware/errorMiddleware";
+
+// routes
+import authRouter from "./routes/authRouter";
+
 dotenv.config();
 
 const app = express();
@@ -34,6 +38,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "../public")));
 app.use(express.urlencoded({ extended: true, limit: "5000mb" }));
 app.use(express.json({ limit: "5000mb" }));
+
+// Authentication
+app.use("/api/auth", authRouter);
 
 app.get("/", (req: Request, res: Response) => {
   res.status(200).json({ msg: "Welcome to the home page" });
