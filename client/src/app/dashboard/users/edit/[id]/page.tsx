@@ -1,5 +1,5 @@
 import PageHeading from "@/components/dashboard/common/PageHeading";
-import UserForm from "@/components/dashboard/ecommerce/users/UserForm";
+import UserForm from "@/components/dashboard/users/UserForm";
 import { Button } from "@/components/ui/button";
 
 import Link from "next/link";
