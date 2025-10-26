@@ -27,28 +27,28 @@ export default function UserForm() {
               <InputBox
                 label="Username"
                 placeholder="Username"
-                name="username"
-                value={userForm.username}
+                name="userName"
+                value={userForm.userName}
                 onChange={(e) =>
-                  dispatch(addUserField({ username: e.target.value }))
+                  dispatch(addUserField({ userName: e.target.value }))
                 }
               />
               <InputBox
                 label="First Name"
                 placeholder="First Name"
-                name="firstname"
-                value={userForm.firstname}
+                name="firstName"
+                value={userForm.firstName}
                 onChange={(e) =>
-                  dispatch(addUserField({ firstname: e.target.value }))
+                  dispatch(addUserField({ firstName: e.target.value }))
                 }
               />
               <InputBox
                 label="Last Name"
                 placeholder="Last Name"
-                name="lastname"
-                value={userForm.lastname}
+                name="lastName"
+                value={userForm.lastName}
                 onChange={(e) =>
-                  dispatch(addUserField({ lastname: e.target.value }))
+                  dispatch(addUserField({ lastName: e.target.value }))
                 }
               />
               <InputBox label="Email" placeholder="Email" name="email" />
@@ -63,7 +63,7 @@ export default function UserForm() {
               />
               <InputBox
                 label="Confirm password"
-                placeholder="c-password"
+                placeholder="Confirm password"
                 name="cpassword"
                 value={userForm.cpassword}
                 onChange={(e) =>
@@ -97,9 +97,9 @@ export default function UserForm() {
               <div className="capitalize ">
                 <Label className="mb-4">Are you an orthodox Jew?</Label>
                 <RadioGroup
-                  value={userForm.orthodoxJew}
+                  value={userForm.isOrthodoxJew}
                   onValueChange={(val) =>
-                    dispatch(addUserField({ orthodoxJew: val }))
+                    dispatch(addUserField({ isOrthodoxJew: val }))
                   }
                 >
                   <div className="flex items-center space-x-2">
@@ -117,9 +117,9 @@ export default function UserForm() {
                   Are you married or ever been married?
                 </Label>
                 <RadioGroup
-                  value={userForm.marriedOrEverMarried}
+                  value={userForm.maritalStatus}
                   onValueChange={(val) =>
-                    dispatch(addUserField({ marriedOrEverMarried: val }))
+                    dispatch(addUserField({ maritalStatus: val }))
                   }
                 >
                   <div className="flex items-center space-x-2">
@@ -138,7 +138,7 @@ export default function UserForm() {
                     />
                     <Label htmlFor="option-one">Other</Label>
                   </div>
-                  {userForm.marriedOrEverMarried === "other" && (
+                  {userForm.maritalStatus === "other" && (
                     <InputBox name="write here" label="" />
                   )}
                 </RadioGroup>
@@ -150,11 +150,11 @@ export default function UserForm() {
                   Do you keep Shabbos ,Kashrus and Taharas Hamishpacha?
                 </Label>
                 <RadioGroup
-                  value={userForm.keepShabbosKashrusTaharasHamishpacha}
+                  value={userForm.keepsMitzvos}
                   onValueChange={(val) =>
                     dispatch(
                       addUserField({
-                        keepShabbosKashrusTaharasHamishpacha: val,
+                        keepsMitzvos: val,
                       })
                     )
                   }
@@ -175,20 +175,22 @@ export default function UserForm() {
               </div>
               <InputBox
                 label="How long is the preparation (Chafifa ) for mikvah on the day of mikvah supposed to take?"
-                placeholder="Mikvah experience"
-                name="mikvahExperience"
-                value={userForm.mikvahExperience}
+                placeholder="chafifa duration"
+                name="chafifaDuration"
+                value={userForm.chafifaDuration}
                 onChange={(e) =>
-                  dispatch(addUserField({ mikvahExperience: e.target.value }))
+                  dispatch(addUserField({ chafifaDuration: e.target.value }))
                 }
               />
               <TextBox
                 label="if hot chicken soup spilled in your dairy sink, what would you do?"
                 placeholder="Describe here"
-                name="hotChickenSoup"
-                value={userForm.hotChickenSoup}
+                name="Chicken Soup In DairySink"
+                value={userForm.chickenSoupInDairySink}
                 onChange={(e) =>
-                  dispatch(addUserField({ hotChickenSoup: e.target.value }))
+                  dispatch(
+                    addUserField({ chickenSoupInDairySink: e.target.value })
+                  )
                 }
               />
             </div>

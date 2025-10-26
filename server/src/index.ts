@@ -5,7 +5,6 @@ import express, { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
 import path from "path";
 import { errorHandler, notFoundHandler } from "./middleware/errorMiddleware";
-
 dotenv.config();
 
 const app = express();
@@ -42,6 +41,7 @@ app.get("/", (req: Request, res: Response) => {
 //global error handler for every request
 app.use(notFoundHandler);
 app.use(errorHandler);
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port http://localhost:${PORT}`);

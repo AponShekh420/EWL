@@ -1,19 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  username: "",
-  firstname: "",
-  lastname: "",
+  userName: "",
+  firstName: "",
+  lastName: "",
   email: "",
   password: "",
   cpassword: "",
-  gender: "",
   avatar: null,
-  orthodoxJew: "",
-  marriedOrEverMarried: "",
-  keepShabbosKashrusTaharasHamishpacha: "",
-  mikvahExperience: "",
-  hotChickenSoup: "",
+  gender: "",
+  isOrthodoxJew: "",
+  maritalStatus: "",
+  keepsMitzvos: "",
+  chafifaDuration: "",
+  chickenSoupInDairySink: "",
 };
 export type UserFormState = typeof initialState;
 export const userFormSlice = createSlice({
