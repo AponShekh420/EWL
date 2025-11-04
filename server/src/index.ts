@@ -8,6 +8,7 @@ import { errorHandler, notFoundHandler } from "./middleware/errorMiddleware";
 
 // routes
 import authRouter from "./routes/authRouter";
+import ecommerceRouter from "./routes/ecommerceRouter";
 
 dotenv.config();
 
@@ -41,6 +42,7 @@ app.use(express.json({ limit: "5000mb" }));
 
 // Authentication
 app.use("/api/auth", authRouter);
+app.use("/api/ecommerce", ecommerceRouter);
 
 app.get("/", (req: Request, res: Response) => {
   res.status(200).json({ msg: "Welcome to the home page" });
