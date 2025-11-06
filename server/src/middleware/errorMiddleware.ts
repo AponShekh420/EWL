@@ -16,34 +16,46 @@ export const errorHandler = (
   res: Response,
   next: NextFunction
 ) => {
+  // 🔹 Handle Multer-specific errors first
   if (error instanceof multer.MulterError) {
-    let message = error.message;
+    let message = "File upload error";
 
     switch (error.code) {
       case "LIMIT_FILE_SIZE":
-        message = "File too large";
+        message = "File size too large";
         break;
       case "LIMIT_FILE_COUNT":
         message = "Too many files uploaded";
         break;
       case "LIMIT_UNEXPECTED_FILE":
-        message = "Unexpected field in form data";
+        message = "Unexpected file field in form data";
         break;
+      default:
+        message = error.message;
     }
 
     return res.status(400).json({
       success: false,
-      status: 400,
+      statusCode: 400,
       message,
+      error: {
+        name: "MulterError",
+        code: error.code,
+      },
     });
   }
 
+  // 🔹 General error handling
   const statusCode = error.statusCode || error.status || 500;
 
-  res.status(statusCode).json({
+  return res.status(statusCode).json({
     success: false,
-    status: statusCode,
-    message: error?.message || "Internal Server Error",
-    stack: process.env.NODE_ENV === "production" ? undefined : error.stack,
+    statusCode,
+    message: error.message || "Internal Server Error",
+    error: {
+      name: error.name || "ServerError",
+      details: error.details || null,
+    },
+    ...(process.env.NODE_ENV !== "production" && { stack: error.stack }),
   });
 };
