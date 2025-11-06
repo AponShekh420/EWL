@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import createError from "http-errors";
 import productModel from "../../../models/ProductModel";
+import { catchErrorSend } from "../../../utils/catchErrorSend";
 import { deleteFileFromLocal } from "../../../utils/deleteFileFromLocal";
 
 export const deleteProduct = async (
@@ -9,12 +10,14 @@ export const deleteProduct = async (
   next: NextFunction
 ) => {
   try {
-    const { id } = req.params;
-    const deletedProduct = await productModel.findByIdAndDelete(id);
+    const id = req.params?.id;
+    if (!id) return next(createError(400, "Product ID is required"));
 
+    const deletedProduct = await productModel.findByIdAndDelete(id);
     if (!deletedProduct) {
       return next(createError(404, `Product with id ${id} not found`));
     }
+
     deleteFileFromLocal(
       [
         ...deletedProduct.images,
@@ -23,14 +26,14 @@ export const deleteProduct = async (
       ],
       "/images/products"
     );
-    res
-      .status(201)
-      .json({ message: `Product with id ${id} deleted successfully` });
+
+    return res.status(200).json({
+      success: true,
+      status: 201,
+      data: deletedProduct,
+      message: `Product with id ${id} deleted successfully`,
+    });
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      next(createError(500, error.message));
-    } else {
-      next(createError(500, "server error"));
-    }
+    catchErrorSend(next, error);
   }
 };
