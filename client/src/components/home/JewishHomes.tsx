@@ -13,7 +13,7 @@ export default function JewishHomes() {
             couples toward harmony, intimacy, and thriving marriages
           </p>
         </div>
-        <div className="grid grid-cols-2 gap-x-32 mt-10">
+        <div className="grid sm:grid-cols-2 gap-y-16 gap-x-8 md:gap-x-16 lg:gap-x-32 mt-10">
           <div className="bg-white p-10 rounded-4xl shadow-lg">
             <h1 className="text-xl font-bold">Give With Impact</h1>
             <p className="mt-4 mb-8">
