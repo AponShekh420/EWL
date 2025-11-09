@@ -10,7 +10,12 @@ export const deleteFileFromLocal = (
   files.forEach((fileUrl) => {
     try {
       const filename = path.basename(fileUrl); // safer than split('/')
-      const filePath = path.join("public", dirPath, filename);
+      const filePath = path.join(
+        process.cwd(),
+        "public/images",
+        dirPath,
+        filename
+      );
 
       if (fs.existsSync(filePath)) {
         fs.unlinkSync(filePath);

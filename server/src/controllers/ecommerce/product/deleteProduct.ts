@@ -24,7 +24,7 @@ export const deleteProduct = async (
         deletedProduct.thumbnail,
         deletedProduct.attachment,
       ],
-      "/images/products"
+      "products"
     );
 
     return res.status(200).json({

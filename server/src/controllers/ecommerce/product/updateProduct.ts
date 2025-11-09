@@ -72,14 +72,13 @@ export const updateProduct = async (
 
     deletedImages.forEach((img) => {
       if (allOldFiles.includes(img)) {
-        deleteFileFromLocal(img, "/images/products");
+        deleteFileFromLocal(img, "products");
       }
     });
 
     // ---- RESPONSE ----
     return res.status(200).json({
       success: true,
-      status: 200,
       data: updatedProduct,
       message: "Product updated successfully",
     });
