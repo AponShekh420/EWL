@@ -8,6 +8,11 @@ import { getSubAllCategories } from "../controllers/ecommerce/category/sub-categ
 
 import { updateSubcategory } from "../controllers/ecommerce/category/sub-category/updateSubCategory";
 import { updateCategory } from "../controllers/ecommerce/category/updateCategory";
+import { createOrder } from "../controllers/ecommerce/order/createOrder";
+import { deleteOrder } from "../controllers/ecommerce/order/deleteOrder";
+import { getAllOrder } from "../controllers/ecommerce/order/getAllProduct";
+import { getOrderById } from "../controllers/ecommerce/order/getOrderById";
+import { updateOrder } from "../controllers/ecommerce/order/updateOrder";
 import { createProduct } from "../controllers/ecommerce/product/createProduct";
 import { deleteProduct } from "../controllers/ecommerce/product/deleteProduct";
 import { getAllProduct } from "../controllers/ecommerce/product/getAllProduct";
@@ -64,6 +69,12 @@ router.put(
 router.delete("/product/:id", deleteProduct);
 router.get("/product/:id", getProductById);
 router.get("/products", getAllProduct);
+//order routes
+router.post("/order", createOrder);
+router.put("/orders/:id", updateOrder);
+router.delete("/orders/:id", deleteOrder);
+router.get("/orders/:id", getOrderById);
+router.get("/orders", getAllOrder);
 
 //category routes
 router.post(
