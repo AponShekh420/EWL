@@ -102,7 +102,7 @@ export const validateProduct = (
       ).flat() as Express.Multer.File[];
       files.forEach((file) => {
         const imgPath = getImageUrl(req, "products", file);
-        deleteFileFromLocal(imgPath, "/images/products");
+        deleteFileFromLocal(imgPath, "products");
       });
     }
   };

@@ -9,7 +9,7 @@ export const multerUploader = (
   acceptedFileTypes: string[] = ["image/jpeg", "image/png", "image/webp"], // defaults
   maxFileSize?: number
 ) => {
-  const uploadDir = path.join(__dirname, "../../public", folder);
+  const uploadDir = path.join(process.cwd(), "public/images", folder);
   // Ensure upload folder exists
   if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: false });
