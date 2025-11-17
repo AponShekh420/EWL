@@ -33,7 +33,7 @@ export default function StuggleToStrength() {
           ))}
         </div>
       </div>
-      <div className="bg-darkPink text-white py-14 mt-14">
+      <div className="bg-darkPink text-white py-14 mt-14 px-8">
         <div className="text-center max-w-[800px] mx-auto">
           <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold">
             Reignite Your Marriage with Torah-Based Guidance

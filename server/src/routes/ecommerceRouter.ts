@@ -8,6 +8,11 @@ import { getSubAllCategories } from "../controllers/ecommerce/category/sub-categ
 
 import { updateSubcategory } from "../controllers/ecommerce/category/sub-category/updateSubCategory";
 import { updateCategory } from "../controllers/ecommerce/category/updateCategory";
+
+import { createCart } from "../controllers/ecommerce/cart/createCart";
+import { deleteCart } from "../controllers/ecommerce/cart/deleteCart";
+import { getAllCart } from "../controllers/ecommerce/cart/getAllCart";
+import { updateCart } from "../controllers/ecommerce/cart/updateCart";
 import { createOrder } from "../controllers/ecommerce/order/createOrder";
 import { deleteOrder } from "../controllers/ecommerce/order/deleteOrder";
 import { getAllOrder } from "../controllers/ecommerce/order/getAllProduct";
@@ -18,7 +23,18 @@ import { deleteProduct } from "../controllers/ecommerce/product/deleteProduct";
 import { getAllProduct } from "../controllers/ecommerce/product/getAllProduct";
 import { getProductById } from "../controllers/ecommerce/product/getProductById";
 import { updateProduct } from "../controllers/ecommerce/product/updateProduct";
+import { createReview } from "../controllers/ecommerce/review/createReview";
+import { deleteReview } from "../controllers/ecommerce/review/deleteReview";
+
+import { getProductByFilter } from "../controllers/ecommerce/product/getProductByFilter";
+import { getAllReview } from "../controllers/ecommerce/review/getAllReview";
+import { getAllReviewByProductId } from "../controllers/ecommerce/review/getAllReviewByProductId";
+import { updateReview } from "../controllers/ecommerce/review/updateReview";
 import { multerUploader } from "../lib/multer";
+import {
+  cartValidationRules,
+  validateCart,
+} from "../middleware/carts/cartMiddleware";
 import {
   categoryValidationRules,
   validateCategory,
@@ -28,9 +44,18 @@ import {
   validateSubcategory,
 } from "../middleware/category/subcategoryValidator";
 import {
+  orderValidationRules,
+  validateOrder,
+} from "../middleware/order/orderMiddleware";
+import {
   productValidationRules,
   validateProduct,
 } from "../middleware/product/productValidator";
+import {
+  reviewUpdateValidationRules,
+  reviewValidationRules,
+  validateReview,
+} from "../middleware/review/reviewMiddleware";
 import { convertBooleanFields } from "../utils/convertBooleanFields";
 const router = Router();
 
@@ -69,12 +94,31 @@ router.put(
 router.delete("/product/:id", deleteProduct);
 router.get("/product/:id", getProductById);
 router.get("/products", getAllProduct);
+router.get("/product-by-filter", getProductByFilter);
 //order routes
-router.post("/order", createOrder);
-router.put("/orders/:id", updateOrder);
+router.post("/order", orderValidationRules, validateOrder, createOrder);
+router.put("/orders/:id", orderValidationRules, validateOrder, updateOrder);
 router.delete("/orders/:id", deleteOrder);
 router.get("/orders/:id", getOrderById);
 router.get("/orders", getAllOrder);
+
+//cart routes
+router.post("/cart", cartValidationRules, validateCart, createCart);
+router.put("/carts/:id", cartValidationRules, validateCart, updateCart);
+router.delete("/carts/:id", deleteCart);
+router.get("/carts", getAllCart);
+
+//review routes
+router.post("/review", reviewValidationRules, validateReview, createReview);
+router.put(
+  "/reviews/:id",
+  reviewUpdateValidationRules,
+  validateReview,
+  updateReview
+);
+router.delete("/reviews/:id", deleteReview);
+router.get("/reviews", getAllReview);
+router.get("/reviews/:productId", getAllReviewByProductId);
 
 //category routes
 router.post(

@@ -5,10 +5,10 @@ export default function StrengthenYourMarriage() {
     <section className="mt-20 bg-lightRed py-10">
       <div className="container">
         <div className="text-center max-w-[700px] mx-auto">
-          <h1 className="text-3xl font-bold text-teal">
+          <h1 className="text-2xl md:text-3xl font-bold text-teal">
             Strengthen Your Marriage, Inside & Out
           </h1>
-          <p className="text-lg mt-4">
+          <p className="md:text-lg mt-4">
             Explore our services designed to guide Orthodox couples toward
             deeper connection, harmony, and kedushah in the home.
           </p>
