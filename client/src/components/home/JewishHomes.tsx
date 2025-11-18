@@ -5,10 +5,10 @@ export default function JewishHomes() {
     <section className="bg-[url('/images/home/sky-bg.webp')] bg-center bg-cover bg-no-repeat h-[350px] mb-58 py-12 mt-10">
       <div className="container">
         <div className="text-center max-w-[700px] mx-auto">
-          <h1 className="text-3xl font-bold">
+          <h1 className="text-2xl md:text-3xl font-bold">
             Together, We Can Strengthen Jewish Homes
           </h1>
-          <p className="text-lg mt-4">
+          <p className="md:text-lg mt-4">
             Your time and support make it possible for Ohel Miriam to guide more
             couples toward harmony, intimacy, and thriving marriages
           </p>

@@ -1,7 +1,8 @@
 import { model, Schema } from "mongoose";
+
 const orderSchema = new Schema(
   {
-    oderId: {
+    orderId: {
       type: Number,
       required: true,
     },
@@ -64,7 +65,7 @@ const orderSchema = new Schema(
         required: true,
       },
     },
-    ShippingInfo: {
+    shippingInfo: {
       customerName: {
         type: String,
         required: true,
@@ -111,4 +112,5 @@ const orderSchema = new Schema(
   },
   { timestamps: true }
 );
+
 export const OrderModel = model("order", orderSchema);

@@ -1,6 +1,6 @@
 import { model, Schema } from "mongoose";
 
-const CartSchema = new Schema(
+const reviewSchema = new Schema(
   {
     product: {
       type: Schema.Types.ObjectId,
@@ -12,17 +12,25 @@ const CartSchema = new Schema(
       ref: "User",
       required: true,
     },
-    totalProduct: {
+    rating: {
       type: Number,
+      min: 1,
+      max: 5,
       required: true,
-      default: 0,
     },
-    totalPrice: {
-      type: Number,
+    review: {
+      type: String,
       required: true,
-      default: 0,
+    },
+    status: {
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: "pending",
     },
   },
   { timestamps: true }
 );
-export const CartModel = model("cart", CartSchema);
+
+const ReviewModel = model("review", reviewSchema);
+
+export default ReviewModel;
