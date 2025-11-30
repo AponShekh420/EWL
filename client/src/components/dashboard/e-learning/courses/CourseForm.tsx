@@ -14,7 +14,13 @@ import { Icon } from "@iconify/react";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { CourseTabs } from "./CourseTabs";
-import Editor from "../../common/editor/Editor";
+import dynamic from "next/dynamic";
+const Editor = dynamic(
+  () => import("@/components/dashboard/common/editor/Editor"),
+  {
+    ssr: false,
+  }
+);
 
 export default function CreateCourseForm() {
   const dispatch = useDispatch();
