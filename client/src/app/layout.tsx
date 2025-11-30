@@ -4,6 +4,7 @@ import { Inter, Lexend_Deca } from "next/font/google";
 import ReduxStoreProvider from "@/context-provider/ReduxStoreProvider";
 import "./globals.css";
 import Nav from "@/components/common/Nav";
+import Footer from "@/components/common/Footer";
 export const inter = Inter({
   subsets: ["latin"],
   display: "swap",
@@ -36,6 +37,7 @@ export default function RootLayout({
         <ReduxStoreProvider>
           <Nav/>
           {children}
+          <Footer/>
         </ReduxStoreProvider>
       </body>
     </html>
