@@ -1,38 +1,77 @@
 import { coupleFacesData } from "@/constants/home";
 import { Icon } from "@iconify/react";
+import FadeInSection from "../common/FadeInSection";
 
 export default function CoupleFaced() {
   return (
     <section className="mt-20">
       <div className="container my-20">
         <div className="text-center max-w-[1080px] mx-auto">
-          <h1 className="font-bold text-2xl md:text-3xl lg:text-4xl">
-            You want a home filled with peace, connection, and holiness.
-          </h1>
-          <p className="mt-4 mb-14 text-base lg:text-lg">
-            But when challenges arise in marriage — especially in the private
-            areas of life — it can feel overwhelming. Many couples don t know
-            where to turn for discreet, Torah-true guidance. You re not alone.
-            Ohel Miriam exists to give you the tools and knowledge to build a
-            marriage that truly thrives
-          </p>
+          <FadeInSection
+            initial={{ opacity: 0, y: 50 }}
+            scrollTop={{ opacity: 1, y: 0 }}
+            scrollBottom={{ opacity: 0, y: 50 }}
+            margin="40px 0px -40px 0px"
+          > 
+            <h1 className="font-bold text-2xl md:text-3xl lg:text-4xl">
+              You want a home filled with peace, connection, and holiness.
+            </h1>
+          </FadeInSection>
+          <FadeInSection
+            initial={{ opacity: 0, y: 50 }}
+            scrollTop={{ opacity: 1, y: 0 }}
+            scrollBottom={{ opacity: 0, y: 50 }}
+            margin="40px 0px -40px 0px"
+            delay={0.5}
+          > 
+            <p className="mt-4 mb-14 text-base lg:text-lg">
+              But when challenges arise in marriage — especially in the private areas of life — it can feel overwhelming.
+              Many couples don&apos;t know where to turn for discreet, Torah-true guidance.  
+              <b>Ohel Miriam was created to address knowledge gaps on the 
+              Torah perspective of marital harmony, intimate relationships and related topics.</b>
+              Ohel Miriam helps Jewish couples build harmony and intimacy in marriage
+              through trusted guidance, practical tools, and Torah-aligned wisdom.
+              Ohel Miriam gives you the tools and knowledge to build a marriage that truly thrives. 
+              Ohel Miriam arranges live teleconferences and courses, catering to both men and women alike. These sessions feature insights from Rabbanim, women lecturers, therapists and medical professionals.
+            </p>
+          </FadeInSection>
         </div>
       </div>
       <div className="bg-ligtGray">
         <div className="container py-14">
           <div className="text-center">
-            <h1 className="font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl">
-              The Challenge Every Couple Faces
-            </h1>
-            <p className="mt-4 mb-14 text-base mg:text-lg">
-              When struggles go unresolved, distance and frustration can quietly
-              grow.
-            </p>
+            <FadeInSection
+              initial={{ opacity: 0, y: 50 }}
+              scrollTop={{ opacity: 1, y: 0 }}
+              scrollBottom={{ opacity: 0, y: 50 }}
+              margin="40px 0px -40px 0px"
+            > 
+              <h1 className="font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl">
+                The Challenge Every Couple Faces
+              </h1>
+            </FadeInSection>
+            <FadeInSection
+              initial={{ opacity: 0, y: 50 }}
+              scrollTop={{ opacity: 1, y: 0 }}
+              scrollBottom={{ opacity: 0, y: 50 }}
+              margin="40px 0px -40px 0px"
+              delay={0.5}
+            >
+              <p className="mt-4 mb-14 text-base mg:text-lg">
+                When struggles go unresolved, distance and frustration can quietly
+                grow.
+              </p>
+            </FadeInSection>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:flex flex-wrap gap-8 justify-center text-white">
-            {coupleFacesData.map((data) => (
-              <div
+            {coupleFacesData.map((data, index) => (
+              <FadeInSection
                 key={data.id}
+                initial={{ opacity: 0, y: 50 }}
+                scrollTop={{ opacity: 1, y: 0 }}
+                scrollBottom={{ opacity: 0, y: 50 }}
+                margin="40px 0px -40px 0px"
+                delay={index == 0 ? 0 : (index/10) * 2}
                 className="bg-teal p-10 flex flex-col justify-center items-center text-center xl:min-w-[350px]  rounded-sm basis-1"
               >
                 <Icon
@@ -42,7 +81,7 @@ export default function CoupleFaced() {
                   className="size-[40px] md:size-[50px]"
                 />
                 <p className="text-base md:text-lg mt-5">{data.desc}</p>
-              </div>
+              </FadeInSection>
             ))}
           </div>
         </div>

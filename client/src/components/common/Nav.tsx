@@ -9,10 +9,26 @@ const Nav = () => {
   const [toggle, setToggle] = useState<boolean>(false);
   return (
     <div className="header">
-      <div></div>
+      {/* top header */}
+      <nav className="bg-[#0F75BC] w-full h-7 fixed top-0">
+        <div className="container flex justify-end h-full">
+          <div className="flex items-center gap-x-3">
+            <div className="flex gap-x-2 h-full items-center">
+              <p className="text-sm capitalize text-white hover:text-[#270034] cursor-pointer transition-all duration-150">login</p>
+              <div className="h-full border-[1px] border-white bg-white"></div>
+              <p className="text-sm capitalize text-white hover:text-[#270034] cursor-pointer transition-all duration-150">register</p>
+            </div>
+            <div className="h-full border-[1px] border-white bg-white"></div>
+            <div className="relative w-7">
+              <p className="bg-[#270034] rounded-full text-[10px] text-white h-fit flex items-center justify-center w-fit px-[3px] absolute top-0 -left-1 font-medium">2</p>
+              <Icon icon="uil:cart" width="23" height="23" className="text-sm capitalize text-white hover:text-[#270034] cursor-pointer transition-all duration-150"/>
+            </div>
+          </div>
+        </div>
+      </nav>
 
       {/* desktop header & menu */}
-      <nav className="text-[1.05rem] fixed top-0 z-40 w-full bg-white h-20 shadow-[0px_0px_15px_0px_#C5C5C5]">
+      <nav className="text-[1.05rem] fixed top-7 z-40 w-full bg-white h-20 shadow-[0px_0px_15px_0px_#C5C5C5]">
         <div className="container flex justify-between items-center h-full gap-x-2 py-2">
           {/* logo */}
           <div className="min-w-[130px] max-w-[130px] h-full relative">
@@ -88,7 +104,7 @@ const Nav = () => {
           </div>
         </div>
       </nav>
-      <div className="h-20"></div>
+      <div className="h-24 mb-3"></div>
       {/* destop header & menu end */}
 
       {/* mobile menu */}

@@ -25,7 +25,7 @@ const FadeInSection: FC<FadeInSectionProps> = ({
   const ref = useRef<HTMLDivElement | null>(null);
 
   const isInView = useInView(ref, {
-    once: false,
+    once: true,
     margin,
   });
 
