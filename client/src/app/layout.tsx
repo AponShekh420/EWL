@@ -3,6 +3,8 @@ import { Inter, Roboto, Roboto_Slab } from "next/font/google";
 
 import ReduxStoreProvider from "@/context-provider/ReduxStoreProvider";
 import "./globals.css";
+import Nav from "@/components/common/Nav";
+import Footer from "@/components/common/Footer";
 export const inter = Inter({
   subsets: ["latin"],
   display: "swap",
@@ -38,7 +40,11 @@ export default function RootLayout({
         className={`${inter.className}  antialiased`}
         suppressHydrationWarning
       >
-        <ReduxStoreProvider>{children}</ReduxStoreProvider>
+        <ReduxStoreProvider>
+          <Nav/>
+          {children}
+          <Footer/>
+        </ReduxStoreProvider>
       </body>
     </html>
   );
