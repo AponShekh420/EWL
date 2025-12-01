@@ -14,7 +14,11 @@ const MobileMenu = ({
     <div
       className={`
         fixed inset-0 z-50 bg-black/50 flex transition-opacity duration-300
-        ${toggle ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}
+        ${
+          toggle
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+        }
       `}
       onClick={() => setToggle(false)}
     >
@@ -42,29 +46,61 @@ const MobileMenu = ({
         </div>
 
         {/* LINKS */}
-        <div className="flex flex-col border-t-2 sm:mt-3 mt-4 border-[#0F75BC] ">
-          <Link href="/" className="px-2.5 py-2 hover:bg-[#0F75BC] text-[#270034] hover:text-white duration-150 border-b" onClick={() => setToggle(false)}>
+        <div className="flex flex-col border-t-2 sm:mt-3 mt-4 border-[#0F75BC] text-[1.05rem]">
+          <Link
+            href="/"
+            className="px-2.5 py-2 hover:bg-[#0F75BC] text-[#270034] hover:text-white duration-150 border-b"
+            onClick={() => setToggle(false)}
+          >
             Home
           </Link>
-          <Link href="/about" className="px-2.5 py-2 hover:bg-[#0F75BC] text-[#270034] hover:text-white duration-150 border-b" onClick={() => setToggle(false)}>
+          <Link
+            href="/about"
+            className="px-2.5 py-2 hover:bg-[#0F75BC] text-[#270034] hover:text-white duration-150 border-b"
+            onClick={() => setToggle(false)}
+          >
             About
           </Link>
-          <Link href="/services" className="px-2.5 py-2 hover:bg-[#0F75BC] text-[#270034] hover:text-white duration-150 border-b" onClick={() => setToggle(false)}>
+          <Link
+            href="/services"
+            className="px-2.5 py-2 hover:bg-[#0F75BC] text-[#270034] hover:text-white duration-150 border-b"
+            onClick={() => setToggle(false)}
+          >
             Services
           </Link>
-          <Link href="/courses" className="px-2.5 py-2 hover:bg-[#0F75BC] text-[#270034] hover:text-white duration-150 border-b" onClick={() => setToggle(false)}>
+          <Link
+            href="/courses"
+            className="px-2.5 py-2 hover:bg-[#0F75BC] text-[#270034] hover:text-white duration-150 border-b"
+            onClick={() => setToggle(false)}
+          >
             Courses
           </Link>
-          <Link href="/shop" className="px-2.5 py-2 hover:bg-[#0F75BC] text-[#270034] hover:text-white duration-150 border-b" onClick={() => setToggle(false)}>
+          <Link
+            href="/shop"
+            className="px-2.5 py-2 hover:bg-[#0F75BC] text-[#270034] hover:text-white duration-150 border-b"
+            onClick={() => setToggle(false)}
+          >
             Shop
           </Link>
-          <Link href="/speakers" className="px-2.5 py-2 hover:bg-[#0F75BC] text-[#270034] hover:text-white duration-150 border-b" onClick={() => setToggle(false)}>
+          <Link
+            href="/speakers"
+            className="px-2.5 py-2 hover:bg-[#0F75BC] text-[#270034] hover:text-white duration-150 border-b"
+            onClick={() => setToggle(false)}
+          >
             Speakers
           </Link>
-          <Link href="/volunteer" className="px-2.5 py-2 hover:bg-[#0F75BC] text-[#270034] hover:text-white duration-150 border-b" onClick={() => setToggle(false)}>
+          <Link
+            href="/volunteer"
+            className="px-2.5 py-2 hover:bg-[#0F75BC] text-[#270034] hover:text-white duration-150 border-b"
+            onClick={() => setToggle(false)}
+          >
             Volunteer
           </Link>
-          <Link href="/blogs" className="px-2.5 py-2 hover:bg-[#0F75BC] text-[#270034] hover:text-white duration-150 border-b" onClick={() => setToggle(false)}>
+          <Link
+            href="/blogs"
+            className="px-2.5 py-2 hover:bg-[#0F75BC] text-[#270034] hover:text-white duration-150 border-b"
+            onClick={() => setToggle(false)}
+          >
             Blog
           </Link>
         </div>
