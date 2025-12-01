@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Lexend_Deca } from "next/font/google";
+import { Inter, Roboto, Roboto_Slab } from "next/font/google";
 
 import ReduxStoreProvider from "@/context-provider/ReduxStoreProvider";
 import "./globals.css";
@@ -9,11 +9,17 @@ export const inter = Inter({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   variable: "--font-inter",
 });
-export const lexendDeca = Lexend_Deca({
+export const roboto = Roboto({
   subsets: ["latin"],
   display: "swap",
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-  variable: "--font-lexend-deca",
+  variable: "--font-roboto",
+});
+export const robotoSlab = Roboto_Slab({
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-roboto-slab",
 });
 
 export const metadata: Metadata = {
@@ -29,7 +35,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.className} antialiased`}
+        className={`${inter.className}  antialiased`}
         suppressHydrationWarning
       >
         <ReduxStoreProvider>{children}</ReduxStoreProvider>
