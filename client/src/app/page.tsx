@@ -1,5 +1,6 @@
 import "@/app/home.css";
 import About from "@/components/home/About";
+import Counter from "@/components/home/Counter";
 import CoupleFaced from "@/components/home/CoupleFaced";
 import Hero from "@/components/home/Hero";
 import JewishHomes from "@/components/home/JewishHomes";
@@ -8,10 +9,13 @@ import Struggle from "@/components/home/Struggle";
 import StuggleToStrength from "@/components/home/StuggleToStrength";
 import Testimonials from "@/components/home/testimonials/Testimonials";
 import Upcoming from "@/components/home/Upcoming";
+import Welcome from "@/components/home/Welcome";
 export default function Home() {
   return (
     <main>
       <Hero />
+      <Welcome/>
+      <Counter/>
       <CoupleFaced />
       <Upcoming />
       <Struggle />
