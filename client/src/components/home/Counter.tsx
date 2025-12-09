@@ -2,7 +2,7 @@ const Counter = () => {
   return (
     <div className="mt-10">
       <div className="container">
-        <div className="grid lg:grid-cols-4 grid-cols-2 gap-3 gap-y-15">
+        <div className="grid lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-x-3 gap-y-15">
 
           {/* grid 1 */}
           <div className="flex items-center flex-col">
