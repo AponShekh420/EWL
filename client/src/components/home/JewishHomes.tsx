@@ -3,7 +3,7 @@ import { Button } from "../ui/button";
 
 export default function JewishHomes() {
   return (
-    <section className="bg-[url('/images/home/sky-bg.webp')] bg-center bg-cover bg-no-repeat h-[350px] mb-58 py-12 mt-10">
+    <section className="bg-[url('/images/home/sky-bg.webp')] bg-center bg-cover bg-no-repeat sm:h-[350px] h-fit sm:mb-58 py-12 mt-10">
       <div className="container">
         <div className="text-center max-w-[700px] mx-auto">
           <FadeInSection

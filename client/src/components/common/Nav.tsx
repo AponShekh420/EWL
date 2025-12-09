@@ -10,7 +10,7 @@ const Nav = () => {
   return (
     <div className="header">
       {/* top header */}
-      <nav className="bg-[#0F75BC] w-full h-7 fixed top-0">
+      <nav className="bg-[#0F75BC] w-full h-7 fixed top-0 z-40">
         <div className="container flex justify-end h-full">
           <div className="flex items-center gap-x-3">
             <div className="flex gap-x-2 h-full items-center">
@@ -29,9 +29,9 @@ const Nav = () => {
 
       {/* desktop header & menu */}
       <nav className="text-[1.05rem] fixed top-7 z-40 w-full bg-white h-20 shadow-[0px_0px_15px_0px_#C5C5C5]">
-        <div className="container flex justify-between items-center h-full gap-x-2 py-2">
+        <div className="container flex justify-between items-center h-full sm:gap-x-2 py-2">
           {/* logo */}
-          <div className="min-w-[130px] max-w-[130px] h-full relative">
+          <div className="sm:min-w-[130px] w-[130px] sm:max-w-[130px] h-full relative">
             <Image src="/logo.png" alt="logo" fill className="h-full w-auto" />
           </div>
 
@@ -77,7 +77,7 @@ const Nav = () => {
               href={"/volunteer"}
               className="px-2.5 py-1 text-[#270034] hover:text-[#0F75BC] transition-all duration-150"
             >
-              Volunteer
+              Get Involved
             </Link>
             <Link
               href={"/blogs"}
