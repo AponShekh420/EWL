@@ -5,8 +5,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import MobileMenu from "./MobileMenu";
+import LoginRegister from "./LoginRegister";
 const Nav = () => {
   const [toggle, setToggle] = useState<boolean>(false);
+  const [authToggle, setAuthToggle] = useState<boolean | string>(false);
   return (
     <div className="header">
       {/* top header */}
@@ -14,9 +16,15 @@ const Nav = () => {
         <div className="container flex justify-end h-full">
           <div className="flex items-center gap-x-3">
             <div className="flex gap-x-2 h-full items-center">
-              <p className="text-sm capitalize text-white hover:text-[#270034] cursor-pointer transition-all duration-150">login</p>
+              <p 
+                className="text-sm capitalize text-white hover:text-[#270034] cursor-pointer transition-all duration-150"
+                onClick={() => setAuthToggle("login")}
+              >login</p>
               <div className="h-full border-[1px] border-white bg-white"></div>
-              <p className="text-sm capitalize text-white hover:text-[#270034] cursor-pointer transition-all duration-150">register</p>
+              <p 
+                className="text-sm capitalize text-white hover:text-[#270034] cursor-pointer transition-all duration-150"
+                onClick={() => setAuthToggle("register")}
+              >register</p>
             </div>
             <div className="h-full border-[1px] border-white bg-white"></div>
             <div className="relative w-7">
@@ -109,6 +117,9 @@ const Nav = () => {
 
       {/* mobile menu */}
       <MobileMenu setToggle={setToggle} toggle={toggle} />
+
+      {/* login & register form */}
+      {authToggle && <LoginRegister setAuthToggle={setAuthToggle} authToggle={authToggle}/>}
     </div>
   );
 };
