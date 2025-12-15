@@ -10,9 +10,9 @@ const Nav = () => {
   const [toggle, setToggle] = useState<boolean>(false);
   const [authToggle, setAuthToggle] = useState<boolean | string>(false);
   return (
-    <div className="header">
+    <div className="header !max-w-screen">
       {/* top header */}
-      <nav className="bg-[#0F75BC] w-full h-7 fixed top-0 z-40">
+      <nav className="bg-[#0F75BC] w-full h-7 fixed top-0 z-40 !max-w-screen">
         <div className="container flex justify-end h-full">
           <div className="flex items-center gap-x-3">
             <div className="flex gap-x-2 h-full items-center">
@@ -36,7 +36,7 @@ const Nav = () => {
       </nav>
 
       {/* desktop header & menu */}
-      <nav className="text-[1.05rem] fixed top-7 z-40 w-full bg-white h-20 shadow-[0px_0px_15px_0px_#C5C5C5]">
+      <nav className="text-[1.05rem] fixed top-7 z-40 w-full bg-white h-20 shadow-[0px_0px_15px_0px_#C5C5C5] !max-w-screen">
         <div className="container flex justify-between items-center h-full sm:gap-x-2 py-2">
           {/* logo */}
           <div className="sm:min-w-[130px] w-[130px] sm:max-w-[130px] h-full relative">
