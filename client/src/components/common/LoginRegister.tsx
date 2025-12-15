@@ -15,7 +15,7 @@ const LoginRegister = ({
       <div className="relative p-[3px] rounded-2xl bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500">
 
         {/* Popup box inside the border */}
-        <div className="w-[600px] max-h-[90vh] bg-white rounded-2xl overflow-hidden flex flex-col">
+        <div className="sm:w-[600px] sm:max-h-[90vh] sm:h-fit h-screen w-screen bg-white rounded-2xl overflow-hidden flex flex-col">
 
           {/* Close button */}
           <div className="w-full flex justify-end p-6 flex-shrink-0">
