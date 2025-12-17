@@ -9,7 +9,7 @@ export const getProductById = async (
   next: NextFunction
 ) => {
   try {
-    const id = req.query?.id;
+    const id = req.params?.id;
     if (!id) return next(createError(400, "Product ID is required"));
 
     const product = await productModel.findById(id);

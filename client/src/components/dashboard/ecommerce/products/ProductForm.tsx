@@ -9,11 +9,23 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { addProductField } from "@/redux/features/product/productFormSlice";
+import {
+  addProductField,
+  deleteExistingImages,
+  deleteExistingThumb,
+  resetProductFields,
+} from "@/redux/features/product/productFormSlice";
+import { activeStep } from "@/redux/features/stepper/stepperSlice";
 import { RootState } from "@/redux/store";
+import { ProductType, ProductValidationErrors } from "@/types/Product";
+import { createFormData } from "@/utils/createFormData";
+import { BASE_URL } from "@/utils/envVariable";
 import { Icon } from "@iconify/react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 
 const Editor = dynamic(
@@ -23,21 +35,86 @@ const Editor = dynamic(
   }
 );
 
-export default function CreateProductForm() {
+export default function CreateProductForm({
+  productData,
+  categories,
+}: {
+  productData?: ProductType;
+  categories?: { label: string; value: string }[];
+}) {
+  const [errors, setErrors] = useState<ProductValidationErrors>({});
   const dispatch = useDispatch();
   const { step } = useSelector((state: RootState) => state.stepper);
   const productForm = useSelector((state: RootState) => state.productForm);
+  const path = usePathname();
+  const router = useRouter();
   const totalStep = 6;
 
-  const onHandleSubmit = (e: React.FormEvent) => {
+  const onHandleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.clear();
+    const formData = createFormData(productForm);
     console.log(productForm);
+    if (path.includes("edit")) {
+      if (!productData?._id) return;
+      const res = await fetch(
+        BASE_URL + "/api/ecommerce/products/" + productData?._id,
+        {
+          method: "PUT",
+          body: formData,
+        }
+      );
+      const data = await res.json();
+
+      if (!data.success) {
+        setErrors(data.errors || {});
+        toast.error(data.message);
+      }
+      if (data.success) {
+        toast.success(data.message);
+        dispatch(resetProductFields());
+        setTimeout(() => {
+          router.push("/dashboard/ecommerce/products");
+        }, 2000);
+      }
+    } else {
+      const res = await fetch(BASE_URL + "/api/ecommerce/product", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+
+      if (!data.success) {
+        setErrors(data.errors || {});
+      }
+      if (data.success) {
+        toast.success(data.message);
+        dispatch(resetProductFields());
+        dispatch(activeStep(1));
+      }
+    }
   };
+
+  useEffect(() => {
+    if (!productData) {
+      return;
+    }
+    console.log(productData);
+    dispatch(
+      addProductField({
+        ...productData,
+        tags: productData?.tags.join(","),
+        thumbnail: null,
+        images: [],
+        existingThumbnail: productData?.thumbnail,
+        existingImages: productData?.images,
+        existingAttachment: productData?.attachment,
+      })
+    );
+  }, [productData, dispatch]);
 
   return (
     <MultiStepper totalStep={totalStep}>
-      <form action="#" className="min-h-[50vh]" onSubmit={onHandleSubmit}>
+      <form className="min-h-[50vh]" onSubmit={onHandleSubmit}>
         {step === 1 && (
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-8 lg:gap-4">
             <div>
@@ -56,20 +133,18 @@ export default function CreateProductForm() {
                   onChange={(e) =>
                     dispatch(addProductField({ title: e.target.value }))
                   }
+                  error={errors?.title?.msg}
                 />
+
                 <SelectBox
                   name="category"
                   label="Category"
-                  value={productForm.title}
+                  value={productForm?.category}
                   onChange={(val) =>
                     dispatch(addProductField({ category: val }))
                   }
-                  options={[
-                    { label: "Fruits", value: "fruits" },
-                    { label: "Grocery", value: "grocery" },
-                    { label: "Meat", value: "meat" },
-                    { label: "Cat Food", value: "cat-food" },
-                  ]}
+                  options={categories ? categories : []}
+                  error={errors?.category?.msg}
                 />
                 <InputBox
                   name="product-tags"
@@ -79,6 +154,7 @@ export default function CreateProductForm() {
                   onChange={(e) =>
                     dispatch(addProductField({ tags: e.target.value }))
                   }
+                  error={errors?.tags?.msg}
                 />
               </div>
 
@@ -90,6 +166,11 @@ export default function CreateProductForm() {
                     dispatch(addProductField({ shortDescription: val }))
                   }
                 />
+                {errors.shortDescription && (
+                  <span className="text-red-500 text-xs mt-2 ml-1">
+                    {errors?.shortDescription?.msg}
+                  </span>
+                )}
               </div>
               <div>
                 <Label className="mb-4 mt-8">Full description</Label>
@@ -99,6 +180,11 @@ export default function CreateProductForm() {
                     dispatch(addProductField({ description: val }))
                   }
                 />
+                {errors.description && (
+                  <span className="text-red-500 text-xs mt-2 ml-1">
+                    {errors?.description?.msg}
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -124,11 +210,16 @@ export default function CreateProductForm() {
                     }
                   }}
                 />
+                {errors.thumbnail && (
+                  <span className="text-red-500 text-xs mt-2 ml-1">
+                    {errors?.thumbnail?.msg}
+                  </span>
+                )}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-4">
                   {productForm.thumbnail && (
                     <div className="relative w-fit">
                       <Image
-                        src={URL.createObjectURL(productForm.thumbnail)}
+                        src={URL.createObjectURL(productForm?.thumbnail)}
                         alt="preview"
                         width={220}
                         height={220}
@@ -140,6 +231,36 @@ export default function CreateProductForm() {
                         onClick={() =>
                           dispatch(addProductField({ thumbnail: null }))
                         }
+                      >
+                        <Icon
+                          icon="material-symbols-light:delete-rounded"
+                          width="22"
+                          height="22"
+                        />
+                      </button>
+                    </div>
+                  )}
+                  {productForm.existingThumbnail && (
+                    <div className="relative w-fit">
+                      <Image
+                        src={productForm.existingThumbnail}
+                        alt="preview"
+                        width={220}
+                        height={220}
+                        className="rounded-md object-cover size-[220px]"
+                      />
+                      <button
+                        className="p-1 bg-gray-200 rounded-md absolute top-2 right-2 hover:text-red-500"
+                        type="button"
+                        onClick={() => {
+                          if (!productForm.existingThumbnail) {
+                            return;
+                          }
+
+                          dispatch(
+                            deleteExistingThumb(productForm.existingThumbnail)
+                          );
+                        }}
                       >
                         <Icon
                           icon="material-symbols-light:delete-rounded"
@@ -164,6 +285,11 @@ export default function CreateProductForm() {
                     }
                   }}
                 />
+                {errors.images && (
+                  <span className="text-red-500 text-xs mt-2 ml-1">
+                    {errors?.images?.msg}
+                  </span>
+                )}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-4">
                   {productForm.images &&
                     productForm.images.length > 0 &&
@@ -198,6 +324,34 @@ export default function CreateProductForm() {
                         </button>
                       </div>
                     ))}
+                  {productForm.existingImages &&
+                    productForm.existingImages.length > 0 &&
+                    productForm.existingImages.map(
+                      (img: string, index: number) => (
+                        <div key={index} className="relative w-fit">
+                          <Image
+                            src={img}
+                            alt="preview"
+                            width={220}
+                            height={220}
+                            className="rounded-md object-cover size-[220px]"
+                          />
+                          <button
+                            className="p-1 bg-gray-200 rounded-md absolute top-2 right-2 hover:text-red-500"
+                            type="button"
+                            onClick={() => {
+                              dispatch(deleteExistingImages(img));
+                            }}
+                          >
+                            <Icon
+                              icon="material-symbols-light:delete-rounded"
+                              width="22"
+                              height="22"
+                            />
+                          </button>
+                        </div>
+                      )
+                    )}
                 </div>
               </div>
             </div>
@@ -220,6 +374,7 @@ export default function CreateProductForm() {
                 onChange={(e) =>
                   dispatch(addProductField({ sku: e.target.value }))
                 }
+                error={errors?.sku?.msg}
               />
               <InputBox
                 name="isbn"
@@ -229,6 +384,7 @@ export default function CreateProductForm() {
                 onChange={(e) =>
                   dispatch(addProductField({ isbn: e.target.value }))
                 }
+                error={errors?.isbn?.msg}
               />
 
               <InputBox
@@ -236,22 +392,26 @@ export default function CreateProductForm() {
                 name="regular-price"
                 label="Regular Price"
                 placeholder="25"
+                min="0"
                 icon="$"
                 value={productForm.regularPrice}
                 onChange={(e) =>
                   dispatch(addProductField({ regularPrice: e.target.value }))
                 }
+                error={errors?.regularPrice?.msg}
               />
               <InputBox
                 type="number"
                 name="sale-price"
                 label="Sale Price"
                 placeholder="20"
+                min="0"
                 icon="$"
                 value={productForm.salePrice}
                 onChange={(e) =>
                   dispatch(addProductField({ salePrice: e.target.value }))
                 }
+                error={errors?.salePrice?.msg}
               />
 
               {/* <InputBox
@@ -269,10 +429,12 @@ export default function CreateProductForm() {
                 name="initial-stock"
                 label="Initial number in stock"
                 placeholder="0"
+                min="0"
                 value={productForm.stock}
                 onChange={(e) =>
                   dispatch(addProductField({ stock: e.target.value }))
                 }
+                error={errors?.stock?.msg}
               />
               <div className="capitalize ">
                 <Label className="mb-4">Stock Status</Label>
@@ -359,20 +521,24 @@ export default function CreateProductForm() {
                   name="weight"
                   label="Weight (LBS)"
                   placeholder="0"
+                  min="0"
                   value={productForm.weight}
                   onChange={(e) =>
                     dispatch(addProductField({ weight: e.target.value }))
                   }
+                  error={errors?.weight?.msg}
                 />
                 <InputBox
                   type="number"
                   name="declared-value"
                   label="Declared Value ($)"
                   placeholder="Use product's price"
+                  min="0"
                   value={productForm.declaredValue}
                   onChange={(e) =>
                     dispatch(addProductField({ declaredValue: e.target.value }))
                   }
+                  error={errors?.declaredValue?.msg}
                 />
               </div>
               <div>
@@ -382,6 +548,7 @@ export default function CreateProductForm() {
                     type="number"
                     name="length"
                     label=""
+                    min="0"
                     placeholder="Length"
                     value={productForm.dimensionLength}
                     onChange={(e) =>
@@ -389,11 +556,13 @@ export default function CreateProductForm() {
                         addProductField({ dimensionLength: e.target.value })
                       )
                     }
+                    error={errors?.dimensionLength?.msg}
                   />
                   <InputBox
                     type="number"
                     name="width"
                     label=""
+                    min="0"
                     placeholder="Width"
                     value={productForm.dimensionWidth}
                     onChange={(e) =>
@@ -401,11 +570,13 @@ export default function CreateProductForm() {
                         addProductField({ dimensionWidth: e.target.value })
                       )
                     }
+                    error={errors?.dimensionWidth?.msg}
                   />
                   <InputBox
                     type="number"
                     name="Height"
                     label=""
+                    min="0"
                     placeholder="Height"
                     value={productForm.dimensionHeight}
                     onChange={(e) =>
@@ -413,6 +584,7 @@ export default function CreateProductForm() {
                         addProductField({ dimensionHeight: e.target.value })
                       )
                     }
+                    error={errors?.dimensionHeight?.msg}
                   />
                 </div>
               </div>
@@ -420,9 +592,9 @@ export default function CreateProductForm() {
                 <SelectBox
                   name="tax-status"
                   label="Tax Status"
-                  value={productForm.textStatus}
+                  value={productForm.taxStatus}
                   onChange={(val) =>
-                    dispatch(addProductField({ textStatus: val }))
+                    dispatch(addProductField({ taxStatus: val }))
                   }
                   options={[
                     { label: "Fruits", value: "fruits" },
@@ -430,13 +602,14 @@ export default function CreateProductForm() {
                     { label: "Meat", value: "meat" },
                     { label: "Cat Food", value: "cat-food" },
                   ]}
+                  error={errors?.taxStatus?.msg}
                 />
                 <SelectBox
                   name="tax-class"
                   label="Tax class"
-                  value={productForm.textClass}
+                  value={productForm.taxClass}
                   onChange={(val) =>
-                    dispatch(addProductField({ textClass: val }))
+                    dispatch(addProductField({ taxClass: val }))
                   }
                   options={[
                     { label: "Fruits", value: "fruits" },
@@ -444,6 +617,7 @@ export default function CreateProductForm() {
                     { label: "Meat", value: "meat" },
                     { label: "Cat Food", value: "cat-food" },
                   ]}
+                  error={errors?.taxClass?.msg}
                 />
                 <SelectBox
                   name="shipping-class"
@@ -458,10 +632,17 @@ export default function CreateProductForm() {
                     { label: "Meat", value: "meat" },
                     { label: "Cat Food", value: "cat-food" },
                   ]}
+                  error={errors?.shippingClass?.msg}
                 />
               </div>
               <div className="flex items-center gap-x-2 mt-8">
-                <Checkbox className="size-5 checkbox-t" />
+                <Checkbox
+                  checked={productForm.enelope}
+                  onCheckedChange={(val) =>
+                    dispatch(addProductField({ enelope: val }))
+                  }
+                  className="size-5 checkbox-t"
+                />
 
                 <Label>Enelope?</Label>
               </div>
@@ -485,16 +666,33 @@ export default function CreateProductForm() {
                 onChange={(e) =>
                   dispatch(addProductField({ customMessage: e.target.value }))
                 }
+                error={errors?.customMessage?.msg}
               />
               <div>
                 <Label className="mb-4">Upload Attachment</Label>{" "}
                 <Input
                   name="attachment"
                   type="file"
-                  onChange={(e) =>
-                    dispatch(addProductField({ attachment: e.target.files }))
-                  }
+                  onChange={(e) => {
+                    if (e.target.files) {
+                      dispatch(
+                        addProductField({
+                          attachment: e.target.files[0] as File,
+                        })
+                      );
+                      dispatch(
+                        addProductField({
+                          existingAttachment: "",
+                        })
+                      );
+                    }
+                  }}
                 />
+                {errors.customMessage && (
+                  <span className="text-red-500 text-xs mt-2 ml-1">
+                    {errors?.customMessage?.msg}
+                  </span>
+                )}
               </div>
               <TextBox
                 label="Message on checkout page"
@@ -506,6 +704,7 @@ export default function CreateProductForm() {
                     addProductField({ checkoutPageMessage: e.target.value })
                   )
                 }
+                error={errors?.checkoutPageMessage?.msg}
               />
             </div>
           </div>
@@ -527,6 +726,7 @@ export default function CreateProductForm() {
                 onChange={(e) =>
                   dispatch(addProductField({ metaData: e.target.value }))
                 }
+                error={errors?.metaData?.msg}
               />
               <TextBox
                 label="Meta Description"
@@ -537,13 +737,14 @@ export default function CreateProductForm() {
                 onChange={(e) =>
                   dispatch(addProductField({ metaDescription: e.target.value }))
                 }
+                error={errors?.metaDescription?.msg}
               />
             </div>
           </div>
         )}
         {step === totalStep && (
           <Button variant="blue" type="submit" className="ml-auto block mt-10">
-            Submit
+            {path.includes("edit") ? "Update" : "Submit"}
           </Button>
         )}
       </form>

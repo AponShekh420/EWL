@@ -3,10 +3,17 @@ import "@/app/home.css";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import MobileMenu from "./MobileMenu";
+
 const Nav = () => {
   const [toggle, setToggle] = useState<boolean>(false);
+  const pathname = usePathname();
+
+  if (pathname.includes("dashboard")) {
+    return null;
+  }
   return (
     <div className="header">
       <div></div>

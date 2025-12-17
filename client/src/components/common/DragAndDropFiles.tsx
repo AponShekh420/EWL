@@ -13,7 +13,7 @@ interface FileInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 export default function DragAndDropFiles({
   onFileChange,
   className = "",
-  supportedFormat = ["image/png", "image/jpeg", "image/jpg"],
+  supportedFormat = ["image/png", "image/jpeg", "image/jpg", "image/webp"],
   MAX_FILES = 1,
   ...rest
 }: FileInputProps) {

@@ -7,15 +7,26 @@ export const productValidationRules = [
   body("creator").notEmpty().withMessage("Creator is required"),
   body("title").notEmpty().withMessage("Title is required"),
   body("category").notEmpty().withMessage("Category is required"),
-  body("productTags")
+  body("tags")
+    .notEmpty()
+    .withMessage("Product tags is required")
     .isArray({ min: 1 })
     .withMessage("Product tags must be an array with at least one tag"),
   body("shortDescription")
     .notEmpty()
     .withMessage("Short description is required"),
   body("description").notEmpty().withMessage("Description is required"),
-  body("sku").notEmpty().withMessage("SKU is required"),
-  body("isbn").notEmpty().withMessage("ISBN is required"),
+  body("sku")
+    .notEmpty()
+    .withMessage("SKU is required")
+    .isNumeric()
+    .withMessage("SKU must be a number"),
+  body("isbn")
+    .notEmpty()
+    .withMessage("ISBN is required")
+    .isNumeric()
+    .withMessage("Isbn must be a number"),
+
   body("regularPrice")
     .isNumeric()
     .withMessage("Regular price must be a number"),
@@ -70,7 +81,7 @@ export const validateProduct = (
   if (!images?.length) {
     errors.images = {
       type: "field",
-      msg: "images is required",
+      msg: "Feature images is required",
       path: "images",
       location: "body",
     };
@@ -115,5 +126,33 @@ export const validateProduct = (
       errors: errors,
     });
   }
+  next();
+};
+export const validateUpdateProduct = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const errors = validationResult(req).mapped();
+  const imageDeleteHandler = () => {
+    if (req.files) {
+      const files = Object.values(
+        req.files as any
+      ).flat() as Express.Multer.File[];
+      files.forEach((file) => {
+        const imgPath = getImageUrl(req, "products", file);
+        deleteFileFromLocal(imgPath, "products");
+      });
+    }
+  };
+  if (Object.keys(errors).length > 0) {
+    imageDeleteHandler();
+    return res.status(400).json({
+      success: false,
+      message: "Validation failed",
+      errors: errors,
+    });
+  }
+
   next();
 };

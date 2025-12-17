@@ -8,13 +8,13 @@ export default function ProductCard({ product }: { product: ProductType }) {
   const [isFill, setIsFill] = useState<boolean>(false);
   return (
     <div>
-      <div className="relative">
-        <Link href={`/dashboard/ecommerce/products/${product.slug}`}>
+      <div className="relative ">
+        <Link href={`/dashboard/ecommerce/products/${product._id}`}>
           <Image
             src={product.thumbnail}
             width={400}
             height={400}
-            alt={product.name}
+            alt={product.title}
             className="w-full h-[200px] md:h-[400px] rounded-lg object-cover"
           />
         </Link>
@@ -34,13 +34,13 @@ export default function ProductCard({ product }: { product: ProductType }) {
           href={`/dashboard/ecommerce/products/${product.slug}`}
           className="font-bold hover:underline"
         >
-          {product.name}
+          {product.title}
         </Link>
         <p className="text-gray-500 text-sm">{product.category}</p>
         <div className="flex gap-2 ">
-          <p className="font-semibold">${product.price}</p>
+          <p className="font-semibold">${product.salePrice}</p>
           <p className="line-through text-gray-500">
-            ${Number(product.price) + 20}.00
+            ${product.regularPrice}.00
           </p>
         </div>
       </div>

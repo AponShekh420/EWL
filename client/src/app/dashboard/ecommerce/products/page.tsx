@@ -1,11 +1,22 @@
 import PageHeading from "@/components/dashboard/common/PageHeading";
 import ProductTable from "@/components/dashboard/common/tables/ProductTable";
 import { Button } from "@/components/ui/button";
-import { productsData } from "@/constants/products";
+import { BASE_URL } from "@/utils/envVariable";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 
-export default function Products() {
+export default async function Products({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  const page = await searchParams;
+  const res = await fetch(
+    BASE_URL + "/api/ecommerce/product-by-filter?page=" + page.page
+  );
+
+  const { data: productsData, pagination } = await res.json();
+
   return (
     <div>
       <PageHeading
@@ -27,7 +38,7 @@ export default function Products() {
         </Link>
       </PageHeading>
 
-      <ProductTable products={productsData} />
+      <ProductTable products={productsData} pagination={pagination} />
     </div>
   );
 }

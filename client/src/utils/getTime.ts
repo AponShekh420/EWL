@@ -1,4 +1,4 @@
-export const GetTime = (isoDate: Date, withTime?: boolean) => {
+export const GetTime = (isoDate: Date | string, withTime?: boolean) => {
   const date = new Date(isoDate);
 
   let options: Intl.DateTimeFormatOptions;

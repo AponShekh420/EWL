@@ -1,10 +1,19 @@
 import PageHeading from "@/components/dashboard/common/PageHeading";
 import OrderTable from "@/components/dashboard/common/tables/OrderTable";
 import { Button } from "@/components/ui/button";
-import { order_data } from "@/constants/order-data";
+import { BASE_URL } from "@/utils/envVariable";
 import { Icon } from "@iconify/react";
 
-export default function Orders() {
+export default async function Orders({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  const page = await searchParams;
+
+  const res = await fetch(BASE_URL + "/api/ecommerce/orders?page=" + page.page);
+  const { data: orders, pagination } = await res.json();
+
   return (
     <div>
       <PageHeading
@@ -19,7 +28,7 @@ export default function Orders() {
           <span>Export</span>
         </Button>
       </PageHeading>
-      <OrderTable orders={order_data} />
+      <OrderTable orders={orders} pagination={pagination} />
     </div>
   );
 }

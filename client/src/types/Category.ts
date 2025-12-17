@@ -1,8 +1,23 @@
 export type CategoryType = {
-  id: string;
-  image: string;
+  _id: string;
+  thumbnail: string;
   name: string;
   slug: string;
   description: string;
   products: number;
+};
+
+type ValidationErrorItem = {
+  type: string;
+  msg: string;
+  path: string;
+  location: string;
+  value?: string;
+};
+
+export type CategoryValidationErrors = {
+  name?: ValidationErrorItem;
+  description?: ValidationErrorItem;
+  categoryId?: ValidationErrorItem;
+  thumbnail?: ValidationErrorItem;
 };

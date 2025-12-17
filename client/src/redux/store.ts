@@ -1,3 +1,4 @@
+import categoryFormReducer from "@/redux/features/category/categoryFormSlice";
 import courseFormReducer from "@/redux/features/course/courseFormSlice";
 import productFormReducer from "@/redux/features/product/productFormSlice";
 import sidebarReducer from "@/redux/features/sidebar/sidebarSlice";
@@ -9,19 +10,21 @@ export const store = configureStore({
     sidebar: sidebarReducer,
     stepper: stepperReducer,
     productForm: productFormReducer,
+    categoryForm: categoryFormReducer,
     courseForm: courseFormReducer,
     userForm: userFormReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: {
-        // Ignore these action types
-        ignoredActions: ["your/action/type"],
-        // Ignore these field paths in all actions
-        ignoredActionPaths: ["meta.arg", "payload.timestamp"],
-        // Ignore these paths in the state
-        ignoredPaths: ["items.dates"],
-      },
+      // serializableCheck: {
+      //   // Ignore these action types
+      //   ignoredActions: ["your/action/type"],
+      //   // Ignore these field paths in all actions
+      //   ignoredActionPaths: ["meta.arg", "payload.timestamp"],
+      //   // Ignore these paths in the state
+      //   ignoredPaths: ["items.dates"],
+      // },
+      serializableCheck: false,
     }),
 });
 

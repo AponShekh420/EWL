@@ -1,11 +1,21 @@
 import PageHeading from "@/components/dashboard/common/PageHeading";
 import ProductReviewsTable from "@/components/dashboard/common/tables/ProductReviewsTable";
 import { Button } from "@/components/ui/button";
-import { productReviews } from "@/constants/product-reviews";
+import { BASE_URL } from "@/utils/envVariable";
 
 import Link from "next/link";
 
-export default function Reviews() {
+export default async function Reviews({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  const page = await searchParams;
+  const res = await fetch(
+    BASE_URL + "/api/ecommerce/reviews?page=" + page.page
+  );
+  const { data: reviews, pagination } = await res.json();
+  console.log(reviews);
   return (
     <div>
       <PageHeading
@@ -22,7 +32,7 @@ export default function Reviews() {
           </Button>
         </Link>
       </PageHeading>
-      <ProductReviewsTable reviews={productReviews} />
+      <ProductReviewsTable reviews={reviews} pagination={pagination} />
     </div>
   );
 }

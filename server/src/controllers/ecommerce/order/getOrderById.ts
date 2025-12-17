@@ -12,7 +12,10 @@ export const getOrderById = async (
     const id = req.params?.id;
     if (!id) return next(createError(400, "Order ID is required"));
 
-    const order = await OrderModel.findById(id);
+    const order = await OrderModel.findById(id).populate([
+      "products",
+      "customer",
+    ]);
     if (!order) {
       return next(createError(400, "Not found order"));
     }
