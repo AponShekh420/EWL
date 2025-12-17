@@ -19,7 +19,7 @@ export const deleteCategory = async (
       return next(createError(404, `Category with id ${id} not found`));
     }
 
-    deleteFileFromLocal(deletedProduct.image, "category");
+    deleteFileFromLocal(deletedProduct.thumbnail, "category");
 
     return res.status(200).json({
       success: true,

@@ -11,14 +11,15 @@ export const getProductByFilter = async (
 ) => {
   try {
     const page = Number(req.query?.page) || 1;
-    const limit = Number(req.query?.page) || 10;
+    const limit = Number(req.query?.limit) || 10;
     const skip = (page - 1) * limit;
 
     const products = await productModel
       .find(productFilterQuery(req))
       .skip(skip)
       .limit(limit)
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .populate("reviews");
 
     if (!products) {
       return next(createError(400, "Not found products"));

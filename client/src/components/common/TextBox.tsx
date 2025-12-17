@@ -5,12 +5,14 @@ interface TextBoxProps extends React.ComponentProps<"textarea"> {
   name: string;
   label: string;
   className?: string;
+  error?: string;
 }
 
 export default function TextBox({
   className,
   name,
   label,
+  error,
   ...rest
 }: TextBoxProps) {
   return (
@@ -25,6 +27,7 @@ export default function TextBox({
         className={`py-5 ${className}`}
         {...rest}
       />
+      {error && <span className="text-red-500 text-xs mt-2 ml-1">{error}</span>}
     </div>
   );
 }

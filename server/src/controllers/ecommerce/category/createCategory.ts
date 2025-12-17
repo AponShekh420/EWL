@@ -11,18 +11,16 @@ export const createCategory = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { name } = req.body;
+  const { name, description } = req.body;
   const file = req.file as Express.Multer.File;
-  if (!name) {
-    return next(createError(400, "Required fields are missing!"));
-  }
   if (!file) {
-    return next(createError(400, "Category image is missing!"));
+    return next(createError(400, "Category thumbnail is missing!"));
   }
   const category = await CategoryModel.create({
     name: name,
+    description: description,
     slug: name.replace(" ", "-").toLowerCase(),
-    image: getImageUrl(req, "category", file),
+    thumbnail: getImageUrl(req, "category", file),
   });
 
   try {

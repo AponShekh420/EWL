@@ -9,6 +9,14 @@ const nextConfig: NextConfig = {
         hostname: "isomorphic-furyroad.s3.amazonaws.com",
       },
       {
+        protocol: "http",
+        hostname: "localhost",
+      },
+      {
+        protocol: "http",
+        hostname: "image.jpg",
+      },
+      {
         protocol: "https",
         hostname: "swiperjs.com",
         pathname: "/demos/images/**",

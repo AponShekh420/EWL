@@ -1,9 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import createError from "http-errors";
-import {
-  CategoryModel,
-  SubCategoryModel,
-} from "../../../../models/CategoryModel";
+import { SubCategoryModel } from "../../../../models/CategoryModel";
 import { catchErrorSend } from "../../../../utils/catchErrorSend";
 import { deleteFileFromLocal } from "../../../../utils/deleteFileFromLocal";
 import { getImageUrl } from "../../../../utils/getImageUrl";
@@ -24,8 +21,11 @@ export const updateSubcategory = async (
     updatedData.name = body.name;
     updatedData.slug = body.name.replace(" ", "-").toLowerCase();
   }
+  if (body && body.description) {
+    updatedData.description = body.description;
+  }
   if (file) {
-    updatedData.image = getImageUrl(req, "category", file);
+    updatedData.thumbnail = getImageUrl(req, "category", file);
   }
 
   try {
@@ -48,15 +48,8 @@ export const updateSubcategory = async (
     if (!updatedSubcategory)
       return next(createError(400, "Failed to update subcategory"));
 
-    //if change category inside subcategory then exicution this code
-    if (!oldSubcategory.category.equals(body.categoryId)) {
-      await CategoryModel.findByIdAndUpdate(body.categoryId, {
-        subcategory: updatedSubcategory._id,
-      });
-    }
-
-    if (file && oldSubcategory?.image) {
-      deleteFileFromLocal(oldSubcategory?.image, "category");
+    if (body.deletedImage) {
+      deleteFileFromLocal(body.deletedImage, "category");
     }
 
     return res.status(200).json({

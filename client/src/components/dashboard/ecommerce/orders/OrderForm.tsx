@@ -103,15 +103,17 @@ export default function OrderForm({ order }: { order: OrderType }) {
           <h5 className="font-bold text-lg font-lexend-deca">Customer Info</h5>
           <div className="flex flex-col xl:flex-row gap-4 mt-8">
             <Image
-              src={order?.avatar}
+              src={order?.customer?.avatar}
               width={80}
               height={80}
               alt="customer"
               className="rounded-xl"
             />
             <div className="space-y-2">
-              <h5 className="font-lexend-deca font-medium">{order.name}</h5>
-              <p className="text-sm text-gray-500">{order.email}</p>
+              <h5 className="font-lexend-deca font-medium capitalize">
+                {order.customer.firstName + " " + order.customer.lastName}
+              </h5>
+              <p className="text-sm text-gray-500">{order.customer.email}</p>
               <p className="text-gray-500 text-sm">(316) 555-0116</p>
             </div>
           </div>
@@ -119,7 +121,7 @@ export default function OrderForm({ order }: { order: OrderType }) {
           <h5 className="font-bold text-lg font-lexend-deca">Order Details</h5>
           <div>
             <p className="text-sm py-1.5">Order ID</p>
-            <p className="font-medium">OD-{order.id}</p>
+            <p className="font-medium">OD-{order.orderId}</p>
           </div>
           <hr className="my-8" />
           <div className="space-y-5">

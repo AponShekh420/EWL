@@ -5,6 +5,7 @@ import { getImageUrl } from "../../utils/getImageUrl";
 
 export const categoryValidationRules = [
   body("name").notEmpty().withMessage("Category name is required"),
+  body("description").notEmpty().withMessage("Description is required"),
 ];
 
 export const validateCategory = (
@@ -17,10 +18,10 @@ export const validateCategory = (
   const file = req.file as Express.Multer.File;
 
   if (!file) {
-    errors.images = {
+    errors.thumbnail = {
       type: "field",
-      msg: "image is required",
-      path: "images",
+      msg: "thumbnail is required",
+      path: "thumbnail",
       location: "body",
     };
   }
@@ -32,12 +33,13 @@ export const validateCategory = (
   };
 
   if (Object.keys(errors).length > 0) {
-    imageDeleteHandler();
+    file && imageDeleteHandler();
     return res.status(400).json({
       success: false,
       message: "Validation failed",
       errors: errors,
     });
   }
+  console.log(errors);
   next();
 };

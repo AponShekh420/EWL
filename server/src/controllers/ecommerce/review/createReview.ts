@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import createError from "http-errors";
+import productModel from "../../../models/ProductModel";
 import ReviewModel from "../../../models/ReviewModel";
 import { catchErrorSend } from "../../../utils/catchErrorSend";
 export const createReview = async (
@@ -17,6 +18,10 @@ export const createReview = async (
     if (!createdReview) {
       return next(createError(400, "Failed to add review"));
     }
+
+    await productModel.findByIdAndUpdate(body.product, {
+      $push: { reviews: createdReview._id },
+    });
 
     return res.status(201).json({
       success: true,

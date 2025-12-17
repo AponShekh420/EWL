@@ -10,7 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 export function DeleteModal({
   children,
 
@@ -19,8 +19,9 @@ export function DeleteModal({
   children: ReactNode;
   deleteAction: () => void;
 }) {
+  const [open, setOpen] = useState(false);
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <form>
         <DialogTrigger asChild>{children}</DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
@@ -37,7 +38,10 @@ export function DeleteModal({
               <Button variant="outline">Cancel</Button>
             </DialogClose>
             <Button
-              onClick={() => deleteAction()}
+              onClick={() => {
+                deleteAction();
+                setOpen(false);
+              }}
               className="cursor-pointer"
               variant="destructive"
               type="submit"

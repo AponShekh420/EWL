@@ -1,10 +1,10 @@
+import Footer from "@/components/common/Footer";
+import Nav from "@/components/common/Nav";
+import ReduxStoreProvider from "@/context-provider/ReduxStoreProvider";
 import type { Metadata } from "next";
 import { Inter, Roboto, Roboto_Slab } from "next/font/google";
-
-import ReduxStoreProvider from "@/context-provider/ReduxStoreProvider";
+import { Toaster } from "react-hot-toast";
 import "./globals.css";
-import Nav from "@/components/common/Nav";
-import Footer from "@/components/common/Footer";
 export const inter = Inter({
   subsets: ["latin"],
   display: "swap",
@@ -40,10 +40,11 @@ export default function RootLayout({
         className={`${inter.className}  antialiased`}
         suppressHydrationWarning
       >
+        <Toaster />
         <ReduxStoreProvider>
-          <Nav/>
+          <Nav />
           {children}
-          <Footer/>
+          <Footer />
         </ReduxStoreProvider>
       </body>
     </html>

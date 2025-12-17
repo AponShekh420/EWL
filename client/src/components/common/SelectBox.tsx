@@ -15,6 +15,7 @@ interface SelectBoxProps {
   value?: string;
   onChange?: (value: string) => void;
   options: { label: string; value: string }[];
+  error?: string;
 }
 
 export default function SelectBox({
@@ -25,6 +26,7 @@ export default function SelectBox({
   value,
   onChange,
   options,
+  error,
 }: SelectBoxProps) {
   return (
     <div className={className}>
@@ -43,6 +45,7 @@ export default function SelectBox({
           ))}
         </SelectContent>
       </Select>
+      {error && <span className="text-red-500 text-xs mt-2 ml-1">{error}</span>}
     </div>
   );
 }

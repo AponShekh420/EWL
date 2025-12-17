@@ -22,15 +22,32 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { CategoryType } from "@/types/Category";
+import { PaginationType } from "@/types/Pagination";
+import { BASE_URL } from "@/utils/envVariable";
+import { paginationCounter } from "@/utils/paginationCounter";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
 import Link from "next/link";
+import toast from "react-hot-toast";
 
 export default function CategoriesTable({
   categories,
+  pagination,
 }: {
   categories: CategoryType[];
+  pagination: PaginationType;
 }) {
+  const deleteHandler = async (id: string) => {
+    if (!id) return;
+    const res = await fetch(BASE_URL + "/api/ecommerce/categories/" + id, {
+      method: "DELETE",
+    });
+    const data = await res.json();
+    console.log(data);
+    if (data.success) {
+      toast.success(data.message);
+    }
+  };
   return (
     <div>
       <div className="my-5">
@@ -68,13 +85,13 @@ export default function CategoriesTable({
         </TableHeader>
         <TableBody>
           {categories?.map((category) => (
-            <TableRow key={category.id}>
+            <TableRow key={category._id}>
               <TableCell>
                 <div className="flex gap-4 items-center">
                   <Checkbox className="checkbox-t" />
                   <div className="flex items-center gap-x-4">
                     <Image
-                      src={category.image}
+                      src={category.thumbnail}
                       alt={category.name}
                       width={50}
                       height={50}
@@ -84,15 +101,20 @@ export default function CategoriesTable({
                 </div>
               </TableCell>
               <TableCell>{category.name}</TableCell>
-              <TableCell>{category.description}</TableCell>
+              <TableCell className="max-w-[200px]">
+                <div
+                  className="text-wrap "
+                  dangerouslySetInnerHTML={{ __html: category.description }}
+                />
+              </TableCell>
               <TableCell>{category.slug}</TableCell>
               <TableCell className="font-medium">
-                ${category.products}
+                {category.products ? category.products : 0}
               </TableCell>
               <TableCell>
                 <div className="flex items-center gap-x-3">
                   <Link
-                    href={`/dashboard/ecommerce/categories/edit/${category.slug}`}
+                    href={`/dashboard/ecommerce/categories/edit/${category._id}`}
                   >
                     <Button
                       size="icon"
@@ -106,7 +128,7 @@ export default function CategoriesTable({
                       />
                     </Button>
                   </Link>
-                  <DeleteModal deleteAction={() => console.log(category.id)}>
+                  <DeleteModal deleteAction={() => deleteHandler(category._id)}>
                     <Button
                       size="icon"
                       variant="outline"
@@ -129,16 +151,50 @@ export default function CategoriesTable({
         <Pagination>
           <PaginationContent>
             <PaginationItem>
-              <PaginationPrevious href="#" />
+              {pagination.page > 1 ? (
+                <PaginationPrevious
+                  href={`/dashboard/ecommerce/orders?page=${
+                    pagination.page - 1
+                  }`}
+                />
+              ) : (
+                <button
+                  disabled
+                  className="disabled:text-gray-400 cursor-not-allowed"
+                >
+                  {"< Previous"}
+                </button>
+              )}
             </PaginationItem>
             <PaginationItem>
-              <PaginationLink href="#">1</PaginationLink>
+              {paginationCounter(pagination).map((page, index) => (
+                <PaginationLink
+                  className={pagination.page === page ? "bg-gray-100" : ""}
+                  key={index}
+                  href={`/dashboard/ecommerce/orders?page=${page}`}
+                >
+                  {page}
+                </PaginationLink>
+              ))}
             </PaginationItem>
             <PaginationItem>
               <PaginationEllipsis />
             </PaginationItem>
             <PaginationItem>
-              <PaginationNext href="#" />
+              {pagination.totalPages > pagination.page ? (
+                <PaginationNext
+                  href={`/dashboard/ecommerce/orders?page=${
+                    pagination.page + 1
+                  }`}
+                />
+              ) : (
+                <button
+                  disabled
+                  className="disabled:text-gray-400 cursor-not-allowed"
+                >
+                  {"Next >"}
+                </button>
+              )}
             </PaginationItem>
           </PaginationContent>
         </Pagination>

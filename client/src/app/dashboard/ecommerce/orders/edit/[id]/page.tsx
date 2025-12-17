@@ -1,8 +1,8 @@
 import PageHeading from "@/components/dashboard/common/PageHeading";
 import OrderForm from "@/components/dashboard/ecommerce/orders/OrderForm";
 import { Button } from "@/components/ui/button";
-import { order_data } from "@/constants/order-data";
 import { OrderType } from "@/types/Order";
+import { BASE_URL } from "@/utils/envVariable";
 import Link from "next/link";
 
 export default async function EditOrder({
@@ -11,7 +11,8 @@ export default async function EditOrder({
   params: { id: string };
 }) {
   const { id } = await params;
-  const order = order_data.find((order) => order.id === id) as OrderType;
+  const res = await fetch(BASE_URL + "/api/ecommerce/orders/" + id);
+  const { data: order }: { data: OrderType } = await res.json();
   return (
     <div>
       <PageHeading

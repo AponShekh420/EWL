@@ -3,12 +3,18 @@ import "@/app/home.css";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
-import MobileMenu from "./MobileMenu";
 import LoginRegister from "./LoginRegister";
+import MobileMenu from "./MobileMenu";
 const Nav = () => {
   const [toggle, setToggle] = useState<boolean>(false);
   const [authToggle, setAuthToggle] = useState<boolean | string>(false);
+  const pathname = usePathname();
+
+  if (pathname.includes("dashboard")) {
+    return null;
+  }
   return (
     <div className="header !max-w-screen">
       {/* top header */}
@@ -16,20 +22,31 @@ const Nav = () => {
         <div className="container flex justify-end h-full">
           <div className="flex items-center gap-x-3">
             <div className="flex gap-x-2 h-full items-center">
-              <p 
+              <p
                 className="text-sm capitalize text-white hover:text-[#270034] cursor-pointer transition-all duration-150"
                 onClick={() => setAuthToggle("login")}
-              >login</p>
+              >
+                login
+              </p>
               <div className="h-full border-[1px] border-white bg-white"></div>
-              <p 
+              <p
                 className="text-sm capitalize text-white hover:text-[#270034] cursor-pointer transition-all duration-150"
                 onClick={() => setAuthToggle("register")}
-              >register</p>
+              >
+                register
+              </p>
             </div>
             <div className="h-full border-[1px] border-white bg-white"></div>
             <div className="relative w-7">
-              <p className="bg-[#270034] rounded-full text-[10px] text-white h-fit flex items-center justify-center w-fit px-[3px] absolute top-0 -left-1 font-medium">2</p>
-              <Icon icon="uil:cart" width="23" height="23" className="text-sm capitalize text-white hover:text-[#270034] cursor-pointer transition-all duration-150"/>
+              <p className="bg-[#270034] rounded-full text-[10px] text-white h-fit flex items-center justify-center w-fit px-[3px] absolute top-0 -left-1 font-medium">
+                2
+              </p>
+              <Icon
+                icon="uil:cart"
+                width="23"
+                height="23"
+                className="text-sm capitalize text-white hover:text-[#270034] cursor-pointer transition-all duration-150"
+              />
             </div>
           </div>
         </div>
@@ -119,7 +136,9 @@ const Nav = () => {
       <MobileMenu setToggle={setToggle} toggle={toggle} />
 
       {/* login & register form */}
-      {authToggle && <LoginRegister setAuthToggle={setAuthToggle} authToggle={authToggle}/>}
+      {authToggle && (
+        <LoginRegister setAuthToggle={setAuthToggle} authToggle={authToggle} />
+      )}
     </div>
   );
 };

@@ -1,30 +1,32 @@
-export type ProductType = {
-  id: string;
-  name: string;
-  category: string;
-  thumbnail: string;
-  sku: string;
-  stock: number;
-  price: string;
-  status: string;
-  rating: number[];
-  slug: string;
-  images: string[];
-};
-
-interface Customer {
-  name: string;
-  avatar: string;
-}
-
 export interface ProductReviewType {
-  id: string;
+  _id: string;
   product: { name: string; category: string; thumbnail: string };
   review: string;
   customer: Customer;
   status: string | undefined;
   rating: number;
   createdAt: Date;
+}
+export type ProductType = {
+  _id: string;
+  title: string;
+  category: string;
+  thumbnail: string;
+  sku: string;
+  stock: number;
+  salePrice: number;
+  regularPrice: number;
+  tags: string[];
+  status: string;
+  reviews: ProductReviewType[];
+  slug: string;
+  attachment: string;
+  images: string[];
+};
+
+interface Customer {
+  name: string;
+  avatar: string;
 }
 
 export type ProductFormState = {
@@ -38,6 +40,10 @@ export type ProductFormState = {
   // 2nd tab
   thumbnail: File | null;
   images: File[] | null;
+  existingThumbnail?: string;
+  existingAttachment?: string;
+  existingImages?: string[];
+  deletedImages?: string[];
 
   // 3rd tab
   sku: string;
@@ -56,8 +62,8 @@ export type ProductFormState = {
   dimensionLength: string;
   dimensionHeight: string;
   dimensionWidth: string;
-  textStatus: string;
-  textClass: string;
+  taxStatus: string;
+  taxClass: string;
   shippingClass: string;
   enelope: boolean;
 
@@ -67,4 +73,42 @@ export type ProductFormState = {
   checkoutPageMessage: string;
   metaData: string;
   metaDescription: string;
+};
+
+//product express validator types errors
+type ValidationErrorItem = {
+  type: string;
+  msg: string;
+  path: string;
+  location: string;
+  value?: string;
+};
+
+export type ProductValidationErrors = {
+  attachment?: ValidationErrorItem;
+  category?: ValidationErrorItem;
+  checkoutPageMessage?: ValidationErrorItem;
+  customMessage?: ValidationErrorItem;
+  declaredValue?: ValidationErrorItem;
+  description?: ValidationErrorItem;
+  dimensionHeight?: ValidationErrorItem;
+  dimensionLength?: ValidationErrorItem;
+  dimensionWidth?: ValidationErrorItem;
+  images?: ValidationErrorItem;
+  isbn?: ValidationErrorItem;
+  metaData?: ValidationErrorItem;
+  metaDescription?: ValidationErrorItem;
+  regularPrice?: ValidationErrorItem;
+  salePrice?: ValidationErrorItem;
+  shippingClass?: ValidationErrorItem;
+  shortDescription?: ValidationErrorItem;
+  sku?: ValidationErrorItem;
+  stock?: ValidationErrorItem;
+  stockStatus?: ValidationErrorItem;
+  taxClass?: ValidationErrorItem;
+  taxStatus?: ValidationErrorItem;
+  thumbnail?: ValidationErrorItem;
+  title?: ValidationErrorItem;
+  weight?: ValidationErrorItem;
+  tags?: ValidationErrorItem;
 };
