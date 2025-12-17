@@ -1,7 +1,6 @@
 "use client"
 import ButtonGroup from "@/components/login&resigter/ButtonGroup";
 import Register from "@/components/login&resigter/Register";
-import Image from "next/image";
 
 const page = () => {
 

@@ -3,6 +3,7 @@ import productFormReducer from "@/redux/features/product/productFormSlice";
 import sidebarReducer from "@/redux/features/sidebar/sidebarSlice";
 import stepperReducer from "@/redux/features/stepper/stepperSlice";
 import userFormReducer from "@/redux/features/user/userFormSlice";
+import registerFormReducer from "@/redux/auth/registerFormSlice";
 import { configureStore } from "@reduxjs/toolkit";
 export const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
     productForm: productFormReducer,
     courseForm: courseFormReducer,
     userForm: userFormReducer,
+    registerFrom: registerFormReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
