@@ -10,6 +10,7 @@ export default async function EditProduct({
   params: { id: string };
 }) {
   const { id } = await params;
+
   const [productRes, categoryRes] = await Promise.all([
     fetch(BASE_URL + "/api/ecommerce/products/" + id),
     fetch(BASE_URL + "/api/ecommerce/categories"),
@@ -19,13 +20,13 @@ export default async function EditProduct({
     productRes.json(),
     categoryRes.json(),
   ]);
+
   const categories = categoriesData.data.map(
     (category: { name: string; slug: string }) => ({
       label: category.name,
       value: category.slug,
     })
   );
-
   return (
     <div>
       <PageHeading

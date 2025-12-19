@@ -13,6 +13,7 @@ interface SelectBoxProps {
   className?: string;
   placeholder?: string;
   value?: string;
+  defaultValue?: string;
   onChange?: (value: string) => void;
   options: { label: string; value: string }[];
   error?: string;
@@ -24,6 +25,7 @@ export default function SelectBox({
   label,
   placeholder,
   value,
+  defaultValue,
   onChange,
   options,
   error,
@@ -33,7 +35,11 @@ export default function SelectBox({
       <Label htmlFor={name} className="capitalize mb-4 block">
         {label}
       </Label>
-      <Select onValueChange={onChange} defaultValue={value}>
+      <Select
+        onValueChange={onChange}
+        defaultValue={defaultValue}
+        value={value}
+      >
         <SelectTrigger id={name} className="w-full py-5">
           <SelectValue placeholder={placeholder || "Select option"} />
         </SelectTrigger>

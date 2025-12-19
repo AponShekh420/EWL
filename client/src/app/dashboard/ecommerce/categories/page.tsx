@@ -2,6 +2,7 @@ import PageHeading from "@/components/dashboard/common/PageHeading";
 import CategoriesTable from "@/components/dashboard/common/tables/CategoriesTable";
 import { Button } from "@/components/ui/button";
 import { BASE_URL } from "@/utils/envVariable";
+import { queryFormatter } from "@/utils/queryFormatter";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 
@@ -10,9 +11,9 @@ export default async function Categories({
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const page = await searchParams;
+  const query = await queryFormatter(searchParams);
   const res = await fetch(
-    BASE_URL + "/api/ecommerce/categories-by-filter?page=" + page.page
+    BASE_URL + "/api/ecommerce/categories-by-filter?" + query
   );
   const { data: categories, pagination } = await res.json();
   return (

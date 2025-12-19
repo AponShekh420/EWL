@@ -1,6 +1,6 @@
 export interface ProductReviewType {
   _id: string;
-  product: { name: string; category: string; thumbnail: string };
+  product: ProductType;
   review: string;
   customer: Customer;
   status: string | undefined;

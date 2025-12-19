@@ -23,11 +23,14 @@ import {
 } from "@/components/ui/table";
 import { CategoryType } from "@/types/Category";
 import { PaginationType } from "@/types/Pagination";
+import { debounce } from "@/utils/debounce";
 import { BASE_URL } from "@/utils/envVariable";
 import { paginationCounter } from "@/utils/paginationCounter";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useMemo } from "react";
 import toast from "react-hot-toast";
 
 export default function CategoriesTable({
@@ -37,6 +40,7 @@ export default function CategoriesTable({
   categories: CategoryType[];
   pagination: PaginationType;
 }) {
+  const router = useRouter();
   const deleteHandler = async (id: string) => {
     if (!id) return;
     const res = await fetch(BASE_URL + "/api/ecommerce/categories/" + id, {
@@ -48,11 +52,21 @@ export default function CategoriesTable({
       toast.success(data.message);
     }
   };
+  const debouncedSearch = useMemo(
+    () =>
+      debounce((value: string) => {
+        router.push(`/dashboard/ecommerce/categories?search=${value}`);
+      }, 500),
+    [router]
+  );
   return (
     <div>
       <div className="my-5">
         <div className="flex justify-between flex-col-reverse sm:flex-row gap-4 mt-5">
-          <SearchBox placeholder="Search by category name..." />
+          <SearchBox
+            placeholder="Search by category name..."
+            onChange={(e) => debouncedSearch(e.target.value)}
+          />
           <div className="space-x-4">
             <Button
               variant="outline"
@@ -153,7 +167,7 @@ export default function CategoriesTable({
             <PaginationItem>
               {pagination.page > 1 ? (
                 <PaginationPrevious
-                  href={`/dashboard/ecommerce/orders?page=${
+                  href={`/dashboard/ecommerce/categories?page=${
                     pagination.page - 1
                   }`}
                 />
@@ -171,7 +185,7 @@ export default function CategoriesTable({
                 <PaginationLink
                   className={pagination.page === page ? "bg-gray-100" : ""}
                   key={index}
-                  href={`/dashboard/ecommerce/orders?page=${page}`}
+                  href={`/dashboard/ecommerce/categories?page=${page}`}
                 >
                   {page}
                 </PaginationLink>
@@ -183,7 +197,7 @@ export default function CategoriesTable({
             <PaginationItem>
               {pagination.totalPages > pagination.page ? (
                 <PaginationNext
-                  href={`/dashboard/ecommerce/orders?page=${
+                  href={`/dashboard/ecommerce/categories?page=${
                     pagination.page + 1
                   }`}
                 />

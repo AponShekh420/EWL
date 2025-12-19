@@ -36,15 +36,18 @@ import {
 } from "@/components/ui/table";
 import { PaginationType } from "@/types/Pagination";
 import { ProductType } from "@/types/Product";
+import { debounce } from "@/utils/debounce";
 import { BASE_URL } from "@/utils/envVariable";
 import { getAverageRating } from "@/utils/getAverageRating";
 import { getProductStatusColor } from "@/utils/getStatusColor";
 import { paginationCounter } from "@/utils/paginationCounter";
-
 import { Icon } from "@iconify/react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useMemo } from "react";
 import toast from "react-hot-toast";
+
 export default function ProductTable({
   products,
   pagination,
@@ -52,6 +55,7 @@ export default function ProductTable({
   products: ProductType[];
   pagination: PaginationType;
 }) {
+  const router = useRouter();
   const deleteHandler = async (id: string) => {
     if (!id) return;
     const res = await fetch(BASE_URL + "/api/ecommerce/products/" + id, {
@@ -79,11 +83,23 @@ export default function ProductTable({
       toast.success(data.message);
     }
   };
+
+  const debouncedSearch = useMemo(
+    () =>
+      debounce((value: string) => {
+        router.push(`/dashboard/ecommerce/products?search=${value}`);
+      }, 500),
+    [router]
+  );
+
   return (
     <div>
       <div className="my-5">
         <div className="flex justify-between flex-col-reverse sm:flex-row gap-4 mt-5">
-          <SearchBox placeholder="Search by product name..." />
+          <SearchBox
+            placeholder="Search by product name..."
+            onChange={(e) => debouncedSearch(e.target.value)}
+          />
           <div className="space-x-4">
             <Sheet>
               <SheetTrigger>
@@ -173,7 +189,9 @@ export default function ProductTable({
                         className="size-12 object-cover rounded-md"
                       />
                       <div className="font-lexend-deca">
-                        <h5 className="font-medium">{product.title}</h5>
+                        <h5 className="font-medium text-wrap">
+                          {product.title}
+                        </h5>
                         <p className="text-gray-500  mt-0.5">
                           {product.category}
                         </p>
@@ -278,7 +296,7 @@ export default function ProductTable({
             <PaginationItem>
               {pagination.page > 1 ? (
                 <PaginationPrevious
-                  href={`/dashboard/ecommerce/orders?page=${
+                  href={`/dashboard/ecommerce/products?page=${
                     pagination.page - 1
                   }`}
                 />
@@ -296,7 +314,7 @@ export default function ProductTable({
                 <PaginationLink
                   className={pagination.page === page ? "bg-gray-100" : ""}
                   key={index}
-                  href={`/dashboard/ecommerce/orders?page=${page}`}
+                  href={`/dashboard/ecommerce/products?page=${page}`}
                 >
                   {page}
                 </PaginationLink>
@@ -308,7 +326,7 @@ export default function ProductTable({
             <PaginationItem>
               {pagination.totalPages > pagination.page ? (
                 <PaginationNext
-                  href={`/dashboard/ecommerce/orders?page=${
+                  href={`/dashboard/ecommerce/products?page=${
                     pagination.page + 1
                   }`}
                 />

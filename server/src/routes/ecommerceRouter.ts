@@ -15,7 +15,7 @@ import { getAllCart } from "../controllers/ecommerce/cart/getAllCart";
 import { updateCart } from "../controllers/ecommerce/cart/updateCart";
 import { createOrder } from "../controllers/ecommerce/order/createOrder";
 import { deleteOrder } from "../controllers/ecommerce/order/deleteOrder";
-import { getAllOrder } from "../controllers/ecommerce/order/getAllProduct";
+import { getAllOrder } from "../controllers/ecommerce/order/getAllOrders";
 import { getOrderById } from "../controllers/ecommerce/order/getOrderById";
 import { updateOrder } from "../controllers/ecommerce/order/updateOrder";
 import { createProduct } from "../controllers/ecommerce/product/createProduct";
