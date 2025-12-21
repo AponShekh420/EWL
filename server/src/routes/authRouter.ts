@@ -6,11 +6,13 @@ import logout from "../controllers/auth/logout";
 import checkSignUpValidation from "../middleware/auth/checkSignUpValidation";
 import checkSignInValidation from "../middleware/auth/checkSignInValidation";
 import authCheck from "../middleware/common/authCheck";
+import multer from "multer";
+const upload = multer();
 
 const router = express.Router();
 
 router.post("/signin", checkSignInValidation, useValidationResult, signin);
-router.post("/signup", checkSignUpValidation, useValidationResult, signup)
+router.post("/signup", upload.none(), checkSignUpValidation, useValidationResult, signup);
 router.patch("/logout", authCheck, logout)
 
 

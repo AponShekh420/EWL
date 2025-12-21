@@ -1,62 +1,101 @@
-import { check } from "express-validator";
+import { body } from "express-validator";
 import UserModel from "../../models/UserModel";
 
-const checkSignUpValidation = [ 
-  check("userName")
-    .isLength({min: 3})
-    .withMessage("The last name is too short")
+const checkSignUpValidation = [
+
+  // Username
+  body("userName")
+    .isLength({ min: 3 })
+    .withMessage("Username must be at least 3 characters long")
     .trim(),
-  check("firstName")
-    .isLength({min: 2})
-    .withMessage('First name is required')
-    .isAlpha('en-US', {ignore: ' -'})
-    .withMessage('There should be nothing but alphabets')
+
+  // First Name
+  body("firstName")
+    .isLength({ min: 2 })
+    .withMessage("First name must be at least 2 characters long")
+    .isAlpha("en-US", { ignore: " -" })
+    .withMessage("First name can contain only letters")
     .trim(),
-  check("lastName")
-    .isLength({min: 2})
-    .withMessage('Last name is required')
-    .isAlpha('en-US', {ignore: ' -'})
-    .withMessage('There should be nothing but alphabets')
+
+  // Last Name
+  body("lastName")
+    .isLength({ min: 2 })
+    .withMessage("Last name must be at least 2 characters long")
+    .isAlpha("en-US", { ignore: " -" })
+    .withMessage("Last name can contain only letters")
     .trim(),
-  check("email")
+
+  // Email
+  body("email")
     .isEmail()
-    .withMessage("Invalid email address")
-    .custom((email: string) => {
-      return UserModel.findOne({email}).then(user => {
-        if (user) {
-          return Promise.reject('E-mail already in use');
-        }
-      });
+    .withMessage("Please enter a valid email address")
+    .custom(async (email: string) => {
+      const user = await UserModel.findOne({ email });
+      if (user) {
+        throw new Error("Email already exists");
+      }
     })
+    .normalizeEmail(),
+
+  // Password
+  body("password")
+    .isStrongPassword({
+      minLength: 8,
+      minLowercase: 1,
+      minUppercase: 1,
+      minNumbers: 1,
+      minSymbols: 1,
+    })
+    .withMessage(
+      "Password must be at least 8 characters long and include uppercase, lowercase, number, and symbol"
+    ),
+
+  // Confirm Password
+  body("cpassword")
+    .notEmpty()
+    .withMessage("Confirm password is required")
+    .custom((value, { req }) => {
+      if (value !== req.body.password) {
+        throw new Error("Passwords do not match");
+      }
+      return true;
+    }),
+
+  // Gender
+  body("gender")
+    .notEmpty()
+    .withMessage("Gender is required")
     .trim(),
-  check("password")
-    .isStrongPassword()
-    .withMessage('Password must be at 8 charactor long & should contain at least 3 lowercase, 3 uppercase, 3 number, & 3 symbol')
+
+  // Is Orthodox Jew
+  body("isOrthodoxJew")
+    .notEmpty()
+    .withMessage("Orthodox Jew status must be 'Yes' or 'No'")
     .trim(),
-  check("gender")
-    .isLength({min: 2})
-    .withMessage("The last name is too short")
+
+  // Marital Status
+  body("maritalStatus")
+    .notEmpty()
+    .withMessage("Marital status is required")
     .trim(),
-  check("isOrthodoxJew")
-    .isBoolean()
-    .withMessage("The last name is too short")
+
+  // Keeps Mitzvos
+  body("keepsMitzvos")
+    .notEmpty()
+    .withMessage("Keeps mitzvos must be 'Yes' or 'No'")
     .trim(),
-  check("maritalStatus")
-    .isLength({min: 2})
-    .withMessage("The first name is too short")
+
+  // Chafifa Duration
+  body("chafifaDuration")
+    .notEmpty()
+    .withMessage("Chafifa duration is required")
     .trim(),
-  check("keepsMitzvos")
-    .isBoolean()
-    .withMessage("The last name is too short")
+
+  // Chicken Soup in Dairy Sink
+  body("chickenSoupInDairySink")
+    .notEmpty()
+    .withMessage("Please select an option for chicken soup in dairy sink")
     .trim(),
-  check("chafifaDuration")
-    .isLength({min: 2})
-    .withMessage("The last name is too short")
-    .trim(),
-  check("chickenSoupInDairySink")
-    .isLength({min: 2})
-    .withMessage("The last name is too short")
-    .trim()
-]
+];
 
 export default checkSignUpValidation;

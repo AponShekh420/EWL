@@ -19,10 +19,16 @@ import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Textarea } from "../ui/textarea";
 
 import { useDispatch, useSelector } from "react-redux";
-import { addUserField } from "@/redux/auth/registerFormSlice";
+import { addUserField, resetUserFields } from "@/redux/auth/registerFormSlice";
 import type { RootState } from "@/redux/store";
+import UserErrors from "@/types/UserErrors";
+import { useState } from "react";
+import { createFormData } from "@/utils/createFormData";
+import toast from "react-hot-toast";
+import { BASE_URL } from "@/utils/envVariable";
 
 const Register = () => {
+  const [errors, setErrors] = useState<UserErrors>({});
   const dispatch = useDispatch();
 
   // 👇 same redux state
@@ -34,6 +40,28 @@ const Register = () => {
     dispatch(addUserField({ [field]: value }));
   };
 
+  const onHandleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrors({});
+    const formData = createFormData(form);
+
+    console.log("Submitting registration form:", formData.get("userName"));
+    const res = await fetch(BASE_URL + "/api/auth/signup", {
+      method: "POST",
+      body: formData,
+    });
+    const data = await res.json();
+    console.log("Registration response:", data);
+
+    if (!data.success) {
+      setErrors(data.errors || {});
+    }
+    if (data.success) {
+      toast.success(data.message);
+      dispatch(resetUserFields());
+    }
+  };
+
   return (
     <div>
       <p className="text-[#333333] mt-4">
@@ -41,7 +69,7 @@ const Register = () => {
         Put a button to the form
       </p>
 
-      <div className="w-ful mt-5">
+      <form className="w-ful mt-5" onSubmit={onHandleSubmit}>
         <FieldSet>
           <FieldGroup className="grid md:grid-cols-2 grid-cols-1">
             <Field>
@@ -57,9 +85,11 @@ const Register = () => {
                   handleChange("userName", e.target.value)
                 }
               />
-              {/* <FieldDescription>
-                Choose a unique username for your account.
-              </FieldDescription> */}
+              {errors?.userName && (
+                <FieldDescription className="text-red-600">
+                  {errors?.userName?.msg}
+                </FieldDescription>
+              )}
             </Field>
 
             <Field>
@@ -75,9 +105,11 @@ const Register = () => {
                   handleChange("firstName", e.target.value)
                 }
               />
-              {/* <FieldDescription>
-                Must be at least 8 characters long.
-              </FieldDescription> */}
+              {errors?.firstName && (
+                <FieldDescription className="text-red-600">
+                  {errors?.firstName?.msg}
+                </FieldDescription>
+              )}
             </Field>
 
             <Field>
@@ -93,9 +125,11 @@ const Register = () => {
                   handleChange("lastName", e.target.value)
                 }
               />
-              {/* <FieldDescription>
-                Choose a unique username for your account.
-              </FieldDescription> */}
+              {errors?.lastName && (
+                <FieldDescription className="text-red-600">
+                  {errors?.lastName?.msg}
+                </FieldDescription>
+              )}
             </Field>
 
             <Field>
@@ -111,9 +145,11 @@ const Register = () => {
                   handleChange("email", e.target.value)
                 }
               />
-              {/* <FieldDescription>
-                Choose a unique username for your account.
-              </FieldDescription> */}
+              {errors?.email && (
+                <FieldDescription className="text-red-600">
+                  {errors?.email?.msg}
+                </FieldDescription>
+              )}
             </Field>
 
             <Field>
@@ -129,9 +165,11 @@ const Register = () => {
                   handleChange("password", e.target.value)
                 }
               />
-              {/* <FieldDescription>
-                Must be at least 8 characters long.
-              </FieldDescription> */}
+              {errors?.password && (
+                <FieldDescription className="text-red-600">
+                  {errors?.password?.msg}
+                </FieldDescription>
+              )}
             </Field>
 
             <Field>
@@ -147,9 +185,11 @@ const Register = () => {
                   handleChange("cpassword", e.target.value)
                 }
               />
-              {/* <FieldDescription>
-                Must be at least 8 characters long.
-              </FieldDescription> */}
+              {errors?.cpassword && (
+                <FieldDescription className="text-red-600">
+                  {errors?.cpassword?.msg}
+                </FieldDescription>
+              )}
             </Field>
 
             <Field>
@@ -166,13 +206,15 @@ const Register = () => {
                   <SelectValue placeholder="Select Gender" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="engineering">Male</SelectItem>
-                  <SelectItem value="design">Female</SelectItem>
+                  <SelectItem value="male">Male</SelectItem>
+                  <SelectItem value="female">Female</SelectItem>
                 </SelectContent>
               </Select>
-              {/* <FieldDescription>
-                Select your department or area of work.
-              </FieldDescription> */}
+              {errors?.gender && (
+                <FieldDescription className="text-red-600">
+                  {errors?.gender?.msg}
+                </FieldDescription>
+              )}
             </Field>
 
             {/* redio */}
@@ -201,6 +243,11 @@ const Register = () => {
                   </FieldLabel>
                 </Field>
               </RadioGroup>
+              {errors?.isOrthodoxJew && (
+                <FieldDescription className="text-red-600">
+                  {errors?.isOrthodoxJew?.msg}
+                </FieldDescription>
+              )}
             </FieldSet>
 
             <FieldSet>
@@ -234,6 +281,11 @@ const Register = () => {
                   </FieldLabel>
                 </Field>
               </RadioGroup>
+              {errors?.maritalStatus && (
+                <FieldDescription className="text-red-600">
+                  {errors?.maritalStatus?.msg}
+                </FieldDescription>
+              )}
             </FieldSet>
 
             <FieldSet>
@@ -261,6 +313,11 @@ const Register = () => {
                   </FieldLabel>
                 </Field>
               </RadioGroup>
+              {errors?.keepsMitzvos && (
+                <FieldDescription className="text-red-600">
+                  {errors?.keepsMitzvos?.msg}
+                </FieldDescription>
+              )}
             </FieldSet>
 
             <Field>
@@ -285,6 +342,11 @@ const Register = () => {
                   )
                 }
               />
+              {errors?.chafifaDuration && (
+                <FieldDescription className="text-red-600">
+                  {errors?.chafifaDuration?.msg}
+                </FieldDescription>
+              )}
             </Field>
 
             <Field>
@@ -305,21 +367,24 @@ const Register = () => {
                   )
                 }
               />
-              {/* <FieldDescription>
-                Share your thoughts about our service.
-              </FieldDescription> */}
+              {errors?.chickenSoupInDairySink && (
+                <FieldDescription className="text-red-600">
+                  {errors?.chickenSoupInDairySink?.msg}
+                </FieldDescription>
+              )}
             </Field>
           </FieldGroup>
         </FieldSet>
 
         <button
+          type="submit"
           className="mt-5 w-full py-3 text-white font-medium text-lg rounded-lg 
           bg-gradient-to-r from-teal via-purple-500 to-pink-500 
           bg-[length:200%_200%] transition-all duration-500 hover:bg-right"
         >
           Register
         </button>
-      </div>
+      </form>
     </div>
   );
 };
