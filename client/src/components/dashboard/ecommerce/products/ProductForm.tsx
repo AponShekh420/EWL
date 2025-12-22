@@ -721,12 +721,25 @@ export default function CreateProductForm({
                 name="meta-title"
                 label="Meta Title"
                 placeholder="Meta Title"
-                value={productForm.metaData}
+                value={productForm.metaTitle}
                 onChange={(e) =>
-                  dispatch(addProductField({ metaData: e.target.value }))
+                  dispatch(addProductField({ metaTitle: e.target.value }))
                 }
-                error={errors?.metaData?.msg}
+                error={errors?.metaTitle?.msg}
               />
+              {path.includes("edit") && (
+                <InputBox
+                  name="meta-slug"
+                  label="Meta Slug"
+                  placeholder="Meta slug"
+                  value={productForm.slug}
+                  onChange={(e) =>
+                    dispatch(addProductField({ slug: e.target.value }))
+                  }
+                  error={errors?.slug?.msg}
+                />
+              )}
+
               <TextBox
                 label="Meta Description"
                 name="Meta Description"

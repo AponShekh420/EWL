@@ -7,6 +7,7 @@ const productSchema = new Schema(
       type: String,
       required: true,
     },
+    slug: { type: String, required: true },
     category: {
       type: String,
       required: true,
@@ -60,7 +61,7 @@ const productSchema = new Schema(
     customMessage: { type: String, required: true },
     attachment: { type: String, required: true },
     checkoutPageMessage: { type: String, required: true },
-    metaData: { type: String, required: true },
+    metaTitle: { type: String, required: true },
     metaDescription: { type: String, required: true },
   },
   { timestamps: true }

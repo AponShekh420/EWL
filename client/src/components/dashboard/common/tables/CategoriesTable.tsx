@@ -123,12 +123,12 @@ export default function CategoriesTable({
               </TableCell>
               <TableCell>{category.slug}</TableCell>
               <TableCell className="font-medium">
-                {category.products ? category.products : 0}
+                {category.products ? category.products.length : 0}
               </TableCell>
               <TableCell>
                 <div className="flex items-center gap-x-3">
                   <Link
-                    href={`/dashboard/ecommerce/categories/edit/${category._id}`}
+                    href={`/dashboard/ecommerce/categories/edit/${category.slug}`}
                   >
                     <Button
                       size="icon"

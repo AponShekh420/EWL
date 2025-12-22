@@ -7,10 +7,10 @@ import Link from "next/link";
 export default async function EditCategory({
   params,
 }: {
-  params: { id: string };
+  params: { slug: string };
 }) {
-  const { id } = await params;
-  const res = await fetch(BASE_URL + "/api/ecommerce/categories/" + id);
+  const { slug } = await params;
+  const res = await fetch(BASE_URL + "/api/ecommerce/categories/" + slug);
   const { data: category } = await res.json();
 
   return (
@@ -22,7 +22,11 @@ export default async function EditCategory({
           { name: "Categories", href: "/ecommerce/categories" },
           {
             name: "Edit",
-            href: `/ecommerce/categories/edit/${id}`,
+            href: `/ecommerce/categories/edit/${slug}`,
+          },
+          {
+            name: slug,
+            href: `/ecommerce/categories/edit/${slug}`,
           },
         ]}
       >

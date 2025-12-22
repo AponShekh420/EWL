@@ -61,10 +61,9 @@ export const productValidationRules = [
   body("checkoutPageMessage")
     .notEmpty()
     .withMessage("Checkout page message is required"),
-  body("metaData").notEmpty().withMessage("Meta data is required"),
-  body("metaDescription")
-    .notEmpty()
-    .withMessage("Meta description is required"),
+  body("metaTitle").optional(),
+  body("metaDescription").optional(),
+  body("slug").optional(),
 ];
 
 export const validateProduct = (

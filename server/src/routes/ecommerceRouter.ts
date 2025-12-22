@@ -21,13 +21,14 @@ import { updateOrder } from "../controllers/ecommerce/order/updateOrder";
 import { createProduct } from "../controllers/ecommerce/product/createProduct";
 import { deleteProduct } from "../controllers/ecommerce/product/deleteProduct";
 import { getAllProduct } from "../controllers/ecommerce/product/getAllProduct";
-import { getProductById } from "../controllers/ecommerce/product/getProductById";
+import { getProductBySlug } from "../controllers/ecommerce/product/getProductById";
 import { updateProduct } from "../controllers/ecommerce/product/updateProduct";
 import { createReview } from "../controllers/ecommerce/review/createReview";
 import { deleteReview } from "../controllers/ecommerce/review/deleteReview";
 
 import { getCategoriesByFilters } from "../controllers/ecommerce/category/getCategoriesByFilters";
-import { getCategoryById } from "../controllers/ecommerce/category/getCategoryById";
+import { getCategoryBySlug } from "../controllers/ecommerce/category/getCategoryBySlug";
+import { getSubCategoryById } from "../controllers/ecommerce/category/sub-category/getSubCategoryById";
 import { getProductByFilter } from "../controllers/ecommerce/product/getProductByFilter";
 import { updateProductStatus } from "../controllers/ecommerce/product/updateProductStatus";
 import { getAllReview } from "../controllers/ecommerce/review/getAllReview";
@@ -93,7 +94,7 @@ router.put(
 );
 router.put("/product-status/:id", updateProductStatus);
 router.delete("/products/:id", deleteProduct);
-router.get("/products/:id", getProductById);
+router.get("/products/:slug", getProductBySlug);
 router.get("/products", getAllProduct);
 router.get("/product-by-filter", getProductByFilter);
 //order routes
@@ -136,7 +137,7 @@ router.put(
   updateCategory
 );
 router.delete("/categories/:id", deleteCategory);
-router.get("/categories/:id", getCategoryById);
+router.get("/categories/:slug", getCategoryBySlug);
 router.get("/categories", getAllCategories);
 router.get("/categories-by-filter", getCategoriesByFilters);
 
@@ -148,7 +149,7 @@ router.post(
   validateSubcategory,
   createSubCategory
 );
-router.get("/subcategories/:id", getCategoryById);
+router.get("/subcategories/:id", getSubCategoryById);
 router.put(
   "/subcategories/:id",
   singleFileUploader.single("thumbnail"),

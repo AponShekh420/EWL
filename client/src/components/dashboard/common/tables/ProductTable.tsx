@@ -245,7 +245,7 @@ export default function ProductTable({
                 <TableCell>
                   <div className="flex items-center gap-x-3">
                     <Link
-                      href={`/dashboard/ecommerce/products/edit/${product._id}`}
+                      href={`/dashboard/ecommerce/products/edit/${product.slug}`}
                     >
                       <Button
                         size="icon"
@@ -259,7 +259,9 @@ export default function ProductTable({
                         />
                       </Button>
                     </Link>
-                    <Link href={`/dashboard/ecommerce/products/${product._id}`}>
+                    <Link
+                      href={`/dashboard/ecommerce/products/${product.slug}`}
+                    >
                       <Button
                         size="icon"
                         variant="outline"

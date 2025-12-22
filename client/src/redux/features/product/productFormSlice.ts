@@ -5,6 +5,7 @@ const initialState: ProductFormState = {
   title: "",
   category: "",
   shortDescription: "",
+  slug: "",
   tags: "",
   description: "",
   //   2nd tab
@@ -40,7 +41,7 @@ const initialState: ProductFormState = {
   customMessage: "",
   attachment: null,
   checkoutPageMessage: "",
-  metaData: "",
+  metaTitle: "",
   metaDescription: "",
 };
 
