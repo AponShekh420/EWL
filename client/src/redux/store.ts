@@ -6,6 +6,7 @@ import stepperReducer from "@/redux/features/stepper/stepperSlice";
 import userFormReducer from "@/redux/features/user/userFormSlice";
 import registerFormReducer from "@/redux/auth/registerFormSlice";
 import loginFormReducer from "@/redux/auth/loginFormSlice";
+import userSlice from "@/redux/auth/userSlice";
 import { configureStore } from "@reduxjs/toolkit";
 export const store = configureStore({
   reducer: {
@@ -17,6 +18,7 @@ export const store = configureStore({
     userForm: userFormReducer,
     registerFrom: registerFormReducer,
     loginFrom: loginFormReducer,
+    user: userSlice
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

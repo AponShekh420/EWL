@@ -2,6 +2,7 @@
 
 import {
   Field,
+  FieldDescription,
   FieldGroup,
   FieldLabel,
   FieldSet,
@@ -9,10 +10,18 @@ import {
 import { Input } from "@/components/ui/input";
 
 import { useDispatch, useSelector } from "react-redux";
-import { addUserField } from "@/redux/auth/loginFormSlice";
+import { addUserField, resetUserFields } from "@/redux/auth/loginFormSlice";
 import type { RootState } from "@/redux/store";
+import { BASE_URL } from "@/utils/envVariable";
+import { createFormData } from "@/utils/createFormData";
+import toast from "react-hot-toast";
+import { setCredentials } from "@/redux/auth/userSlice";
+import { useState } from "react";
 
 const Login = () => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [errors, setErrors] = useState<Record<string, { msg: string }>>({});
+
   const dispatch = useDispatch();
 
   // 👇 using your existing store key
@@ -24,9 +33,40 @@ const Login = () => {
     dispatch(addUserField({ [field]: value }));
   };
 
+
+   const userLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const formData = createFormData(form);
+    console.log("formData", formData.get("email"), formData.get("password"))
+    try {
+      setErrors({})
+      setLoading(true)
+      const res = await fetch(BASE_URL + "/api/auth/signin", {
+        method: "POST",
+        body: formData,
+        credentials: "include",
+      });
+      const dataRes = await res.json();
+      setLoading(false)
+      if(dataRes.success) {
+        const {userInfo} = dataRes;
+        dispatch(setCredentials(userInfo));
+        dispatch(resetUserFields());
+        toast.success(dataRes.msg)
+        // modalCloseBtn.current.click();
+      } else {
+        setErrors(dataRes?.errors)
+      }
+    } catch(err: unknown) {
+      if (err instanceof Error) {
+        console.log(err.message)
+      }
+    }
+  }
+
   return (
     <div>
-      <div className="w-ful mt-5">
+      <form className="w-ful mt-5" onSubmit={userLogin}>
         <FieldSet>
           <FieldGroup>
             <Field>
@@ -43,9 +83,11 @@ const Login = () => {
                   handleChange("email", e.target.value)
                 }
               />
-              {/* <FieldDescription>
-                Choose a unique username for your account.
-              </FieldDescription> */}
+              {errors?.email && (
+                <FieldDescription className="text-red-600">
+                  {errors?.email?.msg}
+                </FieldDescription>
+              )}
             </Field>
 
             <Field>
@@ -61,21 +103,28 @@ const Login = () => {
                   handleChange("password", e.target.value)
                 }
               />
-              {/* <FieldDescription>
-                Must be at least 8 characters long.
-              </FieldDescription> */}
+               {errors?.password && (
+                <FieldDescription className="text-red-600">
+                  {errors?.password?.msg}
+                </FieldDescription>
+              )}
             </Field>
           </FieldGroup>
         </FieldSet>
 
+        {errors?.failure && (
+          <p className="text-red-600 mt-2 text-center">{errors?.failure?.msg}</p>
+        )}
+
         <button
+          type="submit"
           className="mt-5 w-full py-3 text-white font-medium text-lg rounded-lg 
           bg-gradient-to-r from-teal via-purple-500 to-pink-500 
           bg-[length:200%_200%] transition-all duration-500 hover:bg-right"
         >
           Login
         </button>
-      </div>
+      </form>
     </div>
   );
 };

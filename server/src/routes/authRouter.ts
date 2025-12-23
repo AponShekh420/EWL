@@ -1,4 +1,4 @@
-import express from "express"
+import express, { Request, Response } from "express"
 import signup from "../controllers/auth/signup";
 import signin from "../controllers/auth/signin";
 import useValidationResult from "../middleware/common/useValidationResult";
@@ -11,9 +11,15 @@ const upload = multer();
 
 const router = express.Router();
 
-router.post("/signin", checkSignInValidation, useValidationResult, signin);
+router.post("/signin", upload.none(), checkSignInValidation, useValidationResult,  signin);
 router.post("/signup", upload.none(), checkSignUpValidation, useValidationResult, signup);
-router.patch("/logout", authCheck, logout)
+router.patch("/logout", authCheck, logout);
+router.get("/login/success", authCheck, (req: Request, res: Response) => {
+    res.status(200).json({
+        user: (req as any)?.user,
+        msg: "Succesfully logged in",
+    })
+})
 
 
 export default router;

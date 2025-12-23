@@ -7,6 +7,12 @@ const checkSignUpValidation = [
   body("userName")
     .isLength({ min: 3 })
     .withMessage("Username must be at least 3 characters long")
+    .custom(async (userName: string) => {
+      const user = await UserModel.findOne({ userName });
+      if (user) {
+        throw new Error("Username already exists");
+      }
+    })
     .trim(),
 
   // First Name

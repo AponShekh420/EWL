@@ -15,7 +15,7 @@ const initialState = {
   chafifaDuration: "",
   chickenSoupInDairySink: "",
 };
-export type UserFormState = typeof initialState;
+export type RegisterFormState = typeof initialState;
 export const registerFormSlice = createSlice({
   name: "user-form",
   initialState,
