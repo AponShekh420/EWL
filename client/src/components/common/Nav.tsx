@@ -56,9 +56,9 @@ const Nav = () => {
       <nav className="text-[1.05rem] fixed top-7 z-40 w-full bg-white h-20 shadow-[0px_0px_15px_0px_#C5C5C5] !max-w-screen">
         <div className="container flex justify-between items-center h-full sm:gap-x-2 py-2">
           {/* logo */}
-          <div className="sm:min-w-[130px] w-[130px] sm:max-w-[130px] h-full relative">
+          <Link className="sm:min-w-[130px] w-[130px] sm:max-w-[130px] h-full relative" href={"/"}>
             <Image src="/logo.png" alt="logo" fill className="h-full w-auto" />
-          </div>
+          </Link>
 
           {/* menu */}
           <div className="lg:flex flex-wrap hidden">

@@ -6,8 +6,7 @@ import tokenGenerator from '../../helpers/tokenGenerator';
 
 const signin = async (req: Request, res: Response, next: NextFunction) => {
   const {email, password} = req.body;
-  const userInfo = await UserModel.findOne({email}) ;
-  console.log(userInfo)
+  const userInfo = await UserModel.findOne({$or: [{email: email.toLowerCase()}, {userName: email.toLowerCase()}]}); ;
   if(userInfo) {
     const passCheck = await bcrypt.compare(password, userInfo?.password);
     if(passCheck) {
@@ -33,19 +32,16 @@ const signin = async (req: Request, res: Response, next: NextFunction) => {
       res.status(200).json({
         userInfo: modifiedUser,
         token: token,
-        message: "Logged in successfully!"
+        msg: "Logged in successfully!",
+        success: true
       })
 
     } else {
-      next(createError(403, "Invalid email or password."));
+      res.status(401).json({errors: {failure: {msg: "Invalid email or password."}}})
     }
   } else {
-    next(createError(403, "Invalid email or password."));
+    res.status(401).json({errors: {failure: {msg: "Invalid email or password."}}})
   }
-  res.status(200).json({
-    message: "The user has loggined successfully!",
-    // data: authCheck
-  })
 }
 
 export default signin;

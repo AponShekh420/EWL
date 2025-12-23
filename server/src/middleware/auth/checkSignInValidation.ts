@@ -1,12 +1,12 @@
-import { check } from "express-validator";
+import { body } from "express-validator";
 
 const checkSignInValidation = [
-  check("email")
-    .isEmail()
-    .withMessage("Invalid email address")
+  body("email")
+    .notEmpty()
+    .withMessage("Email address or username is required")
     .trim(),
-  check("password")
-    .isLength({min: 8})
+  body("password")
+    .notEmpty()
     .withMessage('Password is required')
     .trim()
 ];

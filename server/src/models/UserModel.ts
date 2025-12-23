@@ -21,7 +21,14 @@ const userSchema = new Schema({
   role: {
     type: String,
     required: true,
+    default: "viewer",
     enum: ['admin', 'speaker', "viewer", "customer"],
+  },
+  status: {
+    type: String,
+    required: true,
+    default: "pending",
+    enum: ['active', 'pending'],
   },
   email: {
     type: String,

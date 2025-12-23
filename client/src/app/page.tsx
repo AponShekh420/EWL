@@ -10,7 +10,11 @@ import StuggleToStrength from "@/components/home/StuggleToStrength";
 import Testimonials from "@/components/home/testimonials/Testimonials";
 import Upcoming from "@/components/home/Upcoming";
 import Welcome from "@/components/home/Welcome";
-export default function Home() {
+import { getSession } from "@/lib/authLib";
+export default async function Home() {
+  const user = await getSession();
+  console.log("Home User:", user);
+  
   return (
     <main>
       <Hero />
