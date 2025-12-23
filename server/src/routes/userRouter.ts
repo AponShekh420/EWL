@@ -9,7 +9,7 @@ import {
   userValidationRules,
   validateUser,
 } from "../middleware/user/userValidator";
-const singleFileUploader = multerUploader("category");
+const singleFileUploader = multerUploader("profile");
 const router = express.Router();
 
 router.post(
