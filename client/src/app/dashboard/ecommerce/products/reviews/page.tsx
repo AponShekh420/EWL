@@ -14,7 +14,9 @@ export default async function Reviews({
   const query = await queryFormatter(searchParams);
   const res = await fetch(BASE_URL + "/api/ecommerce/reviews?" + query);
   const { data: reviews, pagination } = await res.json();
-
+  if (!res.ok) {
+    throw new Error("Failed to fetch reviews");
+  }
   return (
     <div>
       <PageHeading

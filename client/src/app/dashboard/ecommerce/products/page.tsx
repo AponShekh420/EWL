@@ -16,7 +16,9 @@ export default async function Products({
     BASE_URL + "/api/ecommerce/product-by-filter?" + query
   );
   const { data: productsData, pagination } = await res.json();
-
+  if (!res.ok) {
+    throw new Error("Failed to fetch products");
+  }
   return (
     <div>
       <PageHeading

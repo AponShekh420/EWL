@@ -12,7 +12,9 @@ export default async function EditCategory({
   const { slug } = await params;
   const res = await fetch(BASE_URL + "/api/ecommerce/categories/" + slug);
   const { data: category } = await res.json();
-
+  if (!res.ok) {
+    throw new Error("Failed to fetch category");
+  }
   return (
     <div>
       <PageHeading

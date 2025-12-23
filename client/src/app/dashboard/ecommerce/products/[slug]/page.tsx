@@ -13,7 +13,9 @@ export default async function ProductDetails({
   const { slug } = await params;
   const res = await fetch(BASE_URL + "/api/ecommerce/products/" + slug);
   const { data: product } = await res.json();
-
+  if (!res.ok) {
+    throw new Error("Failed to fetch product details");
+  }
   return (
     <div>
       <PageHeading

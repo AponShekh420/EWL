@@ -16,6 +16,9 @@ export default async function Categories({
     BASE_URL + "/api/ecommerce/categories-by-filter?" + query
   );
   const { data: categories, pagination } = await res.json();
+  if (!res.ok) {
+    throw new Error("Failed to fetch categories");
+  }
   return (
     <div>
       <PageHeading

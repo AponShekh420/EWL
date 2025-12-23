@@ -13,7 +13,9 @@ export default async function Orders({
   const query = await queryFormatter(searchParams);
   const res = await fetch(BASE_URL + "/api/ecommerce/orders?" + query);
   const { data: orders, pagination } = await res.json();
-
+  if (!res.ok) {
+    throw new Error("Failed to fetch orders detail");
+  }
   return (
     <div>
       <PageHeading

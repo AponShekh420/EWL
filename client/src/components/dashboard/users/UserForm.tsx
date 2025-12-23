@@ -6,15 +6,74 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { addUserField } from "@/redux/features/user/userFormSlice";
+import {
+  addUserField,
+  resetUserFields,
+} from "@/redux/features/user/userFormSlice";
 import { RootState } from "@/redux/store";
+import { UserType } from "@/types/User";
+import { createFormData } from "@/utils/createFormData";
+import { BASE_URL } from "@/utils/envVariable";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-export default function UserForm() {
+export default function UserForm({ user }: { user?: UserType }) {
   const userForm = useSelector((state: RootState) => state.userForm);
   const dispatch = useDispatch();
+  const path = usePathname();
+  const router = useRouter();
+  const onHandleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const formData = createFormData(userForm);
+
+    if (path.includes("edit")) {
+      if (!user?._id) return;
+      const res = await fetch(BASE_URL + "/api/account/users/" + user?._id, {
+        method: "PUT",
+        body: formData,
+      });
+      const data = await res.json();
+
+      if (!data.success) {
+        toast.error(data.message);
+      }
+      if (data.success) {
+        toast.success(data.message);
+        dispatch(resetUserFields());
+        setTimeout(() => {
+          router.push("/dashboard/users");
+        }, 2000);
+      }
+    } else {
+      const res = await fetch(BASE_URL + "/api/account/user", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+      if (!data.success) {
+        toast.error(data.message);
+      }
+      if (data.success) {
+        toast.success(data.message);
+        dispatch(resetUserFields());
+      }
+    }
+  };
+  useEffect(() => {
+    if (!user) return;
+    dispatch(addUserField({ ...user, password: "" }));
+  }, []);
+
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
   return (
     <div className="mt-14">
-      <form className="grid grid-cols-1 lg:grid-cols-[1fr_1.8fr] gap-8 lg:gap-4 xl:gap-8 2xl:gap-16">
+      <form
+        onSubmit={onHandleSubmit}
+        className="grid grid-cols-1 lg:grid-cols-[1fr_1.8fr] gap-8 lg:gap-4 xl:gap-8 2xl:gap-16"
+      >
         <div>
           <h5 className="font-bold text-lg">User information</h5>
           <p className=" text-gray-700 mt-2">
@@ -51,7 +110,15 @@ export default function UserForm() {
                   dispatch(addUserField({ lastName: e.target.value }))
                 }
               />
-              <InputBox label="Email" placeholder="Email" name="email" />
+              <InputBox
+                label="Email"
+                placeholder="Email"
+                name="email"
+                value={userForm.email}
+                onChange={(e) =>
+                  dispatch(addUserField({ email: e.target.value }))
+                }
+              />
               <InputBox
                 label="Password"
                 placeholder="Password"
@@ -75,6 +142,7 @@ export default function UserForm() {
                 placeholder="Gender"
                 name="gender"
                 value={userForm.gender}
+                defaultValue={userForm.gender}
                 onChange={(val) => dispatch(addUserField({ gender: val }))}
                 options={[
                   { label: "Male", value: "male" },
@@ -97,7 +165,7 @@ export default function UserForm() {
               <div className="capitalize ">
                 <Label className="mb-4">Are you an orthodox Jew?</Label>
                 <RadioGroup
-                  value={userForm.isOrthodoxJew}
+                  value={userForm.isOrthodoxJew ? "yes" : "no"}
                   onValueChange={(val) =>
                     dispatch(addUserField({ isOrthodoxJew: val }))
                   }
@@ -117,7 +185,7 @@ export default function UserForm() {
                   Are you married or ever been married?
                 </Label>
                 <RadioGroup
-                  value={userForm.maritalStatus}
+                  value={userForm.maritalStatus ? "yes" : "no"}
                   onValueChange={(val) =>
                     dispatch(addUserField({ maritalStatus: val }))
                   }
@@ -150,7 +218,7 @@ export default function UserForm() {
                   Do you keep Shabbos ,Kashrus and Taharas Hamishpacha?
                 </Label>
                 <RadioGroup
-                  value={userForm.keepsMitzvos}
+                  value={userForm.keepsMitzvos ? "yes" : "no"}
                   onValueChange={(val) =>
                     dispatch(
                       addUserField({
@@ -197,7 +265,7 @@ export default function UserForm() {
           </div>
 
           <Button className="ml-auto w-fit block my-8" variant="blue">
-            Submit
+            {path.includes("edit") ? "Update User" : "Submit"}
           </Button>
         </div>
       </form>

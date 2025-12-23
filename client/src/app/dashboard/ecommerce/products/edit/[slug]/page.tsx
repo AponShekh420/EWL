@@ -20,7 +20,12 @@ export default async function EditProduct({
     productRes.json(),
     categoryRes.json(),
   ]);
-
+  if (!productRes.ok) {
+    throw new Error("Failed to fetch product details");
+  }
+  if (!categoryRes.ok) {
+    throw new Error("Failed to fetch categories");
+  }
   const categories = categoriesData.data.map(
     (category: { name: string; slug: string }) => ({
       label: category.name,
