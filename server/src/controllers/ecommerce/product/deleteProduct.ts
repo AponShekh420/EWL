@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import createError from "http-errors";
+import { CategoryModel } from "../../../models/CategoryModel";
 import productModel from "../../../models/ProductModel";
 import { catchErrorSend } from "../../../utils/catchErrorSend";
 import { deleteFileFromLocal } from "../../../utils/deleteFileFromLocal";
@@ -26,7 +27,11 @@ export const deleteProduct = async (
       ],
       "products"
     );
-
+    await CategoryModel.findOneAndUpdate(
+      { _id: deletedProduct.category },
+      { $pull: { products: deletedProduct._id } },
+      { new: true } // Optional: returns the updated document
+    );
     return res.status(200).json({
       success: true,
       status: 201,

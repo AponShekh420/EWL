@@ -10,8 +10,11 @@ export const getFilterBodyData = (req: Request) => {
     trackStockQuantity,
     limitOneItemPerOrder,
     declaredValue,
-
+    metaTitle,
+    metaDescription,
     enelope,
+    title,
+    shortDescription,
   } = req.body;
 
   return {
@@ -20,6 +23,8 @@ export const getFilterBodyData = (req: Request) => {
     regularPrice: Number(regularPrice),
     salePrice: Number(salePrice),
     stock: Number(stock),
+    metaTitle: metaTitle || title,
+    metaDescription: metaDescription || shortDescription,
     isVisibleProductPage: isVisibleProductPage === "true" ? true : false,
     trackStockQuantity: trackStockQuantity === "true" ? true : false,
     limitOneItemPerOrder: limitOneItemPerOrder === "true" ? true : false,

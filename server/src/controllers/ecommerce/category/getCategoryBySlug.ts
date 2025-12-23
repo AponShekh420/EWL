@@ -3,16 +3,16 @@ import createError from "http-errors";
 import { CategoryModel } from "../../../models/CategoryModel";
 import { catchErrorSend } from "../../../utils/catchErrorSend";
 
-export const getCategoryById = async (
+export const getCategoryBySlug = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const id = req.params?.id;
-    if (!id) return next(createError(400, "Category ID is required"));
+    const slug = req.params?.slug;
+    if (!slug) return next(createError(400, "Category slug is required"));
 
-    const category = await CategoryModel.findById(id);
+    const category = await CategoryModel.findOne({ slug });
     if (!category) {
       return next(createError(400, "Not found Category"));
     }

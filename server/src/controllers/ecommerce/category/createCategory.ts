@@ -16,10 +16,15 @@ export const createCategory = async (
   if (!file) {
     return next(createError(400, "Category thumbnail is missing!"));
   }
+  const slug = name.replace(" ", "-").toLowerCase();
+  const existingCategory = await CategoryModel.findOne({ slug: slug });
+  if (existingCategory) {
+    return next(createError(409, "Category with this name already exists!"));
+  }
   const category = await CategoryModel.create({
     name: name,
     description: description,
-    slug: name.replace(" ", "-").toLowerCase(),
+    slug: slug,
     thumbnail: getImageUrl(req, "category", file),
   });
 

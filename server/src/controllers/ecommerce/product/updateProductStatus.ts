@@ -3,8 +3,6 @@ import createError from "http-errors";
 import productModel from "../../../models/ProductModel";
 import { catchErrorSend } from "../../../utils/catchErrorSend";
 
-type MulterFile = Record<string, Express.Multer.File[]>;
-
 export const updateProductStatus = async (
   req: Request,
   res: Response,
@@ -12,13 +10,16 @@ export const updateProductStatus = async (
 ) => {
   try {
     const id = req.params?.id;
+    const body = req.body;
     if (!id) return next(createError(400, "Product ID is required"));
     // Find old product
     const oldProduct = await productModel.findById(id);
     if (!oldProduct) return next(createError(404, "Product not found"));
-    const { status } = req.body;
-    if (!status) return next(createError(400, "Status is required"));
-    const updatedData: Record<string, any> = { ...req.body };
+
+    const updatedData: Record<string, any> = { ...body };
+    if (body.status) {
+      updatedData.status = body.status;
+    }
 
     // ---- UPDATE PRODUCT ----
     const updatedProduct = await productModel.findByIdAndUpdate(

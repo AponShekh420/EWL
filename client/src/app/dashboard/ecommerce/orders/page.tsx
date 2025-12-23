@@ -2,6 +2,7 @@ import PageHeading from "@/components/dashboard/common/PageHeading";
 import OrderTable from "@/components/dashboard/common/tables/OrderTable";
 import { Button } from "@/components/ui/button";
 import { BASE_URL } from "@/utils/envVariable";
+import { queryFormatter } from "@/utils/queryFormatter";
 import { Icon } from "@iconify/react";
 
 export default async function Orders({
@@ -9,11 +10,12 @@ export default async function Orders({
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const page = await searchParams;
-
-  const res = await fetch(BASE_URL + "/api/ecommerce/orders?page=" + page.page);
+  const query = await queryFormatter(searchParams);
+  const res = await fetch(BASE_URL + "/api/ecommerce/orders?" + query);
   const { data: orders, pagination } = await res.json();
-
+  if (!res.ok) {
+    throw new Error("Failed to fetch orders detail");
+  }
   return (
     <div>
       <PageHeading

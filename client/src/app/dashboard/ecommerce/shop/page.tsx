@@ -17,6 +17,9 @@ import { Icon } from "@iconify/react";
 export default async function Shop() {
   const res = await fetch(BASE_URL + "/api/ecommerce/product-by-filter");
   const { data: productsData } = await res.json();
+  if (!res.ok) {
+    throw new Error("Failed to fetch products");
+  }
   return (
     <div>
       <PageHeading

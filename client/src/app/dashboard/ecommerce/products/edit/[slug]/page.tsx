@@ -7,11 +7,12 @@ import Link from "next/link";
 export default async function EditProduct({
   params,
 }: {
-  params: { id: string };
+  params: { slug: string };
 }) {
-  const { id } = await params;
+  const { slug } = await params;
+
   const [productRes, categoryRes] = await Promise.all([
-    fetch(BASE_URL + "/api/ecommerce/products/" + id),
+    fetch(BASE_URL + "/api/ecommerce/products/" + slug),
     fetch(BASE_URL + "/api/ecommerce/categories"),
   ]);
 
@@ -19,13 +20,18 @@ export default async function EditProduct({
     productRes.json(),
     categoryRes.json(),
   ]);
+  if (!productRes.ok) {
+    throw new Error("Failed to fetch product details");
+  }
+  if (!categoryRes.ok) {
+    throw new Error("Failed to fetch categories");
+  }
   const categories = categoriesData.data.map(
     (category: { name: string; slug: string }) => ({
       label: category.name,
       value: category.slug,
     })
   );
-
   return (
     <div>
       <PageHeading
@@ -33,7 +39,8 @@ export default async function EditProduct({
         breadcrumbList={[
           { name: "E-commerce", href: "" },
           { name: "Products", href: "/ecommerce/products" },
-          { name: `Edit`, href: `/ecommerce/products/edit/${id}` },
+          { name: `Edit`, href: `/ecommerce/products/edit/${slug}` },
+          { name: `${slug}`, href: `/ecommerce/products/edit/${slug}` },
         ]}
       >
         <Link href="/dashboard/ecommerce/products">

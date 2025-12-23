@@ -13,6 +13,9 @@ export default async function EditOrder({
   const { id } = await params;
   const res = await fetch(BASE_URL + "/api/ecommerce/orders/" + id);
   const { data: order }: { data: OrderType } = await res.json();
+  if (!res.ok) {
+    throw new Error("Failed to fetch order details");
+  }
   return (
     <div>
       <PageHeading
