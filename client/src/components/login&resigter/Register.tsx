@@ -26,9 +26,13 @@ import { useState } from "react";
 import { createFormData } from "@/utils/createFormData";
 import toast from "react-hot-toast";
 import { BASE_URL } from "@/utils/envVariable";
+import { Icon } from "@iconify/react";
+import { useRouter } from "next/navigation";
 
 const Register = () => {
+  const [loading, setLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<UserErrors>({});
+  const router = useRouter()
   const dispatch = useDispatch();
 
   // 👇 same redux state
@@ -43,15 +47,15 @@ const Register = () => {
   const onHandleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
+    setLoading(true);
     const formData = createFormData(form);
 
-    console.log("Submitting registration form:", formData.get("userName"));
     const res = await fetch(BASE_URL + "/api/auth/signup", {
       method: "POST",
       body: formData,
     });
     const data = await res.json();
-    console.log("Registration response:", data);
+    setLoading(false);
 
     if (!data.success) {
       setErrors(data.errors || {});
@@ -59,6 +63,7 @@ const Register = () => {
     if (data.success) {
       toast.success(data.message);
       dispatch(resetUserFields());
+      router.push("/login");
     }
   };
 
@@ -279,6 +284,17 @@ const Register = () => {
                   <FieldLabel htmlFor="other" className="font-normal">
                     Other
                   </FieldLabel>
+                  <Input
+                    className={`${form.maritalStatus === "yes" || form.maritalStatus === "no" || form.maritalStatus === "" ? 'hidden' : 'block'}`}
+                    id="other-text"
+                    type="text"
+                    placeholder="Please specify"
+                    disabled={form.maritalStatus === "yes" || form.maritalStatus === "no"}
+                    value={form.maritalStatus === "other" ? "" : form.maritalStatus}
+                    onChange={(e) =>
+                      handleChange("maritalStatus", e.target.value)
+                    }
+                  />
                 </Field>
               </RadioGroup>
               {errors?.maritalStatus && (
@@ -380,9 +396,9 @@ const Register = () => {
           type="submit"
           className="mt-5 w-full py-3 text-white font-medium text-lg rounded-lg 
           bg-gradient-to-r from-teal via-purple-500 to-pink-500 
-          bg-[length:200%_200%] transition-all duration-500 hover:bg-right"
+          bg-[length:200%_200%] transition-all duration-500 hover:bg-right flex justify-center items-center"
         >
-          Register
+          {loading ? <Icon icon="svg-spinners:wind-toy" width="28" height="28" /> : 'Register'}
         </button>
       </form>
     </div>

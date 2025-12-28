@@ -21,14 +21,18 @@ import { Textarea } from "../ui/textarea";
 import { useDispatch, useSelector } from "react-redux";
 import { addUserField, resetUserFields } from "@/redux/auth/registerFormSlice";
 import type { RootState } from "@/redux/store";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import toast from "react-hot-toast";
 // import { useRouter } from "next/navigation";
 import { BASE_URL } from "@/utils/envVariable";
 import { createFormData } from "@/utils/createFormData";
 import UserErrors from "@/types/UserErrors";
+import { Icon } from "@iconify/react";
 
-const Register = () => {
+const Register = ({setAuthToggle}: {
+  setAuthToggle: Dispatch<SetStateAction<boolean | string>>;
+}) => {
+  const [loading, setLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<UserErrors>({});
   // const router = useRouter();
   const dispatch = useDispatch();
@@ -44,15 +48,15 @@ const Register = () => {
   const onHandleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
+    setLoading(true);
     const formData = createFormData(form);
 
-    console.log("Submitting registration form:", formData.get("userName"));
     const res = await fetch(BASE_URL + "/api/auth/signup", {
       method: "POST",
       body: formData,
     });
     const data = await res.json();
-    console.log("Registration response:", data);
+    setLoading(false);
 
     if (!data.success) {
       setErrors(data.errors || {});
@@ -60,6 +64,7 @@ const Register = () => {
     if (data.success) {
       toast.success(data.message);
       dispatch(resetUserFields());
+      setAuthToggle('login');
     }
   };
 
@@ -275,12 +280,24 @@ const Register = () => {
                     No
                   </FieldLabel>
                 </Field>
-                <Field orientation="horizontal">
-                  <RadioGroupItem value="other" id="other" />
-                  <FieldLabel htmlFor="other" className="font-normal">
-                    Other
-                  </FieldLabel>
-                </Field>
+                  <Field orientation="horizontal">
+                    <RadioGroupItem value="other" id="other" />
+                    <FieldLabel htmlFor="other" className="font-normal">
+                      Other
+                    </FieldLabel>
+
+                    <Input
+                      className={`${form.maritalStatus === "yes" || form.maritalStatus === "no" || form.maritalStatus === "" ? 'hidden' : 'block'}`}
+                      id="other-text"
+                      type="text"
+                      placeholder="Please specify"
+                      disabled={form.maritalStatus === "yes" || form.maritalStatus === "no"}
+                      value={form.maritalStatus === "other" ? "" : form.maritalStatus}
+                      onChange={(e) =>
+                        handleChange("maritalStatus", e.target.value)
+                      }
+                    />
+                  </Field>
               </RadioGroup>
               {errors?.maritalStatus && (
                 <FieldDescription className="text-red-600">
@@ -378,12 +395,13 @@ const Register = () => {
         </FieldSet>
 
         <button
+          disabled={loading}
           className="mt-5 w-full py-3 text-white font-medium text-lg rounded-lg 
           bg-gradient-to-r from-teal via-purple-500 to-pink-500 
-          bg-[length:200%_200%] transition-all duration-500 hover:bg-right"
+          bg-[length:200%_200%] transition-all duration-500 hover:bg-right flex justify-center items-center"
           type="submit"
         >
-          Register
+          {loading ? <Icon icon="svg-spinners:wind-toy" width="28" height="28" /> : 'Register'}
         </button>
       </form>
     </div>
