@@ -34,12 +34,15 @@ import {
 } from "@/components/ui/table";
 import { OrderType } from "@/types/Order";
 import { PaginationType } from "@/types/Pagination";
+import { debounce } from "@/utils/debounce";
 import { BASE_URL } from "@/utils/envVariable";
 import { getOrderStatusColor } from "@/utils/getStatusColor";
 import { GetTime } from "@/utils/getTime";
 import { paginationCounter } from "@/utils/paginationCounter";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useMemo } from "react";
 import toast from "react-hot-toast";
 export default function OrderTable({
   orders,
@@ -48,6 +51,7 @@ export default function OrderTable({
   orders: OrderType[];
   pagination: PaginationType;
 }) {
+  const router = useRouter();
   const deleteHandler = async (id: string) => {
     if (!id) return;
     const res = await fetch(BASE_URL + "/api/ecommerce/orders/" + id, {
@@ -73,11 +77,21 @@ export default function OrderTable({
       toast.success(data.message);
     }
   };
+  const debouncedSearch = useMemo(
+    () =>
+      debounce((value: string) => {
+        router.push(`/dashboard/ecommerce/orders?search=${value}`);
+      }, 500),
+    [router]
+  );
   return (
     <div>
       <div className="my-4">
         <div className="flex justify-between flex-col-reverse sm:flex-row gap-4 mt-5">
-          <SearchBox placeholder="Search by customer name..." />
+          <SearchBox
+            placeholder="Search by customer name..."
+            onChange={(e) => debouncedSearch(e.target.value)}
+          />
           <div className="space-x-4">
             <Sheet>
               <SheetTrigger>

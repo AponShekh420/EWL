@@ -8,12 +8,14 @@ import Link from "next/link";
 export default async function ProductDetails({
   params,
 }: {
-  params: { id: string };
+  params: { slug: string };
 }) {
-  const { id } = await params;
-  const res = await fetch(BASE_URL + "/api/ecommerce/products/" + id);
+  const { slug } = await params;
+  const res = await fetch(BASE_URL + "/api/ecommerce/products/" + slug);
   const { data: product } = await res.json();
-
+  if (!res.ok) {
+    throw new Error("Failed to fetch product details");
+  }
   return (
     <div>
       <PageHeading
@@ -45,7 +47,9 @@ export default async function ProductDetails({
         </div>
         <div>
           <div>
-            <h1 className="text-3xl font-semibold">{product.title}</h1>
+            <h1 className="text-3xl font-semibold capitalize">
+              {product.title}
+            </h1>
             <p className="text-gray-600 mt-2 ml-1">{product.category}</p>
           </div>
           <hr className="my-8" />

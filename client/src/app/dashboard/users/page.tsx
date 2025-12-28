@@ -1,12 +1,24 @@
 import PageHeading from "@/components/dashboard/common/PageHeading";
 import UsersTable from "@/components/dashboard/common/tables/UsersTable";
 import { Button } from "@/components/ui/button";
-import { usersData } from "@/constants/users-data";
+import { BASE_URL } from "@/utils/envVariable";
+import { queryFormatter } from "@/utils/queryFormatter";
 import { Icon } from "@iconify/react";
 
 import Link from "next/link";
 
-export default function Users() {
+export default async function Users({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  const query = await queryFormatter(searchParams);
+  const res = await fetch(BASE_URL + "/api/account/users?" + query);
+  const { data: userData, pagination } = await res.json();
+  console.log(userData);
+  if (!res.ok) {
+    throw new Error("Failed to fetch users data");
+  }
   return (
     <div>
       <PageHeading
@@ -23,12 +35,7 @@ export default function Users() {
           </Button>
         </Link>
       </PageHeading>
-      <UsersTable
-        users={usersData.map((user) => ({
-          ...user,
-          createdAt: new Date(user.createdAt),
-        }))}
-      />
+      <UsersTable users={userData} pagination={pagination} />
     </div>
   );
 }

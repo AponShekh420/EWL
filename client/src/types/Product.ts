@@ -1,6 +1,6 @@
 export interface ProductReviewType {
   _id: string;
-  product: { name: string; category: string; thumbnail: string };
+  product: ProductType;
   review: string;
   customer: Customer;
   status: string | undefined;
@@ -33,6 +33,7 @@ export type ProductFormState = {
   // 1st tab
   title: string;
   category: string;
+  slug: string;
   tags: string;
   shortDescription: string;
   description: string;
@@ -71,7 +72,7 @@ export type ProductFormState = {
   customMessage: string;
   attachment: File | null;
   checkoutPageMessage: string;
-  metaData: string;
+  metaTitle: string;
   metaDescription: string;
 };
 
@@ -96,7 +97,7 @@ export type ProductValidationErrors = {
   dimensionWidth?: ValidationErrorItem;
   images?: ValidationErrorItem;
   isbn?: ValidationErrorItem;
-  metaData?: ValidationErrorItem;
+  metaTitle?: ValidationErrorItem;
   metaDescription?: ValidationErrorItem;
   regularPrice?: ValidationErrorItem;
   salePrice?: ValidationErrorItem;
@@ -111,4 +112,5 @@ export type ProductValidationErrors = {
   title?: ValidationErrorItem;
   weight?: ValidationErrorItem;
   tags?: ValidationErrorItem;
+  slug?: ValidationErrorItem;
 };

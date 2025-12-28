@@ -53,7 +53,7 @@ export default function CreateProductForm({
   const onHandleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const formData = createFormData(productForm);
-    console.log(productForm);
+
     if (path.includes("edit")) {
       if (!productData?._id) return;
       const res = await fetch(
@@ -95,22 +95,20 @@ export default function CreateProductForm({
   };
 
   useEffect(() => {
-    if (!productData) {
-      return;
-    }
-    console.log(productData);
+    if (!productData) return;
     dispatch(
       addProductField({
         ...productData,
         tags: productData?.tags.join(","),
         thumbnail: null,
         images: [],
+        category: productData?.category,
         existingThumbnail: productData?.thumbnail,
         existingImages: productData?.images,
         existingAttachment: productData?.attachment,
       })
     );
-  }, [productData, dispatch]);
+  }, []);
 
   return (
     <MultiStepper totalStep={totalStep}>
@@ -140,6 +138,7 @@ export default function CreateProductForm({
                   name="category"
                   label="Category"
                   value={productForm?.category}
+                  defaultValue={productForm?.category}
                   onChange={(val) =>
                     dispatch(addProductField({ category: val }))
                   }
@@ -722,12 +721,25 @@ export default function CreateProductForm({
                 name="meta-title"
                 label="Meta Title"
                 placeholder="Meta Title"
-                value={productForm.metaData}
+                value={productForm.metaTitle}
                 onChange={(e) =>
-                  dispatch(addProductField({ metaData: e.target.value }))
+                  dispatch(addProductField({ metaTitle: e.target.value }))
                 }
-                error={errors?.metaData?.msg}
+                error={errors?.metaTitle?.msg}
               />
+              {path.includes("edit") && (
+                <InputBox
+                  name="meta-slug"
+                  label="Meta Slug"
+                  placeholder="Meta slug"
+                  value={productForm.slug}
+                  onChange={(e) =>
+                    dispatch(addProductField({ slug: e.target.value }))
+                  }
+                  error={errors?.slug?.msg}
+                />
+              )}
+
               <TextBox
                 label="Meta Description"
                 name="Meta Description"
