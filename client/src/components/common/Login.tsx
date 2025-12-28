@@ -21,7 +21,7 @@ import { Icon } from "@iconify/react";
 import { useRouter } from "next/navigation";
 
 const Login = ({setAuthToggle}: {
-  setAuthToggle: Dispatch<SetStateAction<boolean | string>>;
+  setAuthToggle?: Dispatch<SetStateAction<boolean | string>>;
 }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<Record<string, { msg: string }>>({});
@@ -59,7 +59,8 @@ const Login = ({setAuthToggle}: {
         dispatch(resetUserFields());
         toast.success(dataRes.msg)
         router.push("/");
-        setAuthToggle(false);
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        setAuthToggle && setAuthToggle(false);
       } else {
         setErrors(dataRes?.errors)
       }
