@@ -55,7 +55,7 @@ export default function UsersTable({
   };
   const handleRoleChange = async (role: string, id: string) => {
     if (!id) return;
-    const res = await fetch(BASE_URL + "/api/account/users/" + id, {
+    const res = await fetch(BASE_URL + "/api/account/user-role/" + id, {
       method: "PUT",
       body: JSON.stringify({ role }),
       headers: {

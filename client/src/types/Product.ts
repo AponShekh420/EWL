@@ -85,32 +85,4 @@ type ValidationErrorItem = {
   value?: string;
 };
 
-export type ProductValidationErrors = {
-  attachment?: ValidationErrorItem;
-  category?: ValidationErrorItem;
-  checkoutPageMessage?: ValidationErrorItem;
-  customMessage?: ValidationErrorItem;
-  declaredValue?: ValidationErrorItem;
-  description?: ValidationErrorItem;
-  dimensionHeight?: ValidationErrorItem;
-  dimensionLength?: ValidationErrorItem;
-  dimensionWidth?: ValidationErrorItem;
-  images?: ValidationErrorItem;
-  isbn?: ValidationErrorItem;
-  metaTitle?: ValidationErrorItem;
-  metaDescription?: ValidationErrorItem;
-  regularPrice?: ValidationErrorItem;
-  salePrice?: ValidationErrorItem;
-  shippingClass?: ValidationErrorItem;
-  shortDescription?: ValidationErrorItem;
-  sku?: ValidationErrorItem;
-  stock?: ValidationErrorItem;
-  stockStatus?: ValidationErrorItem;
-  taxClass?: ValidationErrorItem;
-  taxStatus?: ValidationErrorItem;
-  thumbnail?: ValidationErrorItem;
-  title?: ValidationErrorItem;
-  weight?: ValidationErrorItem;
-  tags?: ValidationErrorItem;
-  slug?: ValidationErrorItem;
-};
+export type ProductValidationErrors = { [key: string]: ValidationErrorItem };
