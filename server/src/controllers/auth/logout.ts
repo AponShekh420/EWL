@@ -6,6 +6,7 @@ const logout = async (req: Request, res: Response, next: NextFunction) => {
     const logout = res.clearCookie("session");
     if(logout) {
         res.status(200).json({
+            success: true,
             message: "logged out successfully"
         });
     } else {

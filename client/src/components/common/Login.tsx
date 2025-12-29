@@ -16,11 +16,16 @@ import { BASE_URL } from "@/utils/envVariable";
 import { createFormData } from "@/utils/createFormData";
 import toast from "react-hot-toast";
 import { setCredentials } from "@/redux/auth/userSlice";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
+import { Icon } from "@iconify/react";
+import { useRouter } from "next/navigation";
 
-const Login = () => {
+const Login = ({setAuthToggle}: {
+  setAuthToggle?: Dispatch<SetStateAction<boolean | string>>;
+}) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<Record<string, { msg: string }>>({});
+  const router = useRouter();
 
   const dispatch = useDispatch();
 
@@ -53,7 +58,9 @@ const Login = () => {
         dispatch(setCredentials(userInfo));
         dispatch(resetUserFields());
         toast.success(dataRes.msg)
-        // modalCloseBtn.current.click();
+        router.push("/");
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        setAuthToggle && setAuthToggle(false);
       } else {
         setErrors(dataRes?.errors)
       }
@@ -118,11 +125,12 @@ const Login = () => {
 
         <button
           type="submit"
+          disabled={loading}
           className="mt-5 w-full py-3 text-white font-medium text-lg rounded-lg 
           bg-gradient-to-r from-teal via-purple-500 to-pink-500 
-          bg-[length:200%_200%] transition-all duration-500 hover:bg-right"
+          bg-[length:200%_200%] transition-all duration-500 hover:bg-right flex justify-center items-center"
         >
-          Login
+          {loading ? <Icon icon="svg-spinners:wind-toy" width="28" height="28" /> : 'Login'}
         </button>
       </form>
     </div>

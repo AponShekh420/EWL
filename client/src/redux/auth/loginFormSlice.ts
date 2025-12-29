@@ -4,7 +4,7 @@ const initialState = {
   email: "",
   password: "",
 };
-export type UserFormState = typeof initialState;
+export type LoginFormState = typeof initialState;
 export const loginFormSlice = createSlice({
   name: "login-form",
   initialState,

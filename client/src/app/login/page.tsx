@@ -1,9 +1,17 @@
-"use client"
 import Login from "@/components/common/Login";
 import ButtonGroup from "@/components/login&resigter/ButtonGroup";
+import { getSession } from "@/lib/authLib";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 
-const page = () => {
+const page = async () => {
+  const userInfo = await getSession();
+
+  if (userInfo) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    userInfo.role === "admin" ? redirect("/dashboard") : redirect("/profile");
+    return null;
+  }
 
   return (
     <div className="w-full min-h-screen flex items-center justify-center">
@@ -16,7 +24,7 @@ const page = () => {
   
             {/* Scrollable Register form */}
             <div className="max-h-[75vh] overflow-y-auto px-8 pb-8">
-             <Login />
+             <Login/>
             </div>
           </div>
         </div>

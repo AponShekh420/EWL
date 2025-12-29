@@ -1,8 +1,16 @@
-"use client"
 import ButtonGroup from "@/components/login&resigter/ButtonGroup";
 import Register from "@/components/login&resigter/Register";
+import { getSession } from "@/lib/authLib";
+import { redirect } from "next/navigation";
 
-const page = () => {
+const page = async () => {
+  const userInfo = await getSession();
+
+  if (userInfo) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    userInfo.role === "admin" ? redirect("/dashboard") : redirect("/profile");
+    return null;
+  }
 
   return (
     <div className="w-full min-h-screen flex items-center justify-center py-10">
