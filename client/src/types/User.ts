@@ -16,3 +16,12 @@ export interface UserType {
   createdAt: Date;
   updatedAt: Date;
 }
+
+type ValidationErrorItem = {
+  type: string;
+  msg: string;
+  path: string;
+  location: string;
+  value?: string;
+};
+export type UserErrorType = { [key: string]: ValidationErrorItem };

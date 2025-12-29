@@ -11,11 +11,12 @@ import {
   resetUserFields,
 } from "@/redux/features/user/userFormSlice";
 import { RootState } from "@/redux/store";
-import { UserType } from "@/types/User";
+
+import { UserErrorType, UserType } from "@/types/User";
 import { createFormData } from "@/utils/createFormData";
 import { BASE_URL } from "@/utils/envVariable";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 export default function UserForm({ user }: { user?: UserType }) {
@@ -23,6 +24,7 @@ export default function UserForm({ user }: { user?: UserType }) {
   const dispatch = useDispatch();
   const path = usePathname();
   const router = useRouter();
+  const [errors, setErrors] = useState<UserErrorType>({});
   const onHandleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const formData = createFormData(userForm);
@@ -36,6 +38,7 @@ export default function UserForm({ user }: { user?: UserType }) {
       const data = await res.json();
 
       if (!data.success) {
+        setErrors(data.errors || {});
         toast.error(data.message);
       }
       if (data.success) {
@@ -51,7 +54,9 @@ export default function UserForm({ user }: { user?: UserType }) {
         body: formData,
       });
       const data = await res.json();
+      console.log(data);
       if (!data.success) {
+        setErrors(data.errors || {});
         toast.error(data.message);
       }
       if (data.success) {
@@ -65,9 +70,6 @@ export default function UserForm({ user }: { user?: UserType }) {
     dispatch(addUserField({ ...user, password: "" }));
   }, []);
 
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
   return (
     <div className="mt-14">
       <form
@@ -91,6 +93,7 @@ export default function UserForm({ user }: { user?: UserType }) {
                 onChange={(e) =>
                   dispatch(addUserField({ userName: e.target.value }))
                 }
+                error={errors?.userName?.msg}
               />
               <InputBox
                 label="First Name"
@@ -100,6 +103,7 @@ export default function UserForm({ user }: { user?: UserType }) {
                 onChange={(e) =>
                   dispatch(addUserField({ firstName: e.target.value }))
                 }
+                error={errors?.firstName?.msg}
               />
               <InputBox
                 label="Last Name"
@@ -109,6 +113,7 @@ export default function UserForm({ user }: { user?: UserType }) {
                 onChange={(e) =>
                   dispatch(addUserField({ lastName: e.target.value }))
                 }
+                error={errors?.lastName?.msg}
               />
               <InputBox
                 label="Email"
@@ -118,15 +123,19 @@ export default function UserForm({ user }: { user?: UserType }) {
                 onChange={(e) =>
                   dispatch(addUserField({ email: e.target.value }))
                 }
+                error={errors?.email?.msg}
               />
               <InputBox
-                label="Password"
+                label={
+                  path.includes("edit") ? "Password (optional)" : "Password"
+                }
                 placeholder="Password"
                 name="password"
                 value={userForm.password}
                 onChange={(e) =>
                   dispatch(addUserField({ password: e.target.value }))
                 }
+                error={errors?.password?.msg}
               />
               <InputBox
                 label="Confirm password"
@@ -136,6 +145,7 @@ export default function UserForm({ user }: { user?: UserType }) {
                 onChange={(e) =>
                   dispatch(addUserField({ cpassword: e.target.value }))
                 }
+                error={errors?.cpassword?.msg}
               />
               <SelectBox
                 label="Gender"
@@ -149,6 +159,7 @@ export default function UserForm({ user }: { user?: UserType }) {
                   { label: "Female", value: "female" },
                   { label: "Other", value: "other" },
                 ]}
+                error={errors?.gender?.msg}
               />
               <div>
                 <Label className="mb-4">Upload your avatar (optional)</Label>{" "}
@@ -167,7 +178,11 @@ export default function UserForm({ user }: { user?: UserType }) {
                 <RadioGroup
                   value={userForm.isOrthodoxJew ? "yes" : "no"}
                   onValueChange={(val) =>
-                    dispatch(addUserField({ isOrthodoxJew: val }))
+                    dispatch(
+                      addUserField({
+                        isOrthodoxJew: val === "yes" ? true : false,
+                      })
+                    )
                   }
                 >
                   <div className="flex items-center space-x-2">
@@ -185,7 +200,7 @@ export default function UserForm({ user }: { user?: UserType }) {
                   Are you married or ever been married?
                 </Label>
                 <RadioGroup
-                  value={userForm.maritalStatus ? "yes" : "no"}
+                  value={userForm.maritalStatus}
                   onValueChange={(val) =>
                     dispatch(addUserField({ maritalStatus: val }))
                   }
@@ -222,7 +237,7 @@ export default function UserForm({ user }: { user?: UserType }) {
                   onValueChange={(val) =>
                     dispatch(
                       addUserField({
-                        keepsMitzvos: val,
+                        keepsMitzvos: val === "yes" ? true : false,
                       })
                     )
                   }
@@ -249,6 +264,7 @@ export default function UserForm({ user }: { user?: UserType }) {
                 onChange={(e) =>
                   dispatch(addUserField({ chafifaDuration: e.target.value }))
                 }
+                error={errors?.chafifaDuration?.msg}
               />
               <TextBox
                 label="if hot chicken soup spilled in your dairy sink, what would you do?"
@@ -260,6 +276,7 @@ export default function UserForm({ user }: { user?: UserType }) {
                     addUserField({ chickenSoupInDairySink: e.target.value })
                   )
                 }
+                error={errors?.chickenSoupInDairySink?.msg}
               />
             </div>
           </div>

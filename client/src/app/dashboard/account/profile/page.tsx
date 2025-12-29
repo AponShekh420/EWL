@@ -1,12 +1,19 @@
 import InputBox from "@/components/common/InputBox";
 import PageHeading from "@/components/dashboard/common/PageHeading";
 import { Button } from "@/components/ui/button";
+import { getSession } from "@/lib/authLib";
+import { BASE_URL } from "@/utils/envVariable";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
 
 import Link from "next/link";
 
-export default function Profile() {
+export default async function Profile() {
+  const session = await getSession();
+
+  const res = await fetch(`${BASE_URL}/api/account/users/${session?.id}`);
+  const { data: user } = await res.json();
+  console.log(user);
   return (
     <div>
       <PageHeading
@@ -31,7 +38,7 @@ export default function Profile() {
             </h1>
             <div>
               <Image
-                src="/images/user.png"
+                src={user?.avatar || "/default-avatar.png"}
                 width={300}
                 height={300}
                 alt="avatar"
@@ -67,7 +74,12 @@ export default function Profile() {
               <div>
                 <div className="grid xl:grid-cols-2 gap-8">
                   <InputBox
-                    label="Full Name"
+                    label="First Name"
+                    placeholder="Full name"
+                    name="full-name"
+                  />
+                  <InputBox
+                    label="Last Name"
                     placeholder="Full name"
                     name="full-name"
                   />
