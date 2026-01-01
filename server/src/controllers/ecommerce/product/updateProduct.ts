@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import createError from "http-errors";
+import { CategoryModel } from "../../../models/CategoryModel";
 import productModel from "../../../models/ProductModel";
 import { catchErrorSend } from "../../../utils/catchErrorSend";
 import { deleteFileFromLocal } from "../../../utils/deleteFileFromLocal";
@@ -27,7 +28,36 @@ export const updateProduct = async (
     const oldProduct = await productModel.findById(id);
     if (!oldProduct) return next(createError(404, "Product not found"));
 
-    const updatedData: Record<string, any> = { ...body };
+    let slug;
+    // If the title hasn't changed, keep the current slug
+    if (body.title === oldProduct.title && oldProduct?.slug == body.slug) {
+      slug = oldProduct.slug;
+    } else {
+      // Remove special characters and generate slug
+      const sanitizedTitle = body.metaTitle
+        ? body.metaTitle
+            .toLowerCase()
+            .trim()
+            .replace(/[^\w\s-]/g, "")
+        : body.title
+            .toLowerCase()
+            .trim()
+            .replace(/[^\w\s-]/g, "");
+
+      slug = sanitizedTitle.split(" ").join("-");
+
+      // Check for duplicates excluding the current communtiy ID
+      const duplicateCommunityCount = await productModel.countDocuments({
+        slug: { $regex: `^${slug}(-[0-9]*)?$`, $options: "i" },
+        _id: { $ne: oldProduct._id },
+      });
+
+      if (duplicateCommunityCount > 0) {
+        slug = `${slug}-${duplicateCommunityCount}`;
+      }
+    }
+
+    const updatedData: Record<string, any> = { ...body, slug };
 
     // ---- IMAGES ----
     if (images?.length) {
@@ -75,6 +105,16 @@ export const updateProduct = async (
         deleteFileFromLocal(img, "products");
       }
     });
+    if (body.category !== oldProduct.category) {
+      await CategoryModel.updateOne(
+        { products: oldProduct._id },
+        { $pull: { products: oldProduct._id } }
+      );
+      await CategoryModel.updateOne(
+        { name: body.category },
+        { $addToSet: { products: oldProduct._id } }
+      );
+    }
 
     // ---- RESPONSE ----
     return res.status(200).json({

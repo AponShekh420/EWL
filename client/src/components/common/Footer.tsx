@@ -80,19 +80,31 @@ const Footer = () => {
               href="/free-recordings"
               className="mt-2 sm:mt-3 transition-all hover:text-[#270034] text-white duration-150"
             >
-              oh******@gmail.com
+              example@gmail.com
             </Link>
             <Link
-              href="/shop"
+              href="tel:+18454148016"
               className="mt-2 sm:mt-3 transition-all hover:text-[#270034] text-white duration-150"
             >
-              (845) 414-8016 x3
+              hotline (845) 414-8016
             </Link>
             <Link
-              href="/courses"
+              href="tel:+18452883873"
               className="mt-2 sm:mt-3 transition-all hover:text-[#270034] text-white duration-150"
             >
-              (845) 288-3873
+              call/ text (845) 288-3873
+            </Link>
+            <Link
+              href="tel:+18454009559"
+              className="mt-2 sm:mt-3 transition-all hover:text-[#270034] text-white duration-150"
+            >
+              course pay (845) 400-9559
+            </Link>
+            <Link
+              href="tel:+18454009965"
+              className="mt-2 sm:mt-3 transition-all hover:text-[#270034] text-white duration-150"
+            >
+              ecommerce (845) 400-9965
             </Link>
           </div>
         </div>

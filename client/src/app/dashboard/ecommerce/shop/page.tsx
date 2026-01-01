@@ -11,9 +11,15 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { productsData } from "@/constants/products";
+import { ProductType } from "@/types/Product";
+import { BASE_URL } from "@/utils/envVariable";
 import { Icon } from "@iconify/react";
-export default function Shop() {
+export default async function Shop() {
+  const res = await fetch(BASE_URL + "/api/ecommerce/product-by-filter");
+  const { data: productsData } = await res.json();
+  if (!res.ok) {
+    throw new Error("Failed to fetch products");
+  }
   return (
     <div>
       <PageHeading
@@ -70,8 +76,8 @@ export default function Shop() {
         </Sheet>
       </PageHeading>
       <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8 mt-8">
-        {productsData.map((product) => (
-          <ProductCard key={product.id} product={product} />
+        {productsData.map((product: ProductType) => (
+          <ProductCard key={product._id} product={product} />
         ))}
       </div>
       <Button variant="blue" className="mx-auto w-fit block my-8">

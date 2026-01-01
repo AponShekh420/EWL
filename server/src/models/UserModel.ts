@@ -16,12 +16,19 @@ const userSchema = new Schema({
   avatar: {
     type: String,
     required: true,
-    default: "http://image.jpg"
+    default: "user.png"
   },
   role: {
     type: String,
     required: true,
+    default: "viewer",
     enum: ['admin', 'speaker', "viewer", "customer"],
+  },
+  status: {
+    type: String,
+    required: true,
+    default: "pending",
+    enum: ['active', 'pending'],
   },
   email: {
     type: String,

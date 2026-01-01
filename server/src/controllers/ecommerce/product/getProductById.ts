@@ -3,16 +3,16 @@ import createError from "http-errors";
 import productModel from "../../../models/ProductModel";
 import { catchErrorSend } from "../../../utils/catchErrorSend";
 
-export const getProductById = async (
+export const getProductBySlug = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const id = req.query?.id;
-    if (!id) return next(createError(400, "Product ID is required"));
+    const slug = req.params?.slug;
+    if (!slug) return next(createError(400, "Product slug is required"));
 
-    const product = await productModel.findById(id);
+    const product = await productModel.findOne({ slug });
     if (!product) {
       return next(createError(400, "Not found product"));
     }

@@ -10,13 +10,20 @@ const categorySchema = new Schema(
       type: String,
       required: true,
     },
-    image: {
+    description: {
       type: String,
       required: true,
     },
-    subcategory: {
+    thumbnail: {
       type: String,
+      required: true,
     },
+    products: [{ type: Schema.Types.ObjectId, ref: "Product" }],
+    subcategory: [
+      {
+        type: String,
+      },
+    ],
   },
   { timestamps: true }
 );
@@ -31,7 +38,11 @@ const subCategorySchema = new Schema(
       type: String,
       required: true,
     },
-    image: {
+    thumbnail: {
+      type: String,
+      required: true,
+    },
+    description: {
       type: String,
       required: true,
     },

@@ -1,11 +1,24 @@
 import PageHeading from "@/components/dashboard/common/PageHeading";
 import CategoriesTable from "@/components/dashboard/common/tables/CategoriesTable";
 import { Button } from "@/components/ui/button";
-import { categories } from "@/constants/product-categories";
+import { BASE_URL } from "@/utils/envVariable";
+import { queryFormatter } from "@/utils/queryFormatter";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 
-export default function Categories() {
+export default async function Categories({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  const query = await queryFormatter(searchParams);
+  const res = await fetch(
+    BASE_URL + "/api/ecommerce/categories-by-filter?" + query
+  );
+  const { data: categories, pagination } = await res.json();
+  if (!res.ok) {
+    throw new Error("Failed to fetch categories");
+  }
   return (
     <div>
       <PageHeading
@@ -22,7 +35,7 @@ export default function Categories() {
           </Button>
         </Link>
       </PageHeading>
-      <CategoriesTable categories={categories} />
+      <CategoriesTable categories={categories} pagination={pagination} />
     </div>
   );
 }

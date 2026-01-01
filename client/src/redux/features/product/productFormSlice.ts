@@ -5,11 +5,17 @@ const initialState: ProductFormState = {
   title: "",
   category: "",
   shortDescription: "",
+  slug: "",
   tags: "",
   description: "",
   //   2nd tab
   thumbnail: null,
   images: null,
+  //   2nd tab
+  existingThumbnail: "",
+  existingAttachment: "",
+  existingImages: [],
+  deletedImages: [],
   //   3rd tab
   sku: "",
   isbn: "",
@@ -27,15 +33,15 @@ const initialState: ProductFormState = {
   dimensionWidth: "",
   dimensionHeight: "",
 
-  textStatus: "",
-  textClass: "",
+  taxStatus: "",
+  taxClass: "",
   shippingClass: "",
   enelope: false,
   //   5th tab
   customMessage: "",
   attachment: null,
   checkoutPageMessage: "",
-  metaData: "",
+  metaTitle: "",
   metaDescription: "",
 };
 
@@ -49,12 +55,48 @@ export const productFormSlice = createSlice({
         ...action.payload,
       };
     },
+    deleteExistingThumb: (state, action: { type: string; payload: string }) => {
+      if (!state.existingThumbnail) {
+        return;
+      }
+      state.existingThumbnail = "";
+      state.deletedImages?.push(action.payload);
+    },
+    deleteExistingAttachment: (
+      state,
+      action: { type: string; payload: string }
+    ) => {
+      if (!state.existingAttachment) {
+        return;
+      }
+      state.existingAttachment = "";
+      state.deletedImages?.push(action.payload);
+    },
+    deleteExistingImages: (
+      state,
+      action: { type: string; payload: string }
+    ) => {
+      if (!state.existingImages) {
+        return;
+      }
+      state.existingImages = state?.existingImages.filter(
+        (img) => img !== action.payload
+      );
+
+      state.deletedImages?.push(action.payload);
+    },
     resetProductFields: () => {
       return initialState;
     },
   },
 });
 
-export const { addProductField, resetProductFields } = productFormSlice.actions;
+export const {
+  addProductField,
+  resetProductFields,
+  deleteExistingThumb,
+  deleteExistingImages,
+  deleteExistingAttachment,
+} = productFormSlice.actions;
 
 export default productFormSlice.reducer;

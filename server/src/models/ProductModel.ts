@@ -7,16 +7,22 @@ const productSchema = new Schema(
       type: String,
       required: true,
     },
+    slug: { type: String, required: true },
     category: {
       type: String,
       required: true,
     },
-    productTags: [
+    tags: [
       {
         type: String,
         required: true,
       },
     ],
+    status: {
+      type: String,
+      enum: ["pending", "draft", "publish"],
+      default: "pending",
+    },
     shortDescription: {
       type: String,
       required: true,
@@ -29,7 +35,10 @@ const productSchema = new Schema(
       type: String,
       required: true,
     },
-    reviews: [{ type: Schema.Types.ObjectId, ref: "Product" }],
+    reviews: {
+      type: [{ type: Schema.Types.ObjectId, ref: "Review" }],
+      default: [],
+    },
     images: [{ type: String, required: true }],
     sku: { type: String, required: true },
     isbn: { type: String, required: true },
@@ -52,7 +61,7 @@ const productSchema = new Schema(
     customMessage: { type: String, required: true },
     attachment: { type: String, required: true },
     checkoutPageMessage: { type: String, required: true },
-    metaData: { type: String, required: true },
+    metaTitle: { type: String, required: true },
     metaDescription: { type: String, required: true },
   },
   { timestamps: true }

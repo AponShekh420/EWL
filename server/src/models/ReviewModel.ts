@@ -31,6 +31,6 @@ const reviewSchema = new Schema(
   { timestamps: true }
 );
 
-const ReviewModel = model("review", reviewSchema);
+const ReviewModel = model("Review", reviewSchema);
 
 export default ReviewModel;

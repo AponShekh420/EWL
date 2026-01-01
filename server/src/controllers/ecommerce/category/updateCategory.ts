@@ -19,7 +19,10 @@ export const updateCategory = async (
     updatedData.slug = body.name.replace(" ", "-").toLowerCase();
   }
   if (file) {
-    updatedData.image = getImageUrl(req, "category", file);
+    updatedData.thumbnail = getImageUrl(req, "category", file);
+  }
+  if (body && body.description) {
+    updatedData.description = body.description;
   }
   try {
     const id = req.params?.id;
@@ -40,8 +43,8 @@ export const updateCategory = async (
     if (!updatedCategory)
       return next(createError(400, "Failed to update category"));
 
-    if (file && oldCategory?.image) {
-      deleteFileFromLocal(oldCategory?.image, "category");
+    if (body.deletedImage) {
+      deleteFileFromLocal(body.deletedImage, "category");
     }
 
     return res.status(200).json({

@@ -11,7 +11,7 @@ export const updateReview = async (
 ) => {
   const id = req.params?.id;
   const body = req.body;
-
+  console.log(body);
   try {
     if (!id) return next(createError(400, "Review ID is required"));
     // Find old order

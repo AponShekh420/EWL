@@ -1,23 +1,40 @@
 export const coupleFacesData = [
   {
     id: 1,
-    desc: "Without support,misunderstandings deepen and years of hurt can follow",
+    desc: `I know we come from different
+          backgrounds, but our views on
+          parenting, yiddishkeit, etc keep
+          pulling us in opposite directions`,
   },
   {
     id: 2,
-    desc: "Feelings of frustration, disconnection, or being “stuck”",
+    desc: `I tend to the home, the children,
+          the daily swirl of tasks… but I don’t
+          have the energy to tend to us.`,
   },
   {
     id: 3,
-    desc: "Marriage can feel distant when it should be a place of closeness",
+    desc: `I see how love begins to feel
+          far away when we don’t make
+          time to truly reconnect`,
   },
   {
     id: 4,
-    desc: "Struggles with communication or harmony that disrupt the home",
+    desc: `I hold so much inside… will
+          you ever hear what I haven’t
+          said?`,
   },
   {
     id: 5,
-    desc: "A weakened foundation threatens the harmony, kedusha, and joy",
+    desc: `Our bodies pass each other like
+          strangers, the touch once
+          effortless now feels delayed.`,
+  },
+  {
+    id: 6,
+    desc: `I save, you spend—and
+          somewhere in between, our
+          trust gets tested`,
   },
 ];
 export const struggleToStrengthData = [
@@ -59,7 +76,7 @@ export const strengthenYourMarriageData = [
     id: 3,
     category: "Courses",
     title: "  Learn & Grow — Step-by-Step Courses",
-    desc: "Structured programs with expert speakers to help you deepen connection, increase understanding, and strengthen your marriage through Torah-based guidance.",
+    desc: "Structured programs with expert speakers to help you deepen connection, increase understanding, and here’s how to strengthen you marriage through Torah-based guidance.",
   },
   {
     id: 4,

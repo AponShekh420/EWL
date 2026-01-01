@@ -22,18 +22,71 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { PaginationType } from "@/types/Pagination";
 import { UserType } from "@/types/User";
+import { debounce } from "@/utils/debounce";
+import { BASE_URL } from "@/utils/envVariable";
 import { getUserRoleColor } from "@/utils/getStatusColor";
 import { GetTime } from "@/utils/getTime";
+import { paginationCounter } from "@/utils/paginationCounter";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
 import Link from "next/link";
-export default function UsersTable({ users }: { users: UserType[] }) {
+import { useRouter } from "next/navigation";
+import { useMemo } from "react";
+import toast from "react-hot-toast";
+export default function UsersTable({
+  users,
+  pagination,
+}: {
+  users: UserType[];
+  pagination: PaginationType;
+}) {
+  const router = useRouter();
+  const deleteHandler = async (id: string) => {
+    if (!id) return;
+    const res = await fetch(BASE_URL + "/api/account/users/" + id, {
+      method: "DELETE",
+    });
+    const data = await res.json();
+    if (data.success) {
+      toast.success(data.message);
+    }
+  };
+  const handleRoleChange = async (role: string, id: string) => {
+    if (!id) return;
+    const res = await fetch(BASE_URL + "/api/account/user-role/" + id, {
+      method: "PUT",
+      body: JSON.stringify({ role }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await res.json();
+    if (!data.success) {
+      toast.error(data.message);
+    }
+    if (data.success) {
+      toast.success(data.message);
+    }
+  };
+
+  const debouncedSearch = useMemo(
+    () =>
+      debounce((value: string) => {
+        router.push(`/dashboard/account/users?search=${value}`);
+      }, 500),
+    [router]
+  );
+
   return (
     <div>
       <div className="my-5">
         <div className="flex justify-between flex-col-reverse sm:flex-row gap-4 mt-5">
-          <SearchBox placeholder="Search by product name..." />
+          <SearchBox
+            placeholder="Search by product name..."
+            onChange={(e) => debouncedSearch(e.target.value)}
+          />
           <div className="space-x-4">
             <Button
               variant="outline"
@@ -65,11 +118,11 @@ export default function UsersTable({ users }: { users: UserType[] }) {
         </TableHeader>
         <TableBody>
           {users?.map((user) => (
-            <TableRow key={user.id}>
+            <TableRow key={user._id}>
               <TableCell>
                 <div className="flex gap-4 items-center">
                   <Checkbox className="checkbox-t" />
-                  <span>RW-{user.id}</span>
+                  <span>RW-{user._id}</span>
                 </div>
               </TableCell>
 
@@ -84,7 +137,9 @@ export default function UsersTable({ users }: { users: UserType[] }) {
                   />
                 </div>
               </TableCell>
-              <TableCell>{user.fullName}</TableCell>
+              <TableCell>
+                {user.firstName} {user.lastName}
+              </TableCell>
               <TableCell className="font-medium">{user.email}</TableCell>
               <TableCell>{GetTime(user.createdAt)}</TableCell>
               <TableCell>
@@ -96,18 +151,18 @@ export default function UsersTable({ users }: { users: UserType[] }) {
                     user.role as string
                   )}`}
                   placeholder="Change status"
-                  onChange={(val) => console.log("Selected:", val)}
+                  onChange={(val) => handleRoleChange(val, user._id)}
                   options={[
-                    { label: "User", value: "user" },
                     { label: "Admin", value: "admin" },
                     { label: "Customer", value: "customer" },
                     { label: "Speaker", value: "speaker" },
+                    { label: "Viewer", value: "viewer" },
                   ]}
                 />
               </TableCell>
               <TableCell>
                 <div className="flex items-center gap-x-3">
-                  <Link href={`/dashboard/users/edit/${user.id}`}>
+                  <Link href={`/dashboard/users/edit/${user._id}`}>
                     <Button
                       size="icon"
                       variant="outline"
@@ -120,7 +175,7 @@ export default function UsersTable({ users }: { users: UserType[] }) {
                       />
                     </Button>
                   </Link>
-                  <Link href={`/dashboard/users/${user.id}`}>
+                  <Link href={`/dashboard/users/${user._id}`}>
                     <Button
                       size="icon"
                       variant="outline"
@@ -129,7 +184,7 @@ export default function UsersTable({ users }: { users: UserType[] }) {
                       <Icon icon="ph:eye-light" width="32" height="32" />
                     </Button>
                   </Link>
-                  <DeleteModal deleteAction={() => console.log(user.id)}>
+                  <DeleteModal deleteAction={() => deleteHandler(user._id)}>
                     <Button
                       size="icon"
                       variant="outline"
@@ -152,16 +207,46 @@ export default function UsersTable({ users }: { users: UserType[] }) {
         <Pagination>
           <PaginationContent>
             <PaginationItem>
-              <PaginationPrevious href="#" />
+              {pagination.page > 1 ? (
+                <PaginationPrevious
+                  href={`/dashboard/users?page=${pagination.page - 1}`}
+                />
+              ) : (
+                <button
+                  disabled
+                  className="disabled:text-gray-400 cursor-not-allowed"
+                >
+                  {"< Previous"}
+                </button>
+              )}
             </PaginationItem>
             <PaginationItem>
-              <PaginationLink href="#">1</PaginationLink>
+              {paginationCounter(pagination).map((page, index) => (
+                <PaginationLink
+                  className={pagination.page === page ? "bg-gray-100" : ""}
+                  key={index}
+                  href={`/dashboard/users?page=${page}`}
+                >
+                  {page}
+                </PaginationLink>
+              ))}
             </PaginationItem>
             <PaginationItem>
               <PaginationEllipsis />
             </PaginationItem>
             <PaginationItem>
-              <PaginationNext href="#" />
+              {pagination.totalPages > pagination.page ? (
+                <PaginationNext
+                  href={`/dashboard/users?page=${pagination.page + 1}`}
+                />
+              ) : (
+                <button
+                  disabled
+                  className="disabled:text-gray-400 cursor-not-allowed"
+                >
+                  {"Next >"}
+                </button>
+              )}
             </PaginationItem>
           </PaginationContent>
         </Pagination>

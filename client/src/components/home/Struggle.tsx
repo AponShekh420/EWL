@@ -1,7 +1,7 @@
-import family from "@/assets/png/family.png";
-import handshake from "@/assets/png/handshake.png";
-import handshake2 from "@/assets/png/handshake2.png";
-import spark from "@/assets/png/spark.png";
+import phoneIcon from "@/assets/png/phone-icon.png";
+import teacherIcon from "@/assets/png/teacher-icon.png";
+import candleIcon from "@/assets/png/candle-icon.png";
+import headsetIcon from "@/assets/png/headset-icon.png";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import FadeInSection from "../common/FadeInSection";
@@ -53,14 +53,13 @@ export default function Struggle() {
           scrollTop={{ opacity: 1, x: 0 }}
           scrollBottom={{ opacity: 0, x: -150 }}
           margin="40px 0px -40px 0px"
-          className="md:max-w-[250px] text-center md:text-left"
+          className="md:max-w-[330px] text-center md:text-left"
         >
           <h3 className="text-2xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold">
             From Struggle to Strength
           </h3>
           <p className="mt-4 mb-8 sm:text-lg lg:text-xl">
-            With wisdom, empathy, and Torah-based guidance, Ohel Miriam empowers
-            couples to build marriages of peace, holiness, and joy.
+            Ohel Miriam strengthens couples in building marriages grounded in kedusha, shalom, and simcha.  Through this journey, you’ll gain four essential gifts for deeper connection and harmony.
           </p>
           <Button className="rounded-xl px-8 py-6 text-base">
             Discover More
@@ -74,47 +73,47 @@ export default function Struggle() {
           className="space-y-2">
             <div className="bg-[#f9e1ef] py-2 px-10 flex items-center gap-x-5">
               <Image
-                src={handshake}
+                src={phoneIcon}
                 width={100}
                 height={100}
-                alt="handshake"
+                alt="PhoneIcon"
                 className="w-16 md:w-20 lg:w-24 h-auto"
               />
 
-              <p>Compassionate, discreet support for sensitive struggles</p>
+              <p>Get confidence and clarity across many areas of married life. Learn to articulate what was hidden in silence, Expose yourself to topics you didn’t know you needed, and have the option to go deeper with one-on-one guidance if you so choose.</p>
             </div>
             <div className="bg-[#f9e1ef] py-2 px-10 flex items-center gap-x-5">
               <Image
-                src={spark}
+                src={teacherIcon}
                 width={100}
                 height={100}
-                alt="spark"
+                alt="teacherIcon"
                 className="w-16 md:w-20 lg:w-24 h-auto"
               />
 
-              <p>Trusted rabbinic and professional guidance with proven tools</p>
+              <p>Feel empowered and equipped with practical tools to troubleshoot challenges, and be able to transform closeness from something stilted into something natural. Gain depth and awareness on a specific topic, with Torah guidance that replaces confusion with clarity and stress with strength.</p>
             </div>
             <div className="bg-[#f9e1ef] py-2 px-10 flex items-center gap-x-5">
               <Image
-                src={family}
+                src={candleIcon}
                 width={100}
                 height={100}
-                alt="family"
+                alt="candleIcon"
                 className="w-16 md:w-20 lg:w-24 h-auto"
               />
 
-              <p>A home transformed into a place of peace, holiness, and joy</p>
+              <p>Enjoy richer connection, renewed vitality, and a warm, playful atmosphere that makes intimacy feel natural and exciting.</p>
             </div>
             <div className="bg-[#f9e1ef] py-2 px-10 flex items-center gap-x-5">
               <Image
-                src={handshake2}
+                src={headsetIcon}
                 width={100}
                 height={100}
-                alt="handshake2"
+                alt="headsetIcon"
                 className="w-16 md:w-20 lg:w-24 h-auto"
               />
 
-              <p>Intimacy restored as a source of closeness and connection</p>
+              <p>Get clear direction and practical tools to navigate many aspects of marital life.</p>
             </div>
         </FadeInSection>
       </div>

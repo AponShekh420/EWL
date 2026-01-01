@@ -9,7 +9,7 @@ import { errorHandler, notFoundHandler } from "./middleware/errorMiddleware";
 // routes
 import authRouter from "./routes/authRouter";
 import ecommerceRouter from "./routes/ecommerceRouter";
-
+import userRouter from "./routes/userRouter";
 dotenv.config();
 
 const app = express();
@@ -43,6 +43,7 @@ app.use(express.json({ limit: "5000mb" }));
 // Authentication
 app.use("/api/auth", authRouter);
 app.use("/api/ecommerce", ecommerceRouter);
+app.use("/api/account", userRouter);
 
 app.get("/", (req: Request, res: Response) => {
   res.status(200).json({ msg: "Welcome to the home page" });
@@ -51,7 +52,7 @@ app.get("/", (req: Request, res: Response) => {
 app.use(notFoundHandler);
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port http://localhost:${PORT}`);
 });

@@ -5,6 +5,7 @@ import { getImageUrl } from "../../utils/getImageUrl";
 
 export const subcategoryValidationRules = [
   body("name").notEmpty().withMessage("Subcategory name is required"),
+  body("description").notEmpty().withMessage("Description is required"),
   body("categoryId")
     .notEmpty()
     .withMessage("Category ID is required")
@@ -22,10 +23,10 @@ export const validateSubcategory = (
   const file = req.file as Express.Multer.File;
 
   if (!file) {
-    errors.images = {
+    errors.thumbnail = {
       type: "field",
-      msg: "image is required",
-      path: "images",
+      msg: "thumbnail is required",
+      path: "thumbnail",
       location: "body",
     };
   }
@@ -37,7 +38,7 @@ export const validateSubcategory = (
   };
 
   if (Object.keys(errors).length > 0) {
-    imageDeleteHandler();
+    file && imageDeleteHandler();
     return res.status(400).json({
       success: false,
       message: "Validation failed",

@@ -4,6 +4,7 @@ import PopupButton from "@/components/common/PopupButton";
 import Rating from "@/components/common/Rating";
 import ScrollArea from "@/components/common/ScrollArea";
 import SearchBox from "@/components/common/SearchBox";
+import SelectBox from "@/components/common/SelectBox";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -29,26 +30,76 @@ import {
   TableBody,
   TableCaption,
   TableCell,
-  TableHead, 
+  TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { PaginationType } from "@/types/Pagination";
 import { ProductType } from "@/types/Product";
+import { debounce } from "@/utils/debounce";
+import { BASE_URL } from "@/utils/envVariable";
+import { getAverageRating } from "@/utils/getAverageRating";
 import { getProductStatusColor } from "@/utils/getStatusColor";
-
+import { paginationCounter } from "@/utils/paginationCounter";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useMemo } from "react";
+import toast from "react-hot-toast";
+
 export default function ProductTable({
   products,
+  pagination,
 }: {
   products: ProductType[];
+  pagination: PaginationType;
 }) {
+  const router = useRouter();
+  const deleteHandler = async (id: string) => {
+    if (!id) return;
+    const res = await fetch(BASE_URL + "/api/ecommerce/products/" + id, {
+      method: "DELETE",
+    });
+    const data = await res.json();
+    if (data.success) {
+      toast.success(data.message);
+    }
+  };
+  const handleStatusChange = async (status: string, id: string) => {
+    if (!id) return;
+    const res = await fetch(BASE_URL + "/api/ecommerce/product-status/" + id, {
+      method: "PUT",
+      body: JSON.stringify({ status }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await res.json();
+    if (!data.success) {
+      toast.error(data.message);
+    }
+    if (data.success) {
+      toast.success(data.message);
+    }
+  };
+
+  const debouncedSearch = useMemo(
+    () =>
+      debounce((value: string) => {
+        router.push(`/dashboard/ecommerce/products?search=${value}`);
+      }, 500),
+    [router]
+  );
+
   return (
     <div>
       <div className="my-5">
         <div className="flex justify-between flex-col-reverse sm:flex-row gap-4 mt-5">
-          <SearchBox placeholder="Search by product name..." />
+          <SearchBox
+            placeholder="Search by product name..."
+            onChange={(e) => debouncedSearch(e.target.value)}
+          />
           <div className="space-x-4">
             <Sheet>
               <SheetTrigger>
@@ -125,7 +176,7 @@ export default function ProductTable({
           </TableHeader>
           <TableBody>
             {products?.map((product) => (
-              <TableRow key={product.id}>
+              <TableRow key={product._id}>
                 <TableCell>
                   <div className="flex gap-4 items-center">
                     <Checkbox className="checkbox-t" />
@@ -138,7 +189,9 @@ export default function ProductTable({
                         className="size-12 object-cover rounded-md"
                       />
                       <div className="font-lexend-deca">
-                        <h5 className="font-medium">{product.name}</h5>
+                        <h5 className="font-medium text-wrap">
+                          {product.title}
+                        </h5>
                         <p className="text-gray-500  mt-0.5">
                           {product.category}
                         </p>
@@ -155,26 +208,39 @@ export default function ProductTable({
                     {product.stock} in stock
                   </p>
                 </TableCell>
-                <TableCell className="font-medium">${product.price}</TableCell>
+                <TableCell className="font-medium">
+                  ${product.salePrice}
+                </TableCell>
                 <TableCell>
                   <div className="flex gap-2 items-center">
-                    <span>{product.rating[0]}</span>
+                    {product?.reviews.length > 0 && (
+                      <span>{getAverageRating(product?.reviews)}</span>
+                    )}
                     <Rating
-                      rating={product.rating[0]}
+                      rating={getAverageRating(product?.reviews) || 0}
                       className="text-orange-400 size-3.5"
                     />
-                    <span>({product.rating.length})</span>
+                    {product?.reviews.length > 0 && (
+                      <span>({product?.reviews?.length})</span>
+                    )}
                   </div>
                 </TableCell>
                 <TableCell>
-                  <div
-                    className={`flex items-center gap-2 ${getProductStatusColor(
-                      product.status
+                  <SelectBox
+                    name="status"
+                    label=""
+                    value={product.status?.toLowerCase()}
+                    className={`w-[150px] ${getProductStatusColor(
+                      product.status as string
                     )}`}
-                  >
-                    <span className="size-2.5 bg-current inline-block rounded-full"></span>
-                    <span>{product.status}</span>
-                  </div>
+                    placeholder="Change status"
+                    onChange={(val) => handleStatusChange(val, product._id)}
+                    options={[
+                      { label: "Pending", value: "pending" },
+                      { label: "Publish", value: "publish" },
+                      { label: "Draft", value: "draft" },
+                    ]}
+                  />
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center gap-x-3">
@@ -204,7 +270,9 @@ export default function ProductTable({
                         <Icon icon="ph:eye-light" width="32" height="32" />
                       </Button>
                     </Link>
-                    <DeleteModal deleteAction={() => console.log(product.id)}>
+                    <DeleteModal
+                      deleteAction={() => deleteHandler(product._id)}
+                    >
                       <Button
                         size="icon"
                         variant="outline"
@@ -228,16 +296,50 @@ export default function ProductTable({
         <Pagination>
           <PaginationContent>
             <PaginationItem>
-              <PaginationPrevious href="#" />
+              {pagination.page > 1 ? (
+                <PaginationPrevious
+                  href={`/dashboard/ecommerce/products?page=${
+                    pagination.page - 1
+                  }`}
+                />
+              ) : (
+                <button
+                  disabled
+                  className="disabled:text-gray-400 cursor-not-allowed"
+                >
+                  {"< Previous"}
+                </button>
+              )}
             </PaginationItem>
             <PaginationItem>
-              <PaginationLink href="#">1</PaginationLink>
+              {paginationCounter(pagination).map((page, index) => (
+                <PaginationLink
+                  className={pagination.page === page ? "bg-gray-100" : ""}
+                  key={index}
+                  href={`/dashboard/ecommerce/products?page=${page}`}
+                >
+                  {page}
+                </PaginationLink>
+              ))}
             </PaginationItem>
             <PaginationItem>
               <PaginationEllipsis />
             </PaginationItem>
             <PaginationItem>
-              <PaginationNext href="#" />
+              {pagination.totalPages > pagination.page ? (
+                <PaginationNext
+                  href={`/dashboard/ecommerce/products?page=${
+                    pagination.page + 1
+                  }`}
+                />
+              ) : (
+                <button
+                  disabled
+                  className="disabled:text-gray-400 cursor-not-allowed"
+                >
+                  {"Next >"}
+                </button>
+              )}
             </PaginationItem>
           </PaginationContent>
         </Pagination>

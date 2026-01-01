@@ -1,35 +1,133 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import "@/app/home.css";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
-import MobileMenu from "./MobileMenu";
 import LoginRegister from "./LoginRegister";
+import MobileMenu from "./MobileMenu";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
+import { logout } from "@/redux/auth/userSlice";
+import { BASE_URL } from "@/utils/envVariable";
+import { RootState } from "@/redux/store";
+
+
 const Nav = () => {
   const [toggle, setToggle] = useState<boolean>(false);
   const [authToggle, setAuthToggle] = useState<boolean | string>(false);
+  const [accountMenuOpen, setAccountMenuOpen] = useState<boolean>(false)
+  const {userInfo, loading} = useSelector((state: RootState) => state?.user);
+  const dispatch = useDispatch();
+  const pathname = usePathname();
+  const router = useRouter();
+
+  if (pathname.includes("dashboard")) {
+    return null;
+  }
+
+  const logoutFunc = async (e: React.MouseEvent<HTMLParagraphElement>) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(`${BASE_URL}/api/auth/logout`, {
+        credentials: "include",
+        method: "PATCH",
+      });
+      const data = await res.json();
+      if(data.success){
+        dispatch(logout());
+        router.push("/");
+      } else{
+        throw new Error("Logout failed");
+      }
+      
+    } catch (error) {
+        console.log((error as Error).message)
+    }
+  }
+
   return (
-    <div className="header !max-w-screen">
+    <header className="header !max-w-screen">
       {/* top header */}
-      <nav className="bg-[#0F75BC] w-full h-7 fixed top-0 z-40 !max-w-screen">
+      <nav className="bg-[#0F75BC] w-full h-7 fixed top-0 z-50 !max-w-screen">
         <div className="container flex justify-end h-full">
           <div className="flex items-center gap-x-3">
-            <div className="flex gap-x-2 h-full items-center">
-              <p 
+
+            {!userInfo ? (
+            <div className={`flex gap-x-2 h-full items-center ${loading ? "pointer-events-none opacity-50" : ""}`}>
+              <p
                 className="text-sm capitalize text-white hover:text-[#270034] cursor-pointer transition-all duration-150"
-                onClick={() => setAuthToggle("login")}
-              >login</p>
+                onClick={() => !loading && setAuthToggle("login")}
+              >
+                login
+              </p>
               <div className="h-full border-[1px] border-white bg-white"></div>
-              <p 
+              <p
                 className="text-sm capitalize text-white hover:text-[#270034] cursor-pointer transition-all duration-150"
-                onClick={() => setAuthToggle("register")}
-              >register</p>
-            </div>
+                onClick={() => !loading && setAuthToggle("register")}
+              >
+                register
+              </p>
+            </div>) : ( 
+            <div className="flex items-center gap-[15px] !z-50">
+              <div className="flex items-center gap-[7px] cursor-pointer relative"
+                onClick={() => setAccountMenuOpen(!accountMenuOpen)}>
+                <div className="relative">
+                  <Image
+                    width={25}
+                    height={25}
+                    src={`/images/${(userInfo as any)?.avatar}` || "/images/avatar.png"}
+                    alt="avatar" className="w-[22px] h-[22px] rounded-full object-cover"/>
+                  <div className="w-[10px] h-[10px] rounded-full bg-green-500 absolute bottom-[0px] right-0 border-2 border-white"></div>
+                </div>
+
+                {/* <h1 className="text-[1rem] font-[400] text-white sm:block hidden">Chaya</h1> */}
+                <h1 className="text-[0.9rem] font-[400] text-white">Chaya</h1>
+
+                <div
+                  className={`${accountMenuOpen ? "translate-y-0 opacity-100 z-[1]" : "translate-y-[10px] opacity-0 z-[-1]"} !z-50 bg-white w-max rounded-md absolute dark:bg-slate-800 top-[45px] right-0 p-[10px] flex flex-col transition-all duration-300 gap-[5px]`}>
+                  <Link href={(userInfo as any)?.role == "admin" ? "/dashboard/profile" : "/profile"} className="flex items-center gap-[5px] rounded-md p-[8px] pr-[45px] py-[3px] text-[1rem] dark:text-[#abc2d3] dark:hover:bg-slate-900/50 text-gray-600 hover:bg-gray-50">
+                    <Icon icon="tabler:user" width="24" height="24" />
+                    View Profile
+                  </Link>
+                  <Link href={"/settings"} className="flex items-center gap-[5px] rounded-md p-[8px] pr-[45px] py-[3px] text-[1rem] dark:text-[#abc2d3] dark:hover:bg-slate-900/50 text-gray-600 hover:bg-gray-50">
+                    <Icon icon="weui:setting-outlined" width="24" height="24" />
+                    Settings
+                  </Link>
+                  <Link href={"/dashboard"} className="flex items-center gap-[5px] rounded-md p-[8px] pr-[45px] py-[3px] text-[1rem] dark:text-[#abc2d3] dark:hover:bg-slate-900/50 text-gray-600 hover:bg-gray-50">
+                    <Icon icon="duo-icons:dashboard" width="24" height="24" />
+                    Dashboard
+                  </Link>
+
+                  <div className="mt-3 border-t dark:border-slate-700 border-gray-200 pt-[5px]">
+                    <p className="flex items-center gap-[5px] rounded-md p-[8px] pr-[45px] py-[3px] text-[1rem] dark:text-red-500 dark:hover:bg-red-500/20 text-red-500 hover:bg-red-50" onClick={logoutFunc}>
+                        <Icon icon="tabler:logout-2" width="24" height="24" />
+                        Logout
+                    </p>
+                  </div>
+                </div>
+                <Icon icon="iconamoon:arrow-down-2" width="23" height="23" className={`${accountMenuOpen ? "rotate-0" : "rotate-[180deg]"} transition-all duration-300 text-white`}/>
+              </div>
+            </div>)}
+            
+
+            {/* devider */}
             <div className="h-full border-[1px] border-white bg-white"></div>
+
+
+            {/* cart icon */}
             <div className="relative w-7">
-              <p className="bg-[#270034] rounded-full text-[10px] text-white h-fit flex items-center justify-center w-fit px-[3px] absolute top-0 -left-1 font-medium">2</p>
-              <Icon icon="uil:cart" width="23" height="23" className="text-sm capitalize text-white hover:text-[#270034] cursor-pointer transition-all duration-150"/>
+              <p className="bg-[#270034] rounded-full text-[10px] text-white h-fit flex items-center justify-center w-fit px-[3px] absolute top-0 -left-1 font-medium">
+                2
+              </p>
+              <Icon
+                icon="uil:cart"
+                width="23"
+                height="23"
+                className="text-sm capitalize text-white hover:text-[#270034] cursor-pointer transition-all duration-150"
+              />
             </div>
           </div>
         </div>
@@ -39,9 +137,9 @@ const Nav = () => {
       <nav className="text-[1.05rem] fixed top-7 z-40 w-full bg-white h-20 shadow-[0px_0px_15px_0px_#C5C5C5] !max-w-screen">
         <div className="container flex justify-between items-center h-full sm:gap-x-2 py-2">
           {/* logo */}
-          <div className="sm:min-w-[130px] w-[130px] sm:max-w-[130px] h-full relative">
+          <Link className="sm:min-w-[130px] w-[130px] sm:max-w-[130px] h-full relative" href={"/"}>
             <Image src="/logo.png" alt="logo" fill className="h-full w-auto" />
-          </div>
+          </Link>
 
           {/* menu */}
           <div className="lg:flex flex-wrap hidden">
@@ -98,7 +196,7 @@ const Nav = () => {
           {/* buttons */}
           <div className="flex items-center gap-x-2">
             <button className="bg-[#0F75BC] px-5 py-2 h-9 rounded-full font-semibold text-white text-[0.9rem] text-nowrap shadow-[2px_2px_20px_0px_#2700346c] hover:bg-[#270034] transition-all duration-150">
-              Free demo
+              Donate
             </button>
             <div className="w-[45px] flex items-center justify-center lg:hidden">
               <Icon
@@ -119,8 +217,10 @@ const Nav = () => {
       <MobileMenu setToggle={setToggle} toggle={toggle} />
 
       {/* login & register form */}
-      {authToggle && <LoginRegister setAuthToggle={setAuthToggle} authToggle={authToggle}/>}
-    </div>
+      {authToggle && (
+        <LoginRegister setAuthToggle={setAuthToggle} authToggle={authToggle} />
+      )}
+    </header>
   );
 };
 

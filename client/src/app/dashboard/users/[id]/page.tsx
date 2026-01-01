@@ -1,7 +1,6 @@
 import PageHeading from "@/components/dashboard/common/PageHeading";
 import { Button } from "@/components/ui/button";
-import { usersData } from "@/constants/users-data";
-import { UserType } from "@/types/User";
+import { BASE_URL } from "@/utils/envVariable";
 import { GetTime } from "@/utils/getTime";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
@@ -13,13 +12,11 @@ export default async function UserDetails({
   params: { id: string };
 }) {
   const { id } = await params;
-  const FindUserById = usersData.find((item) => item.id === id);
-  const user = {
-    ...FindUserById,
-    createdAt: FindUserById?.createdAt
-      ? new Date(FindUserById.createdAt)
-      : new Date(),
-  } as UserType;
+  const res = await fetch(BASE_URL + "/api/account/users/" + id);
+  const { data: user } = await res.json();
+  if (!res.ok) {
+    throw new Error("Failed to fetch users data");
+  }
 
   return (
     <div>
@@ -27,7 +24,7 @@ export default async function UserDetails({
         pageTitle="User Details"
         breadcrumbList={[
           { name: "Users", href: `/users/${id}` },
-          { name: id, href: `/users/${id}` },
+          { name: user.userName, href: `/users/${id}` },
         ]}
       >
         <Link href="/dashboard/users/create">
@@ -57,7 +54,7 @@ export default async function UserDetails({
               <h5 className="font-bold text-lg mb-5">Profile info</h5>
               <div className="space-y-8">
                 <p className="border py-3 px-4 rounded-sm">
-                  <strong>Name:</strong> {user.fullName}
+                  <strong>Name:</strong> {user.firstName} {user.lastName}
                 </p>
                 <p className="border py-3 px-4 rounded-sm">
                   <strong>Email:</strong> {user.email}

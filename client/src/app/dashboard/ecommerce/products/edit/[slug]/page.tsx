@@ -1,11 +1,37 @@
 import PageHeading from "@/components/dashboard/common/PageHeading";
 import ProductForm from "@/components/dashboard/ecommerce/products/ProductForm";
 import { Button } from "@/components/ui/button";
+import { BASE_URL } from "@/utils/envVariable";
 import Link from "next/link";
 
-export default function EditProduct({ params }: { params: { slug: string } }) {
-  const { slug } = params;
-  console.log(slug);
+export default async function EditProduct({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  const { slug } = await params;
+
+  const [productRes, categoryRes] = await Promise.all([
+    fetch(BASE_URL + "/api/ecommerce/products/" + slug),
+    fetch(BASE_URL + "/api/ecommerce/categories"),
+  ]);
+
+  const [productData, categoriesData] = await Promise.all([
+    productRes.json(),
+    categoryRes.json(),
+  ]);
+  if (!productRes.ok) {
+    throw new Error("Failed to fetch product details");
+  }
+  if (!categoryRes.ok) {
+    throw new Error("Failed to fetch categories");
+  }
+  const categories = categoriesData.data.map(
+    (category: { name: string; slug: string }) => ({
+      label: category.name,
+      value: category.slug,
+    })
+  );
   return (
     <div>
       <PageHeading
@@ -14,6 +40,7 @@ export default function EditProduct({ params }: { params: { slug: string } }) {
           { name: "E-commerce", href: "" },
           { name: "Products", href: "/ecommerce/products" },
           { name: `Edit`, href: `/ecommerce/products/edit/${slug}` },
+          { name: `${slug}`, href: `/ecommerce/products/edit/${slug}` },
         ]}
       >
         <Link href="/dashboard/ecommerce/products">
@@ -22,7 +49,8 @@ export default function EditProduct({ params }: { params: { slug: string } }) {
           </Button>
         </Link>
       </PageHeading>
-      <ProductForm />
+
+      <ProductForm productData={productData?.data} categories={categories} />
     </div>
   );
 }

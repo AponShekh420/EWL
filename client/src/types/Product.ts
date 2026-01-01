@@ -1,14 +1,26 @@
+export interface ProductReviewType {
+  _id: string;
+  product: ProductType;
+  review: string;
+  customer: Customer;
+  status: string | undefined;
+  rating: number;
+  createdAt: Date;
+}
 export type ProductType = {
-  id: string;
-  name: string;
+  _id: string;
+  title: string;
   category: string;
   thumbnail: string;
   sku: string;
   stock: number;
-  price: string;
+  salePrice: number;
+  regularPrice: number;
+  tags: string[];
   status: string;
-  rating: number[];
+  reviews: ProductReviewType[];
   slug: string;
+  attachment: string;
   images: string[];
 };
 
@@ -17,20 +29,11 @@ interface Customer {
   avatar: string;
 }
 
-export interface ProductReviewType {
-  id: string;
-  product: { name: string; category: string; thumbnail: string };
-  review: string;
-  customer: Customer;
-  status: string | undefined;
-  rating: number;
-  createdAt: Date;
-}
-
 export type ProductFormState = {
   // 1st tab
   title: string;
   category: string;
+  slug: string;
   tags: string;
   shortDescription: string;
   description: string;
@@ -38,6 +41,10 @@ export type ProductFormState = {
   // 2nd tab
   thumbnail: File | null;
   images: File[] | null;
+  existingThumbnail?: string;
+  existingAttachment?: string;
+  existingImages?: string[];
+  deletedImages?: string[];
 
   // 3rd tab
   sku: string;
@@ -56,8 +63,8 @@ export type ProductFormState = {
   dimensionLength: string;
   dimensionHeight: string;
   dimensionWidth: string;
-  textStatus: string;
-  textClass: string;
+  taxStatus: string;
+  taxClass: string;
   shippingClass: string;
   enelope: boolean;
 
@@ -65,6 +72,17 @@ export type ProductFormState = {
   customMessage: string;
   attachment: File | null;
   checkoutPageMessage: string;
-  metaData: string;
+  metaTitle: string;
   metaDescription: string;
 };
+
+//product express validator types errors
+type ValidationErrorItem = {
+  type: string;
+  msg: string;
+  path: string;
+  location: string;
+  value?: string;
+};
+
+export type ProductValidationErrors = { [key: string]: ValidationErrorItem };

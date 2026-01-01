@@ -2,6 +2,7 @@
 import { DeleteModal } from "@/components/common/DeleteModal";
 import PopupButton from "@/components/common/PopupButton";
 import SearchBox from "@/components/common/SearchBox";
+import SelectBox from "@/components/common/SelectBox";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -32,15 +33,65 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { OrderType } from "@/types/Order";
+import { PaginationType } from "@/types/Pagination";
+import { debounce } from "@/utils/debounce";
+import { BASE_URL } from "@/utils/envVariable";
 import { getOrderStatusColor } from "@/utils/getStatusColor";
+import { GetTime } from "@/utils/getTime";
+import { paginationCounter } from "@/utils/paginationCounter";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
-export default function OrderTable({ orders }: { orders: OrderType[] }) {
+import { useRouter } from "next/navigation";
+import { useMemo } from "react";
+import toast from "react-hot-toast";
+export default function OrderTable({
+  orders,
+  pagination,
+}: {
+  orders: OrderType[];
+  pagination: PaginationType;
+}) {
+  const router = useRouter();
+  const deleteHandler = async (id: string) => {
+    if (!id) return;
+    const res = await fetch(BASE_URL + "/api/ecommerce/orders/" + id, {
+      method: "DELETE",
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      toast.success(data.message);
+    }
+  };
+  const handleStatusChange = async (status: string, id: string) => {
+    const res = await fetch(BASE_URL + "/api/ecommerce/order-status/" + id, {
+      method: "PUT",
+      body: JSON.stringify({ status }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      toast.success(data.message);
+    }
+  };
+  const debouncedSearch = useMemo(
+    () =>
+      debounce((value: string) => {
+        router.push(`/dashboard/ecommerce/orders?search=${value}`);
+      }, 500),
+    [router]
+  );
   return (
     <div>
       <div className="my-4">
         <div className="flex justify-between flex-col-reverse sm:flex-row gap-4 mt-5">
-          <SearchBox placeholder="Search by customer name..." />
+          <SearchBox
+            placeholder="Search by customer name..."
+            onChange={(e) => debouncedSearch(e.target.value)}
+          />
           <div className="space-x-4">
             <Sheet>
               <SheetTrigger>
@@ -110,56 +161,71 @@ export default function OrderTable({ orders }: { orders: OrderType[] }) {
         <TableCaption>A list of order list</TableCaption>
         <TableHeader className="bg-stone-100 ">
           <TableRow className="uppercase !h-13">
-            <TableHead className="w-[400px] space-x-5 font-bold text-gray-500">
+            <TableHead className="w-[300px] space-x-5 font-bold text-gray-500">
               <Checkbox className="checkbox-t" />
               <span>Order</span>
             </TableHead>
+            <TableHead className="font-bold text-gray-500">Email</TableHead>
             <TableHead className="font-bold text-gray-500">Date</TableHead>
-            <TableHead className="font-bold text-gray-500">Status</TableHead>
+            <TableHead className="font-bold text-gray-500">product</TableHead>
             <TableHead className="font-bold text-gray-500">Total</TableHead>
-            <TableHead className="font-bold text-gray-500">
-              product title
-            </TableHead>
-            <TableHead className="font-bold text-gray-500">email</TableHead>
+
+            <TableHead className="font-bold text-gray-500">Status</TableHead>
             <TableHead className="font-bold text-gray-500">action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {orders?.map((order) => (
-            <TableRow key={order.id}>
+            <TableRow key={order._id}>
               <TableCell>
                 <div className="flex gap-4 items-center">
                   <Checkbox className="checkbox-t" />
                   <div className="flex items-center gap-x-4">
                     <div className="font-lexend-deca flex items-center gap-1">
-                      <h5 className="font-medium">#{order.id}</h5>
-                      <p className="text-gray-500  mt-0.5">{order.name}</p>
+                      <h5 className="font-medium">#{order.orderId}</h5>
+                      <p className="text-gray-500  mt-0.5 capitalize">
+                        {order.customer.firstName +
+                          " " +
+                          order.customer.lastName}
+                      </p>
                     </div>
                   </div>
                 </div>
               </TableCell>
-              <TableCell>{order.createdAt}</TableCell>
-              <TableCell>
-                <p
-                  className={`mt-1 text-sm text-gray-500 ${getOrderStatusColor(
-                    order.status
-                  )}`}
-                >
-                  {order.status}
-                </p>
-              </TableCell>
-              <TableCell className="font-medium">${order.price}</TableCell>
+              <TableCell>{order.customer.email}</TableCell>
+              <TableCell>{GetTime(order.createdAt as string, true)}</TableCell>
 
               <TableCell>
-                <div className="flex gap-2 items-center">
-                  <span>{order.products[0].name}</span>
+                <div className="flex gap-2 items-start flex-col text-wrap">
+                  <span>{order.products[0].title}</span>
                   <span>{order.products[0].category}</span>
                 </div>
               </TableCell>
-              <TableCell>{order.email}</TableCell>
+              <TableCell className="font-medium">${order.totalPrice}</TableCell>
+              <TableCell>
+                {" "}
+                <div className="relative mt-[-20px]">
+                  <SelectBox
+                    name="status"
+                    label=""
+                    value={order.status?.toLowerCase()}
+                    className={`w-[150px] ${getOrderStatusColor(
+                      order.status as string
+                    )}`}
+                    placeholder="Change status"
+                    onChange={(val) => handleStatusChange(val, order._id)}
+                    options={[
+                      { label: "Pending", value: "pending" },
+                      { label: "Completed", value: "completed" },
+                      { label: "Cancelled", value: "cancelled" },
+                      { label: "Refunded", value: "refunded" },
+                    ]}
+                  />
+                </div>
+              </TableCell>
               <TableCell>
                 <div className="flex items-center gap-x-3">
-                  <Link href={`/dashboard/ecommerce/orders/edit/${order.id}`}>
+                  <Link href={`/dashboard/ecommerce/orders/edit/${order._id}`}>
                     <Button
                       size="icon"
                       variant="outline"
@@ -172,7 +238,7 @@ export default function OrderTable({ orders }: { orders: OrderType[] }) {
                       />
                     </Button>
                   </Link>
-                  <Link href={`/dashboard/ecommerce/orders/${order.id}`}>
+                  <Link href={`/dashboard/ecommerce/orders/${order._id}`}>
                     <Button
                       size="icon"
                       variant="outline"
@@ -181,7 +247,7 @@ export default function OrderTable({ orders }: { orders: OrderType[] }) {
                       <Icon icon="ph:eye-light" width="32" height="32" />
                     </Button>
                   </Link>
-                  <DeleteModal deleteAction={() => console.log(order.id)}>
+                  <DeleteModal deleteAction={() => deleteHandler(order._id)}>
                     <Button
                       size="icon"
                       variant="outline"
@@ -204,16 +270,50 @@ export default function OrderTable({ orders }: { orders: OrderType[] }) {
         <Pagination>
           <PaginationContent>
             <PaginationItem>
-              <PaginationPrevious href="#" />
+              {pagination.page > 1 ? (
+                <PaginationPrevious
+                  href={`/dashboard/ecommerce/orders?page=${
+                    pagination.page - 1
+                  }`}
+                />
+              ) : (
+                <button
+                  disabled
+                  className="disabled:text-gray-400 cursor-not-allowed"
+                >
+                  {"< Previous"}
+                </button>
+              )}
             </PaginationItem>
             <PaginationItem>
-              <PaginationLink href="#">1</PaginationLink>
+              {paginationCounter(pagination).map((page, index) => (
+                <PaginationLink
+                  className={pagination.page === page ? "bg-gray-100" : ""}
+                  key={index}
+                  href={`/dashboard/ecommerce/orders?page=${page}`}
+                >
+                  {page}
+                </PaginationLink>
+              ))}
             </PaginationItem>
             <PaginationItem>
               <PaginationEllipsis />
             </PaginationItem>
             <PaginationItem>
-              <PaginationNext href="#" />
+              {pagination.totalPages > pagination.page ? (
+                <PaginationNext
+                  href={`/dashboard/ecommerce/orders?page=${
+                    pagination.page + 1
+                  }`}
+                />
+              ) : (
+                <button
+                  disabled
+                  className="disabled:text-gray-400 cursor-not-allowed"
+                >
+                  {"Next >"}
+                </button>
+              )}
             </PaginationItem>
           </PaginationContent>
         </Pagination>

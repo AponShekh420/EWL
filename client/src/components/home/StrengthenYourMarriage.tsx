@@ -14,7 +14,7 @@ export default function StrengthenYourMarriage() {
             delay={0}
           >
             <h1 className="text-2xl md:text-3xl font-bold text-teal">
-              Strengthen Your Marriage, Inside & Out
+              Here’s how to strengthen you marriage, Inside & Out
             </h1>
           </FadeInSection>
           <FadeInSection

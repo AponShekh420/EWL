@@ -15,18 +15,22 @@ import { getAllCart } from "../controllers/ecommerce/cart/getAllCart";
 import { updateCart } from "../controllers/ecommerce/cart/updateCart";
 import { createOrder } from "../controllers/ecommerce/order/createOrder";
 import { deleteOrder } from "../controllers/ecommerce/order/deleteOrder";
-import { getAllOrder } from "../controllers/ecommerce/order/getAllProduct";
+import { getAllOrder } from "../controllers/ecommerce/order/getAllOrders";
 import { getOrderById } from "../controllers/ecommerce/order/getOrderById";
 import { updateOrder } from "../controllers/ecommerce/order/updateOrder";
 import { createProduct } from "../controllers/ecommerce/product/createProduct";
 import { deleteProduct } from "../controllers/ecommerce/product/deleteProduct";
 import { getAllProduct } from "../controllers/ecommerce/product/getAllProduct";
-import { getProductById } from "../controllers/ecommerce/product/getProductById";
+import { getProductBySlug } from "../controllers/ecommerce/product/getProductById";
 import { updateProduct } from "../controllers/ecommerce/product/updateProduct";
 import { createReview } from "../controllers/ecommerce/review/createReview";
 import { deleteReview } from "../controllers/ecommerce/review/deleteReview";
 
+import { getCategoriesByFilters } from "../controllers/ecommerce/category/getCategoriesByFilters";
+import { getCategoryBySlug } from "../controllers/ecommerce/category/getCategoryBySlug";
+import { getSubCategoryById } from "../controllers/ecommerce/category/sub-category/getSubCategoryById";
 import { getProductByFilter } from "../controllers/ecommerce/product/getProductByFilter";
+import { updateProductStatus } from "../controllers/ecommerce/product/updateProductStatus";
 import { getAllReview } from "../controllers/ecommerce/review/getAllReview";
 import { getAllReviewByProductId } from "../controllers/ecommerce/review/getAllReviewByProductId";
 import { updateReview } from "../controllers/ecommerce/review/updateReview";
@@ -50,13 +54,13 @@ import {
 import {
   productValidationRules,
   validateProduct,
+  validateUpdateProduct,
 } from "../middleware/product/productValidator";
 import {
   reviewUpdateValidationRules,
   reviewValidationRules,
   validateReview,
 } from "../middleware/review/reviewMiddleware";
-import { convertBooleanFields } from "../utils/convertBooleanFields";
 const router = Router();
 
 const multiFileUploader = multerUploader("products");
@@ -72,32 +76,31 @@ router.post(
     { name: "attachment", maxCount: 1 },
     { name: "images" },
   ]),
-  convertBooleanFields([
-    "isVisibleProductPage",
-    "trackStockQuantity",
-    "limitOneItemPerOrder",
-    "enelope",
-  ]),
+
   productValidationRules,
   validateProduct,
   createProduct
 );
 router.put(
-  "/product/:id",
+  "/products/:id",
   multiFileUploader.fields([
     { name: "thumbnail", maxCount: 1 },
     { name: "attachment", maxCount: 1 },
     { name: "images" },
   ]),
+  productValidationRules,
+  validateUpdateProduct,
   updateProduct
 );
-router.delete("/product/:id", deleteProduct);
-router.get("/product/:id", getProductById);
+router.put("/product-status/:id", updateProductStatus);
+router.delete("/products/:id", deleteProduct);
+router.get("/products/:slug", getProductBySlug);
 router.get("/products", getAllProduct);
 router.get("/product-by-filter", getProductByFilter);
 //order routes
 router.post("/order", orderValidationRules, validateOrder, createOrder);
 router.put("/orders/:id", orderValidationRules, validateOrder, updateOrder);
+router.put("/order-status/:id", updateOrder);
 router.delete("/orders/:id", deleteOrder);
 router.get("/orders/:id", getOrderById);
 router.get("/orders", getAllOrder);
@@ -123,30 +126,33 @@ router.get("/reviews/:productId", getAllReviewByProductId);
 //category routes
 router.post(
   "/category",
-  singleFileUploader.single("image"),
+  singleFileUploader.single("thumbnail"),
   categoryValidationRules,
   validateCategory,
   createCategory
 );
 router.put(
   "/categories/:id",
-  singleFileUploader.single("image"),
+  singleFileUploader.single("thumbnail"),
   updateCategory
 );
 router.delete("/categories/:id", deleteCategory);
+router.get("/categories/:slug", getCategoryBySlug);
 router.get("/categories", getAllCategories);
+router.get("/categories-by-filter", getCategoriesByFilters);
 
 //subcategory routes
 router.post(
   "/subcategory",
-  singleFileUploader.single("image"),
+  singleFileUploader.single("thumbnail"),
   subcategoryValidationRules,
   validateSubcategory,
   createSubCategory
 );
+router.get("/subcategories/:id", getSubCategoryById);
 router.put(
   "/subcategories/:id",
-  singleFileUploader.single("image"),
+  singleFileUploader.single("thumbnail"),
   updateSubcategory
 );
 router.delete("/subcategories/:id", deleteSubcategory);

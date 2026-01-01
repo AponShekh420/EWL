@@ -23,21 +23,67 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { PaginationType } from "@/types/Pagination";
 import { ProductReviewType } from "@/types/Product";
+import { debounce } from "@/utils/debounce";
+import { BASE_URL } from "@/utils/envVariable";
 import { getReviewsStatusColor } from "@/utils/getStatusColor";
 import { GetTime } from "@/utils/getTime";
+import { paginationCounter } from "@/utils/paginationCounter";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+
+import { useMemo } from "react";
+import toast from "react-hot-toast";
 export default function ProductReviewsTable({
   reviews,
+  pagination,
 }: {
   reviews: ProductReviewType[];
+  pagination: PaginationType;
 }) {
+  const router = useRouter();
+  const deleteHandler = async (id: string) => {
+    if (!id) return;
+    const res = await fetch(BASE_URL + "/api/ecommerce/reviews/" + id, {
+      method: "DELETE",
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      toast.success(data.message);
+    }
+  };
+  const handleStatusChange = async (status: string, id: string) => {
+    const res = await fetch(BASE_URL + "/api/ecommerce/reviews/" + id, {
+      method: "PUT",
+      body: JSON.stringify({ status }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      toast.success(data.message);
+    }
+  };
+  const debouncedSearch = useMemo(
+    () =>
+      debounce((value: string) => {
+        router.push(`/dashboard/ecommerce/products/reviews?search=${value}`);
+      }, 500),
+    [router]
+  );
   return (
     <div>
       <div className="my-5">
         <div className="flex justify-between flex-col-reverse sm:flex-row gap-4 mt-5">
-          <SearchBox placeholder="Search by product name..." />
+          <SearchBox
+            placeholder="Search by product name..."
+            onChange={(e) => debouncedSearch(e.target.value)}
+          />
           <div className="space-x-4">
             <Button
               variant="outline"
@@ -69,11 +115,11 @@ export default function ProductReviewsTable({
         </TableHeader>
         <TableBody>
           {reviews?.map((review) => (
-            <TableRow key={review.id}>
+            <TableRow key={review._id}>
               <TableCell>
                 <div className="flex gap-4 items-center">
                   <Checkbox className="checkbox-t" />
-                  <span>RW-{review.id}</span>
+                  <span>RW-{review._id}</span>
                 </div>
               </TableCell>
 
@@ -81,7 +127,7 @@ export default function ProductReviewsTable({
                 <div className="flex items-center gap-x-4 text-wrap">
                   <Image
                     src={review.customer.avatar}
-                    alt=""
+                    alt={"avatar"}
                     width={50}
                     height={50}
                     className="size-12 object-cover rounded-md"
@@ -111,7 +157,7 @@ export default function ProductReviewsTable({
                     className="size-12 object-cover rounded-md"
                   />
                   <div className="font-lexend-deca">
-                    <h5 className="font-medium">{review.product.name}</h5>
+                    <h5 className="font-medium">{review.product.title}</h5>
                     <p className="text-gray-500  mt-0.5">
                       {review.product.category}
                     </p>
@@ -128,7 +174,7 @@ export default function ProductReviewsTable({
                     review.status as string
                   )}`}
                   placeholder="Change status"
-                  onChange={(val) => console.log("Selected:", val)}
+                  onChange={(val) => handleStatusChange(val, review._id)}
                   options={[
                     { label: "Pending", value: "pending" },
                     { label: "Approved", value: "approved" },
@@ -138,7 +184,7 @@ export default function ProductReviewsTable({
               </TableCell>
               <TableCell>
                 <div className="flex items-center gap-x-3">
-                  <DeleteModal deleteAction={() => console.log(review.id)}>
+                  <DeleteModal deleteAction={() => deleteHandler(review._id)}>
                     <Button
                       size="icon"
                       variant="outline"
@@ -161,16 +207,50 @@ export default function ProductReviewsTable({
         <Pagination>
           <PaginationContent>
             <PaginationItem>
-              <PaginationPrevious href="#" />
+              {pagination.page > 1 ? (
+                <PaginationPrevious
+                  href={`/dashboard/ecommerce/products/reviews?page=${
+                    pagination.page - 1
+                  }`}
+                />
+              ) : (
+                <button
+                  disabled
+                  className="disabled:text-gray-400 cursor-not-allowed"
+                >
+                  {"< Previous"}
+                </button>
+              )}
             </PaginationItem>
             <PaginationItem>
-              <PaginationLink href="#">1</PaginationLink>
+              {paginationCounter(pagination).map((page, index) => (
+                <PaginationLink
+                  className={pagination.page === page ? "bg-gray-100" : ""}
+                  key={index}
+                  href={`/dashboard/ecommerce/products/reviews?page=${page}`}
+                >
+                  {page}
+                </PaginationLink>
+              ))}
             </PaginationItem>
             <PaginationItem>
               <PaginationEllipsis />
             </PaginationItem>
             <PaginationItem>
-              <PaginationNext href="#" />
+              {pagination.totalPages > pagination.page ? (
+                <PaginationNext
+                  href={`/dashboard/ecommerce/products/reviews?page=${
+                    pagination.page + 1
+                  }`}
+                />
+              ) : (
+                <button
+                  disabled
+                  className="disabled:text-gray-400 cursor-not-allowed"
+                >
+                  {"Next >"}
+                </button>
+              )}
             </PaginationItem>
           </PaginationContent>
         </Pagination>

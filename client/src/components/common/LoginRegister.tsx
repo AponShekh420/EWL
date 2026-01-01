@@ -72,8 +72,8 @@ const LoginRegister = ({
 
           {/* Scrollable Register form */}
           <div className="max-h-[75vh] overflow-y-auto px-8 pb-8">
-            {authToggle == "register" && <Register />}
-            {authToggle == "login" && <Login />}
+            {authToggle == "register" && <Register setAuthToggle={setAuthToggle}/>}
+            {authToggle == "login" && <Login setAuthToggle={setAuthToggle}/>}
           </div>
 
         </div>
