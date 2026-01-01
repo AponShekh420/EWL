@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const createFormData = (data: Record<string, any>) => {
   const formData = new FormData();
   // Loop through object
@@ -41,5 +40,3 @@ export const createFormData = (data: Record<string, any>) => {
   formData.append("creator", "6902151f2684b533a0cd38a2");
   return formData;
 };
-
-// nothing
