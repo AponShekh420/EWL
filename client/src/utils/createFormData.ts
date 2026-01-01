@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const createFormData = (data: Record<string, any>) => {
   const formData = new FormData();
   // Loop through object
