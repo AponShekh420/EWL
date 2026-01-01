@@ -12,7 +12,9 @@ const Welcome = () => {
             margin="40px 0px -40px 0px"
           > 
             <h1 className="font-bold text-2xl md:text-3xl lg:text-4xl">
-              You want a home filled with peace, connection, and holiness.
+              Nurture Your Bond with
+              Tranquility, Connection,
+              and Kedusha
             </h1>
           </FadeInSection>
           <FadeInSection
@@ -22,15 +24,75 @@ const Welcome = () => {
             margin="40px 0px -40px 0px"
             delay={0.5}
           > 
-            <p className="mt-4 mb-14 text-base lg:text-lg text-[#333333]">
-              But when challenges arise in marriage — especially in the private areas of life — it can feel overwhelming.
-              Many couples don&apos;t know where to turn for discreet, Torah-true guidance.  
-              <b>Ohel Miriam was created to address knowledge gaps on the 
-              Torah perspective of marital harmony, intimate relationships and related topics.</b>
-              Ohel Miriam helps Jewish couples build harmony and intimacy in marriage
-              through trusted guidance, practical tools, and Torah-aligned wisdom.
-              Ohel Miriam gives you the tools and knowledge to build a marriage that truly thrives. 
-              Ohel Miriam arranges live teleconferences and courses, catering to both men and women alike. These sessions feature insights from Rabbanim, women lecturers, therapists and medical professionals.
+            <p className="mt-6 text-lg lg:text-xl font-semibold text-[#333333]">
+              Torah-rooted guidance for couples seeking harmony,
+              intimacy, and renewal
+            </p>
+          </FadeInSection>
+          <FadeInSection
+            initial={{ opacity: 0, y: 50 }}
+            scrollTop={{ opacity: 1, y: 0 }}
+            scrollBottom={{ opacity: 0, y: 50 }}
+            margin="40px 0px -40px 0px"
+            delay={0.6}
+          > 
+            <p className="mt-6 text-base lg:text-lg text-[#333333]">
+              Marriage is meant to be a source of joy, strength, and spiritual growth. Yet
+              when challenges arise—especially in the most private and sensitive areas—
+              many couples feel unsure where to turn.
+            </p>
+          </FadeInSection>
+          <FadeInSection
+            initial={{ opacity: 0, y: 50 }}
+            scrollTop={{ opacity: 1, y: 0 }}
+            scrollBottom={{ opacity: 0, y: 50 }}
+            margin="40px 0px -40px 0px"
+            delay={0.7}
+          > 
+            <p className="mt-6 text-base lg:text-lg text-[#333333]">
+            <b>Ohel Miriam</b> was founded to fill a vital gap: providing discreet, Torah-
+            grounded guidance on marital harmony, intimacy, and related topics. We
+            support Jewish couples with trusted insights, practical tools, and timeless
+            wisdom to help their relationships flourish.
+            </p>
+          </FadeInSection>
+          <FadeInSection
+            initial={{ opacity: 0, y: 50 }}
+            scrollTop={{ opacity: 1, y: 0 }}
+            scrollBottom={{ opacity: 0, y: 50 }}
+            margin="40px 0px -40px 0px"
+            delay={0.8}
+          > 
+            <p className="mt-6 text-base lg:text-lg text-[#333333]">Through live teleconferences, recordings and thoughtfully designed courses
+              for both men and women, Ohel Miriam brings together Rabbanim, female
+              educators, therapists, and medical professionals. Together, they offer
+              compassionate, clear, and halachically sound perspectives to strengthen your
+              home from the inside out.
+            </p>
+          </FadeInSection>
+          <FadeInSection
+            initial={{ opacity: 0, y: 50 }}
+            scrollTop={{ opacity: 1, y: 0 }}
+            scrollBottom={{ opacity: 0, y: 50 }}
+            margin="40px 0px -40px 0px"
+            delay={0.9}
+          > 
+            <p className="mt-6 text-base lg:text-lg text-[#333333]">The Ohel Miriam Store provides personal care products—carefully selected
+              resources that support comfort, dignity, and connection in marriage. Each
+              item is chosen to gently nurture the sacred space between husband and wife
+              —inviting warmth, tenderness, and playful connection into the heart of the
+              home.
+            </p>
+          </FadeInSection>
+          <FadeInSection
+            initial={{ opacity: 0, y: 50 }}
+            scrollTop={{ opacity: 1, y: 0 }}
+            scrollBottom={{ opacity: 0, y: 50 }}
+            margin="40px 0px -40px 0px"
+            delay={1.0}
+          > 
+            <p className="mt-6 mb-14 text-base lg:text-lg text-[#333333]">Whether you&apos;re seeking deeper connection, greater understanding, or a path
+              toward renewal—Ohel Miriam is here to guide you.
             </p>
           </FadeInSection>
         </div>

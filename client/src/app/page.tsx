@@ -23,9 +23,9 @@ export default async function Home() {
       <CoupleFaced />
       <Upcoming />
       <Struggle />
-      <StuggleToStrength />
+      {/* <StuggleToStrength /> */}
       <Testimonials />
-      <About />
+      {/* <About /> */}
       <StrengthenYourMarriage />
       <JewishHomes />
     </main>
