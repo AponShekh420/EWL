@@ -1,12 +1,12 @@
 import "@/app/home.css";
-import About from "@/components/home/About";
+// import About from "@/components/home/About";
 import Counter from "@/components/home/Counter";
 import CoupleFaced from "@/components/home/CoupleFaced";
 import Hero from "@/components/home/Hero";
 import JewishHomes from "@/components/home/JewishHomes";
 import StrengthenYourMarriage from "@/components/home/StrengthenYourMarriage";
 import Struggle from "@/components/home/Struggle";
-import StuggleToStrength from "@/components/home/StuggleToStrength";
+// import StuggleToStrength from "@/components/home/StuggleToStrength";
 import Testimonials from "@/components/home/testimonials/Testimonials";
 import Upcoming from "@/components/home/Upcoming";
 import Welcome from "@/components/home/Welcome";
@@ -23,9 +23,9 @@ export default async function Home() {
       <CoupleFaced />
       <Upcoming />
       <Struggle />
-      <StuggleToStrength />
+      {/* <StuggleToStrength /> */}
       <Testimonials />
-      <About />
+      {/* <About /> */}
       <StrengthenYourMarriage />
       <JewishHomes />
     </main>

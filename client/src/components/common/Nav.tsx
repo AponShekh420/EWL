@@ -19,7 +19,7 @@ const Nav = () => {
   const [toggle, setToggle] = useState<boolean>(false);
   const [authToggle, setAuthToggle] = useState<boolean | string>(false);
   const [accountMenuOpen, setAccountMenuOpen] = useState<boolean>(false)
-  const {userInfo} = useSelector((state: RootState) => state?.user);
+  const {userInfo, loading} = useSelector((state: RootState) => state?.user);
   const dispatch = useDispatch();
   const pathname = usePathname();
   const router = useRouter();
@@ -56,17 +56,17 @@ const Nav = () => {
           <div className="flex items-center gap-x-3">
 
             {!userInfo ? (
-            <div className="flex gap-x-2 h-full items-center">
+            <div className={`flex gap-x-2 h-full items-center ${loading ? "pointer-events-none opacity-50" : ""}`}>
               <p
                 className="text-sm capitalize text-white hover:text-[#270034] cursor-pointer transition-all duration-150"
-                onClick={() => setAuthToggle("login")}
+                onClick={() => !loading && setAuthToggle("login")}
               >
                 login
               </p>
               <div className="h-full border-[1px] border-white bg-white"></div>
               <p
                 className="text-sm capitalize text-white hover:text-[#270034] cursor-pointer transition-all duration-150"
-                onClick={() => setAuthToggle("register")}
+                onClick={() => !loading && setAuthToggle("register")}
               >
                 register
               </p>
@@ -196,7 +196,7 @@ const Nav = () => {
           {/* buttons */}
           <div className="flex items-center gap-x-2">
             <button className="bg-[#0F75BC] px-5 py-2 h-9 rounded-full font-semibold text-white text-[0.9rem] text-nowrap shadow-[2px_2px_20px_0px_#2700346c] hover:bg-[#270034] transition-all duration-150">
-              Free demo
+              Donate
             </button>
             <div className="w-[45px] flex items-center justify-center lg:hidden">
               <Icon

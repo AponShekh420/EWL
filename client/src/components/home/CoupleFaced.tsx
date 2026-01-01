@@ -1,6 +1,6 @@
 import { coupleFacesData } from "@/constants/home";
-import { Icon } from "@iconify/react";
 import FadeInSection from "../common/FadeInSection";
+import Image from "next/image";
 
 export default function CoupleFaced() {
   return (
@@ -42,12 +42,13 @@ export default function CoupleFaced() {
                 delay={index == 0 ? 0 : (index/10) * 2}
                 className="bg-teal p-10 flex flex-col justify-center items-center text-center xl:min-w-[350px]  rounded-sm basis-1"
               >
-                <Icon
+                {/* <Icon
                   icon="fluent-emoji-high-contrast:broken-heart"
                   width="50"
                   height="50"
                   className="size-[40px] md:size-[50px]"
-                />
+                /> */}
+                <Image src={"/images/home/heart-icon.png"} alt="heart icon" width={100} height={100} />
                 <p className="text-base md:text-lg mt-5">{data.desc}</p>
               </FadeInSection>
             ))}

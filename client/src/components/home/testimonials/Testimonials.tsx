@@ -3,7 +3,7 @@ import TestimonialsSlider from "./TestimonialsSlider";
 
 const Testimonials = () => {
   return (
-    <div className="bg-ligtGray py-14">
+    <div className="bg-ligtGray py-14 mt-20">
       <div className="container">
         <FadeInSection
           initial={{ opacity: 0, y: 50 }}
