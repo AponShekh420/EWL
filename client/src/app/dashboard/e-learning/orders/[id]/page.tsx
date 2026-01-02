@@ -11,14 +11,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-  order_data,
   orderStatus,
   shippingCharge,
   transactionsList,
 } from "@/constants/order-data";
 import { OrderType } from "@/types/Order";
+import { BASE_URL } from "@/utils/envVariable";
 import { GetTime } from "@/utils/getTime";
-import { totalProductAmount, totalProductCount } from "@/utils/getTotalUtils";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -29,11 +28,15 @@ export default async function OrderDetails({
   params: { id: string };
 }) {
   const { id } = await params;
-  const order = order_data.find((order) => order.id === id) as OrderType;
+  const res = await fetch(BASE_URL + "/api/ecommerce/orders/" + id);
+  const { data: order }: { data: OrderType } = await res.json();
+  if (!res.ok) {
+    throw new Error("Failed to fetch order details");
+  }
   return (
     <div>
       <PageHeading
-        pageTitle={`Order #${id}`}
+        pageTitle={`Order #${order.orderId}`}
         breadcrumbList={[
           { name: "E-commerce", href: "" },
           { name: "Orders", href: "/ecommerce/orders" },
@@ -54,12 +57,8 @@ export default async function OrderDetails({
         <p className="sm:border-r w-fit pr-4">
           {GetTime(new Date(order.createdAt), true)}
         </p>
-        <p className="sm:border-r w-fit sm:px-4">
-          {totalProductCount(order.products)} Items
-        </p>
-        <p className="sm:border-r w-fit sm:px-4">
-          Total ${totalProductAmount(order.products)}
-        </p>
+        <p className="sm:border-r w-fit sm:px-4">{order.totalProduct} Items</p>
+        <p className="sm:border-r w-fit sm:px-4">Total ${order.totalPrice}</p>
         <button className="bg-green-300 text-green-800 px-3 py-1 text-sm rounded-2xl sm:ml-4">
           Paid
         </button>
@@ -90,27 +89,27 @@ export default async function OrderDetails({
             </TableHeader>
 
             <TableBody>
-              {order.products.map((product) => (
-                <TableRow key={product.id}>
+              {order.products.map((product, index) => (
+                <TableRow key={product._id + index}>
                   <TableCell>
                     <div>
                       <Image
-                        src={product.image}
+                        src={product.thumbnail}
                         width={100}
                         height={100}
-                        alt={product.name}
+                        alt={product.title}
                         className="w-25 h-25 object-cover rounded-lg"
                       />
-                      <h5 className="font-semibold mt-2">{product.name}</h5>
+                      <h5 className="font-semibold mt-2">{product.title}</h5>
                       <p className="text-sm text-gray-600">
                         {product.category}
                       </p>
                     </div>
                   </TableCell>
-                  <TableCell>${product.price}</TableCell>
-                  <TableCell>{product.quantity}</TableCell>
+                  <TableCell>${product.salePrice}</TableCell>
+                  <TableCell>{1}</TableCell>
                   <TableCell className="font-medium">
-                    ${Number(product.price) * Number(product.quantity)}
+                    ${Number(product.salePrice) * Number(1)}
                   </TableCell>
                 </TableRow>
               ))}
@@ -127,7 +126,7 @@ export default async function OrderDetails({
           <div className="max-w-[400px] ml-auto space-y-4">
             <div className="flex justify-between items-center">
               <span>Subtotal</span>
-              <span>${totalProductAmount(order.products)}</span>
+              <span>${order.totalPrice}</span>
             </div>
             <div className="flex justify-between items-center">
               <span>Store Credit</span>
@@ -140,9 +139,7 @@ export default async function OrderDetails({
             <hr />
             <div className="flex justify-between items-center">
               <span className="font-bold">Total</span>
-              <span>
-                ${totalProductAmount(order.products) + shippingCharge}
-              </span>
+              <span>${order.totalPrice + shippingCharge}</span>
             </div>
           </div>
           <div>
@@ -193,15 +190,17 @@ export default async function OrderDetails({
           </h5>
           <div className="flex flex-col lg:flex-row gap-4 mt-5 shadow border rounded-md p-6">
             <Image
-              src={order?.avatar}
+              src={order?.customer?.avatar || "/images/user.png"}
               width={80}
               height={80}
               alt="customer"
               className="rounded-xl"
             />
             <div className="space-y-2">
-              <h5 className="font-lexend-deca font-medium">{order.name}</h5>
-              <p className="text-sm text-gray-500">{order.email}</p>
+              <h5 className="font-lexend-deca font-medium">
+                {order?.customer?.firstName + " " + order?.customer?.lastName}
+              </h5>
+              <p className="text-sm text-gray-500">{order.customer?.email}</p>
               <p className="text-gray-500 text-sm">(316) 555-0116</p>
             </div>
           </div>
@@ -212,15 +211,48 @@ export default async function OrderDetails({
             <div className="space-y-2">
               <div className="font-lexend-deca capitalize">
                 <span className="font-medium">Address: </span>{" "}
-                <span className="text-gray-500">flat4, road 2, mirpur 10</span>
+                <span className="text-gray-500">
+                  {order.shippingInfo.streetAddress +
+                    ", " +
+                    order.shippingInfo.city}
+                </span>
               </div>
               <div className="font-lexend-deca capitalize">
                 <span className="font-medium">state: </span>{" "}
-                <span className="text-gray-500">dhaka</span>
+                <span className="text-gray-500">
+                  {order.shippingInfo.state}
+                </span>
               </div>
               <div className="font-lexend-deca  capitalize">
                 <span className="font-medium">country: </span>{" "}
-                <span className="text-gray-500">bangladesh</span>
+                <span className="text-gray-500">
+                  {order.shippingInfo.country}
+                </span>
+              </div>
+            </div>
+          </div>
+          <h5 className="font-bold text-lg font-lexend-deca mt-8">
+            Billing Information
+          </h5>
+          <div className=" mt-5 shadow border rounded-md p-6">
+            <div className="space-y-2">
+              <div className="font-lexend-deca capitalize">
+                <span className="font-medium">Address: </span>{" "}
+                <span className="text-gray-500">
+                  {order.billingInfo.streetAddress +
+                    ", " +
+                    order.billingInfo.city}
+                </span>
+              </div>
+              <div className="font-lexend-deca capitalize">
+                <span className="font-medium">state: </span>{" "}
+                <span className="text-gray-500">{order.billingInfo.state}</span>
+              </div>
+              <div className="font-lexend-deca  capitalize">
+                <span className="font-medium">country: </span>{" "}
+                <span className="text-gray-500">
+                  {order.billingInfo.country}
+                </span>
               </div>
             </div>
           </div>

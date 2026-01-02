@@ -8,6 +8,8 @@ export interface ProductReviewType {
   createdAt: Date;
 }
 export type ProductType = {
+  price(price: unknown): unknown;
+  name: string;
   _id: string;
   title: string;
   category: string;
