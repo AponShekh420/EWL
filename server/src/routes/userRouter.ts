@@ -6,6 +6,7 @@ import { getUserById } from "../controllers/user/getUserById";
 import { updateUser } from "../controllers/user/updateUser";
 import { multerUploader } from "../lib/multer";
 import {
+  profileUpdateValidationRules,
   userUpdateValidationRules,
   userValidationRules,
   validateUser,
@@ -30,7 +31,7 @@ router.put(
 router.put(
   "/profile/:id",
   singleFileUploader.single("avatar"),
-  userUpdateValidationRules,
+  profileUpdateValidationRules,
   validateUser,
   updateUser
 );

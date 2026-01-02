@@ -37,6 +37,9 @@ export const updateUser = async (
     if (body.password) {
       updatedData.password = bcrypt.hashSync(body.password, 10);
     }
+    if (body.newPassword && body.oldPassword) {
+      updatedData.password = bcrypt.hashSync(body.newPassword, 10);
+    }
     // ---- UPDATE USER ----
     const updatedUser = await UserModel.findByIdAndUpdate(id, updatedData, {
       new: true,
