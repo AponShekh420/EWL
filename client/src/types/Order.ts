@@ -37,6 +37,8 @@ type Customer = {
 };
 
 export type OrderType = {
+  quantity(quantity: unknown): unknown;
+  price(price: unknown): unknown;
   _id: string;
   orderId: number;
 
