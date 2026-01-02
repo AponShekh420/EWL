@@ -1,8 +1,17 @@
-export const createFormData = (data: Record<string, any>) => {
+type FormDataValue =
+  | string
+  | boolean
+  | File
+  | File[]
+  | string[]
+  | null
+  | undefined;
+export const createFormData = (data: Record<string, FormDataValue>) => {
   const formData = new FormData();
   // Loop through object
   Object.entries(data).forEach(([key, value]) => {
-    if (value === undefined || value === null || value.length < 1) return;
+    if (value === undefined || value === null) return;
+    if (Array.isArray(value) && value.length < 1) return;
 
     // 📌 If value is File -> append directly
     if (value instanceof File) {

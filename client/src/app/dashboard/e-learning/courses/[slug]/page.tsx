@@ -14,7 +14,7 @@ export default async function ProductDetails({
   const { slug } = await params;
   const product = productsData.find(
     (item) => item.slug === slug
-  ) as ProductType;
+  ) as unknown as ProductType;
 
   return (
     <div>
@@ -23,7 +23,7 @@ export default async function ProductDetails({
         breadcrumbList={[
           { name: "E-commerce", href: "" },
           { name: "Products", href: `/ecommerce/products` },
-          { name: product.name, href: `/ecommerce/products/${product.slug}` },
+          { name: product?.name, href: `/ecommerce/products/${product.slug}` },
         ]}
       >
         <Link href="/dashboard/ecommerce/products">
@@ -53,7 +53,7 @@ export default async function ProductDetails({
           <hr className="my-8" />
           <div>
             <div className="flex items-center gap-2 ">
-              <p className="font-semibold text-3xl">${product.price}</p>
+              <p className="font-semibold text-3xl">${String(product.price)}</p>
               <div className="flex gap-2">
                 <p className="line-through text-gray-500 text-xl">
                   ${Number(product.price) + 20}.00
