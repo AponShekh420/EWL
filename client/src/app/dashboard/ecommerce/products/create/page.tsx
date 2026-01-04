@@ -6,9 +6,9 @@ import Link from "next/link";
 
 export default async function CreateProduct() {
   const res = await fetch(BASE_URL + "/api/ecommerce/categories");
-  const { data: categoriesData } = await res.json();
+  const { data: categoriesData } = await res?.json();
 
-  const categories = categoriesData.map(
+  const categories = categoriesData?.map(
     (category: { name: string; slug: string }) => ({
       label: category.name,
       value: category.slug,
