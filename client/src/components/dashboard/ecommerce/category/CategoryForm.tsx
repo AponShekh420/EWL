@@ -12,6 +12,7 @@ import {
 import { RootState } from "@/redux/store";
 import { CategoryType, CategoryValidationErrors } from "@/types/Category";
 import { BASE_URL } from "@/utils/envVariable";
+import { getImageUrl } from "@/utils/getImageUrl";
 import { Icon } from "@iconify/react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
@@ -206,7 +207,7 @@ export default function CategoryForm({
             {existingThumbnail && (
               <div className="relative w-fit">
                 <Image
-                  src={existingThumbnail as string}
+                  src={getImageUrl(existingThumbnail, "category")}
                   alt="preview"
                   width={220}
                   height={220}

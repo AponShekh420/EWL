@@ -27,6 +27,7 @@ import { PaginationType } from "@/types/Pagination";
 import { ProductReviewType } from "@/types/Product";
 import { debounce } from "@/utils/debounce";
 import { BASE_URL } from "@/utils/envVariable";
+import { getImageUrl } from "@/utils/getImageUrl";
 import { getReviewsStatusColor } from "@/utils/getStatusColor";
 import { GetTime } from "@/utils/getTime";
 import { paginationCounter } from "@/utils/paginationCounter";
@@ -126,14 +127,16 @@ export default function ProductReviewsTable({
               <TableCell>
                 <div className="flex items-center gap-x-4 text-wrap">
                   <Image
-                    src={review.customer.avatar}
+                    src={getImageUrl(review.customer.avatar, "profile")}
                     alt={"avatar"}
                     width={50}
                     height={50}
                     className="size-12 object-cover rounded-md"
                   />
                   <div className="font-lexend-deca">
-                    <h5 className="font-medium">{review.customer.name}</h5>
+                    <h5 className="font-medium">
+                      {review.customer.firstName} {review.customer.lastName}
+                    </h5>
                     <p className="text-gray-500  mt-0.5">{review.review}</p>
                   </div>
                 </div>
@@ -150,7 +153,7 @@ export default function ProductReviewsTable({
               <TableCell className="font-medium">
                 <div className="flex items-center gap-x-4">
                   <Image
-                    src={review.product.thumbnail}
+                    src={getImageUrl(review.product.thumbnail, "products")}
                     alt=""
                     width={50}
                     height={50}

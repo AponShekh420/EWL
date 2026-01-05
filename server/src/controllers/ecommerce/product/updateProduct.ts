@@ -5,7 +5,6 @@ import productModel from "../../../models/ProductModel";
 import { catchErrorSend } from "../../../utils/catchErrorSend";
 import { deleteFileFromLocal } from "../../../utils/deleteFileFromLocal";
 import { getFilterBodyData } from "../../../utils/getFilterBodyData";
-import { getImageUrl } from "../../../utils/getImageUrl";
 
 type MulterFile = Record<string, Express.Multer.File[]>;
 
@@ -61,9 +60,7 @@ export const updateProduct = async (
 
     // ---- IMAGES ----
     if (images?.length) {
-      const newImages = images.map((file) =>
-        getImageUrl(req, "products", file)
-      );
+      const newImages = images.map((file) => file.filename);
 
       updatedData.images = [
         ...oldProduct.images.filter((img) => !deletedImages.includes(img)),
@@ -73,12 +70,12 @@ export const updateProduct = async (
 
     // ---- THUMBNAIL ----
     if (thumbnail?.length) {
-      updatedData.thumbnail = getImageUrl(req, "products", thumbnail[0]);
+      updatedData.thumbnail = thumbnail[0].filename;
     }
 
     // ---- ATTACHMENT ----
     if (attachment?.length) {
-      updatedData.attachment = getImageUrl(req, "products", attachment[0]);
+      updatedData.attachment = attachment[0].filename;
     }
 
     // ---- UPDATE PRODUCT ----

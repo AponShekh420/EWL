@@ -1,6 +1,7 @@
 import PageHeading from "@/components/dashboard/common/PageHeading";
 import { Button } from "@/components/ui/button";
 import { BASE_URL } from "@/utils/envVariable";
+import { getImageUrl } from "@/utils/getImageUrl";
 import { GetTime } from "@/utils/getTime";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
@@ -44,7 +45,7 @@ export default async function UserDetails({
         <div>
           <div className="grid md:grid-cols-2 lg:grid-cols-1 2xl:grid-cols-2 gap-8">
             <Image
-              src={user.avatar || "/images/user.png"}
+              src={getImageUrl(user.avatar, "profile") || "/images/user.png"}
               width={400}
               height={400}
               alt="avatar"

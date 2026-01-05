@@ -3,7 +3,6 @@ import createError from "http-errors";
 import { SubCategoryModel } from "../../../../models/CategoryModel";
 import { catchErrorSend } from "../../../../utils/catchErrorSend";
 import { deleteFileFromLocal } from "../../../../utils/deleteFileFromLocal";
-import { getImageUrl } from "../../../../utils/getImageUrl";
 
 export const updateSubcategory = async (
   req: Request,
@@ -25,7 +24,7 @@ export const updateSubcategory = async (
     updatedData.description = body.description;
   }
   if (file) {
-    updatedData.thumbnail = getImageUrl(req, "category", file);
+    updatedData.thumbnail = file.filename;
   }
 
   try {

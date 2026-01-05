@@ -3,7 +3,6 @@ import createError from "http-errors";
 import { CategoryModel } from "../../../models/CategoryModel";
 import productModel from "../../../models/ProductModel";
 import { catchErrorSend } from "../../../utils/catchErrorSend";
-import { getImageUrl } from "../../../utils/getImageUrl";
 import { getFilterBodyData } from "./../../../utils/getFilterBodyData";
 
 type MulterFile = {
@@ -42,9 +41,9 @@ export const createProduct = async (
     const createdProduct = await productModel.create({
       ...body,
       slug,
-      thumbnail: getImageUrl(req, "products", thumbnail[0]),
-      attachment: getImageUrl(req, "products", attachment[0]),
-      images: images.map((file) => getImageUrl(req, "products", file)),
+      thumbnail: thumbnail[0].filename,
+      attachment: attachment[0].filename,
+      images: images.map((file) => file.filename),
     });
 
     if (!createdProduct) {

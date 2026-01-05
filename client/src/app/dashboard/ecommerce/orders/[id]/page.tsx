@@ -17,6 +17,7 @@ import {
 } from "@/constants/order-data";
 import { OrderType } from "@/types/Order";
 import { BASE_URL } from "@/utils/envVariable";
+import { getImageUrl } from "@/utils/getImageUrl";
 import { GetTime } from "@/utils/getTime";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
@@ -94,7 +95,7 @@ export default async function OrderDetails({
                   <TableCell>
                     <div>
                       <Image
-                        src={product.thumbnail}
+                        src={getImageUrl(product.thumbnail, "products")}
                         width={100}
                         height={100}
                         alt={product.title}
@@ -190,7 +191,10 @@ export default async function OrderDetails({
           </h5>
           <div className="flex flex-col lg:flex-row gap-4 mt-5 shadow border rounded-md p-6">
             <Image
-              src={order?.customer?.avatar || "/images/user.png"}
+              src={
+                getImageUrl(order?.customer?.avatar, "profile") ||
+                "/images/user.png"
+              }
               width={80}
               height={80}
               alt="customer"

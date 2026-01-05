@@ -7,9 +7,8 @@ export const deleteFileFromLocal = (
 ) => {
   const files = Array.isArray(imageArray) ? imageArray : [imageArray];
 
-  files.forEach((fileUrl) => {
+  files.forEach((filename) => {
     try {
-      const filename = path.basename(fileUrl); // safer than split('/')
       const filePath = path.join(
         process.cwd(),
         "public/images",

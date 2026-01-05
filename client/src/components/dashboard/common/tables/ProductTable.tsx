@@ -39,6 +39,7 @@ import { ProductType } from "@/types/Product";
 import { debounce } from "@/utils/debounce";
 import { BASE_URL } from "@/utils/envVariable";
 import { getAverageRating } from "@/utils/getAverageRating";
+import { getImageUrl } from "@/utils/getImageUrl";
 import { getProductStatusColor } from "@/utils/getStatusColor";
 import { paginationCounter } from "@/utils/paginationCounter";
 import { Icon } from "@iconify/react";
@@ -182,8 +183,8 @@ export default function ProductTable({
                     <Checkbox className="checkbox-t" />
                     <div className="flex items-center gap-x-4">
                       <Image
-                        src={product.thumbnail}
-                        alt=""
+                        src={getImageUrl(product.thumbnail, "products")}
+                        alt={product.title}
                         width={50}
                         height={50}
                         className="size-12 object-cover rounded-md"

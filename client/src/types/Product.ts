@@ -1,8 +1,10 @@
+import { UserType } from "./User";
+
 export interface ProductReviewType {
   _id: string;
   product: ProductType;
   review: string;
-  customer: Customer;
+  customer: UserType;
   status: string | undefined;
   rating: number;
   createdAt: Date;
@@ -25,11 +27,6 @@ export type ProductType = {
   attachment: string;
   images: string[];
 };
-
-interface Customer {
-  name: string;
-  avatar: string;
-}
 
 export type ProductFormState = {
   // 1st tab

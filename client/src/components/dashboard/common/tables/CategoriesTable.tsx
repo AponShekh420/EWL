@@ -25,6 +25,7 @@ import { CategoryType } from "@/types/Category";
 import { PaginationType } from "@/types/Pagination";
 import { debounce } from "@/utils/debounce";
 import { BASE_URL } from "@/utils/envVariable";
+import { getImageUrl } from "@/utils/getImageUrl";
 import { paginationCounter } from "@/utils/paginationCounter";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
@@ -105,7 +106,7 @@ export default function CategoriesTable({
                   <Checkbox className="checkbox-t" />
                   <div className="flex items-center gap-x-4">
                     <Image
-                      src={category.thumbnail}
+                      src={getImageUrl(category.thumbnail, "category")}
                       alt={category.name}
                       width={50}
                       height={50}

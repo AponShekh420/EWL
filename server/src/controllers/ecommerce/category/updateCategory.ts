@@ -3,7 +3,6 @@ import createError from "http-errors";
 import { CategoryModel } from "../../../models/CategoryModel";
 import { catchErrorSend } from "../../../utils/catchErrorSend";
 import { deleteFileFromLocal } from "../../../utils/deleteFileFromLocal";
-import { getImageUrl } from "../../../utils/getImageUrl";
 
 export const updateCategory = async (
   req: Request,
@@ -19,7 +18,7 @@ export const updateCategory = async (
     updatedData.slug = body.name.replace(" ", "-").toLowerCase();
   }
   if (file) {
-    updatedData.thumbnail = getImageUrl(req, "category", file);
+    updatedData.thumbnail = file.filename;
   }
   if (body && body.description) {
     updatedData.description = body.description;
