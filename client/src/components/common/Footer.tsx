@@ -2,9 +2,14 @@ import "@/app/home.css";
 import Link from "next/link";
 const Footer = () => {
   return (
-    <div className="bg-[#0F75BC] w-full py-14 footer">
-      <div className="container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-between gap-10">
+    <div className="bg-[#0F75BC] w-full footer">
+      <div className="container py-14 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 justify-between gap-10">
         {/* col-1 */}
+        <div>
+          <p className=" mt-0 sm:mt-10 !text-nowrap text-[18px] font-terminal text-center text-white leading-[20px]"><strong className="italic">M</strong>aximizing <strong className="italic">I</strong>ntimate <br/> <strong className="italic">R</strong>elationships <strong className="italic">I</strong >n <strong className="italic">A</strong> <strong className="italic">M</strong>arriage</p>
+        </div>
+
+        {/* col-2 */}
         <div>
           <h3 className="font-bold text-lg text-white">Quick Links</h3>
           <div className="flex flex-col mt-3 md:mt-4">
@@ -35,7 +40,7 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* col-2 */}
+        {/* col-3 */}
         <div>
           <h3 className="font-bold text-lg text-white">Services</h3>
           <div className="flex flex-col mt-3 md:mt-4">
@@ -66,7 +71,7 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* col-3 */}
+        {/* col-4 */}
         <div>
           <h3 className="font-bold text-lg text-white">Contact Us</h3>
           <div className="flex flex-col mt-3 md:mt-4">
@@ -109,7 +114,7 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* col-4 */}
+        {/* col-5 */}
         <div className="flex items-center justify-center flex-col">
           <h3 className="font-bold text-xl text-white text-center">
             We Want To Hear From You!
@@ -120,6 +125,10 @@ const Footer = () => {
             </button>
           </div>
         </div>
+      </div>
+      <hr />
+      <div className="container">
+        <p className="text-center text-white py-2 text-[13.333px]">Ohel Miriam does not endorse any of its speakers. Each speaker has their own haskomos or is affiliated with their own Rav. Kindly do research or consult with your halachic authority to enable you to make a decision that is right for you.  ©2021 All Rights Reserved by Ohel Miriam</p>
       </div>
     </div>
   );
