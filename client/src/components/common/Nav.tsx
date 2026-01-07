@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { logout } from "@/redux/auth/userSlice";
 import { BASE_URL } from "@/utils/envVariable";
 import { RootState } from "@/redux/store";
+import toast from "react-hot-toast";
 
 
 const Nav = () => {
@@ -38,6 +39,7 @@ const Nav = () => {
       const data = await res.json();
       if(data.success){
         dispatch(logout());
+        toast.success(data?.message);
         router.push("/");
       } else{
         throw new Error("Logout failed");
