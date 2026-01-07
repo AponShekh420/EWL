@@ -1,4 +1,5 @@
-import { model, Schema } from "mongoose";
+import mongoose, { model, Schema } from "mongoose";
+const crypto = require("crypto");
 
 const userSchema = new Schema({
   userName: {
@@ -65,10 +66,26 @@ const userSchema = new Schema({
   chickenSoupInDairySink: {
     type: String,
     required: true
-  }
+  },
+  passwordResetToken: String,
+  passwordResetExpires: Date,
 }, {timestamps: true});
 
 
-const UserModel = model("User", userSchema);
+
+userSchema.methods.createPasswordResetToken = function () {
+  const resetToken = crypto.randomBytes(32).toString("hex")
+
+  this.passwordResetToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex")
+
+  this.passwordResetExpires = Date.now() + 10 * 60 * 1000 //10mins
+
+  return resetToken
+}
+
+const UserModel = mongoose.models.User || mongoose.model("User", userSchema);
 
 export default UserModel;
