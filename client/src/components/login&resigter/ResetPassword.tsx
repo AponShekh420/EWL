@@ -16,6 +16,8 @@ import { Input } from "@/components/ui/input";
 import { BASE_URL } from "@/utils/envVariable";
 import { Icon } from "@iconify/react";
 import { setCredentials } from "@/redux/auth/userSlice";
+import { Eye, EyeOff } from "lucide-react";
+import { Button } from "../ui/button";
 
 
 interface resetPasswordErrorProps {
@@ -27,7 +29,8 @@ interface resetPasswordErrorProps {
 
 
 const ResetPassword = ({token}: {token: string}) => {
-
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showCPassword, setShowCPassword] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -91,18 +94,33 @@ const ResetPassword = ({token}: {token: string}) => {
       <FieldSet>
         <FieldGroup>
           <Field>
-            <FieldLabel htmlFor="password">
+            <FieldLabel htmlFor="password-toggle">
               New Password
               <span className="text-red-600">*</span>
             </FieldLabel>
-
-            <Input
-              id="password"
-              type="password"
-              placeholder="Enter your new password"
-              onChange={(e)=> setPassword(e.target.value)}
-              value={password}
-            />
+            <div className="relative">
+              <Input
+                className="bg-background"
+                id="password-toggle"
+                placeholder="Enter your new password"
+                type={showPassword ? "text" : "password"}
+                onChange={(e)=> setPassword(e.target.value)}
+                value={password}
+              />
+              <Button
+                className="absolute top-0 right-0 h-full px-3 hover:bg-transparent"
+                onClick={() => setShowPassword(!showPassword)}
+                size="icon"
+                type="button"
+                variant="ghost"
+              >
+                {showPassword ? (
+                  <EyeOff className="h-4 w-4 text-muted-foreground" />
+                ) : (
+                  <Eye className="h-4 w-4 text-muted-foreground" />
+                )}
+              </Button>
+            </div>
 
             {errors?.password && (
               <FieldDescription className="text-red-600">
@@ -114,19 +132,33 @@ const ResetPassword = ({token}: {token: string}) => {
 
         <FieldGroup>
           <Field>
-            <FieldLabel htmlFor="confirm-password">
+            <FieldLabel htmlFor="cpassword-toggle">
               Confirm New Password
               <span className="text-red-600">*</span>
             </FieldLabel>
-
-            <Input
-              id="confirm-password"
-              type="password"
-              placeholder="Confirm your new password"
-              onChange={(e)=> setConfirmPassword(e.target.value)}
-              value={confirmPassword}
-            />
-
+            <div className="relative">
+              <Input
+                className="bg-background"
+                id="cpassword-toggle"
+                type={showCPassword ? "text" : "password"}
+                placeholder="Confirm your new password"
+                onChange={(e)=> setConfirmPassword(e.target.value)}
+                value={confirmPassword}
+              />
+              <Button
+                className="absolute top-0 right-0 h-full px-3 hover:bg-transparent"
+                onClick={() => setShowCPassword(!showCPassword)}
+                size="icon"
+                type="button"
+                variant="ghost"
+              >
+                {showCPassword ? (
+                  <EyeOff className="h-4 w-4 text-muted-foreground" />
+                ) : (
+                  <Eye className="h-4 w-4 text-muted-foreground" />
+                )}
+              </Button>
+            </div>
             {errors?.confirmPassword && (
               <FieldDescription className="text-red-600">
                 {errors?.confirmPassword?.msg}
