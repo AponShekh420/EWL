@@ -3,6 +3,7 @@ import SearchPagePopup from "@/components/dashboard/common/header/SearchPagePopu
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { toggleSidebar } from "@/redux/features/sidebar/sidebarSlice";
+import { getImageUrl } from "@/utils/getImageUrl";
 import { Icon } from "@iconify/react";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -98,7 +99,11 @@ export default function Header() {
 
           <ProfileBox>
             <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
+              <AvatarImage
+                src={
+                  getImageUrl("", "profile") || "https://github.com/shadcn.png"
+                }
+              />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
           </ProfileBox>

@@ -3,7 +3,6 @@ import { NextFunction, Request, Response } from "express";
 import { body, validationResult } from "express-validator";
 import UserModel from "../../models/UserModel";
 import { deleteFileFromLocal } from "../../utils/deleteFileFromLocal";
-import { getImageUrl } from "../../utils/getImageUrl";
 
 export const userValidationRules = [
   // Username
@@ -372,8 +371,7 @@ export const validateUser = (
   const file = req.file;
 
   if (Object.keys(errors).length > 0 && file) {
-    const imgPath = getImageUrl(req, "profile", file);
-    deleteFileFromLocal(imgPath, "profile");
+    deleteFileFromLocal(file.filename, "profile");
   }
   if (Object.keys(errors).length > 0) {
     return res.status(400).json({

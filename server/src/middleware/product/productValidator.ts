@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { body, validationResult } from "express-validator";
 import { deleteFileFromLocal } from "../../utils/deleteFileFromLocal";
-import { getImageUrl } from "../../utils/getImageUrl";
 
 export const productValidationRules = [
   body("creator").notEmpty().withMessage("Creator is required"),
@@ -111,8 +110,7 @@ export const validateProduct = (
         req.files as any
       ).flat() as Express.Multer.File[];
       files.forEach((file) => {
-        const imgPath = getImageUrl(req, "products", file);
-        deleteFileFromLocal(imgPath, "products");
+        deleteFileFromLocal(file.filename, "products");
       });
     }
   };
@@ -139,8 +137,7 @@ export const validateUpdateProduct = (
         req.files as any
       ).flat() as Express.Multer.File[];
       files.forEach((file) => {
-        const imgPath = getImageUrl(req, "products", file);
-        deleteFileFromLocal(imgPath, "products");
+        deleteFileFromLocal(file.filename, "products");
       });
     }
   };

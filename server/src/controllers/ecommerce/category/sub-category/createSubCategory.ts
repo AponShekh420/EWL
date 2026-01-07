@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import createError from "http-errors";
 import { SubCategoryModel } from "../../../../models/CategoryModel";
 import { catchErrorSend } from "../../../../utils/catchErrorSend";
-import { getImageUrl } from "../../../../utils/getImageUrl";
 type MulterFile = {
   [fieldname: string]: Express.Multer.File[];
 };
@@ -25,7 +24,7 @@ export const createSubCategory = async (
       name: name,
       slug: name.replace(" ", "-").toLowerCase(),
       description: description,
-      thumbnail: getImageUrl(req, "category", file),
+      thumbnail: file.filename,
       category: categoryId,
     });
 

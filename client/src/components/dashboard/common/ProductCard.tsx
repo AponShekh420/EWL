@@ -1,5 +1,6 @@
 "use client";
 import { ProductType } from "@/types/Product";
+import { getImageUrl } from "@/utils/getImageUrl";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,7 +12,7 @@ export default function ProductCard({ product }: { product: ProductType }) {
       <div className="relative ">
         <Link href={`/dashboard/ecommerce/products/${product._id}`}>
           <Image
-            src={product.thumbnail}
+            src={getImageUrl(product.thumbnail, "products")}
             width={400}
             height={400}
             alt={product.title}

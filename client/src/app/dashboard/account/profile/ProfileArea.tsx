@@ -3,6 +3,7 @@ import InputBox from "@/components/common/InputBox";
 import { Button } from "@/components/ui/button";
 import { UserErrorType, UserType } from "@/types/User";
 import { BASE_URL } from "@/utils/envVariable";
+import { getImageUrl } from "@/utils/getImageUrl";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -153,7 +154,7 @@ export default function ProfileArea({ user }: { user: UserType }) {
           </h1>
           <div>
             <Image
-              src={user?.avatar || "/default-avatar.png"}
+              src={getImageUrl(user.avatar, "profile") || "/default-avatar.png"}
               width={300}
               height={300}
               alt="avatar"
