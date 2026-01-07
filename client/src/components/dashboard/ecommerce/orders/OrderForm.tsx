@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { OrderType } from "@/types/Order";
+import { getImageUrl } from "@/utils/getImageUrl";
 import { GetTime } from "@/utils/getTime";
 import Image from "next/image";
 import { useState } from "react";
@@ -103,7 +104,7 @@ export default function OrderForm({ order }: { order: OrderType }) {
           <h5 className="font-bold text-lg font-lexend-deca">Customer Info</h5>
           <div className="flex flex-col xl:flex-row gap-4 mt-8">
             <Image
-              src={order?.customer?.avatar}
+              src={getImageUrl(order?.customer?.avatar, "profile")}
               width={80}
               height={80}
               alt="customer"

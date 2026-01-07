@@ -1,6 +1,7 @@
 import PageHeading from "@/components/dashboard/common/PageHeading";
 import { Button } from "@/components/ui/button";
 import { BASE_URL } from "@/utils/envVariable";
+import { getImageUrl } from "@/utils/getImageUrl";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -32,12 +33,12 @@ export default async function ProductDetails({
           </Button>
         </Link>
       </PageHeading>
-      <div className="grid grid-cols-2 gap-10 mt-8">
+      <div className="grid grid-cols-2 items-start gap-10 mt-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {product.images.map((image: string, index: number) => (
             <Image
               key={index}
-              src={image}
+              src={getImageUrl(image, "products")}
               width={400}
               height={400}
               className="h-[300px] md:h-[400px] object-cover rounded-lg"

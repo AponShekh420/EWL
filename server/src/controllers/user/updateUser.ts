@@ -4,7 +4,6 @@ import createError from "http-errors";
 import UserModel from "../../models/UserModel";
 import { catchErrorSend } from "../../utils/catchErrorSend";
 import { deleteFileFromLocal } from "../../utils/deleteFileFromLocal";
-import { getImageUrl } from "../../utils/getImageUrl";
 export const updateUser = async (
   req: Request,
   res: Response,
@@ -26,7 +25,7 @@ export const updateUser = async (
       updatedData.role = body.role;
     }
     if (file) {
-      updatedData.avatar = getImageUrl(req, "profile", file);
+      updatedData.avatar = file.filename;
     }
     // if (body.isOrthodoxJew) {
     //   updatedData.isOrthodoxJew = body.isOrthodoxJew === "true" ? true : false;

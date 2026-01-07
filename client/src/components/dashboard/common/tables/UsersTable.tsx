@@ -26,6 +26,7 @@ import { PaginationType } from "@/types/Pagination";
 import { UserType } from "@/types/User";
 import { debounce } from "@/utils/debounce";
 import { BASE_URL } from "@/utils/envVariable";
+import { getImageUrl } from "@/utils/getImageUrl";
 import { getUserRoleColor } from "@/utils/getStatusColor";
 import { GetTime } from "@/utils/getTime";
 import { paginationCounter } from "@/utils/paginationCounter";
@@ -129,7 +130,7 @@ export default function UsersTable({
               <TableCell>
                 <div className="flex items-center gap-x-4 text-wrap">
                   <Image
-                    src={user.avatar}
+                    src={getImageUrl(user.avatar, "profile")}
                     alt=""
                     width={50}
                     height={50}

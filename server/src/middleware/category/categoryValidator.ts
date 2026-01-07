@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { body, validationResult } from "express-validator";
 import { deleteFileFromLocal } from "../../utils/deleteFileFromLocal";
-import { getImageUrl } from "../../utils/getImageUrl";
 
 export const categoryValidationRules = [
   body("name").notEmpty().withMessage("Category name is required"),
@@ -28,8 +27,7 @@ export const validateCategory = (
 
   //Delete handler for uploaded files if has error
   const imageDeleteHandler = () => {
-    const imgPath = getImageUrl(req, "category", file);
-    deleteFileFromLocal(imgPath, "category");
+    deleteFileFromLocal(file.filename, "category");
   };
 
   if (Object.keys(errors).length > 0) {

@@ -5,15 +5,17 @@ const checkSignUpValidation = [
 
   // Username
   body("userName")
+    .trim()
     .isLength({ min: 3 })
     .withMessage("Username must be at least 3 characters long")
+    .matches(/^[a-z0-9]+$/)
+    .withMessage("Username can contain only lowercase letters (a-z) and numbers (0-9)")
     .custom(async (userName: string) => {
       const user = await UserModel.findOne({ userName });
       if (user) {
         throw new Error("Username already exists");
       }
-    })
-    .trim(),
+    }),
 
   // First Name
   body("firstName")

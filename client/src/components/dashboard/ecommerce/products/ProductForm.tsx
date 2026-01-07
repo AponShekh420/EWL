@@ -20,6 +20,7 @@ import { RootState } from "@/redux/store";
 import { ProductType, ProductValidationErrors } from "@/types/Product";
 import { createFormData } from "@/utils/createFormData";
 import { BASE_URL } from "@/utils/envVariable";
+import { getImageUrl } from "@/utils/getImageUrl";
 import { Icon } from "@iconify/react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
@@ -242,7 +243,10 @@ export default function CreateProductForm({
                   {productForm.existingThumbnail && (
                     <div className="relative w-fit">
                       <Image
-                        src={productForm.existingThumbnail}
+                        src={getImageUrl(
+                          productForm.existingThumbnail,
+                          "products"
+                        )}
                         alt="preview"
                         width={220}
                         height={220}
@@ -329,7 +333,7 @@ export default function CreateProductForm({
                       (img: string, index: number) => (
                         <div key={index} className="relative w-fit">
                           <Image
-                            src={img}
+                            src={getImageUrl(img, "products")}
                             alt="preview"
                             width={220}
                             height={220}

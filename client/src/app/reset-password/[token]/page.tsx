@@ -1,4 +1,4 @@
-import ButtonGroup from "@/components/login&resigter/ButtonGroup";
+import ResetPassword from "@/components/login&resigter/ResetPassword";
 import { getSession } from "@/lib/authLib";
 import Image from "next/image";
 import { redirect } from "next/navigation";
@@ -8,9 +8,8 @@ export const metadata = {
   title: "Account Reset || Homez - Real Estate NextJS Template",
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Reset = async ({params}: {params: {token: string}}) => {
-  // const {token} = params;
+  const {token} = await params;
   const user = await getSession();
   if(user) {
     redirect('/')
@@ -22,11 +21,10 @@ const Reset = async ({params}: {params: {token: string}}) => {
           {/* Popup box inside the border */}
           <div className="w-full h-fit bg-white rounded-2xl overflow-hidden flex flex-col">
   
-           <ButtonGroup/>
   
             {/* Scrollable Register form */}
             <div className="max-h-[75vh] overflow-y-auto px-8 pb-8">
-             {/* <Login token={token}/> */}
+             <ResetPassword token={token}/>
             </div>
           </div>
         </div>

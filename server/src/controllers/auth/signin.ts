@@ -10,7 +10,7 @@ const signin = async (req: Request, res: Response, next: NextFunction) => {
   if(userInfo) {
     const passCheck = await bcrypt.compare(password, userInfo?.password);
     if(passCheck) {
-      const {_id, userName, firstName, lastName, email, gender, isOrthodoxJew, maritalStatus, keepsMitzvos, chafifaDuration, chickenSoupInDairySink, avatar, role, password} = userInfo;
+      const {_id, userName, firstName, lastName, email, gender, isOrthodoxJew, maritalStatus, keepsMitzvos, chafifaDuration, chickenSoupInDairySink, avatar, role} = userInfo;
       const modifiedUser = {
           id: _id,
           userName,

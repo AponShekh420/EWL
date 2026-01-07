@@ -68,7 +68,7 @@ const Register = () => {
   };
 
   return (
-    <div>
+    <div aria-disabled={loading} className={loading ? "opacity-50 pointer-events-none": ""}>
       <p className="text-[#333333] mt-4">
         Ohel Miriam is a sensitive site for frum adults looking to learn more or buy products related to marital intimacy. Due to the nature of our content, we require all users to create a free account in order to view the website in full. We will not pass on your information to a third party.
         Put a button to the form

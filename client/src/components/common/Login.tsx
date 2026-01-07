@@ -19,6 +19,7 @@ import { setCredentials } from "@/redux/auth/userSlice";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Icon } from "@iconify/react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const Login = ({setAuthToggle}: {
   setAuthToggle?: Dispatch<SetStateAction<boolean | string>>;
@@ -72,7 +73,7 @@ const Login = ({setAuthToggle}: {
   }
 
   return (
-    <div>
+    <div aria-disabled={loading} className={loading ? "opacity-50 pointer-events-none": ""}>
       <form className="w-ful mt-5" onSubmit={userLogin}>
         <FieldSet>
           <FieldGroup>
@@ -132,6 +133,17 @@ const Login = ({setAuthToggle}: {
         >
           {loading ? <Icon icon="svg-spinners:wind-toy" width="28" height="28" /> : 'Login'}
         </button>
+        <p className="mt-2 text-center mb0 mt10">
+          Forgot your password?{' '}
+          <Link
+            className="text-red-600 underline hover:text-teal transition-all duration-300"
+            href="/forgot-password"
+            onClick={() => setAuthToggle && setAuthToggle(false)}
+          >
+            Reset it here.
+          </Link>
+        </p>
+
       </form>
     </div>
   );

@@ -7,6 +7,10 @@ import checkSignUpValidation from "../middleware/auth/checkSignUpValidation";
 import checkSignInValidation from "../middleware/auth/checkSignInValidation";
 import authCheck from "../middleware/common/authCheck";
 import multer from "multer";
+import forgotPassword from "../controllers/auth/forgotPassword";
+import checkRestPasswordValidation from "../middleware/auth/checkRestPasswordValidation";
+import resetPassword from "../controllers/auth/resetPassword";
+import checkForgetValidation from "../middleware/auth/checkForgetValidation";
 const upload = multer();
 
 const router = express.Router();
@@ -21,5 +25,9 @@ router.get("/login/success", authCheck, (req: Request, res: Response) => {
     })
 })
 
+
+// reset and forget
+router.post("/forgot-password", checkForgetValidation, useValidationResult, forgotPassword);
+router.patch("/reset-password/:resetToken", checkRestPasswordValidation, useValidationResult, resetPassword);
 
 export default router;
