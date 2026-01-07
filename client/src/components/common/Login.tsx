@@ -46,7 +46,6 @@ const Login = ({setAuthToggle}: {
    const userLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     const formData = createFormData(form);
-    console.log("formData", formData.get("email"), formData.get("password"))
     try {
       setErrors({})
       setLoading(true)
