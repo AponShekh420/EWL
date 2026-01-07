@@ -20,10 +20,13 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { Icon } from "@iconify/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { Button } from "../ui/button";
+import { Eye, EyeOff } from "lucide-react";
 
 const Login = ({setAuthToggle}: {
   setAuthToggle?: Dispatch<SetStateAction<boolean | string>>;
 }) => {
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<Record<string, { msg: string }>>({});
   const router = useRouter();
@@ -99,24 +102,41 @@ const Login = ({setAuthToggle}: {
             </Field>
 
             <Field>
-              <FieldLabel htmlFor="password">
+              <FieldLabel htmlFor="password-toggle">
                 Password<span className="text-red-600">*</span>
               </FieldLabel>
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                value={form.password}
-                onChange={(e) =>
-                  handleChange("password", e.target.value)
-                }
-              />
-               {errors?.password && (
+              <div className="relative">
+                <Input
+                  className="bg-background"
+                  id="password-toggle"
+                  placeholder="Enter your password"
+                  type={showPassword ? "text" : "password"}
+                  value={form.password}
+                  onChange={(e) =>
+                    handleChange("password", e.target.value)
+                  }
+                />
+                <Button
+                  className="absolute top-0 right-0 h-full px-3 hover:bg-transparent"
+                  onClick={() => setShowPassword(!showPassword)}
+                  size="icon"
+                  type="button"
+                  variant="ghost"
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4 text-muted-foreground" />
+                  ) : (
+                    <Eye className="h-4 w-4 text-muted-foreground" />
+                  )}
+                </Button>
+              </div>
+              {errors?.password && (
                 <FieldDescription className="text-red-600">
                   {errors?.password?.msg}
                 </FieldDescription>
               )}
             </Field>
+            
           </FieldGroup>
         </FieldSet>
 

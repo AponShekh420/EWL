@@ -28,10 +28,14 @@ import { BASE_URL } from "@/utils/envVariable";
 import { createFormData } from "@/utils/createFormData";
 import UserErrors from "@/types/UserErrors";
 import { Icon } from "@iconify/react";
+import { Button } from "../ui/button";
+import { Eye, EyeOff } from "lucide-react";
 
 const Register = ({setAuthToggle}: {
   setAuthToggle: Dispatch<SetStateAction<boolean | string>>;
 }) => {
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showCPassword, setShowCPassword] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<UserErrors>({});
   // const router = useRouter();
@@ -159,18 +163,34 @@ const Register = ({setAuthToggle}: {
             </Field>
 
             <Field>
-              <FieldLabel htmlFor="password">
+              <FieldLabel htmlFor="password-toggle">
                 Password<span className="text-red-600">*</span>
               </FieldLabel>
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                value={form.password}
-                onChange={(e) =>
-                  handleChange("password", e.target.value)
-                }
-              />
+              <div className="relative">
+                <Input
+                  className="bg-background"
+                  id="password-toggle"
+                  placeholder="Enter your password"
+                  type={showPassword ? "text" : "password"}
+                  value={form.password}
+                  onChange={(e) =>
+                    handleChange("password", e.target.value)
+                  }
+                />
+                <Button
+                  className="absolute top-0 right-0 h-full px-3 hover:bg-transparent"
+                  onClick={() => setShowPassword(!showPassword)}
+                  size="icon"
+                  type="button"
+                  variant="ghost"
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4 text-muted-foreground" />
+                  ) : (
+                    <Eye className="h-4 w-4 text-muted-foreground" />
+                  )}
+                </Button>
+              </div>
               {errors?.password && (
                 <FieldDescription className="text-red-600">
                   {errors?.password?.msg}
@@ -179,18 +199,34 @@ const Register = ({setAuthToggle}: {
             </Field>
 
             <Field>
-              <FieldLabel htmlFor="confirm-password">
+              <FieldLabel htmlFor="cpassword-toggle">
                 Confirm Password<span className="text-red-600">*</span>
               </FieldLabel>
-              <Input
-                id="confirm-password"
-                type="password"
-                placeholder="••••••••"
-                value={form.cpassword}
-                onChange={(e) =>
-                  handleChange("cpassword", e.target.value)
-                }
-              />
+              <div className="relative">
+                <Input
+                  className="bg-background"
+                  id="cpassword-toggle"
+                  placeholder="Enter your password"
+                  type={showCPassword ? "text" : "password"}
+                  value={form.cpassword}
+                  onChange={(e) =>
+                    handleChange("cpassword", e.target.value)
+                  }
+                />
+                <Button
+                  className="absolute top-0 right-0 h-full px-3 hover:bg-transparent"
+                  onClick={() => setShowCPassword(!showCPassword)}
+                  size="icon"
+                  type="button"
+                  variant="ghost"
+                >
+                  {showCPassword ? (
+                    <EyeOff className="h-4 w-4 text-muted-foreground" />
+                  ) : (
+                    <Eye className="h-4 w-4 text-muted-foreground" />
+                  )}
+                </Button>
+              </div>
               {errors?.cpassword && (
                 <FieldDescription className="text-red-600">
                   {errors?.cpassword?.msg}
