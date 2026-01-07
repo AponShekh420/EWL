@@ -1,5 +1,4 @@
-import Login from "@/components/common/Login";
-import ButtonGroup from "@/components/login&resigter/ButtonGroup";
+import ForgotPassword from "@/components/login&resigter/ForgotPassword";
 import { getSession } from "@/lib/authLib";
 import Image from "next/image";
 import { redirect } from "next/navigation";
@@ -20,11 +19,9 @@ const page = async () => {
           {/* Popup box inside the border */}
           <div className="w-full h-fit bg-white rounded-2xl overflow-hidden flex flex-col">
   
-           <ButtonGroup/>
-  
             {/* Scrollable Register form */}
             <div className="max-h-[75vh] overflow-y-auto px-8 pb-8">
-             <Login/>
+             <ForgotPassword/>
             </div>
           </div>
         </div>

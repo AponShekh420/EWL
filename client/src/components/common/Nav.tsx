@@ -84,7 +84,7 @@ const Nav = () => {
                 </div>
 
                 {/* <h1 className="text-[1rem] font-[400] text-white sm:block hidden">Chaya</h1> */}
-                <h1 className="text-[0.9rem] font-[400] text-white">Chaya</h1>
+                <h1 className="text-[0.9rem] font-[400] text-white">{(userInfo as any)?.firstName}</h1>
 
                 <div
                   className={`${accountMenuOpen ? "translate-y-0 opacity-100 z-[1]" : "translate-y-[10px] opacity-0 z-[-1]"} !z-50 bg-white w-max rounded-md absolute dark:bg-slate-800 top-[45px] right-0 p-[10px] flex flex-col transition-all duration-300 gap-[5px]`}>
