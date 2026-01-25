@@ -10,6 +10,8 @@ import { errorHandler, notFoundHandler } from "./middleware/errorMiddleware";
 import authRouter from "./routes/authRouter";
 import ecommerceRouter from "./routes/ecommerceRouter";
 import userRouter from "./routes/userRouter";
+import courseRouter from "./routes/e-learning/courseRouter";
+
 dotenv.config();
 
 const app = express();
@@ -42,8 +44,13 @@ app.use(express.json({ limit: "5000mb" }));
 
 // Authentication
 app.use("/api/auth", authRouter);
-app.use("/api/ecommerce", ecommerceRouter);
 app.use("/api/account", userRouter);
+
+// E-commerce
+app.use("/api/ecommerce", ecommerceRouter);
+
+// e-learning
+app.use("/api/e-learning", courseRouter);
 
 app.get("/", (req: Request, res: Response) => {
   res.status(200).json({ msg: "Welcome to the home page" });

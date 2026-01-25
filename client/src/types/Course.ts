@@ -22,6 +22,12 @@ export type CourseType = {
 };
 
 export type CourseFormState = {
+  thumbnail: File | null;
+  existingThumbnail?: string;
+  existingAttachment?: string;
+  existingImages?: string[];
+  deletedImages?: string[];
+  limitOneItemPerOrder: boolean;
   id: string;
   title: string;
   category: string; // Men | Women | Couples
@@ -45,11 +51,10 @@ export type CourseFormState = {
   testimonialsTab: string;
   moreInfoTab: string;
   status: string; // Draft | Publish | Pending
-  customMessage: "";
-  attachment: null;
-  checkoutPageMessage: "";
-  metaData: "";
-  metaDescription: "";
-  thumbnail: File | null;
+  customMessage: string;
+  attachment: File | null;
+  checkoutPageMessage: string;
+  metaTitle: string;
+  metaDescription: string;
 };
 
