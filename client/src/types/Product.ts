@@ -26,6 +26,8 @@ export type ProductType = {
   slug: string;
   attachment: string;
   images: string[];
+  shortDescription: string;
+  description: string;
 };
 
 export type ProductFormState = {

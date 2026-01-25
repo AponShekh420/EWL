@@ -6,7 +6,7 @@ import { catchErrorSend } from "../../../utils/catchErrorSend";
 export const getProductByFilter = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const query = req.query;
@@ -19,6 +19,20 @@ export const getProductByFilter = async (
       searchQuery = {
         $or: [{ title: { $regex: query.search, $options: "i" } }],
       };
+    }
+    if (query.category) {
+      searchQuery.category = query.category;
+    }
+    if (query.tag) {
+      searchQuery.tags = { $in: [query.tag] };
+    }
+    if (query.sort) {
+      if (query.sort === "popularity") {
+      } else if (query.sort === "average-rating") {
+      } else if (query.sort === "price-low-to-high") {
+      } else if (query.sort === "price-high-to-low") {
+      } else {
+      }
     }
     const products = await productModel
       .find(searchQuery)
