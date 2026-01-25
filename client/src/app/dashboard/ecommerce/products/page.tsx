@@ -13,12 +13,13 @@ export default async function Products({
 }) {
   const query = await queryFormatter(searchParams);
   const res = await fetch(
-    BASE_URL + "/api/ecommerce/product-by-filter?" + query
+    BASE_URL + "/api/ecommerce/product-by-filter?" + query,
   );
   const { data: productsData, pagination } = await res.json();
   if (!res.ok) {
     throw new Error("Failed to fetch products");
   }
+  console.log(productsData);
   return (
     <div>
       <PageHeading
@@ -39,8 +40,9 @@ export default async function Products({
           </Button>
         </Link>
       </PageHeading>
-
-      <ProductTable products={productsData} pagination={pagination} />
+      {productsData && (
+        <ProductTable products={productsData} pagination={pagination} />
+      )}
     </div>
   );
 }
