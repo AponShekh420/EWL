@@ -7,6 +7,7 @@ const initialState: CourseFormState = {
   category: "",// Men | Women | Couples
   lectures: "",
   time: "",
+  speaker: "",
   DurationNumber: 0,
   DurationType: "",
   date: "",
@@ -18,18 +19,27 @@ const initialState: CourseFormState = {
   testimonialsTab: "",
   moreInfoTab: "",
   slug: "",
+    //   2nd tab
   thumbnail: null,
+  //   2nd tab
+  existingThumbnail: "",
+  existingAttachment: "",
+  existingImages: [],
+  deletedImages: [],
+  // end 2nd tab
   students: 0,
+
+  // 3rd tab
   regularPrice: 0,
   salePrice: 0,
+  limitOneItemPerOrder: false,
   offline: false,
-  speaker: "",
   status: "",
   ExternalLink: "",
   customMessage: "",
   attachment: null,
   checkoutPageMessage: "",
-  metaData: "",
+  metaTitle: "",
   metaDescription: "",
 
 };
