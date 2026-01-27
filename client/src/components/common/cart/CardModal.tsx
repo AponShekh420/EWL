@@ -31,7 +31,7 @@ export default function CartModal() {
           dispatch(addToCart({ isCartModalShow: value }))
         }
       >
-        <SheetContent>
+        <SheetContent className="w-full sm:max-w-[420px]">
           <SheetHeader>
             <SheetTitle className="text-xl text-teal">Your Cart</SheetTitle>
           </SheetHeader>
