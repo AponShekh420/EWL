@@ -93,9 +93,16 @@ const Footer = () => {
             >
               hotline (845) 414-8016
             </Link>
+          </div>
+        </div>
+
+        {/* col-5 */}
+        <div>
+          <h3 className="font-bold text-lg text-white">Dial In Services</h3>
+          <div className="flex flex-col mt-3 md:mt-4">
             <Link
               href="tel:+18452883873"
-              className="mt-2 sm:mt-3 transition-all hover:text-[#270034] text-white duration-150"
+              className="transition-all hover:text-[#270034] text-white duration-150"
             >
               call/ text (845) 288-3873
             </Link>
@@ -112,18 +119,18 @@ const Footer = () => {
               ecommerce (845) 400-9965
             </Link>
           </div>
-        </div>
 
-        {/* col-5 */}
-        <div className="flex items-center justify-center flex-col">
-          <h3 className="font-bold text-xl text-white text-center">
-            We Want To Hear From You!
-          </h3>
-          <div className="flex flex-col items-center border-t-2 sm:mt-3 mt-4 border-[#0F75BC] w-full h-14">
-            <button className="bg-[#270034] py-2 px-4 w-52 rounded-full hover:-mt-[5px] text-white uppercase font-[500] border-[#0998ff] border-2 hover:shadow-[5px_5px_15px_0px_#2700346c] transition-all duration-150">
-              Take The Survey!
-            </button>
+          <div className="flex items-center justify-center flex-col mt-6">
+            <h3 className="font-bold text-xl text-white text-center">
+              We Want To Hear From You!
+            </h3>
+            <div className="flex flex-col items-center border-t-2 sm:mt-3 mt-4 border-[#0F75BC] w-full h-14">
+              <button className="bg-[#270034] py-2 px-4 w-52 rounded-full hover:-mt-[5px] text-white uppercase font-[500] border-[#0998ff] border-2 hover:shadow-[5px_5px_15px_0px_#2700346c] transition-all duration-150">
+                Take The Survey!
+              </button>
+            </div>
           </div>
+
         </div>
       </div>
       <hr />
