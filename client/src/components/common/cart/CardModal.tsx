@@ -13,6 +13,7 @@ import { RootState } from "@/redux/store"
 import { useDispatch, useSelector } from "react-redux"
 import { addToCart } from "@/redux/features/cart/cartSlice"
 import CartProduct from "./CartProduct"
+import Link from "next/link"
 
 
 
@@ -45,7 +46,13 @@ export default function CartModal() {
             <CartProduct/>
           </div>
 
-          <SheetFooter>
+          <SheetFooter className="border-t-2">
+            <div className="w-full">
+              <p className="text-sm text-gray-500 flex justify-between">Total Items: <span>7</span></p>
+              <p className="text-sm text-gray-500 flex justify-between">Shipping: <span>$10.00</span></p>
+              <p className="text-sm text-gray-500 flex justify-between">Tax: <span>$12.00</span></p>
+              <p className="text-lg font-semibold text-teal flex justify-between">Total Price: <span>$150.00</span></p>
+            </div>
             <Button
               className="py-5"
               onClick={() => {
@@ -53,7 +60,7 @@ export default function CartModal() {
                 dispatch(addToCart({ isCartModalShow: false }))
               }}
             >
-              View Cart
+              <Link href="/cart" className="w-full">Cart</Link>
             </Button>
 
             <SheetClose asChild>
@@ -62,7 +69,7 @@ export default function CartModal() {
                 className="bg-teal text-white py-5"
                 onClick={() => dispatch(addToCart({ isCartModalShow: false }))}
               >
-                Checkout
+                <Link href="/checkout" className="w-full">Checkout</Link>
               </Button>
             </SheetClose>
           </SheetFooter>
