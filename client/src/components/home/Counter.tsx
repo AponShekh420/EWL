@@ -6,7 +6,7 @@ const Counter = () => {
 
           {/* grid 1 */}
           <div className="flex items-center flex-col">
-            <p className="text-teal font-bold text-5xl">6,00</p>
+            <p className="text-teal font-bold text-5xl">6,000</p>
             <p className="font-semibold text-teal text-lg mt-2 text-center">Couples</p>
             <p className="text-md text-[#333333] text-center">Who really want to know!</p>
           </div>

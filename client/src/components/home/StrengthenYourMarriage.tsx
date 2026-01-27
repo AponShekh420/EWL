@@ -3,7 +3,7 @@ import FadeInSection from "../common/FadeInSection";
 
 export default function StrengthenYourMarriage() {
   return (
-    <section className="mt-20 bg-lightRed py-10">
+    <section className="mt-20 bg-lightRed py-10" id="services-section">
       <div className="container">
         <div className="text-center max-w-[700px] mx-auto">
           <FadeInSection
