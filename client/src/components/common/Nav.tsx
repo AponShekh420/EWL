@@ -14,6 +14,8 @@ import { logout } from "@/redux/auth/userSlice";
 import { BASE_URL } from "@/utils/envVariable";
 import { RootState } from "@/redux/store";
 import toast from "react-hot-toast";
+import { addToCart } from "@/redux/features/cart/cartSlice";
+import CartModal from "./cart/CardModal";
 
 
 const Nav = () => {
@@ -125,11 +127,13 @@ const Nav = () => {
                 2
               </p>
               <Icon
+                onClick={() => dispatch(addToCart({ isCartModalShow: true }))}
                 icon="uil:cart"
                 width="23"
                 height="23"
                 className="text-sm capitalize text-white hover:text-[#270034] cursor-pointer transition-all duration-150"
               />
+              <CartModal/>
             </div>
           </div>
         </div>
