@@ -1,6 +1,6 @@
 const Counter = () => {
   return (
-    <div className="mt-10">
+    <div className="mt-20">
       <div className="container">
         <div className="grid lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-x-3 gap-y-15">
 
