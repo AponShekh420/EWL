@@ -1,11 +1,11 @@
 import Footer from "@/components/common/Footer";
-import Nav from "@/components/common/Nav";
 import Wrapper from "@/components/common/wrapper";
 import ReduxStoreProvider from "@/context-provider/ReduxStoreProvider";
 import type { Metadata } from "next";
 import { Inter, Roboto, Roboto_Slab } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 
+import Header from "@/components/common/Header";
 import "swiper/css";
 import "./globals.css";
 export const inter = Inter({
@@ -46,7 +46,7 @@ export default function RootLayout({
         <Toaster />
         <ReduxStoreProvider>
           <Wrapper>
-            <Nav />
+            <Header />
             {children}
             <Footer />
           </Wrapper>

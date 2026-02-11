@@ -60,4 +60,20 @@ export const sidebar_links = [
       { id: 102, name: "Create User", url: "/dashboard/users/create" },
     ],
   },
+  {
+    id: 5,
+    url: "",
+    name: "Paid Hotline",
+    icon: "raphael:speaker",
+    isDropdown: true,
+    isShowDropdown: false,
+    dropdownList: [
+      { id: 101, name: "Paid Speaker", url: "/dashboard/paid-hotline-speaker" },
+      {
+        id: 102,
+        name: "Create Paid Speakers",
+        url: "/dashboard/paid-hotline-speaker/create",
+      },
+    ],
+  },
 ];

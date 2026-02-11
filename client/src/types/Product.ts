@@ -10,7 +10,6 @@ export interface ProductReviewType {
   createdAt: Date;
 }
 export type ProductType = {
-  price(price: unknown): unknown;
   name: string;
   _id: string;
   title: string;
@@ -28,6 +27,11 @@ export type ProductType = {
   images: string[];
   shortDescription: string;
   description: string;
+  dimensionLength: number;
+  dimensionHeight: number;
+  dimensionWidth: number;
+  weight: number;
+  stockStatus: string;
 };
 
 export type ProductFormState = {

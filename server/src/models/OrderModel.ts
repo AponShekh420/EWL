@@ -110,7 +110,7 @@ const orderSchema = new Schema(
       },
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-export const OrderModel = model("order", orderSchema);
+export const OrderModel = model("Order", orderSchema);

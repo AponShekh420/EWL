@@ -2,12 +2,9 @@ import { NextFunction, Request, Response } from "express";
 import { body, validationResult } from "express-validator";
 
 export const reviewValidationRules = [
-  body("product")
+  body("productId")
     .isMongoId()
-    .withMessage("Product must be a valid MongoDB ObjectId"),
-  body("customer")
-    .isMongoId()
-    .withMessage("Customer must be a valid MongoDB ObjectId"),
+    .withMessage("ProductId must be a valid MongoDB ObjectId"),
   body("rating")
     .notEmpty()
     .withMessage("Rating is required")
@@ -16,8 +13,7 @@ export const reviewValidationRules = [
   body("review").notEmpty().withMessage("Review is required!"),
 ];
 export const reviewUpdateValidationRules = [
-  body("product").isMongoId().optional(),
-  body("customer").isMongoId().optional(),
+  body("productId").isMongoId().optional(),
   body("rating").isNumeric().optional(),
   body("review").optional(),
   body("status").optional(),
@@ -26,7 +22,7 @@ export const reviewUpdateValidationRules = [
 export const validateReview = (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const errors = validationResult(req).mapped();
 
