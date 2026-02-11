@@ -1,4 +1,6 @@
 "use client";
+import { CategoryType } from "@/types/Category";
+import { PaginationType } from "@/types/Pagination";
 import { ProductType } from "@/types/Product";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
@@ -6,39 +8,10 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import GridProductCard from "../common/GridProductCard";
 import ListProductCard from "../common/ListProductCard";
+import ScrollArea from "../common/ScrollArea";
 import { Button } from "../ui/button";
-const categories = [
-  {
-    id: 1,
-    name: "Accessories",
-    slug: "accessories",
-    products: 6,
-  },
-  {
-    id: 2,
-    name: "Bags",
-    slug: "bags",
-    products: 10,
-  },
-  {
-    id: 3,
-    name: "Clothings",
-    slug: "clothings",
-    products: 4,
-  },
-  {
-    id: 4,
-    name: "Shoes",
-    slug: "shoes",
-    products: 4,
-  },
-  {
-    id: 5,
-    name: "Face and Neck",
-    slug: "face-and-neck",
-    products: 3,
-  },
-];
+import { Slider } from "../ui/slider";
+
 const productTags = [
   "creams",
   "eyebrow pencil",
@@ -47,12 +20,24 @@ const productTags = [
   "lotions",
   "muscara",
 ];
-export default function ShopSection({ products }: { products: ProductType[] }) {
+export default function ShopSection({
+  products,
+  categories,
+  pagination,
+  price,
+}: {
+  products: ProductType[];
+  categories: CategoryType[];
+  pagination: PaginationType;
+  price: { maxPrice: number; minPrice: number };
+}) {
   const [isListView, setIsListView] = useState(false);
   const router = useRouter();
-  const min = 0;
-  const max = 10000;
-  const [maxVal, setMaxVal] = useState(0);
+
+  const [priceRange, setPriceRange] = useState({
+    min: price.minPrice,
+    max: price.maxPrice,
+  });
 
   return (
     <section className="mt-6 grid lg:grid-cols-[280px_1fr] xl:grid-cols-[300px_1fr] gap-x-6">
@@ -60,46 +45,58 @@ export default function ShopSection({ products }: { products: ProductType[] }) {
         <div className="border p-4">
           <h5 className="font-medium text-lg">Product categories</h5>
           <hr className="mt-2 mb-3" />
-          <ul className="space-y-2">
-            {categories.map((category) => (
-              <li
-                key={category.id}
-                className="flex justify-between items-center text-gray-500 text-sm"
-              >
-                <Link
-                  href={`/shop?category=${category.slug}`}
-                  className="hover:text-teal"
+          <ScrollArea className="h-70">
+            <ul className="space-y-2">
+              {categories.map((category) => (
+                <li
+                  key={category._id}
+                  className="flex justify-between items-center text-gray-500 text-sm"
                 >
-                  {category.name}
-                </Link>
-                <span>({category.products})</span>
-              </li>
-            ))}
-          </ul>
+                  <Link
+                    href={`/shop?category=${category.slug}`}
+                    className="hover:text-teal capitalize"
+                  >
+                    {category.name}
+                  </Link>
+                  <span>({category.products.length})</span>
+                </li>
+              ))}
+            </ul>
+          </ScrollArea>
         </div>
         <div className="border p-4 my-8">
           <h4 className="uppercase font-medium">Filter by price</h4>
           <hr className="mt-2 mb-3" />
-          <form className="mt-4">
-            <input
-              type="range"
-              min={min}
-              max={max}
-              value={maxVal}
-              onChange={(e) => setMaxVal(Math.max(Number(e.target.value)))}
-              className="w-full accent-gray-700"
+          <div className="mt-4">
+            <Slider
+              defaultValue={[price.minPrice, price.maxPrice]}
+              max={price.maxPrice}
+              step={5}
+              className="mx-auto w-full max-w-xs py-4"
+              onValueChange={(value) => {
+                const [min, max] = value;
+                setPriceRange({ min, max });
+              }}
             />
+
             <div className="flex items-center justify-between mt-2">
-              <button className="bg-teal text-white px-6 py-2 rounded-full text-sm font-semibold hover:bg-teal/90">
+              <button
+                onClick={() =>
+                  router.push(
+                    `/shop?minPrice=${priceRange.min}&maxPrice=${priceRange.max}`,
+                  )
+                }
+                className="bg-teal text-white px-6 py-2 rounded-full text-sm font-semibold hover:bg-teal/90"
+              >
                 FILTER
               </button>
               <span className="text-sm font-medium">
-                ${min} - ${maxVal}
+                ${priceRange.min} - ${priceRange.max}
               </span>
             </div>
-          </form>
+          </div>
         </div>
-        <div className="border p-4 my-8">
+        <div className="border p-4 my-8 hidden">
           <h4 className="uppercase font-medium">Popular Tags</h4>
           <hr className="mt-2 mb-3" />
           <div className="flex flex-wrap gap-2 py-2">
@@ -166,7 +163,7 @@ export default function ShopSection({ products }: { products: ProductType[] }) {
             </select>
 
             <p className="border-gray-600 sm:border-l sm:pl-4 text-base">
-              Showing 1–9 of 21 results
+              {`Showing ${pagination.page}-${pagination.page + 9} of ${pagination.total} results`}
             </p>
           </div>
         </div>

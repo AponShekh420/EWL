@@ -25,7 +25,7 @@ const categorySchema = new Schema(
       },
     ],
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const subCategorySchema = new Schema(
@@ -52,8 +52,8 @@ const subCategorySchema = new Schema(
       required: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export const CategoryModel = model("Category", categorySchema);
-export const SubCategoryModel = model("subCategory", subCategorySchema);
+export const SubCategoryModel = model("SubCategory", subCategorySchema);

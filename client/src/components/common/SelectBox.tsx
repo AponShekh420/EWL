@@ -32,7 +32,7 @@ export default function SelectBox({
 }: SelectBoxProps) {
   return (
     <div className={className}>
-      <Label htmlFor={name} className="capitalize mb-4 block">
+      <Label htmlFor={name} className="capitalize  block mb-4">
         {label}
       </Label>
       <Select
