@@ -19,21 +19,21 @@ router.post(
   singleFileUploader.single("avatar"),
   userValidationRules,
   validateUser,
-  createUser
+  createUser,
 );
 router.put(
   "/users/:id",
   singleFileUploader.single("avatar"),
   userUpdateValidationRules,
   validateUser,
-  updateUser
+  updateUser,
 );
 router.put(
   "/profile/:id",
   singleFileUploader.single("avatar"),
   profileUpdateValidationRules,
   validateUser,
-  updateUser
+  updateUser,
 );
 router.put("/user-role/:id", updateUser);
 router.delete("/users/:id", deleteUser);

@@ -9,7 +9,7 @@ import { getSubAllCategories } from "../controllers/ecommerce/category/sub-categ
 import { updateSubcategory } from "../controllers/ecommerce/category/sub-category/updateSubCategory";
 import { updateCategory } from "../controllers/ecommerce/category/updateCategory";
 
-import { createCart } from "../controllers/ecommerce/cart/createCart";
+import { addToCart } from "../controllers/ecommerce/cart/addToCart";
 import { deleteCart } from "../controllers/ecommerce/cart/deleteCart";
 import { getAllCart } from "../controllers/ecommerce/cart/getAllCart";
 import { updateCart } from "../controllers/ecommerce/cart/updateCart";
@@ -34,11 +34,10 @@ import { updateProductStatus } from "../controllers/ecommerce/product/updateProd
 import { getAllReview } from "../controllers/ecommerce/review/getAllReview";
 import { getAllReviewByProductId } from "../controllers/ecommerce/review/getAllReviewByProductId";
 import { updateReview } from "../controllers/ecommerce/review/updateReview";
+import { addToWishlist } from "../controllers/ecommerce/wishlist/addToWishlist";
+import { deleteWishlist } from "../controllers/ecommerce/wishlist/deleteWishlist";
+import { getAllWishlist } from "../controllers/ecommerce/wishlist/getAllWishlist";
 import { multerUploader } from "../lib/multer";
-import {
-  cartValidationRules,
-  validateCart,
-} from "../middleware/carts/cartMiddleware";
 import {
   categoryValidationRules,
   validateCategory,
@@ -47,6 +46,7 @@ import {
   subcategoryValidationRules,
   validateSubcategory,
 } from "../middleware/category/subcategoryValidator";
+import authCheck from "../middleware/common/authCheck";
 import {
   orderValidationRules,
   validateOrder,
@@ -79,7 +79,7 @@ router.post(
 
   productValidationRules,
   validateProduct,
-  createProduct
+  createProduct,
 );
 router.put(
   "/products/:id",
@@ -90,7 +90,7 @@ router.put(
   ]),
   productValidationRules,
   validateUpdateProduct,
-  updateProduct
+  updateProduct,
 );
 router.put("/product-status/:id", updateProductStatus);
 router.delete("/products/:id", deleteProduct);
@@ -106,18 +106,28 @@ router.get("/orders/:id", getOrderById);
 router.get("/orders", getAllOrder);
 
 //cart routes
-router.post("/cart", cartValidationRules, validateCart, createCart);
-router.put("/carts/:id", cartValidationRules, validateCart, updateCart);
-router.delete("/carts/:id", deleteCart);
-router.get("/carts", getAllCart);
+router.post("/cart", authCheck, addToCart);
+router.put("/cart/:productId", authCheck, updateCart);
+router.delete("/cart/:productId", authCheck, deleteCart);
+router.get("/cart-list", authCheck, getAllCart);
+//cart routes
+router.post("/wishlist", authCheck, addToWishlist);
+router.delete("/wishlist/:productId", authCheck, deleteWishlist);
+router.get("/wishlist", authCheck, getAllWishlist);
 
 //review routes
-router.post("/review", reviewValidationRules, validateReview, createReview);
+router.post(
+  "/review",
+  authCheck,
+  reviewValidationRules,
+  validateReview,
+  createReview,
+);
 router.put(
   "/reviews/:id",
   reviewUpdateValidationRules,
   validateReview,
-  updateReview
+  updateReview,
 );
 router.delete("/reviews/:id", deleteReview);
 router.get("/reviews", getAllReview);
@@ -129,12 +139,12 @@ router.post(
   singleFileUploader.single("thumbnail"),
   categoryValidationRules,
   validateCategory,
-  createCategory
+  createCategory,
 );
 router.put(
   "/categories/:id",
   singleFileUploader.single("thumbnail"),
-  updateCategory
+  updateCategory,
 );
 router.delete("/categories/:id", deleteCategory);
 router.get("/categories/:slug", getCategoryBySlug);
@@ -147,13 +157,13 @@ router.post(
   singleFileUploader.single("thumbnail"),
   subcategoryValidationRules,
   validateSubcategory,
-  createSubCategory
+  createSubCategory,
 );
 router.get("/subcategories/:id", getSubCategoryById);
 router.put(
   "/subcategories/:id",
   singleFileUploader.single("thumbnail"),
-  updateSubcategory
+  updateSubcategory,
 );
 router.delete("/subcategories/:id", deleteSubcategory);
 

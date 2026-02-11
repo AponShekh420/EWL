@@ -1,3 +1,5 @@
+import { getCategories } from "@/actions/category";
+import { getProductByQuery } from "@/actions/product";
 import BreadcrumbPath from "@/components/common/BreadcrumbPath";
 import ShopSection from "@/components/shop/ShopSection";
 import {
@@ -9,7 +11,6 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { BASE_URL } from "@/utils/envVariable";
 import { paginationCounter } from "@/utils/paginationCounter";
 import { queryFormatter } from "@/utils/queryFormatter";
 
@@ -19,15 +20,12 @@ export default async function Shop({
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
   const query = await queryFormatter(searchParams);
-  console.log(BASE_URL + "/api/ecommerce/product-by-filter?" + query);
-  const res = await fetch(
-    BASE_URL + "/api/ecommerce/product-by-filter?" + query,
-  );
-
-  const { data: productsData, pagination } = await res.json();
-  if (!res.ok) {
-    throw new Error("Failed to fetch products");
-  }
+  const {
+    data: productsData,
+    price,
+    pagination,
+  } = await getProductByQuery(query);
+  const { data: categories } = await getCategories();
 
   return (
     <main className="container min-h-screen">
@@ -42,7 +40,12 @@ export default async function Shop({
           ]}
         />
       </div>
-      <ShopSection products={productsData} />
+      <ShopSection
+        products={productsData}
+        categories={categories}
+        pagination={pagination}
+        price={price}
+      />
       <div className="w-fit ml-auto py-8">
         <Pagination>
           <PaginationContent>
