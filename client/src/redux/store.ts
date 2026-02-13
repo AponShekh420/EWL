@@ -1,13 +1,14 @@
+import loginFormReducer from "@/redux/auth/loginFormSlice";
+import registerFormReducer from "@/redux/auth/registerFormSlice";
+import userSlice from "@/redux/auth/userSlice";
+import cartSlice from "@/redux/features/cart/cartSlice";
 import categoryFormReducer from "@/redux/features/category/categoryFormSlice";
 import courseFormReducer from "@/redux/features/course/courseFormSlice";
+import paidHotlineSpeakerReducer from "@/redux/features/paid-hotline-speaker/paidHotlinSpeaker";
 import productFormReducer from "@/redux/features/product/productFormSlice";
 import sidebarReducer from "@/redux/features/sidebar/sidebarSlice";
 import stepperReducer from "@/redux/features/stepper/stepperSlice";
 import userFormReducer from "@/redux/features/user/userFormSlice";
-import registerFormReducer from "@/redux/auth/registerFormSlice";
-import loginFormReducer from "@/redux/auth/loginFormSlice";
-import userSlice from "@/redux/auth/userSlice";
-import cartSlice from "@/redux/features/cart/cartSlice";
 import { configureStore } from "@reduxjs/toolkit";
 export const store = configureStore({
   reducer: {
@@ -21,6 +22,7 @@ export const store = configureStore({
     loginFrom: loginFormReducer,
     user: userSlice,
     cart: cartSlice,
+    paidHotlineSpeaker: paidHotlineSpeakerReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -1,37 +1,41 @@
-import dot from "dot-object";
 import { NextFunction, Request, Response } from "express";
 import createError from "http-errors";
-import { OrderModel } from "../../../models/OrderModel";
+import { CartModel } from "../../../models/CartModel";
 import { catchErrorSend } from "../../../utils/catchErrorSend";
-
 export const updateCart = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
-  const id = req.params?.id;
-  const body = dot.object(req.body);
-
   try {
-    if (!id) return next(createError(400, "Cart ID is required"));
-    // Find old order
-    const oldCart = await OrderModel.findById(id);
-    if (!oldCart) return next(createError(404, "Cart not found"));
+    const { productId } = req.params;
+    const { quantity } = req.body;
+    const userId = req?.user?._id;
 
-    const updatedData: Record<string, any> = { ...body };
+    if (quantity < 1) {
+      return next(createError(400, "Quantity must be at least 1"));
+    }
 
-    // ---- UPDATE Cart ----
-    const updatedCart = await OrderModel.findByIdAndUpdate(id, updatedData, {
-      new: true,
-      runValidators: true,
-    });
+    const cart = await CartModel.findOne({ customer: userId });
+    if (!cart) {
+      return next(createError(404, "Cart not found"));
+    }
 
-    if (!updatedCart) return next(createError(400, "Failed to update cart"));
+    const itemIndex = cart.items.findIndex(
+      (item) => item.product.toString() === productId,
+    );
 
-    // ---- RESPONSE ----
+    if (itemIndex === -1) {
+      return next(createError(404, "Product not in cart"));
+    }
+
+    cart.items[itemIndex].quantity = quantity;
+
+    await cart.save();
+
     return res.status(200).json({
       success: true,
-      data: updatedCart,
+      data: cart,
       message: "Cart updated successfully",
     });
   } catch (error) {

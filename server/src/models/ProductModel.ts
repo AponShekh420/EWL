@@ -23,6 +23,11 @@ const productSchema = new Schema(
       enum: ["pending", "draft", "publish"],
       default: "pending",
     },
+    sold: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
     shortDescription: {
       type: String,
       required: true,
@@ -64,7 +69,7 @@ const productSchema = new Schema(
     metaTitle: { type: String, required: true },
     metaDescription: { type: String, required: true },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const productModel = model("Product", productSchema);

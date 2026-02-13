@@ -8,7 +8,7 @@ export default async function RelatedProductSection({
   category: string;
 }) {
   const res = await fetch(
-    BASE_URL + `/api/ecommerce/product-by-filter?category=${category}&limit=20`,
+    BASE_URL + `/api/ecommerce/product-by-filter?category=${category}&limit=10`,
   );
   const { data: productsData } = await res.json();
   if (!res.ok) {

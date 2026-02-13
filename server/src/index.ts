@@ -8,15 +8,19 @@ import { errorHandler, notFoundHandler } from "./middleware/errorMiddleware";
 
 // routes
 import authRouter from "./routes/authRouter";
-import ecommerceRouter from "./routes/ecommerceRouter";
-import userRouter from "./routes/userRouter";
 import courseRouter from "./routes/e-learning/courseRouter";
+import ecommerceRouter from "./routes/ecommerceRouter";
+import paidHotlineSpeakerRouter from "./routes/paidHotlineSpeakerRouter";
+import userRouter from "./routes/userRouter";
 
 dotenv.config();
 
 const app = express();
 app.use((req: Request, res: Response, next: NextFunction) => {
-  res.header("Access-Control-Allow-Origin", process.env.CLIENT_URL || "http://localhost:3000");
+  res.header(
+    "Access-Control-Allow-Origin",
+    process.env.CLIENT_URL || "http://localhost:3000",
+  );
   next();
 });
 
@@ -25,11 +29,12 @@ app.use(
     origin: [
       "http://localhost:3000",
       "http://127.0.0.1:3000",
+      "http://localhost:3001",
       process.env.CLIENT_URL || "",
     ],
     credentials: true,
     methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
-  })
+  }),
 );
 
 mongoose
@@ -48,6 +53,8 @@ app.use("/api/account", userRouter);
 
 // E-commerce
 app.use("/api/ecommerce", ecommerceRouter);
+// Paid speaker
+app.use("/api/paid-hotline", paidHotlineSpeakerRouter);
 
 // e-learning
 app.use("/api/e-learning", courseRouter);

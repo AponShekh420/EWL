@@ -1,53 +1,56 @@
 "use client";
+import ScrollArea from "@/components/common/ScrollArea";
+import { addToCart } from "@/redux/features/cart/cartSlice";
 import { ProductType } from "@/types/Product";
+import { BASE_URL } from "@/utils/envVariable";
 import { getImageUrl } from "@/utils/getImageUrl";
 import { Icon } from "@iconify/react";
+import { Minus, Plus } from "lucide-react";
 import Image from "next/image";
-import "swiper/css";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import Rating from "../../common/Rating";
 import { Button } from "../../ui/button";
-import { Input } from "../../ui/input";
+import FeatureImages from "./FeatureImages";
 export default function ShopDetailSection({
   product,
+  bestSelling,
 }: {
   product: ProductType;
+  bestSelling: ProductType[];
 }) {
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const [isAdded, setIsAdded] = useState(false);
+  const [productQuantity, setProductQuantity] = useState(1);
+  const handleAddtoCart = async (productId: string, quantity: number) => {
+    try {
+      const res = await fetch(`${BASE_URL}/api/ecommerce/cart`, {
+        method: "POST",
+        body: JSON.stringify({ productId, quantity }),
+        headers: {
+          "Content-type": "application/json",
+        },
+        credentials: "include",
+      });
+      const cart = await res.json();
+      setIsAdded(true);
+      router.refresh();
+      setTimeout(() => {
+        setIsAdded(false);
+        dispatch(addToCart({ isCartModalShow: true }));
+      }, 500);
+
+      console.log(cart);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <section>
       <div className="grid md:grid-cols-2 lg:grid-cols-[1fr_1fr_300px] gap-8">
-        <div>
-          <Image
-            src={getImageUrl(product.thumbnail, "products")}
-            width={500}
-            height={500}
-            alt={product.title}
-            className="w-[250px] sm:w-[400px] md:w-full mx-auto object-cover max-h-[500px]"
-          />
-
-          <div className="grid grid-cols-4 gap-2">
-            {product.images.map((image, D_id) => (
-              <div key={D_id}>
-                <Image
-                  src={getImageUrl(image, "products")}
-                  width={150}
-                  height={150}
-                  alt={product.title}
-                />
-              </div>
-            ))}
-
-            {product.images.map((image, D_id) => (
-              <div key={D_id}>
-                <Image
-                  src={getImageUrl(image, "products")}
-                  width={150}
-                  height={150}
-                  alt={product.title}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
+        <FeatureImages product={product} />
         <div className="md:mt-8">
           <div className="pl-4 space-y-3 sm:space-y-5">
             <h2 className="text-2xl sm:text-3xl capitalize font-medium ">
@@ -72,15 +75,35 @@ export default function ShopDetailSection({
             <div className="flex flex-col xs:flex-row xs:items-center gap-8 my-8">
               <div className="flex items-center gap-3">
                 <span>Quantity</span>
-                <Input
-                  type="number"
-                  min="0"
-                  defaultValue="0"
-                  className="w-[100px]"
-                />
+                <div className="flex items-center bg-white border border-gray-100 rounded-full p-0.5 shadow-sm mt-auto">
+                  <button
+                    onClick={() => {
+                      if (productQuantity > 1) {
+                        setProductQuantity((prev) => prev - 1);
+                      }
+                    }}
+                    className="w-6 h-6 flex items-center justify-center bg-gray-100 rounded-full hover:bg-gray-200 transition-colors"
+                  >
+                    <Minus size={12} />
+                  </button>
+
+                  <span className="px-3 text-sm font-semibold min-w-[24px] text-center">
+                    {productQuantity}
+                  </span>
+
+                  <button
+                    onClick={() => setProductQuantity((prev) => prev + 1)}
+                    className="w-6 h-6 flex items-center justify-center bg-gray-100 rounded-full hover:bg-gray-200 transition-colors"
+                  >
+                    <Plus size={12} />
+                  </button>
+                </div>
               </div>
-              <Button className="hover:bg-teal uppercase rounded-full text-xs">
-                add to cart
+              <Button
+                onClick={() => handleAddtoCart(product._id, productQuantity)}
+                className="hover:bg-teal uppercase rounded-full text-xs"
+              >
+                {isAdded ? "added" : "add to cart"}
               </Button>
             </div>
             <div className="flex items-center gap-4 mt-6">
@@ -120,29 +143,31 @@ export default function ShopDetailSection({
           <div className="border p-4">
             <h2 className="font-semibold text-lg">Best Selling Product</h2>
             <hr className="mt-1 mb-3" />
-            <div className="space-y-5">
-              {Array.from({ length: 5 }).map((_, ind) => (
-                <div
-                  key={ind}
-                  className="flex gap-2.5 items-center border-b py-2.5"
-                >
-                  <Image
-                    src={getImageUrl(product.thumbnail, "products")}
-                    width={90}
-                    height={90}
-                    alt={product.title}
-                    className="size-[80px] object-cover"
-                  />
-                  <div className="space-y-1">
-                    <h5 className="text-base">{product.title}</h5>
-                    <Rating rating={5} className="size-2.5 text-red-500" />
-                    <h2 className=" font-semibold text-teal">
-                      ${product.salePrice}.00
-                    </h2>
+            <ScrollArea className="h-120">
+              <div className="space-y-5">
+                {bestSelling.map((item, ind) => (
+                  <div
+                    key={ind}
+                    className="flex gap-2.5 items-center border-b py-2.5"
+                  >
+                    <Image
+                      src={getImageUrl(item.thumbnail, "products")}
+                      width={90}
+                      height={90}
+                      alt={product.title}
+                      className="size-[80px] object-cover"
+                    />
+                    <div className="space-y-1">
+                      <h5 className="text-base">{item.title}</h5>
+                      <Rating rating={5} className="size-2.5 text-red-500" />
+                      <h2 className=" font-semibold text-teal">
+                        ${item.salePrice}.00
+                      </h2>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            </ScrollArea>
           </div>
         </div>
       </div>
