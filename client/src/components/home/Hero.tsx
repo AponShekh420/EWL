@@ -51,7 +51,8 @@ const Hero = () => {
           delay={0.11}
         > 
           <button className="bg-[#0F75BC] px-5 py-2 h-9 rounded-full font-semibold text-white text-sm lg:text-md text-nowrap shadow-[5px_5px_15px_0px_#2700346c] hover:shadow-[5px_5px_15px_0px_#dad7dc6c] transition-all duration-150 transform hover:translate-y-[-5px]">Free Demos</button>
-          <button className="bg-[#270034] px-5 py-2 h-9 rounded-full font-semibold text-white text-sm lg:text-md text-nowrap shadow-[5px_5px_15px_0px_#2700346c] hover:shadow-[5px_5px_15px_0px_#dad7dc6c] transition-all duration-150 transform hover:translate-y-[-5px]">Join InfoLine</button>
+          <button className="bg-[#270034] px-5 py-2 h-9 rounded-full font-semibold text-white text-sm lg:text-md text-nowrap shadow-[5px_5px_15px_0px_#2700346c] hover:shadow-[5px_5px_15px_0px_#dad7dc6c] transition-all duration-150 transform hover:translate-y-[-5px]">Women InfoLine</button>
+          <button className="bg-[#270034] px-5 py-2 h-9 rounded-full font-semibold text-white text-sm lg:text-md text-nowrap shadow-[5px_5px_15px_0px_#2700346c] hover:shadow-[5px_5px_15px_0px_#dad7dc6c] transition-all duration-150 transform hover:translate-y-[-5px]">Men InfoLine</button>
         </FadeInSection>
       </div>
     </div>

@@ -5,6 +5,7 @@ import headsetIcon from "@/assets/png/headset-icon.png";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import FadeInSection from "../common/FadeInSection";
+import Link from "next/link";
 export default function Struggle() {
   return (
     <section className="container mt-20">
@@ -43,7 +44,7 @@ export default function Struggle() {
             delay={0}
           >
           <Button className="rounded-xl px-8 py-6 text-base">
-            Discover More
+            <Link href="/speakers">Discover More</Link>
           </Button>
         </FadeInSection>
       </div>
@@ -61,9 +62,11 @@ export default function Struggle() {
           <p className="mt-4 mb-8 sm:text-lg lg:text-xl">
             Ohel Miriam strengthens couples in building marriages grounded in kedusha, shalom, and simcha.  Through this journey, you’ll gain four essential gifts for deeper connection and harmony.
           </p>
-          <Button className="rounded-xl px-8 py-6 text-base">
-            Discover More
-          </Button>
+          <Link href="#services-section">
+            <Button className="rounded-xl px-8 py-6 text-base" >
+              Discover More
+            </Button>
+          </Link>
         </FadeInSection>
         <FadeInSection 
           initial={{ opacity: 0, x: 150 }}

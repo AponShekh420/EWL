@@ -85,13 +85,13 @@ const Footer = () => {
               href="/free-recordings"
               className="mt-2 sm:mt-3 transition-all hover:text-[#270034] text-white duration-150"
             >
-              example@gmail.com
+              ohelmiriam@gmail.com
             </Link>
             <Link
-              href="tel:+18454148016"
+              href="tel:+18452883873"
               className="mt-2 sm:mt-3 transition-all hover:text-[#270034] text-white duration-150"
             >
-              hotline (845) 414-8016
+              call/ text (845) 288-3873
             </Link>
           </div>
         </div>
@@ -101,10 +101,10 @@ const Footer = () => {
           <h3 className="font-bold text-lg text-white">Dial In Services</h3>
           <div className="flex flex-col mt-3 md:mt-4">
             <Link
-              href="tel:+18452883873"
+              href="tel:+18454148016"
               className="transition-all hover:text-[#270034] text-white duration-150"
             >
-              call/ text (845) 288-3873
+              hotline (845) 414-8016
             </Link>
             <Link
               href="tel:+18454009559"

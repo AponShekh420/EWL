@@ -198,12 +198,66 @@ const Nav = ({ cart }: { cart: CartType }) => {
             >
               About
             </Link>
-            <Link
-              href={"/services"}
-              className="px-2.5 py-1 text-[#270034] hover:text-[#0F75BC] transition-all duration-150"
-            >
-              Services
-            </Link>
+            
+            <div className="relative group px-2.5 py-1">
+              {/* Parent Menu */}
+              <Link
+                href="/services"
+                className="text-[#270034] hover:text-[#0F75BC] transition-all duration-150"
+              >
+                Services
+              </Link>
+
+              {/* Submenu */}
+              <div className="absolute left-0 top-full w-48 bg-white shadow-lg rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                <ul className="py-2">
+                  <li>
+                    <Link
+                      href="/free-demos"
+                      className="block px-4 py-2 text-sm text-[#270034] hover:bg-[#F3F4F6] hover:text-[#0F75BC]"
+                    >
+                      Free Demos
+                    </Link>
+                  </li>
+
+                  <li>
+                    <Link
+                      href="/infoline"
+                      className="block px-4 py-2 text-sm text-[#270034] hover:bg-[#F3F4F6] hover:text-[#0F75BC]"
+                    >
+                      Infoline
+                    </Link>
+                  </li>
+
+                  <li>
+                    <Link
+                      href="/membership"
+                      className="block px-4 py-2 text-sm text-[#270034] hover:bg-[#F3F4F6] hover:text-[#0F75BC]"
+                    >
+                      Membership
+                    </Link>
+                  </li>
+
+                  <li>
+                    <Link
+                      href="/courses"
+                      className="block px-4 py-2 text-sm text-[#270034] hover:bg-[#F3F4F6] hover:text-[#0F75BC]"
+                    >
+                      Courses
+                    </Link>
+                  </li>
+
+                  <li>
+                    <Link
+                      href="/shop"
+                      className="block px-4 py-2 text-sm text-[#270034] hover:bg-[#F3F4F6] hover:text-[#0F75BC]"
+                    >
+                      Products
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </div>
             <Link
               href={"/courses"}
               className="px-2.5 py-1 text-[#270034] hover:text-[#0F75BC] transition-all duration-150"
@@ -233,6 +287,12 @@ const Nav = ({ cart }: { cart: CartType }) => {
               className="px-2.5 py-1 text-[#270034] hover:text-[#0F75BC] transition-all duration-150"
             >
               Blog
+            </Link>
+            <Link
+              href={"/resources"}
+              className="px-2.5 py-1 text-[#270034] hover:text-[#0F75BC] transition-all duration-150"
+            >
+              Resources
             </Link>
           </div>
 

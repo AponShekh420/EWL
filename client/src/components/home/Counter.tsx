@@ -1,12 +1,12 @@
 const Counter = () => {
   return (
-    <div className="mt-10">
+    <div className="mt-20">
       <div className="container">
         <div className="grid lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-x-3 gap-y-15">
 
           {/* grid 1 */}
           <div className="flex items-center flex-col">
-            <p className="text-teal font-bold text-5xl">6,00</p>
+            <p className="text-teal font-bold text-5xl">6,000</p>
             <p className="font-semibold text-teal text-lg mt-2 text-center">Couples</p>
             <p className="text-md text-[#333333] text-center">Who really want to know!</p>
           </div>
