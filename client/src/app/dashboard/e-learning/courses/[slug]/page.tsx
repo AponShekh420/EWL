@@ -53,10 +53,10 @@ export default async function ProductDetails({
           <hr className="my-8" />
           <div>
             <div className="flex items-center gap-2 ">
-              <p className="font-semibold text-3xl">${String(product.price)}</p>
+              <p className="font-semibold text-3xl">${String(product?.regularPrice)}</p>
               <div className="flex gap-2">
                 <p className="line-through text-gray-500 text-xl">
-                  ${Number(product.price) + 20}.00
+                  ${Number(product?.regularPrice) + 20}.00
                 </p>
                 <span className="text-red-500">(7.81% OFF)</span>
               </div>
