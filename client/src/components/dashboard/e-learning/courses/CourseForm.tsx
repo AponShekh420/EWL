@@ -297,9 +297,9 @@ export default function CreateCourseForm() {
                 name="meta-title"
                 label="Meta Title"
                 placeholder="Meta Title"
-                value={courseForm.metaData}
+                value={courseForm.metaTitle}
                 onChange={(e) =>
-                  dispatch(addCourseField({ metaData: e.target.value }))
+                  dispatch(addCourseField({ metaTitle: e.target.value }))
                 }
               />
               <TextBox
