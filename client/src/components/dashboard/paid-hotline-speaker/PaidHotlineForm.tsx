@@ -41,7 +41,7 @@ export default function PaidHotlineForm({
   paidHotlineSpeaker?: PaidHotlineSpeakerType;
 }) {
   const dispatch = useDispatch();
-  const [errors, setErrors] = useState<PaidHotlineSpeakerValidationErrors>({});
+  const [errors, setErrors] = useState<PaidHotlineSpeakerValidationErrors>({} as PaidHotlineSpeakerValidationErrors);
   const {
     fullname,
     speakerId,
