@@ -2,12 +2,19 @@ import { getPaidSpeakerWithFilter } from "@/actions/paidHotline";
 import PageHeading from "@/components/dashboard/common/PageHeading";
 import PaidHotlineSpeakerTable from "@/components/dashboard/common/tables/PaidHotlineSpeakerTable";
 import { Button } from "@/components/ui/button";
+import { queryFormatter } from "@/utils/queryFormatter";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 
-export default async function PaidHotlineSpeaker() {
-  const { data: speakers, pagination } = await getPaidSpeakerWithFilter();
-  console.log(speakers);
+export default async function PaidHotlineSpeaker({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  const query = await queryFormatter(searchParams);
+  console.log(query);
+  const { data: speakers, pagination } = await getPaidSpeakerWithFilter(query);
+
   return (
     <div>
       <PageHeading

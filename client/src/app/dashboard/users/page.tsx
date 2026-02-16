@@ -1,7 +1,7 @@
+import { getUsersByQuery } from "@/actions/user";
 import PageHeading from "@/components/dashboard/common/PageHeading";
 import UsersTable from "@/components/dashboard/common/tables/UsersTable";
 import { Button } from "@/components/ui/button";
-import { BASE_URL } from "@/utils/envVariable";
 import { queryFormatter } from "@/utils/queryFormatter";
 import { Icon } from "@iconify/react";
 
@@ -13,12 +13,8 @@ export default async function Users({
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
   const query = await queryFormatter(searchParams);
-  const res = await fetch(BASE_URL + "/api/account/users?" + query);
-  const { data: userData, pagination } = await res.json();
-  console.log(userData);
-  if (!res.ok) {
-    throw new Error("Failed to fetch users data");
-  }
+  const { data: userData, pagination } = await getUsersByQuery(query);
+
   return (
     <div>
       <PageHeading

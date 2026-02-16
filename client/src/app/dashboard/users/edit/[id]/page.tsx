@@ -1,17 +1,13 @@
+import { getUserById } from "@/actions/user";
 import PageHeading from "@/components/dashboard/common/PageHeading";
 import UserForm from "@/components/dashboard/users/UserForm";
 import { Button } from "@/components/ui/button";
-import { BASE_URL } from "@/utils/envVariable";
 
 import Link from "next/link";
 
 export default async function EditUser({ params }: { params: { id: string } }) {
   const { id } = await params;
-  const res = await fetch(BASE_URL + "/api/account/users/" + id);
-  const { data: user } = await res.json();
-  if (!res.ok) {
-    throw new Error("Failed to fetch users data");
-  }
+  const { data: user } = await getUserById(id);
 
   return (
     <div>

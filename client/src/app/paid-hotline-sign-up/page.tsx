@@ -14,11 +14,11 @@ export default async function PaidHotlineSignup() {
       </section>
       <SpeakerGallerySlider speakers={speakers} />
       <section className="container text-center my-32">
-        <h2 className="text-3xl font-bold text-teal">
+        <h2 className="text-2xl font-bold text-teal">
           Intimacy (Before & After Menopause), Shalom Bayis, Taharas Hamispacha,
         </h2>
         <div className="mt-8 text-teal">
-          <h3 className="text-3xl font-medium">and much much more!</h3>
+          <h3 className="text-2xl font-medium">and much much more!</h3>
           <p className="text-2xl leading-15 font-medium mt-8">
             Get access to all the lectures that were previously aired. <br />
             Receive a wealth of information on marital harmony at your
@@ -36,9 +36,14 @@ export default async function PaidHotlineSignup() {
             2. <br />
             Cancellations <strong>WILL NOT</strong> be accepted retroactively.
           </p>
-          <Link href="/paid-hotline">
+          {/* <Link href="/paid-hotline">
             <Button className="bg-teal mt-10 text-base">
               View/Search for Speaker/Topic
+            </Button>
+          </Link> */}
+          <Link href="/paid-hotline">
+            <Button className="bg-teal mt-10 text-base uppercase">
+              Checkout
             </Button>
           </Link>
         </div>

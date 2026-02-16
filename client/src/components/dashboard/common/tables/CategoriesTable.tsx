@@ -44,13 +44,22 @@ export default function CategoriesTable({
   const router = useRouter();
   const deleteHandler = async (id: string) => {
     if (!id) return;
-    const res = await fetch(BASE_URL + "/api/ecommerce/categories/" + id, {
-      method: "DELETE",
-    });
-    const data = await res.json();
-    console.log(data);
-    if (data.success) {
-      toast.success(data.message);
+
+    try {
+      const res = await fetch(BASE_URL + "/api/ecommerce/categories/" + id, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      console.log(data);
+      if (data.success) {
+        toast.success(data.message);
+        router.refresh();
+      }
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      console.log(errorMessage);
+      toast.error(errorMessage);
     }
   };
   const debouncedSearch = useMemo(
@@ -58,7 +67,7 @@ export default function CategoriesTable({
       debounce((value: string) => {
         router.push(`/dashboard/ecommerce/categories?search=${value}`);
       }, 500),
-    [router]
+    [router],
   );
   return (
     <div>

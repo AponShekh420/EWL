@@ -54,27 +54,43 @@ export default function OrderTable({
   const router = useRouter();
   const deleteHandler = async (id: string) => {
     if (!id) return;
-    const res = await fetch(BASE_URL + "/api/ecommerce/orders/" + id, {
-      method: "DELETE",
-    });
-    const data = await res.json();
+    try {
+      const res = await fetch(BASE_URL + "/api/ecommerce/orders/" + id, {
+        method: "DELETE",
+      });
+      const data = await res.json();
 
-    if (data.success) {
-      toast.success(data.message);
+      if (data.success) {
+        toast.success(data.message);
+        router.refresh();
+      }
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      console.log(errorMessage);
+      toast.error(errorMessage);
     }
   };
   const handleStatusChange = async (status: string, id: string) => {
-    const res = await fetch(BASE_URL + "/api/ecommerce/order-status/" + id, {
-      method: "PUT",
-      body: JSON.stringify({ status }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await res.json();
+    try {
+      const res = await fetch(BASE_URL + "/api/ecommerce/order-status/" + id, {
+        method: "PUT",
+        body: JSON.stringify({ status }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
 
-    if (data.success) {
-      toast.success(data.message);
+      if (data.success) {
+        toast.success(data.message);
+        router.refresh();
+      }
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      console.log(errorMessage);
+      toast.error(errorMessage);
     }
   };
   const debouncedSearch = useMemo(
@@ -82,7 +98,7 @@ export default function OrderTable({
       debounce((value: string) => {
         router.push(`/dashboard/ecommerce/orders?search=${value}`);
       }, 500),
-    [router]
+    [router],
   );
   return (
     <div>
@@ -210,7 +226,7 @@ export default function OrderTable({
                     label=""
                     value={order.status?.toLowerCase()}
                     className={`w-[150px] ${getOrderStatusColor(
-                      order.status as string
+                      order.status as string,
                     )}`}
                     placeholder="Change status"
                     onChange={(val) => handleStatusChange(val, order._id)}

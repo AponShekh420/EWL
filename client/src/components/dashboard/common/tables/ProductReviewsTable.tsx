@@ -47,27 +47,43 @@ export default function ProductReviewsTable({
   const router = useRouter();
   const deleteHandler = async (id: string) => {
     if (!id) return;
-    const res = await fetch(BASE_URL + "/api/ecommerce/reviews/" + id, {
-      method: "DELETE",
-    });
-    const data = await res.json();
+    try {
+      const res = await fetch(BASE_URL + "/api/ecommerce/reviews/" + id, {
+        method: "DELETE",
+      });
+      const data = await res.json();
 
-    if (data.success) {
-      toast.success(data.message);
+      if (data.success) {
+        router.refresh();
+        toast.success(data.message);
+      }
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      console.log(errorMessage);
+      toast.error(errorMessage);
     }
   };
   const handleStatusChange = async (status: string, id: string) => {
-    const res = await fetch(BASE_URL + "/api/ecommerce/reviews/" + id, {
-      method: "PUT",
-      body: JSON.stringify({ status }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await res.json();
+    try {
+      const res = await fetch(BASE_URL + "/api/ecommerce/reviews/" + id, {
+        method: "PUT",
+        body: JSON.stringify({ status }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
 
-    if (data.success) {
-      toast.success(data.message);
+      if (data.success) {
+        toast.success(data.message);
+        router.refresh();
+      }
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      console.log(errorMessage);
+      toast.error(errorMessage);
     }
   };
   const debouncedSearch = useMemo(
@@ -75,7 +91,7 @@ export default function ProductReviewsTable({
       debounce((value: string) => {
         router.push(`/dashboard/ecommerce/products/reviews?search=${value}`);
       }, 500),
-    [router]
+    [router],
   );
   return (
     <div>
@@ -174,7 +190,7 @@ export default function ProductReviewsTable({
                   label=""
                   value={review.status?.toLowerCase()}
                   className={`w-[150px] ${getReviewsStatusColor(
-                    review.status as string
+                    review.status as string,
                   )}`}
                   placeholder="Change status"
                   onChange={(val) => handleStatusChange(val, review._id)}

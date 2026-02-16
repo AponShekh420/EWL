@@ -28,41 +28,47 @@ export default function UserForm({ user }: { user?: UserType }) {
   const onHandleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const formData = createFormData(userForm);
+    try {
+      if (path.includes("edit")) {
+        if (!user?._id) return;
+        const res = await fetch(BASE_URL + "/api/account/users/" + user?._id, {
+          method: "PUT",
+          body: formData,
+        });
+        const data = await res.json();
 
-    if (path.includes("edit")) {
-      if (!user?._id) return;
-      const res = await fetch(BASE_URL + "/api/account/users/" + user?._id, {
-        method: "PUT",
-        body: formData,
-      });
-      const data = await res.json();
-
-      if (!data.success) {
-        setErrors(data.errors || {});
-        toast.error(data.message);
+        if (!data.success) {
+          setErrors(data.errors || {});
+          toast.error(data.message);
+        }
+        if (data.success) {
+          toast.success(data.message);
+          dispatch(resetUserFields());
+          setTimeout(() => {
+            router.push("/dashboard/users");
+          }, 2000);
+        }
+      } else {
+        const res = await fetch(BASE_URL + "/api/account/user", {
+          method: "POST",
+          body: formData,
+        });
+        const data = await res.json();
+        console.log(data);
+        if (!data.success) {
+          setErrors(data.errors || {});
+          toast.error(data.message);
+        }
+        if (data.success) {
+          toast.success(data.message);
+          dispatch(resetUserFields());
+        }
       }
-      if (data.success) {
-        toast.success(data.message);
-        dispatch(resetUserFields());
-        setTimeout(() => {
-          router.push("/dashboard/users");
-        }, 2000);
-      }
-    } else {
-      const res = await fetch(BASE_URL + "/api/account/user", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await res.json();
-      console.log(data);
-      if (!data.success) {
-        setErrors(data.errors || {});
-        toast.error(data.message);
-      }
-      if (data.success) {
-        toast.success(data.message);
-        dispatch(resetUserFields());
-      }
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      console.log(errorMessage);
+      toast.error(errorMessage);
     }
   };
   useEffect(() => {
@@ -168,7 +174,7 @@ export default function UserForm({ user }: { user?: UserType }) {
                   type="file"
                   onChange={(e) =>
                     dispatch(
-                      addUserField({ avatar: e.target.files?.[0] ?? null })
+                      addUserField({ avatar: e.target.files?.[0] ?? null }),
                     )
                   }
                 />
@@ -181,7 +187,7 @@ export default function UserForm({ user }: { user?: UserType }) {
                     dispatch(
                       addUserField({
                         isOrthodoxJew: val === "yes" ? true : false,
-                      })
+                      }),
                     )
                   }
                 >
@@ -238,7 +244,7 @@ export default function UserForm({ user }: { user?: UserType }) {
                     dispatch(
                       addUserField({
                         keepsMitzvos: val === "yes" ? true : false,
-                      })
+                      }),
                     )
                   }
                 >
@@ -273,7 +279,7 @@ export default function UserForm({ user }: { user?: UserType }) {
                 value={userForm.chickenSoupInDairySink}
                 onChange={(e) =>
                   dispatch(
-                    addUserField({ chickenSoupInDairySink: e.target.value })
+                    addUserField({ chickenSoupInDairySink: e.target.value }),
                   )
                 }
                 error={errors?.chickenSoupInDairySink?.msg}

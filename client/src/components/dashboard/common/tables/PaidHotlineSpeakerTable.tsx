@@ -44,13 +44,20 @@ export default function PaidHotlineSpeakerTable({
   const router = useRouter();
   const deleteHandler = async (id: string) => {
     if (!id) return;
-    const res = await fetch(BASE_URL + "/api/paid-hotline/speaker/" + id, {
-      method: "DELETE",
-    });
-    const data = await res.json();
-    console.log(data);
-    if (data.success) {
-      toast.success(data.message);
+    try {
+      const res = await fetch(BASE_URL + "/api/paid-hotline/speaker/" + id, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      console.log(data);
+      if (data.success) {
+        toast.success(data.message);
+      }
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      console.log(errorMessage);
+      toast.error(errorMessage);
     }
   };
   const debouncedSearch = useMemo(

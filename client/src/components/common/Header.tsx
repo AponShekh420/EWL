@@ -1,9 +1,8 @@
-import { getCartList } from "@/actions/cart";
+import { getCartListForHeader } from "@/actions/cart";
 import Nav from "./Nav";
 
 export default async function Header() {
-  const { data: cart } = await getCartList();
-
+  const cart = await getCartListForHeader();
   return (
     <>
       <Nav cart={cart} />
