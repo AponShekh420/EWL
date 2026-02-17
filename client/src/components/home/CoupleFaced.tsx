@@ -40,7 +40,7 @@ export default function CoupleFaced() {
                 scrollBottom={{ opacity: 0, y: 50 }}
                 margin="40px 0px -40px 0px"
                 delay={index == 0 ? 0 : (index/10) * 2}
-                className="bg-teal p-10 flex flex-col justify-center items-center text-center xl:min-w-[350px]  rounded-sm basis-1"
+                className="bg-teal flex flex-col items-center text-center xl:min-w-[350px]  rounded-sm basis-1"
               >
                 {/* <Icon
                   icon="fluent-emoji-high-contrast:broken-heart"
@@ -48,8 +48,15 @@ export default function CoupleFaced() {
                   height="50"
                   className="size-[40px] md:size-[50px]"
                 /> */}
-                <Image src={"/images/home/heart-icon.png"} alt="heart icon" width={100} height={100} />
-                <p className="text-base md:text-lg mt-5">{data.desc}</p>
+                <Image 
+                  src={`/images/home/${data?.image}`} 
+                  alt={data.image || "Couple face image"} 
+                  width={0}   // Set to 0 to allow width to be controlled by CSS
+                  height={0}  // Set to 0 to allow height to be controlled by CSS
+                  sizes="100vw" 
+                  className="w-full h-auto object-cover rounded-t-sm" 
+                />
+                <p className="text-base md:text-lg mt-5 px-5 pb-5">{data.desc}</p>
               </FadeInSection>
             ))}
           </div>

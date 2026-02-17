@@ -5,36 +5,42 @@ export const coupleFacesData = [
           backgrounds, but our views on
           parenting, yiddishkeit, etc keep
           pulling us in opposite directions`,
+    image: "couple-faces-1.png",
   },
   {
     id: 2,
     desc: `I tend to the home, the children,
           the daily swirl of tasks… but I don’t
           have the energy to tend to us.`,
+    image: "couple-faces-2.png",
   },
   {
     id: 3,
     desc: `I see how love begins to feel
           far away when we don’t make
           time to truly reconnect`,
+    image: "couple-faces-3.png",
   },
   {
     id: 4,
     desc: `I hold so much inside… will
           you ever hear what I haven’t
           said?`,
+    image: "couple-faces-4.png",
   },
   {
     id: 5,
     desc: `Our bodies pass each other like
           strangers, the touch once
           effortless now feels delayed.`,
+    image: "couple-faces-5.png",
   },
   {
     id: 6,
     desc: `I save, you spend—and
           somewhere in between, our
           trust gets tested`,
+    image: "couple-faces-6.png",
   },
 ];
 export const struggleToStrengthData = [
