@@ -6,7 +6,8 @@ const Footer = () => {
       <div className="container py-14 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 justify-between gap-10">
         {/* col-1 */}
         <div>
-          <p className=" mt-0 sm:mt-10 !text-nowrap text-[18px] font-terminal text-center text-white leading-[20px]"><strong className="italic">M</strong>aximizing <strong className="italic">I</strong>ntimate <br/> <strong className="italic">R</strong>elationships <strong className="italic">I</strong >n <strong className="italic">A</strong> <strong className="italic">M</strong>arriage</p>
+          <h3 className="!text-nowrap text-2xl text-white text-center mt-0 sm:mt-10">Ohel M.I.R.I.A.M</h3>
+          <p className="mt-2 !text-nowrap text-[18px] font-terminal text-center text-white leading-[20px]"><strong className="italic">M</strong>aximizing <strong className="italic">I</strong>ntimate <br/> <strong className="italic">R</strong>elationships <strong className="italic">I</strong >n <strong className="italic">A</strong> <strong className="italic">M</strong>arriage</p>
         </div>
 
         {/* col-2 */}

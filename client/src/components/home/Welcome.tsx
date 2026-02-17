@@ -83,14 +83,14 @@ const Welcome = () => {
         
         {/* IMAGE */}
         <FadeInSection
-          className="xl:w-2/5 lg:w-2/5 md:w-1/2 w-full"
+          className="xl:w-1/5 lg:w-2/5 md:w-1/2 w-full"
           initial={{ opacity: 0, y: 50 }}
           scrollTop={{ opacity: 1, y: 0 }}
           scrollBottom={{ opacity: 0, y: 50 }}
           margin="40px 0px -40px 0px"
         >
           <Image
-            src="/images/home/istockphoto-584574708-612x612.webp"
+            src="/images/home/ohel-miriam-store-products.png"
             alt="Ohel Miriam Store"
             className="w-full h-auto rounded-2xl shadow-xl"
             width={300}
@@ -100,7 +100,7 @@ const Welcome = () => {
 
         {/* TEXT */}
         <FadeInSection
-          className="xl:w-3/5 lg:w-3/5 md:w-1/2 w-full"
+          className="xl:w-4/5 lg:w-3/5 md:w-1/2 w-full"
           initial={{ opacity: 0, y: 50 }}
           scrollTop={{ opacity: 1, y: 0 }}
           scrollBottom={{ opacity: 0, y: 50 }}
