@@ -33,7 +33,7 @@ const Editor = dynamic(
   () => import("@/components/dashboard/common/editor/Editor"),
   {
     ssr: false,
-  }
+  },
 );
 
 export default function CreateProductForm({
@@ -53,45 +53,52 @@ export default function CreateProductForm({
 
   const onHandleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const formData = createFormData(productForm);
+    try {
+      const formData = createFormData(productForm);
 
-    if (path.includes("edit")) {
-      if (!productData?._id) return;
-      const res = await fetch(
-        BASE_URL + "/api/ecommerce/products/" + productData?._id,
-        {
-          method: "PUT",
-          body: formData,
+      if (path.includes("edit")) {
+        if (!productData?._id) return;
+        const res = await fetch(
+          BASE_URL + "/api/ecommerce/products/" + productData?._id,
+          {
+            method: "PUT",
+            body: formData,
+          },
+        );
+        const data = await res.json();
+
+        if (!data.success) {
+          setErrors(data.errors || {});
+          toast.error(data.message);
         }
-      );
-      const data = await res.json();
+        if (data.success) {
+          toast.success(data.message);
+          dispatch(resetProductFields());
+          setTimeout(() => {
+            router.push("/dashboard/ecommerce/products");
+          }, 2000);
+        }
+      } else {
+        const res = await fetch(BASE_URL + "/api/ecommerce/product", {
+          method: "POST",
+          body: formData,
+        });
+        const data = await res.json();
 
-      if (!data.success) {
-        setErrors(data.errors || {});
-        toast.error(data.message);
+        if (!data.success) {
+          setErrors(data.errors || {});
+        }
+        if (data.success) {
+          toast.success(data.message);
+          dispatch(resetProductFields());
+          dispatch(activeStep(1));
+        }
       }
-      if (data.success) {
-        toast.success(data.message);
-        dispatch(resetProductFields());
-        setTimeout(() => {
-          router.push("/dashboard/ecommerce/products");
-        }, 2000);
-      }
-    } else {
-      const res = await fetch(BASE_URL + "/api/ecommerce/product", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await res.json();
-
-      if (!data.success) {
-        setErrors(data.errors || {});
-      }
-      if (data.success) {
-        toast.success(data.message);
-        dispatch(resetProductFields());
-        dispatch(activeStep(1));
-      }
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      console.log(errorMessage);
+      toast.error(errorMessage);
     }
   };
 
@@ -107,7 +114,7 @@ export default function CreateProductForm({
         existingThumbnail: productData?.thumbnail,
         existingImages: productData?.images,
         existingAttachment: productData?.attachment,
-      })
+      }),
     );
   }, []);
 
@@ -245,7 +252,7 @@ export default function CreateProductForm({
                       <Image
                         src={getImageUrl(
                           productForm.existingThumbnail,
-                          "products"
+                          "products",
                         )}
                         alt="preview"
                         width={220}
@@ -261,7 +268,7 @@ export default function CreateProductForm({
                           }
 
                           dispatch(
-                            deleteExistingThumb(productForm.existingThumbnail)
+                            deleteExistingThumb(productForm.existingThumbnail),
                           );
                         }}
                       >
@@ -311,10 +318,10 @@ export default function CreateProductForm({
                           onClick={() => {
                             if (productForm.images) {
                               const filteredFiles = productForm.images.filter(
-                                (_, i) => i !== index
+                                (_, i) => i !== index,
                               );
                               dispatch(
-                                addProductField({ images: filteredFiles })
+                                addProductField({ images: filteredFiles }),
                               );
                             }
                           }}
@@ -353,7 +360,7 @@ export default function CreateProductForm({
                             />
                           </button>
                         </div>
-                      )
+                      ),
                     )}
                 </div>
               </div>
@@ -556,7 +563,7 @@ export default function CreateProductForm({
                     value={productForm.dimensionLength}
                     onChange={(e) =>
                       dispatch(
-                        addProductField({ dimensionLength: e.target.value })
+                        addProductField({ dimensionLength: e.target.value }),
                       )
                     }
                     error={errors?.dimensionLength?.msg}
@@ -570,7 +577,7 @@ export default function CreateProductForm({
                     value={productForm.dimensionWidth}
                     onChange={(e) =>
                       dispatch(
-                        addProductField({ dimensionWidth: e.target.value })
+                        addProductField({ dimensionWidth: e.target.value }),
                       )
                     }
                     error={errors?.dimensionWidth?.msg}
@@ -584,7 +591,7 @@ export default function CreateProductForm({
                     value={productForm.dimensionHeight}
                     onChange={(e) =>
                       dispatch(
-                        addProductField({ dimensionHeight: e.target.value })
+                        addProductField({ dimensionHeight: e.target.value }),
                       )
                     }
                     error={errors?.dimensionHeight?.msg}
@@ -681,12 +688,12 @@ export default function CreateProductForm({
                       dispatch(
                         addProductField({
                           attachment: e.target.files[0] as File,
-                        })
+                        }),
                       );
                       dispatch(
                         addProductField({
                           existingAttachment: "",
-                        })
+                        }),
                       );
                     }
                   }}
@@ -704,7 +711,7 @@ export default function CreateProductForm({
                 value={productForm.checkoutPageMessage}
                 onChange={(e) =>
                   dispatch(
-                    addProductField({ checkoutPageMessage: e.target.value })
+                    addProductField({ checkoutPageMessage: e.target.value }),
                   )
                 }
                 error={errors?.checkoutPageMessage?.msg}

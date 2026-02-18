@@ -119,10 +119,10 @@ export default function page() {
       <section className="container my-20">
         <div className="wrapper">
           <div className="text-center">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 text-teal">
+            <h2 className="text-3xl sm:text-4xl  font-bold mb-4 text-teal">
               Call the Ohel Miriam Infoline
             </h2>
-            <p className="font-bold text-lg  sm:text-xl mt-6">(845) 414-8016</p>
+            <p className="font-bold text-lg   mt-6">(845) 414-8016</p>
           </div>
           <div className="mt-10">
             <div>
@@ -132,10 +132,10 @@ export default function page() {
                   key={line.id}
                   className={`grid grid-cols-[1fr_2fr] border-x border-t h-14 ${line.id === infolines.length ? "border-b" : ""}`}
                 >
-                  <h3 className="text-base sm:text-xl flex items-center justify-center font-medium mb-2 border-r text-center py-1">
+                  <h3 className="text-base sm:text-lg flex items-center justify-center font-medium mb-2 border-r text-center py-1">
                     {line.press}
                   </h3>
-                  <p className="text-base sm:text-xl font-medium flex items-center pl-4 py-1">
+                  <p className="text-base sm:text-lg font-medium flex items-center pl-4 py-1">
                     {line.description}
                   </p>
                 </div>
@@ -153,17 +153,17 @@ export default function page() {
       </section>
       <section className="container my-20">
         <div className="wrapper">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
+          <h1 className="text-2xl sm:text-3xl font-bold">
             Frequently Asked Questions (FAQ)
           </h1>
           <div className="mt-8">
             <Accordion type="single" collapsible defaultValue="faq-1">
               {FAQ.map((faq) => (
                 <AccordionItem key={faq.id} value={`faq-${faq.id}`}>
-                  <AccordionTrigger className="text-lg sm:text-xl md:text-2xl ">
+                  <AccordionTrigger className="text-lg sm:text-xl ">
                     {faq.question}
                   </AccordionTrigger>
-                  <AccordionContent className="text-base sm:text-lg">
+                  <AccordionContent className="text-base">
                     {faq.answer}
                   </AccordionContent>
                 </AccordionItem>

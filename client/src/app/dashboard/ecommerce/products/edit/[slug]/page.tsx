@@ -1,7 +1,8 @@
+import { getCategories } from "@/actions/category";
+import { getProductBySlug } from "@/actions/product";
 import PageHeading from "@/components/dashboard/common/PageHeading";
 import ProductForm from "@/components/dashboard/ecommerce/products/ProductForm";
 import { Button } from "@/components/ui/button";
-import { BASE_URL } from "@/utils/envVariable";
 import Link from "next/link";
 
 export default async function EditProduct({
@@ -10,27 +11,16 @@ export default async function EditProduct({
   params: { slug: string };
 }) {
   const { slug } = await params;
-
-  const [productRes, categoryRes] = await Promise.all([
-    fetch(BASE_URL + "/api/ecommerce/products/" + slug),
-    fetch(BASE_URL + "/api/ecommerce/categories"),
-  ]);
-
   const [productData, categoriesData] = await Promise.all([
-    productRes.json(),
-    categoryRes.json(),
+    getProductBySlug(slug),
+    getCategories(),
   ]);
-  if (!productRes.ok) {
-    throw new Error("Failed to fetch product details");
-  }
-  if (!categoryRes.ok) {
-    throw new Error("Failed to fetch categories");
-  }
+
   const categories = categoriesData.data.map(
     (category: { name: string; slug: string }) => ({
       label: category.name,
       value: category.slug,
-    })
+    }),
   );
   return (
     <div>

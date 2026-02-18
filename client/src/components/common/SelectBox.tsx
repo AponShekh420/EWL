@@ -1,3 +1,4 @@
+"use client";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -25,7 +26,6 @@ export default function SelectBox({
   label,
   placeholder,
   value,
-  defaultValue,
   onChange,
   options,
   error,
@@ -35,22 +35,21 @@ export default function SelectBox({
       <Label htmlFor={name} className="capitalize  block mb-4">
         {label}
       </Label>
-      <Select
-        onValueChange={onChange}
-        defaultValue={defaultValue}
-        value={value}
-      >
-        <SelectTrigger id={name} className="w-full py-5">
-          <SelectValue placeholder={placeholder || "Select option"} />
-        </SelectTrigger>
-        <SelectContent>
-          {options.map((opt) => (
-            <SelectItem key={opt.value} value={opt.value}>
-              {opt.label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+      {value && (
+        <Select onValueChange={onChange} value={value}>
+          <SelectTrigger id={name} className="w-full py-5">
+            <SelectValue placeholder={placeholder || "Select option"} />
+          </SelectTrigger>
+          <SelectContent>
+            {options.map((opt) => (
+              <SelectItem key={opt.value} value={opt.value}>
+                {opt.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      )}
+
       {error && <span className="text-red-500 text-xs mt-2 ml-1">{error}</span>}
     </div>
   );

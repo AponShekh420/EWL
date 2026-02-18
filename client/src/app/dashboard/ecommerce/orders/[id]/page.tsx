@@ -1,3 +1,4 @@
+import { getOrderById } from "@/actions/order";
 import PageHeading from "@/components/dashboard/common/PageHeading";
 import { EmptyItemIcon } from "@/components/svg";
 import { Button } from "@/components/ui/button";
@@ -16,7 +17,6 @@ import {
   transactionsList,
 } from "@/constants/order-data";
 import { OrderType } from "@/types/Order";
-import { BASE_URL } from "@/utils/envVariable";
 import { getImageUrl } from "@/utils/getImageUrl";
 import { GetTime } from "@/utils/getTime";
 import { Icon } from "@iconify/react";
@@ -29,11 +29,7 @@ export default async function OrderDetails({
   params: { id: string };
 }) {
   const { id } = await params;
-  const res = await fetch(BASE_URL + "/api/ecommerce/orders/" + id);
-  const { data: order }: { data: OrderType } = await res.json();
-  if (!res.ok) {
-    throw new Error("Failed to fetch order details");
-  }
+  const { data: order }: { data: OrderType } = await getOrderById(id);
   return (
     <div>
       <PageHeading

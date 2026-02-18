@@ -41,7 +41,9 @@ export default function PaidHotlineForm({
   paidHotlineSpeaker?: PaidHotlineSpeakerType;
 }) {
   const dispatch = useDispatch();
-  const [errors, setErrors] = useState<PaidHotlineSpeakerValidationErrors>({} as PaidHotlineSpeakerValidationErrors);
+  const [errors, setErrors] = useState<PaidHotlineSpeakerValidationErrors>(
+    {} as PaidHotlineSpeakerValidationErrors,
+  );
   const {
     fullname,
     speakerId,
@@ -66,43 +68,49 @@ export default function PaidHotlineForm({
     if (avatar) {
       formData.append("avatar", avatar);
     }
-
-    if (path.includes("edit")) {
-      console.log(paidHotlineSpeaker?._id);
-      if (!paidHotlineSpeaker?._id) return;
-      formData.append("existingAvatar", existingAvatar);
-      formData.append("deletedImage", deletedImage);
-      const res = await fetch(
-        BASE_URL + "/api/paid-hotline/speaker/" + paidHotlineSpeaker?._id,
-        {
-          method: "PUT",
+    try {
+      if (path.includes("edit")) {
+        console.log(paidHotlineSpeaker?._id);
+        if (!paidHotlineSpeaker?._id) return;
+        formData.append("existingAvatar", existingAvatar);
+        formData.append("deletedImage", deletedImage);
+        const res = await fetch(
+          BASE_URL + "/api/paid-hotline/speaker/" + paidHotlineSpeaker?._id,
+          {
+            method: "PUT",
+            body: formData,
+          },
+        );
+        const data = await res.json();
+        console.log("response", data);
+        if (!data.success) {
+          setErrors(data.errors || {});
+          toast.error(data.message);
+        } else {
+          dispatch(resetPaidHotlineFields());
+          router.push("/dashboard/paid-hotline-speaker");
+          toast.success(data.message);
+        }
+      } else {
+        const res = await fetch(BASE_URL + "/api/paid-hotline/speaker", {
+          method: "POST",
           body: formData,
-        },
-      );
-      const data = await res.json();
-      console.log("response", data);
-      if (!data.success) {
-        setErrors(data.errors || {});
-        toast.error(data.message);
-      } else {
-        dispatch(resetPaidHotlineFields());
-        router.push("/dashboard/paid-hotline-speaker");
-        toast.success(data.message);
+        });
+        const data = await res.json();
+        console.log("response", data);
+        if (!data.success) {
+          setErrors(data.errors || {});
+          toast.error(data.message);
+        } else {
+          dispatch(resetPaidHotlineFields());
+          toast.success(data.message);
+        }
       }
-    } else {
-      const res = await fetch(BASE_URL + "/api/paid-hotline/speaker", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await res.json();
-      console.log("response", data);
-      if (!data.success) {
-        setErrors(data.errors || {});
-        toast.error(data.message);
-      } else {
-        dispatch(resetPaidHotlineFields());
-        toast.success(data.message);
-      }
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      console.log(errorMessage);
+      toast.error(errorMessage);
     }
   };
 
@@ -119,9 +127,6 @@ export default function PaidHotlineForm({
       }),
     );
   }, [paidHotlineSpeaker, dispatch]);
-  useEffect(() => {
-    console.log(fullname);
-  }, [fullname]);
 
   return (
     <div>

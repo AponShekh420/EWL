@@ -13,13 +13,11 @@ export const getAllFilterPaidSpeaker = async (
   const limit = Number(query?.limit) || 10;
   const skip = (page - 1) * limit;
   let searchQuery: Record<string, any> = {};
+
   try {
     if (query.search) {
       searchQuery = {
-        $or: [
-          { firstName: { $regex: query.search, $options: "i" } },
-          { lastName: { $regex: query.search, $options: "i" } },
-        ],
+        $or: [{ fullname: { $regex: query.search, $options: "i" } }],
       };
     }
 

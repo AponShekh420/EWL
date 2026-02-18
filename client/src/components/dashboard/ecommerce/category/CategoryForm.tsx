@@ -25,7 +25,7 @@ const Editor = dynamic(
   () => import("@/components/dashboard/common/editor/Editor"),
   {
     ssr: false,
-  }
+  },
 );
 type CatType = { label: string; value: string };
 export default function CategoryForm({
@@ -43,57 +43,64 @@ export default function CategoryForm({
     existingThumbnail,
     deletedImage,
   } = useSelector((state: RootState) => state.categoryForm);
+
   const [categories, setCategories] = useState<CatType[]>([]);
   const path = usePathname();
   const router = useRouter();
   const onHandleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    try {
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("categoryId", categoryId);
+      formData.append("description", description);
+      if (thumbnail) {
+        formData.append("thumbnail", thumbnail);
+      }
 
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("categoryId", categoryId);
-    formData.append("description", description);
-    if (thumbnail) {
-      formData.append("thumbnail", thumbnail);
-    }
-
-    if (path.includes("edit")) {
-      if (!category?._id) return;
-      formData.append("existingThumbnail", existingThumbnail);
-      formData.append("deletedImage", deletedImage);
-      const res = await fetch(
-        BASE_URL + "/api/ecommerce/categories/" + category?._id,
-        {
-          method: "PUT",
-          body: formData,
+      if (path.includes("edit")) {
+        if (!category?._id) return;
+        formData.append("existingThumbnail", existingThumbnail);
+        formData.append("deletedImage", deletedImage);
+        const res = await fetch(
+          BASE_URL + "/api/ecommerce/categories/" + category?._id,
+          {
+            method: "PUT",
+            body: formData,
+          },
+        );
+        const data = await res.json();
+        console.log("response", data);
+        if (!data.success) {
+          setErrors(data.errors || {});
+          toast.error(data.message);
+        } else {
+          dispatch(resetCategoryFields());
+          router.push("/dashboard/ecommerce/categories");
+          toast.success(data.message);
         }
-      );
-      const data = await res.json();
-      console.log("response", data);
-      if (!data.success) {
-        setErrors(data.errors || {});
-        toast.error(data.message);
       } else {
-        dispatch(resetCategoryFields());
-        router.push("/dashboard/ecommerce/categories");
-        toast.success(data.message);
+        const categoryPath =
+          !categoryId || categoryId === "none" ? "category" : "subcategory";
+        const res = await fetch(BASE_URL + "/api/ecommerce/" + categoryPath, {
+          method: "POST",
+          body: formData,
+        });
+        const data = await res.json();
+        console.log("response", data);
+        if (!data.success) {
+          setErrors(data.errors || {});
+          toast.error(data.message);
+        } else {
+          dispatch(resetCategoryFields());
+          toast.success(data.message);
+        }
       }
-    } else {
-      const categoryPath =
-        !categoryId || categoryId === "none" ? "category" : "subcategory";
-      const res = await fetch(BASE_URL + "/api/ecommerce/" + categoryPath, {
-        method: "POST",
-        body: formData,
-      });
-      const data = await res.json();
-      console.log("response", data);
-      if (!data.success) {
-        setErrors(data.errors || {});
-        toast.error(data.message);
-      } else {
-        dispatch(resetCategoryFields());
-        toast.success(data.message);
-      }
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      console.log(errorMessage);
+      toast.error(errorMessage);
     }
   };
   useEffect(() => {
@@ -104,7 +111,7 @@ export default function CategoryForm({
           (category: { name: string; _id: string }) => ({
             label: category.name,
             value: category._id,
-          })
+          }),
         );
         setCategories(formattedCategories);
       })
@@ -112,6 +119,7 @@ export default function CategoryForm({
         console.error("Error fetching categories:", err);
       });
   }, []);
+
   useEffect(() => {
     if (!category) {
       return;
@@ -122,12 +130,9 @@ export default function CategoryForm({
         ...category,
         thumbnail: "",
         existingThumbnail: category?.thumbnail,
-      })
+      }),
     );
   }, [category, dispatch]);
-  useEffect(() => {
-    console.log(deletedImage);
-  }, [deletedImage]);
 
   return (
     <div>
@@ -156,7 +161,10 @@ export default function CategoryForm({
             <SelectBox
               name="parent-categories"
               label="Parent Categories"
-              value={categories.find((cat) => cat.value === categoryId)?.value}
+              value={
+                categories.find((cat) => cat.value === categoryId)?.value ||
+                "show"
+              }
               onChange={(val) =>
                 dispatch(addCategoryField({ categoryId: val }))
               }
