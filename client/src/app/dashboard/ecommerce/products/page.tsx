@@ -1,7 +1,7 @@
+import { getProductByQuery } from "@/actions/product";
 import PageHeading from "@/components/dashboard/common/PageHeading";
 import ProductTable from "@/components/dashboard/common/tables/ProductTable";
 import { Button } from "@/components/ui/button";
-import { BASE_URL } from "@/utils/envVariable";
 import { queryFormatter } from "@/utils/queryFormatter";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
@@ -12,14 +12,8 @@ export default async function Products({
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
   const query = await queryFormatter(searchParams);
-  const res = await fetch(
-    BASE_URL + "/api/ecommerce/product-by-filter?" + query,
-  );
-  const { data: productsData, pagination } = await res.json();
-  if (!res.ok) {
-    throw new Error("Failed to fetch products");
-  }
-  console.log(productsData);
+  const { data: productsData, pagination } = await getProductByQuery(query);
+
   return (
     <div>
       <PageHeading

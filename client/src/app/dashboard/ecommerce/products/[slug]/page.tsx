@@ -1,6 +1,6 @@
+import { getProductBySlug } from "@/actions/product";
 import PageHeading from "@/components/dashboard/common/PageHeading";
 import { Button } from "@/components/ui/button";
-import { BASE_URL } from "@/utils/envVariable";
 import { getImageUrl } from "@/utils/getImageUrl";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
@@ -12,11 +12,8 @@ export default async function ProductDetails({
   params: { slug: string };
 }) {
   const { slug } = await params;
-  const res = await fetch(BASE_URL + "/api/ecommerce/products/" + slug);
-  const { data: product } = await res.json();
-  if (!res.ok) {
-    throw new Error("Failed to fetch product details");
-  }
+  const { data: product } = await getProductBySlug(slug);
+
   return (
     <div>
       <PageHeading

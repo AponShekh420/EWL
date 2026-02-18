@@ -2,12 +2,14 @@
 import { addToCart } from "@/redux/features/cart/cartSlice";
 import { ProductType } from "@/types/Product";
 import { BASE_URL } from "@/utils/envVariable";
+import { getAverageRating } from "@/utils/getAverageRating";
 import { getImageUrl } from "@/utils/getImageUrl";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import Rating from "../common/Rating";
 import { Button } from "../ui/button";
@@ -39,6 +41,24 @@ export default function ListProductCard({ product }: { product: ProductType }) {
       console.log(error);
     }
   };
+  const handleAddtoWishlist = async (productId: string) => {
+    try {
+      const res = await fetch(`${BASE_URL}/api/ecommerce/wishlist`, {
+        method: "POST",
+        body: JSON.stringify({ productId }),
+        headers: {
+          "Content-type": "application/json",
+        },
+        credentials: "include",
+      });
+      const wishlist = await res.json();
+      toast.success("Product added in wishlist");
+      console.log(wishlist);
+      router.refresh();
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div
       key={product._id}
@@ -61,7 +81,10 @@ export default function ListProductCard({ product }: { product: ProductType }) {
           {product.title}
         </Link>
         <div className=" text-red-500">
-          <Rating rating={5} className="size-3" />
+          <Rating
+            rating={getAverageRating(product.reviews)}
+            className="size-3"
+          />
         </div>
         <div className="flex items-end gap-4">
           <span className="text-teal font-bold text-xl">
@@ -85,7 +108,10 @@ export default function ListProductCard({ product }: { product: ProductType }) {
           <button className=" bg-gray-200 p-2 rounded-full hover:bg-teal hover:text-white">
             <Icon icon="icomoon-free:loop" width="14" height="14" />
           </button>
-          <button className=" bg-gray-200 p-1 rounded-full hover:bg-teal hover:text-white group-hover:-translate-x-25">
+          <button
+            onClick={() => handleAddtoWishlist(product._id)}
+            className=" bg-gray-200 p-1 rounded-full hover:bg-teal hover:text-white group-hover:-translate-x-25"
+          >
             <Icon icon="mdi:heart" width="20" height="20" />
           </button>
         </div>

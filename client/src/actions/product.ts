@@ -9,6 +9,7 @@ export const getProductBySlug = async (slug: string) => {
   }
   return res.json();
 };
+
 export const getProductByQuery = async (query: string) => {
   const res = await fetch(
     BASE_URL + "/api/ecommerce/product-by-filter?" + query,

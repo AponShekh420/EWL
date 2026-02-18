@@ -46,29 +46,45 @@ export default function UsersTable({
   const router = useRouter();
   const deleteHandler = async (id: string) => {
     if (!id) return;
-    const res = await fetch(BASE_URL + "/api/account/users/" + id, {
-      method: "DELETE",
-    });
-    const data = await res.json();
-    if (data.success) {
-      toast.success(data.message);
+    try {
+      const res = await fetch(BASE_URL + "/api/account/users/" + id, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast.success(data.message);
+        router.refresh();
+      }
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      console.log(errorMessage);
+      toast.error(errorMessage);
     }
   };
   const handleRoleChange = async (role: string, id: string) => {
     if (!id) return;
-    const res = await fetch(BASE_URL + "/api/account/user-role/" + id, {
-      method: "PUT",
-      body: JSON.stringify({ role }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await res.json();
-    if (!data.success) {
-      toast.error(data.message);
-    }
-    if (data.success) {
-      toast.success(data.message);
+    try {
+      const res = await fetch(BASE_URL + "/api/account/user-role/" + id, {
+        method: "PUT",
+        body: JSON.stringify({ role }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      if (!data.success) {
+        toast.error(data.message);
+      }
+      if (data.success) {
+        toast.success(data.message);
+        router.refresh();
+      }
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      console.log(errorMessage);
+      toast.error(errorMessage);
     }
   };
 
@@ -77,7 +93,7 @@ export default function UsersTable({
       debounce((value: string) => {
         router.push(`/dashboard/account/users?search=${value}`);
       }, 500),
-    [router]
+    [router],
   );
 
   return (
@@ -149,7 +165,7 @@ export default function UsersTable({
                   label=""
                   value={user.role?.toLowerCase()}
                   className={`w-[150px] ${getUserRoleColor(
-                    user.role as string
+                    user.role as string,
                   )}`}
                   placeholder="Change status"
                   onChange={(val) => handleRoleChange(val, user._id)}

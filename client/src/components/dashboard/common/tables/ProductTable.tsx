@@ -59,29 +59,48 @@ export default function ProductTable({
   const router = useRouter();
   const deleteHandler = async (id: string) => {
     if (!id) return;
-    const res = await fetch(BASE_URL + "/api/ecommerce/products/" + id, {
-      method: "DELETE",
-    });
-    const data = await res.json();
-    if (data.success) {
-      toast.success(data.message);
+    try {
+      const res = await fetch(BASE_URL + "/api/ecommerce/products/" + id, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast.success(data.message);
+        router.refresh();
+      }
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      console.log(errorMessage);
+      toast.error(errorMessage);
     }
   };
   const handleStatusChange = async (status: string, id: string) => {
     if (!id) return;
-    const res = await fetch(BASE_URL + "/api/ecommerce/product-status/" + id, {
-      method: "PUT",
-      body: JSON.stringify({ status }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await res.json();
-    if (!data.success) {
-      toast.error(data.message);
-    }
-    if (data.success) {
-      toast.success(data.message);
+    try {
+      const res = await fetch(
+        BASE_URL + "/api/ecommerce/product-status/" + id,
+        {
+          method: "PUT",
+          body: JSON.stringify({ status }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
+      const data = await res.json();
+      if (!data.success) {
+        toast.error(data.message);
+      }
+      if (data.success) {
+        toast.success(data.message);
+        router.refresh();
+      }
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      console.log(errorMessage);
+      toast.error(errorMessage);
     }
   };
 
@@ -90,7 +109,7 @@ export default function ProductTable({
       debounce((value: string) => {
         router.push(`/dashboard/ecommerce/products?search=${value}`);
       }, 500),
-    [router]
+    [router],
   );
 
   return (
@@ -232,7 +251,7 @@ export default function ProductTable({
                     label=""
                     value={product.status?.toLowerCase()}
                     className={`w-[150px] ${getProductStatusColor(
-                      product.status as string
+                      product.status as string,
                     )}`}
                     placeholder="Change status"
                     onChange={(val) => handleStatusChange(val, product._id)}

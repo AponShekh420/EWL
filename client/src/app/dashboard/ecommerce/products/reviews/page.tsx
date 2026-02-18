@@ -1,7 +1,7 @@
+import { getReviewsByQuery } from "@/actions/review";
 import PageHeading from "@/components/dashboard/common/PageHeading";
 import ProductReviewsTable from "@/components/dashboard/common/tables/ProductReviewsTable";
 import { Button } from "@/components/ui/button";
-import { BASE_URL } from "@/utils/envVariable";
 import { queryFormatter } from "@/utils/queryFormatter";
 
 import Link from "next/link";
@@ -12,11 +12,8 @@ export default async function Reviews({
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
   const query = await queryFormatter(searchParams);
-  const res = await fetch(BASE_URL + "/api/ecommerce/reviews?" + query);
-  const { data: reviews, pagination } = await res.json();
-  if (!res.ok) {
-    throw new Error("Failed to fetch reviews");
-  }
+  const { data: reviews, pagination } = await getReviewsByQuery(query);
+
   return (
     <div>
       <PageHeading

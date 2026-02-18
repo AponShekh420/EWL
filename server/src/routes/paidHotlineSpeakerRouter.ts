@@ -30,7 +30,7 @@ router.put(
 );
 
 router.delete("/speaker/:id", deletePaidSpeaker);
-router.get("/filter-speaker", getAllFilterPaidSpeaker);
+router.get("/filter-by-speaker", getAllFilterPaidSpeaker);
 router.get("/speaker", getAllPaidSpeaker);
 router.get("/speaker/:id", getPaidSpeakerById);
 

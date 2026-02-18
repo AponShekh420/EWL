@@ -1,3 +1,4 @@
+import { getProductByQuery } from "@/actions/product";
 import PopupButton from "@/components/common/PopupButton";
 import PageHeading from "@/components/dashboard/common/PageHeading";
 import ProductCard from "@/components/dashboard/common/ProductCard";
@@ -12,14 +13,16 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { ProductType } from "@/types/Product";
-import { BASE_URL } from "@/utils/envVariable";
+import { queryFormatter } from "@/utils/queryFormatter";
 import { Icon } from "@iconify/react";
-export default async function Shop() {
-  const res = await fetch(BASE_URL + "/api/ecommerce/product-by-filter");
-  const { data: productsData } = await res.json();
-  if (!res.ok) {
-    throw new Error("Failed to fetch products");
-  }
+export default async function Shop({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  const query = await queryFormatter(searchParams);
+  const { data: productsData } = await getProductByQuery(query);
+
   return (
     <div>
       <PageHeading
