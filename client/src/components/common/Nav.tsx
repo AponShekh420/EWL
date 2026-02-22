@@ -158,7 +158,7 @@ const Nav = ({ cart }: { cart: CartType }) => {
             {/* cart icon */}
             <div className="relative w-7">
               <p className="bg-[#270034] rounded-full text-[10px] text-white h-fit flex items-center justify-center w-fit px-[3px] absolute top-0 -left-1 font-medium">
-                {cart.totalProduct}
+                {cart?.totalProduct}
               </p>
               <Icon
                 onClick={() => dispatch(addToCart({ isCartModalShow: true }))}
