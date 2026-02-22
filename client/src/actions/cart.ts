@@ -11,7 +11,7 @@ export const getCartList = async () => {
     cache: "no-store",
   });
 
-  if (!res.ok) {
+  if (!res.ok && cookieStore.get("session") != undefined) {
     throw new Error("Failed to fetch cart list");
   }
   return res.json();
