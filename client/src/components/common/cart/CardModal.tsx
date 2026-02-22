@@ -34,7 +34,7 @@ export default function CartModal({ cart }: { cart: CartType }) {
           </SheetHeader>
 
           <div className="grid gap-4 py-4 px-4 w-full max-h-full overflow-y-auto">
-            {cart.items.map((item, index) => (
+            {cart?.items?.map((item, index) => (
               <CartProduct key={index} item={item} />
             ))}
           </div>
@@ -42,7 +42,7 @@ export default function CartModal({ cart }: { cart: CartType }) {
           <SheetFooter className="border-t-2">
             <div className="w-full">
               <p className="text-sm text-gray-500 flex justify-between">
-                Total Items: <span>{cart.totalProduct}</span>
+                Total Items: <span>{cart?.totalProduct}</span>
               </p>
               <p className="text-sm text-gray-500 flex justify-between">
                 Shipping: <span>${50}.00</span>
@@ -51,7 +51,7 @@ export default function CartModal({ cart }: { cart: CartType }) {
                 Tax: <span>$12.00</span>
               </p>
               <p className="text-lg font-semibold text-teal flex justify-between">
-                Total Price: <span>${cart.totalPrice + 50 + 12}</span>
+                Total Price: <span>${cart?.totalPrice + 50 + 12}</span>
               </p>
             </div>
             <Button
