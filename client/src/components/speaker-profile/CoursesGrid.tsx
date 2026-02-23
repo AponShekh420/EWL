@@ -1,7 +1,5 @@
-// app/page.tsx
-
 import CourseCard from "../common/CourseCard";
-
+import { ArrowUpRight } from "lucide-react";
 
 const courses = [
   { id: 1, title: "Starting SEO as your Home Based Business", instructor: "Edward Norton", price: "30", image: "/images/courses/course.jpg", avatar: "/images/user.png" },
@@ -16,36 +14,23 @@ const courses = [
   // ... duplicate for other 7 items
 ];
 
-export default function CourseDirectory() {
-  return (
-    <main className="max-w-6xl mx-auto p-8 min-h-screen">
-      
-      {/* Header & Search Bar */}
-      <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
-        <h2 className="text-gray-600 text-sm">
-          Showing <span className="text-teal font-bold">1-9</span> Of <span className="text-teal font-bold">62</span> Results
-        </h2>
-        
-        <div className="relative w-full md:w-80">
-          <input 
-            type="text" 
-            placeholder="Search Courses..." 
-            className="w-full bg-gray-100 border-none rounded px-4 py-2 text-sm focus:ring-2 focus:ring-teal outline-none"
-          />
-          <button className="absolute right-3 top-2.5 text-gray-400">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
+const CoursesGrid = () => {
+    return (
+      <section className="container px-6 py-20">
+        <div className="flex items-center justify-between mb-10">
+          <h3 className="text-3xl font-bold text-slate-800 underline decoration-amber-400 decoration-4 underline-offset-8">Featured Courses</h3>
+          <button className="text-blue-600 font-semibold hover:text-blue-800 flex items-center gap-1 transition-all">
+            View All Courses <ArrowUpRight size={20} />
           </button>
         </div>
-      </div>
 
-      {/* The 3x3 Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {courses.map(course => (
-          <CourseCard key={course.id} {...course} />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+          {courses.map(course => (
+            <CourseCard key={course.id} {...course} />
         ))}
-      </div>
-    </main>
-  );
+        </div>
+      </section>
+    );
 }
+
+export default CoursesGrid;
