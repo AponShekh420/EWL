@@ -23,7 +23,7 @@ export default function CourseCard({ title, instructor, image, avatar }: CourseP
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         </Link>
-        <Link href={"/preview/348574783"} className="absolute top-3 left-3 hover:bg-teal border-2 border-teal text-teal hover:text-white text-xs font-bold px-2 py-1 rounded cursor-pointer transition-colors">
+        <Link href={"/preview/348574783"} className="absolute top-3 left-3 text-white text-xs font-bold px-2 py-1.5 rounded cursor-pointer transition-all duration-300 hover:bg-[#FFB900] bg-teal shadow-sm">
           Preview
         </Link>
       </div>
@@ -31,7 +31,7 @@ export default function CourseCard({ title, instructor, image, avatar }: CourseP
       {/* Content */}
       <div className="p-5 relative">
         {/* Instructor Info */}
-        <Link className="flex items-center gap-2 mb-3" href={"/spearker/348574783"}>
+        <Link className="flex items-center gap-2 mb-3" href={"/speaker/348574783"}>
           <Image src={avatar} alt={instructor} className="w-8 h-8 rounded-full object-cover" width={100} height={100} />
           <span className="text-gray-600 hover:text-teal transition-colors text-sm font-medium">{instructor}</span>
         </Link>
