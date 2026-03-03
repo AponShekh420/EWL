@@ -14,24 +14,17 @@ export const sidebar_links = [
     isShowDropdown: false,
     dropdownList: [
       { id: 101, name: "products", url: "/dashboard/ecommerce/products" },
-      {
-        id: 102,
-        name: "create product",
-        url: "/dashboard/ecommerce/products/create",
-      },
-      { id: 103, name: "categories", url: "/dashboard/ecommerce/categories" },
+
+      { id: 102, name: "categories", url: "/dashboard/ecommerce/categories" },
+      { id: 103, name: "shipping", url: "/dashboard/ecommerce/shipping" },
       {
         id: 104,
-        name: "create category",
-        url: "/dashboard/ecommerce/categories/create",
-      },
-      { id: 105, name: "orders", url: "/dashboard/ecommerce/orders" },
-      {
-        id: 106,
         name: "reviews",
         url: "/dashboard/ecommerce/products/reviews",
       },
-      { id: 107, name: "shop", url: "/dashboard/ecommerce/shop" },
+      { id: 105, name: "orders", url: "/dashboard/ecommerce/orders" },
+
+      { id: 106, name: "shop", url: "/dashboard/ecommerce/shop" },
     ],
   },
 
@@ -55,10 +48,7 @@ export const sidebar_links = [
     icon: "flowbite:users-outline",
     isDropdown: true,
     isShowDropdown: false,
-    dropdownList: [
-      { id: 101, name: "User list", url: "/dashboard/users" },
-      { id: 102, name: "Create User", url: "/dashboard/users/create" },
-    ],
+    dropdownList: [{ id: 101, name: "User list", url: "/dashboard/users" }],
   },
   {
     id: 5,
@@ -69,11 +59,6 @@ export const sidebar_links = [
     isShowDropdown: false,
     dropdownList: [
       { id: 101, name: "Paid Speaker", url: "/dashboard/paid-hotline-speaker" },
-      {
-        id: 102,
-        name: "Create Paid Speakers",
-        url: "/dashboard/paid-hotline-speaker/create",
-      },
     ],
   },
 ];
