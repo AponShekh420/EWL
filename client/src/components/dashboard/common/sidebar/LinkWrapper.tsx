@@ -12,9 +12,14 @@ export default function LinkWrapper({
   isDropDown,
   className,
   href,
+  ...rest
 }: LinkWrapperProps & { children: ReactNode }) {
   if (isDropDown) {
-    return <div className={className}>{children}</div>;
+    return (
+      <div className={className} {...rest}>
+        {children}
+      </div>
+    );
   }
 
   return (

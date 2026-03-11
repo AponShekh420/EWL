@@ -153,6 +153,7 @@ export default function CreateProductForm({
                   options={categories ? categories : []}
                   error={errors?.category?.msg}
                 />
+
                 <InputBox
                   name="product-tags"
                   label="Product tags"
@@ -165,19 +166,20 @@ export default function CreateProductForm({
                 />
               </div>
 
-              <div>
-                <Label className="mb-4 mt-8">Short description</Label>
-                <Editor
+              <div className="mt-8">
+                <TextBox
+                  label="Short description"
+                  name="Short description"
+                  placeholder="Write short description"
+                  className="min-h-30"
                   value={productForm.shortDescription}
-                  onChange={(val) =>
-                    dispatch(addProductField({ shortDescription: val }))
+                  onChange={(e) =>
+                    dispatch(
+                      addProductField({ shortDescription: e.target.value }),
+                    )
                   }
+                  error={errors?.shortDescription?.msg}
                 />
-                {errors.shortDescription && (
-                  <span className="text-red-500 text-xs mt-2 ml-1">
-                    {errors?.shortDescription?.msg}
-                  </span>
-                )}
               </div>
               <div>
                 <Label className="mb-4 mt-8">Full description</Label>
@@ -738,18 +740,6 @@ export default function CreateProductForm({
                 }
                 error={errors?.metaTitle?.msg}
               />
-              {path.includes("edit") && (
-                <InputBox
-                  name="meta-slug"
-                  label="Meta Slug"
-                  placeholder="Meta slug"
-                  value={productForm.slug}
-                  onChange={(e) =>
-                    dispatch(addProductField({ slug: e.target.value }))
-                  }
-                  error={errors?.slug?.msg}
-                />
-              )}
 
               <TextBox
                 label="Meta Description"

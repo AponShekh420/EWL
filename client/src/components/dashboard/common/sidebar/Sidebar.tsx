@@ -43,6 +43,7 @@ export default function Sidebar() {
               <LinkWrapper
                 href={link.url}
                 onClick={() => {
+                  console.log(link.isDropdown);
                   if (link.isDropdown) {
                     const filterSiderbar = sidebarLinks.map((sidebarlink) => {
                       if (sidebarlink.id == link.id) {

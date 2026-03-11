@@ -67,6 +67,7 @@ const productSchema = new Schema(
     attachment: { type: String, required: true },
     checkoutPageMessage: { type: String, required: true },
     metaTitle: { type: String, required: true },
+    metaSlug: { type: String, required: true },
     metaDescription: { type: String, required: true },
   },
   { timestamps: true },
