@@ -8,12 +8,14 @@ import paidHotlineSpeakerReducer from "@/redux/features/paid-hotline-speaker/pai
 import productFormReducer from "@/redux/features/product/productFormSlice";
 import sidebarReducer from "@/redux/features/sidebar/sidebarSlice";
 import stepperReducer from "@/redux/features/stepper/stepperSlice";
+import CourseStepperReducer from "@/redux/features/stepper/courseStepperSlice";
 import userFormReducer from "@/redux/features/user/userFormSlice";
 import { configureStore } from "@reduxjs/toolkit";
 export const store = configureStore({
   reducer: {
     sidebar: sidebarReducer,
     stepper: stepperReducer,
+    courseStepper: CourseStepperReducer,
     productForm: productFormReducer,
     categoryForm: categoryFormReducer,
     courseForm: courseFormReducer,

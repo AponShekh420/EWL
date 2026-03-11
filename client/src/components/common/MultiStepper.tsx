@@ -1,24 +1,27 @@
 "use client";
-import {
-  activeStep,
-  nextStep,
-  prevStep,
-} from "@/redux/features/stepper/stepperSlice";
-import { RootState } from "@/redux/store";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Button } from "../ui/button";
+import { UnknownAction } from "@reduxjs/toolkit";
 
 export default function MultiStepper({
   children,
   className,
   totalStep = 2,
+  step,
+  nextStep,
+  prevStep,
+  activeStep,
 }: {
   children: React.ReactNode;
   className?: string;
   totalStep: number;
+  step: number;
+  nextStep: () => UnknownAction;
+  prevStep: () => UnknownAction;
+  activeStep: (step: number) => UnknownAction;
 }) {
   const dispatch = useDispatch();
-  const { step } = useSelector((state: RootState) => state.stepper);
+
   return (
     <div className={`mt-8 ${className}`}>
       <div className="mb-10 lg:mb-20">
@@ -27,7 +30,7 @@ export default function MultiStepper({
             <div
               onClick={() => dispatch(activeStep(index + 1))}
               className={`flex-1 flex items-center before:absolute  before:size-4 before:rounded-full before:z-10 before:top-9 before:left-0 relative ${
-                index < step ? "before:bg-blue-500" : "before:bg-gray-300"
+                index < step ? "before:bg-blue-500" : "before:bg-gray-300"}
               }`}
               key={index}
             >
@@ -57,7 +60,7 @@ export default function MultiStepper({
         >
           {" "}
           <span
-            style={{ width: `${(step / totalStep) * 100 + 1}%` }}
+            style={{ width: `${((step) / totalStep) * 100 + 1}%` }}
             className={`bg-blue-500 h-full w-full absolute top-0 left-0 rounded-r-full`}
           ></span>
         </div>

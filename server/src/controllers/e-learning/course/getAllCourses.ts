@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 import createError from "http-errors";
-import productModel from "../../../models/ProductModel";
 import { catchErrorSend } from "../../../utils/catchErrorSend";
 import courseModel from "../../../models/CourseModel";
 

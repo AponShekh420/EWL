@@ -2,8 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import createError from "http-errors";
 import { catchErrorSend } from "../../../utils/catchErrorSend";
 import { deleteFileFromLocal } from "../../../utils/deleteFileFromLocal";
-import { getFilterBodyData } from "../../../utils/getFilterBodyData";
 import courseModel from "../../../models/CourseModel";
+import { getFilterCourseBodyData } from "../../../utils/getFilterCourseBodyData";
 
 type MulterFile = Record<string, Express.Multer.File[]>;
 
@@ -17,7 +17,7 @@ export const updateCourse = async (
     if (!id) return next(createError(400, "Course ID is required"));
 
     const { thumbnail, attachment } = req.files as MulterFile;
-    const body = getFilterBodyData(req);
+    const body = getFilterCourseBodyData(req);
     const deletedImages: string[] = body.deletedImages
       ? JSON.parse(body.deletedImages)
       : [];

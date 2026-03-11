@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import createError from "http-errors";
 import { catchErrorSend } from "../../../utils/catchErrorSend";
-import { getFilterBodyData } from "./../../../utils/getFilterBodyData";
 import courseModel from "../../../models/CourseModel";
+import { getFilterCourseBodyData } from "../../../utils/getFilterCourseBodyData";
 
 type MulterFile = {
   [fieldname: string]: Express.Multer.File[];
@@ -15,7 +15,7 @@ export const createCourse = async (
 ) => {
   try {
     const {thumbnail, attachment } = req.files as MulterFile;
-    const body = getFilterBodyData(req);
+    const body = getFilterCourseBodyData(req);
     // Remove special characters and make the slug
     const sanitizedTitle = body.metaTitle
       ? body.metaTitle
@@ -41,7 +41,7 @@ export const createCourse = async (
       ...body,
       slug,
       thumbnail: thumbnail[0].filename,
-      attachment: attachment[0].filename,
+      attachment: attachment ? attachment[0]?.filename : "",
     });
 
     if (!createdCourse) {
