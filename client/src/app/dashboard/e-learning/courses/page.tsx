@@ -19,7 +19,6 @@ export default async function Courses({
   if (!res.ok) {
     throw new Error("Failed to fetch courses");
   }
-  console.log(coursesData);
   return (
     <div>
       <PageHeading

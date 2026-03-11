@@ -16,6 +16,8 @@ export const getCourseByFilter = async (
     const searchQuery: Record<string, any> = {};
 
     query.category && (searchQuery.category = query.category);
+    query.speaker && (searchQuery.speaker = query.speaker);
+    query.status && (searchQuery.status = query.status);
 
     if (query.search) {
         searchQuery.$or = [

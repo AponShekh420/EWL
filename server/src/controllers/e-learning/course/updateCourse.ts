@@ -4,6 +4,7 @@ import { catchErrorSend } from "../../../utils/catchErrorSend";
 import { deleteFileFromLocal } from "../../../utils/deleteFileFromLocal";
 import courseModel from "../../../models/CourseModel";
 import { getFilterCourseBodyData } from "../../../utils/getFilterCourseBodyData";
+import UserModel from "../../../models/UserModel";
 
 type MulterFile = Record<string, Express.Multer.File[]>;
 
@@ -90,7 +91,16 @@ export const updateCourse = async (
         deleteFileFromLocal(img, "courses");
       }
     });
-    
+    if (body.speaker !== oldCourse.speaker) {
+      await UserModel.updateOne(
+        { courses: oldCourse._id },
+        { $pull: { courses: oldCourse._id } }
+      );
+      await UserModel.updateOne(
+        { _id: body.speaker },
+        { $addToSet: { courses: oldCourse._id } }
+      );
+    }
 
     // ---- RESPONSE ----
     return res.status(200).json({

@@ -17,7 +17,7 @@ export default function CourseDirectory() {
   const getCoursesByFilter = async () => {
     try {
       setLoading(true);
-      const query = `category=${tab}&search=${search}`;
+      const query = `category=${tab}&search=${search}&status=${"publish"}`;
       const { data } = await getCourseByQuery(query);
       setCourses(data);
       console.log("Fetched courses:", data);  
@@ -43,7 +43,7 @@ export default function CourseDirectory() {
   }, [tab, search]);
 
   return (
-    <main className="max-w-6xl mx-auto p-8 min-h-screen">
+    <main className="p-8 min-h-screen">
       
       {/* tabs */}
     <Tabs value={tab} onValueChange={setTab} className="w-full">
@@ -85,7 +85,7 @@ export default function CourseDirectory() {
         </div>
         ) : (
         courses.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {courses.map(course => (
               <CourseCard key={course._id} title={course?.title || ""} slug={course?.slug || ""} thumbnail={course?.thumbnail || ""} speaker={course?.speaker || ""}/>
             ))}

@@ -3,6 +3,7 @@ import createError from "http-errors";
 import { catchErrorSend } from "../../../utils/catchErrorSend";
 import courseModel from "../../../models/CourseModel";
 import { getFilterCourseBodyData } from "../../../utils/getFilterCourseBodyData";
+import UserModel from "../../../models/UserModel";
 
 type MulterFile = {
   [fieldname: string]: Express.Multer.File[];
@@ -47,6 +48,12 @@ export const createCourse = async (
     if (!createdCourse) {
       return next(createError(400, "Failed to create course"));
     }
+
+    await UserModel.findOneAndUpdate(
+      { _id: createdCourse?.speaker },
+      { $push: { courses: createdCourse?._id } },
+      { new: true } // Optional: returns the updated document
+    );
     
     return res.status(201).json({
       success: true,

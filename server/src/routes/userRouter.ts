@@ -12,6 +12,7 @@ import {
   validateUser,
 } from "../middleware/user/userValidator";
 import { getAllSpeakers } from "../controllers/user/getAllSpeakers";
+import { getSpeakerByUsername } from "../controllers/user/getSpeakerByUsername";
 const singleFileUploader = multerUploader("profile");
 const router = express.Router();
 
@@ -40,6 +41,7 @@ router.put("/user-role/:id", updateUser);
 router.delete("/users/:id", deleteUser);
 router.get("/users", getAllUsers);
 router.get("/users/:id", getUserById);
+router.get("/speaker/:username", getSpeakerByUsername);
 
 
 
