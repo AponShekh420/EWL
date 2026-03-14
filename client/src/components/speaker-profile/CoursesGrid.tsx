@@ -35,8 +35,8 @@ const CoursesGrid = ({speakerId}: {speakerId: string}) => {
     return (
       <section className="container px-6 py-20">
         <div className="flex items-center justify-between mb-10">
-          <h3 className="text-3xl font-bold text-slate-800 underline decoration-amber-400 decoration-4 underline-offset-8">Featured Courses</h3>
-          <button className="text-blue-600 font-semibold hover:text-blue-800  transition-all">
+          <h3 className="text-3xl font-bold text-slate-800 underline decoration-teal decoration-4 underline-offset-8">Featured Courses</h3>
+          <button className="text-teal font-semibold hover:text-black  transition-all">
             <Link href="/courses" className="flex items-center gap-1">
               View All Courses <ArrowUpRight size={20} />
             </Link>

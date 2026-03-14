@@ -29,7 +29,7 @@ export default function CourseCard({ title, speaker, thumbnail, slug }: CoursePr
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         </Link>
-        <Link href={`/preview/${slug}`} className="absolute top-3 left-3 text-white text-xs font-bold px-2 py-1.5 rounded cursor-pointer transition-all duration-300 hover:bg-[#FFB900] bg-teal shadow-sm">
+        <Link href={`/preview/${slug}`} className="absolute top-3 left-3 text-white text-xs font-bold px-2 py-1.5 rounded cursor-pointer transition-all duration-300 hover:bg-black hover:text-white bg-teal shadow-sm">
           Preview
         </Link>
       </div>
@@ -55,7 +55,7 @@ export default function CourseCard({ title, speaker, thumbnail, slug }: CoursePr
         </p>
 
         {/* Action Button (Circle) */}
-        <Link href={`/course/${slug}`} className="absolute -top-6 right-5 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg border border-gray-50 text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white transition-colors">
+        <Link href={`/course/${slug}`} className="absolute -top-6 right-5 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg border border-gray-50 text-teal group-hover:bg-black group-hover:text-white transition-colors">
           <Icon icon="maki:arrow" width="15" height="15" />
         </Link>
       </div>

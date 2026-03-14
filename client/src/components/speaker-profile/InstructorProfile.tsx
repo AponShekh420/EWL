@@ -20,7 +20,7 @@ const ModernSpeakerProfile = ({speaker}: InstructorProfileProps) => {
     <section className="container px-6 -mt-16 relative z-20">
     <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 flex flex-col md:flex-row gap-10 items-start">
         <div className="relative group">
-        <div className="absolute -inset-1 bg-gradient-to-r from-amber-400 to-orange-500 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
+        <div className="absolute -inset-1 bg-gradient-to-r from-teal-600 to-teal rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
         <div className="relative w-40 h-40 rounded-full overflow-hidden border-4 border-white shadow-lg">
             <Image src={getImageUrl(speaker?.avatar, "profile")} alt={speaker?.firstName} width={200} height={200} className="w-full h-full object-cover" />
         </div>
