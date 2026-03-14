@@ -22,8 +22,8 @@ export const deleteCourse = async (
     deleteFileFromLocal(
       [
         deletedCourse.thumbnail,
-        deletedCourse.attachment,
-      ],
+        deletedCourse?.attachment,
+      ].filter((file): file is string => Boolean(file)),
       "courses"
     );
     

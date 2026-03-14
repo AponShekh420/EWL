@@ -1,56 +1,90 @@
 
+interface SpeakerType {
+  firstName: string;
+  lastName: string;
+  _id: string; 
+  userName: string; 
+  avatar: string; 
+  role: string; 
+  status: string; 
+  email: string; 
+  gender: string; 
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
 export type CourseType = {
-  id: string;
-  title: string;
-  category: string; // Men | Women | Couples
-  slug: string;
+  duration?: string;
   students: number;
-  price: string;
-  speaker: string;
-  date: string;
-  status: string; // Draft | Publish | Pending
-  // lectures:string,
-  // time:string,
-  // aboutTab: string,
-  // overviewTab: string,
-  // courseTopicsTab: string,
-  // speakerProfileTab: string,
-  // FAQsTab: string,
-  // testimonialsTab: string,
-  // moreInfoTab: string,
-  thumbnail: string
+  speaker: SpeakerType;
+  date?: string;
+  lectures?:string,
+  time?:string,
+  aboutTab?: string,
+  overviewTab?: string,
+  courseTopicsTab?: string,
+  speakerProfileTab?: string,
+  FAQsTab?: string,
+  testimonialsTab?: string,
+  moreInfoTab?: string,
+  offline?: boolean;
+  externalLink?: string;
+  _id?: string;
+  title: string;
+  headline?: string;
+  bio?: string;
+  category: string;
+  thumbnail: string;
+  price: number;
+  installmentMonths?: number;
+  status: string;
+  slug?: string;
+  attachment?: string;
+  updatedAt?: string;
+  durationNumber?: number;
+  durationType?: string;
+  module: number;
 };
 
 export type CourseFormState = {
+  // 1st tab
+  title: string;
+  slug: string;
+  bio: string;
+  headline: string;
+  category: string; // Men | Women | Couples
+  time: string;
+  date: string;
+  lectures:string;
+  durationNumber: string;
+  durationType: string;
+  speaker: string;
+  status: string;
+
+  // 2nd tab
   thumbnail: File | null;
   existingThumbnail?: string;
   existingAttachment?: string;
   existingImages?: string[];
   deletedImages?: string[];
-  limitOneItemPerOrder: boolean;
-  id: string;
-  title: string;
-  category: string; // Men | Women | Couples
-  slug: string;
-  lectures:string;
-  time: string;
-  DurationNumber: number;
-  DurationType: string;
-  students: number;
-  salePrice: number;
-  regularPrice: number;
-  speaker: string;
-  date: string;
+
+  // 3rd tab
+  installmentMonths: string;
+  price: string;
+  offline: boolean;
+  externalLink: string;
+  module: string;
+
+  // 4th tab
   aboutTab: string;
   overviewTab: string;
   courseTopicsTab: string;
-  offline: boolean;
-  ExternalLink: string;
   speakerProfileTab: string;
   FAQsTab: string;
   testimonialsTab: string;
   moreInfoTab: string;
-  status: string; // Draft | Publish | Pending
+
+  // 5th tab
   customMessage: string;
   attachment: File | null;
   checkoutPageMessage: string;
@@ -58,3 +92,15 @@ export type CourseFormState = {
   metaDescription: string;
 };
 
+
+
+//course express validator types errors
+type ValidationErrorItem = {
+  type: string;
+  msg: string;
+  path: string;
+  location: string;
+  value?: string;
+};
+
+export type CourseValidationErrors = { [key: string]: ValidationErrorItem };
