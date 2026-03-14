@@ -6,6 +6,7 @@ import categoryFormReducer from "@/redux/features/category/categoryFormSlice";
 import courseFormReducer from "@/redux/features/course/courseFormSlice";
 import paidHotlineSpeakerReducer from "@/redux/features/paid-hotline-speaker/paidHotlinSpeaker";
 import productFormReducer from "@/redux/features/product/productFormSlice";
+import shippingFormReducer from "@/redux/features/shipping/shippingFormSlice";
 import sidebarReducer from "@/redux/features/sidebar/sidebarSlice";
 import stepperReducer from "@/redux/features/stepper/stepperSlice";
 import userFormReducer from "@/redux/features/user/userFormSlice";
@@ -16,6 +17,7 @@ export const store = configureStore({
     stepper: stepperReducer,
     productForm: productFormReducer,
     categoryForm: categoryFormReducer,
+    shippingForm: shippingFormReducer,
     courseForm: courseFormReducer,
     userForm: userFormReducer,
     registerFrom: registerFormReducer,

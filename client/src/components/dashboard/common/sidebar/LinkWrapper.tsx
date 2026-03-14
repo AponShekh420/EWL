@@ -1,21 +1,29 @@
 import Link, { LinkProps } from "next/link";
 import { ReactNode } from "react";
 
+type LinkWrapperProps = {
+  children: ReactNode;
+  isDropDown: boolean;
+  className?: string;
+} & (LinkProps & React.HTMLAttributes<HTMLDivElement>);
+
 export default function LinkWrapper({
   children,
   isDropDown,
   className,
+  href,
   ...rest
-}: {
-  children: ReactNode;
-  isDropDown: boolean;
-  className: string;
-} & LinkProps) {
+}: LinkWrapperProps & { children: ReactNode }) {
   if (isDropDown) {
-    return <div className={className}>{children}</div>;
+    return (
+      <div className={className} {...rest}>
+        {children}
+      </div>
+    );
   }
+
   return (
-    <Link className={className} {...rest}>
+    <Link href={href} className={className}>
       {children}
     </Link>
   );

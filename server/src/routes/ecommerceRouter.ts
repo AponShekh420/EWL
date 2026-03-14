@@ -34,6 +34,11 @@ import { updateProductStatus } from "../controllers/ecommerce/product/updateProd
 import { getAllReview } from "../controllers/ecommerce/review/getAllReview";
 import { getAllReviewByProductId } from "../controllers/ecommerce/review/getAllReviewByProductId";
 import { updateReview } from "../controllers/ecommerce/review/updateReview";
+import { createShipping } from "../controllers/ecommerce/shipping/createShipping";
+import { deleteShipping } from "../controllers/ecommerce/shipping/deleteShipping";
+import { getAllShipping } from "../controllers/ecommerce/shipping/getAllShipping";
+import { getShippingById } from "../controllers/ecommerce/shipping/getShippingById";
+import { updateShipping } from "../controllers/ecommerce/shipping/updateShipping";
 import { addToWishlist } from "../controllers/ecommerce/wishlist/addToWishlist";
 import { deleteWishlist } from "../controllers/ecommerce/wishlist/deleteWishlist";
 import { getAllWishlist } from "../controllers/ecommerce/wishlist/getAllWishlist";
@@ -61,6 +66,10 @@ import {
   reviewValidationRules,
   validateReview,
 } from "../middleware/review/reviewMiddleware";
+import {
+  shippingValidationRules,
+  validateShipping,
+} from "../middleware/shipping/shippingMiddleware";
 const router = Router();
 
 const multiFileUploader = multerUploader("products");
@@ -169,4 +178,22 @@ router.delete("/subcategories/:id", deleteSubcategory);
 
 router.get("/subcategories", getSubAllCategories);
 
+//for shipping routes, you can add them here in the future
+router.post(
+  "/shipping",
+  authCheck,
+  shippingValidationRules,
+  validateShipping,
+  createShipping,
+);
+router.put(
+  "/shipping/:id",
+  authCheck,
+  shippingValidationRules,
+  validateShipping,
+  updateShipping,
+);
+router.delete("/shipping/:id", deleteShipping);
+router.get("/shipping/:id", getShippingById);
+router.get("/shipping", getAllShipping);
 export default router;

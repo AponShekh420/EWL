@@ -6,7 +6,7 @@ import { catchErrorSend } from "../../../utils/catchErrorSend";
 export const deleteReview = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const id = req.params?.id;
@@ -19,7 +19,7 @@ export const deleteReview = async (
 
     return res.status(200).json({
       success: true,
-      data: deleteReview,
+      data: deletedReview,
       message: `Review with id ${id} deleted successfully`,
     });
   } catch (error: unknown) {
