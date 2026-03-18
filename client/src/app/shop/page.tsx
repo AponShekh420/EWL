@@ -20,6 +20,7 @@ export default async function Shop({
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
   const query = await queryFormatter(searchParams);
+  console.log("query", query);
   const {
     data: productsData,
     price,

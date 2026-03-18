@@ -16,7 +16,7 @@ export default function Sidebar() {
 
   const dispatch = useDispatch();
   const isShowSidebar = useSelector(
-    (state: RootState) => state.sidebar.isShowSidebar
+    (state: RootState) => state.sidebar.isShowSidebar,
   );
 
   return (
@@ -39,27 +39,26 @@ export default function Sidebar() {
         </h5>
         <ul className="space-y-4">
           {sidebarLinks.map((link) => (
-            <li
-              key={link.id}
-              onClick={() => {
-                if (link.isDropdown) {
-                  const filterSiderbar = sidebarLinks.map((sidebarlink) => {
-                    if (sidebarlink.id == link.id) {
-                      return {
-                        ...sidebarlink,
-                        isShowDropdown: !sidebarlink.isShowDropdown,
-                      };
-                    }
-                    return sidebarlink;
-                  });
-                  setSidebarLinks(filterSiderbar as typeof sidebar_links);
-                } else {
-                  dispatch(toggleSidebar());
-                }
-              }}
-            >
+            <li key={link.id}>
               <LinkWrapper
                 href={link.url}
+                onClick={() => {
+                  console.log(link.isDropdown);
+                  if (link.isDropdown) {
+                    const filterSiderbar = sidebarLinks.map((sidebarlink) => {
+                      if (sidebarlink.id == link.id) {
+                        return {
+                          ...sidebarlink,
+                          isShowDropdown: !sidebarlink.isShowDropdown,
+                        };
+                      }
+                      return sidebarlink;
+                    });
+                    setSidebarLinks(filterSiderbar as typeof sidebar_links);
+                  } else {
+                    dispatch(toggleSidebar());
+                  }
+                }}
                 isDropDown={link.isDropdown as boolean}
                 className={`flex items-center justify-between gap-x-2 py-2 px-2 rounded-md text-gray-800 transition-colors duration-200  text-base hover:bg-gray-200 cursor-pointer ${
                   link.url === pathname ? "bg-gray-200 " : ""

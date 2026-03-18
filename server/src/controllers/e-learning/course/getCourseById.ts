@@ -12,7 +12,7 @@ export const getCourseBySlug = async (
     const slug = req.params?.slug;
     if (!slug) return next(createError(400, "Course slug is required"));
 
-    const course = await courseModel.findOne({ slug });
+    const course = await courseModel.findOne({ slug }).populate("speaker", "firstName lastName avatar _id userName");
     if (!course) {
       return next(createError(400, "Not found course"));
     }

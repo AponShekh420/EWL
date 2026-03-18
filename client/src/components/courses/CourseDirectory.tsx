@@ -1,34 +1,73 @@
-// app/page.tsx
+"use client"
+import { useEffect, useMemo, useState } from "react";
+import CourseCard from "../common/CourseCard";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getCourseByQuery } from "@/actions/course";
+import { debounce } from "@/utils/debounce";
+import { CourseType } from "@/types/Course";
+import { Icon } from "@iconify/react";
 
-import CourseCard from "./CourseCard";
-
-const courses = [
-  { id: 1, title: "Starting SEO as your Home Based Business", instructor: "Edward Norton", price: "30", image: "/images/courses/course.jpg", avatar: "/images/user.png" },
-  { id: 2, title: "Grow Personal Financial Security Thinking & Principles", instructor: "Emilie Bryant", price: "49", image: "/images/courses/course.jpg", avatar: "/images/user.png" },
-  { id: 3, title: "Grow Personal Financial Security Thinking & Principles", instructor: "Emilie Bryant", price: "49", image: "/images/courses/course.jpg", avatar: "/images/user.png" },
-  { id: 4, title: "Grow Personal Financial Security Thinking & Principles", instructor: "Emilie Bryant", price: "49", image: "/images/courses/course.jpg", avatar: "/images/user.png" },
-  { id: 5, title: "Grow Personal Financial Security Thinking & Principles", instructor: "Emilie Bryant", price: "49", image: "/images/courses/course.jpg", avatar: "/images/user.png" },
-  { id: 6, title: "Grow Personal Financial Security Thinking & Principles", instructor: "Emilie Bryant", price: "49", image: "/images/courses/course.jpg", avatar: "/images/user.png" },
-  { id: 7, title: "Grow Personal Financial Security Thinking & Principles", instructor: "Emilie Bryant", price: "49", image: "/images/courses/course.jpg", avatar: "/images/user.png" },
-  { id: 8, title: "Grow Personal Financial Security Thinking & Principles", instructor: "Emilie Bryant", price: "49", image: "/images/courses/course.jpg", avatar: "/images/user.png" },
-  { id: 9, title: "Grow Personal Financial Security Thinking & Principles", instructor: "Emilie Bryant", price: "49", image: "/images/courses/course.jpg", avatar: "/images/user.png" },
-  // ... duplicate for other 7 items
-];
 
 export default function CourseDirectory() {
+  const [tab, setTab] = useState<string>("");
+  const [search, setSearch] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
+  const [courses, setCourses] = useState<CourseType[]>([]);
+
+  const getCoursesByFilter = async () => {
+    try {
+      setLoading(true);
+      const query = `category=${tab}&search=${search}&status=${"publish"}`;
+      const { data } = await getCourseByQuery(query);
+      setCourses(data);
+      console.log("Fetched courses:", data);  
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+    } finally {
+      setLoading(false);
+    }
+    // Fetch courses based on the filter
+  }
+
+  const debouncedSearch = useMemo(
+    () =>
+      debounce((value: string) => {
+        setSearch(value);
+      }, 500),
+    [tab] // Recreate the debounced function when the tab changes
+  );
+
+  useEffect(() => {
+    // Fetch courses based on the selected tab (category)
+     getCoursesByFilter();
+  }, [tab, search]);
+
   return (
-    <main className="max-w-6xl mx-auto p-8 min-h-screen">
+    <main className="p-8 min-h-screen">
       
+      {/* tabs */}
+    <Tabs value={tab} onValueChange={setTab} className="w-full">
+      <div className="w-full mb-4 flex justify-center">
+        <TabsList variant="line">
+          <TabsTrigger value="">All</TabsTrigger>
+          <TabsTrigger value="men">Men</TabsTrigger>
+          <TabsTrigger value="women">Women</TabsTrigger>
+          <TabsTrigger value="couples">Couples</TabsTrigger>
+        </TabsList>
+      </div>
+    </Tabs>
+
       {/* Header & Search Bar */}
       <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
         <h2 className="text-gray-600 text-sm">
-          Showing <span className="text-teal font-bold">1-9</span> Of <span className="text-teal font-bold">62</span> Results
+          Showing <span className="text-teal font-bold">{courses.length}</span> Of <span className="text-teal font-bold">{courses.length}</span> Results
         </h2>
         
         <div className="relative w-full md:w-80">
           <input 
-            type="text" 
-            placeholder="Search Courses..." 
+            type="search" 
+            placeholder="Search by course title..."
+            onChange={(e) => debouncedSearch(e.target.value)}
             className="w-full bg-gray-100 border-none rounded px-4 py-2 text-sm focus:ring-2 focus:ring-teal outline-none"
           />
           <button className="absolute right-3 top-2.5 text-gray-400">
@@ -40,11 +79,24 @@ export default function CourseDirectory() {
       </div>
 
       {/* The 3x3 Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {courses.map(course => (
-          <CourseCard key={course.id} {...course} />
-        ))}
-      </div>
+      {loading ? (
+        <div className="flex items-center justify-center w-full mt-36">
+          <Icon icon="eos-icons:bubble-loading" width="50" height="50" className="text-teal"/>
+        </div>
+        ) : (
+        courses.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            {courses.map(course => (
+              <CourseCard key={course._id} title={course?.title || ""} slug={course?.slug || ""} thumbnail={course?.thumbnail || ""} speaker={course?.speaker || ""}/>
+            ))}
+          </div>) : (
+            <div className="flex flex-col items-center justify-center w-full mt-36 gap-4">
+              <Icon icon="mdi:folder-search-outline" width="50" height="50" className="text-gray-400"/>
+              <p className="text-gray-500">No courses found.</p>
+            </div>
+          )
+        )
+      }
     </main>
   );
 }

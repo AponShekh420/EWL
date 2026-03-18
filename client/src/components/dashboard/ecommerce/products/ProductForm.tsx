@@ -15,7 +15,6 @@ import {
   deleteExistingThumb,
   resetProductFields,
 } from "@/redux/features/product/productFormSlice";
-import { activeStep } from "@/redux/features/stepper/stepperSlice";
 import { RootState } from "@/redux/store";
 import { ProductType, ProductValidationErrors } from "@/types/Product";
 import { createFormData } from "@/utils/createFormData";
@@ -28,6 +27,11 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  activeStep,
+  nextStep,
+  prevStep,
+} from "@/redux/features/stepper/stepperSlice";
 
 const Editor = dynamic(
   () => import("@/components/dashboard/common/editor/Editor"),
@@ -119,7 +123,7 @@ export default function CreateProductForm({
   }, []);
 
   return (
-    <MultiStepper totalStep={totalStep}>
+    <MultiStepper totalStep={totalStep} step={step} activeStep={activeStep} nextStep={nextStep} prevStep={prevStep}>
       <form className="min-h-[50vh]" onSubmit={onHandleSubmit}>
         {step === 1 && (
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-8 lg:gap-4">
@@ -153,6 +157,7 @@ export default function CreateProductForm({
                   options={categories ? categories : []}
                   error={errors?.category?.msg}
                 />
+
                 <InputBox
                   name="product-tags"
                   label="Product tags"
@@ -165,19 +170,20 @@ export default function CreateProductForm({
                 />
               </div>
 
-              <div>
-                <Label className="mb-4 mt-8">Short description</Label>
-                <Editor
+              <div className="mt-8">
+                <TextBox
+                  label="Short description"
+                  name="Short description"
+                  placeholder="Write short description"
+                  className="min-h-30"
                   value={productForm.shortDescription}
-                  onChange={(val) =>
-                    dispatch(addProductField({ shortDescription: val }))
+                  onChange={(e) =>
+                    dispatch(
+                      addProductField({ shortDescription: e.target.value }),
+                    )
                   }
+                  error={errors?.shortDescription?.msg}
                 />
-                {errors.shortDescription && (
-                  <span className="text-red-500 text-xs mt-2 ml-1">
-                    {errors?.shortDescription?.msg}
-                  </span>
-                )}
               </div>
               <div>
                 <Label className="mb-4 mt-8">Full description</Label>
@@ -738,18 +744,6 @@ export default function CreateProductForm({
                 }
                 error={errors?.metaTitle?.msg}
               />
-              {path.includes("edit") && (
-                <InputBox
-                  name="meta-slug"
-                  label="Meta Slug"
-                  placeholder="Meta slug"
-                  value={productForm.slug}
-                  onChange={(e) =>
-                    dispatch(addProductField({ slug: e.target.value }))
-                  }
-                  error={errors?.slug?.msg}
-                />
-              )}
 
               <TextBox
                 label="Meta Description"

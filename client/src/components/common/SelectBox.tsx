@@ -31,11 +31,11 @@ export default function SelectBox({
   error,
 }: SelectBoxProps) {
   return (
-    <div className={className}>
+    <div className={className} key={value}>
       <Label htmlFor={name} className="capitalize  block mb-4">
         {label}
       </Label>
-      {value && (
+      {
         <Select onValueChange={onChange} value={value}>
           <SelectTrigger id={name} className="w-full py-5">
             <SelectValue placeholder={placeholder || "Select option"} />
@@ -48,7 +48,7 @@ export default function SelectBox({
             ))}
           </SelectContent>
         </Select>
-      )}
+      }
 
       {error && <span className="text-red-500 text-xs mt-2 ml-1">{error}</span>}
     </div>

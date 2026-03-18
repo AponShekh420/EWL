@@ -11,7 +11,7 @@ type MulterFile = Record<string, Express.Multer.File[]>;
 export const updateProduct = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const id = req.params?.id;
@@ -28,35 +28,59 @@ export const updateProduct = async (
     if (!oldProduct) return next(createError(404, "Product not found"));
 
     let slug;
+    let metaSlug;
     // If the title hasn't changed, keep the current slug
     if (body.title === oldProduct.title && oldProduct?.slug == body.slug) {
       slug = oldProduct.slug;
     } else {
       // Remove special characters and generate slug
-      const sanitizedTitle = body.metaTitle
-        ? body.metaTitle
-            .toLowerCase()
-            .trim()
-            .replace(/[^\w\s-]/g, "")
-        : body.title
-            .toLowerCase()
-            .trim()
-            .replace(/[^\w\s-]/g, "");
+      const sanitizedTitle = body.title
+        .toLowerCase()
+        .trim()
+        .replace(/[^\w\s-]/g, "");
 
       slug = sanitizedTitle.split(" ").join("-");
 
       // Check for duplicates excluding the current communtiy ID
-      const duplicateCommunityCount = await productModel.countDocuments({
+      const duplicateProductCount = await productModel.countDocuments({
         slug: { $regex: `^${slug}(-[0-9]*)?$`, $options: "i" },
         _id: { $ne: oldProduct._id },
       });
 
-      if (duplicateCommunityCount > 0) {
-        slug = `${slug}-${duplicateCommunityCount}`;
+      if (duplicateProductCount > 0) {
+        slug = `${slug}-${duplicateProductCount}`;
+      }
+    }
+    // If the title hasn't changed, keep the current metaSlug
+
+    if (
+      body.metaTitle === oldProduct.metaTitle &&
+      oldProduct?.metaSlug == body.metaSlug
+    ) {
+      metaSlug = oldProduct.metaSlug;
+      console.log(body.metaTitle, "old");
+    } else {
+      console.log(body.metaTitle);
+      // Remove special characters and generate slug
+      const sanitizedTitle = body.metaTitle
+        .toLowerCase()
+        .trim()
+        .replace(/[^\w\s-]/g, "");
+
+      metaSlug = sanitizedTitle.split(" ").join("-");
+
+      // Check for duplicates excluding the current communtiy ID
+      const duplicateProductCount = await productModel.countDocuments({
+        metaSlug: { $regex: `^${metaSlug}(-[0-9]*)?$`, $options: "i" },
+        _id: { $ne: oldProduct._id },
+      });
+
+      if (duplicateProductCount > 0) {
+        metaSlug = `${metaSlug}-${duplicateProductCount}`;
       }
     }
 
-    const updatedData: Record<string, any> = { ...body, slug };
+    const updatedData: Record<string, any> = { ...body, slug, metaSlug };
 
     // ---- IMAGES ----
     if (images?.length) {
@@ -85,7 +109,7 @@ export const updateProduct = async (
       {
         new: true,
         runValidators: true,
-      }
+      },
     );
     if (!updatedProduct)
       return next(createError(400, "Failed to update product"));
@@ -105,11 +129,11 @@ export const updateProduct = async (
     if (body.category !== oldProduct.category) {
       await CategoryModel.updateOne(
         { products: oldProduct._id },
-        { $pull: { products: oldProduct._id } }
+        { $pull: { products: oldProduct._id } },
       );
       await CategoryModel.updateOne(
         { name: body.category },
-        { $addToSet: { products: oldProduct._id } }
+        { $addToSet: { products: oldProduct._id } },
       );
     }
 
