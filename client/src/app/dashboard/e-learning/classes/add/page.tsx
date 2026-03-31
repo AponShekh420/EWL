@@ -1,5 +1,5 @@
 import PageHeading from "@/components/dashboard/common/PageHeading";
-import CreateCourseForm from "@/components/dashboard/e-learning/courses/CourseForm";
+import CreateClassForm from "@/components/dashboard/e-learning/classes/ClassForm";
 import { Button } from "@/components/ui/button";
 import { BASE_URL } from "@/utils/envVariable";
 import Link from "next/link";
@@ -29,7 +29,7 @@ export default async function CreateCourse() {
           </Button>
         </Link>
       </PageHeading>
-      <CreateCourseForm speakers={speakers} />
+      <CreateClassForm speakers={speakers} />
     </div>
   );
 }

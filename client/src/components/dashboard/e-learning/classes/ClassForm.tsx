@@ -13,7 +13,6 @@ import { RootState } from "@/redux/store";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
-import { CourseTabs } from "./CourseTabs";
 import dynamic from "next/dynamic";
 import { CourseType, CourseValidationErrors } from "@/types/Course";
 import { usePathname, useRouter } from "next/navigation";
@@ -23,6 +22,7 @@ import { BASE_URL } from "@/utils/envVariable";
 import toast from "react-hot-toast";
 import { getImageUrl } from "@/utils/getImageUrl";
 import { nextStep, activeStep, prevStep } from "@/redux/features/stepper/courseStepperSlice";
+import { ClassContents } from "./ ClassContents";
 const Editor = dynamic(
   () => import("@/components/dashboard/common/editor/Editor"),
   {
@@ -134,26 +134,6 @@ export default function CreateClassForm({
                   }
                   error={errors?.title?.msg}
                 />
-                <InputBox
-                  name="headline"
-                  label="Headline"
-                  placeholder="Course headline"
-                  value={courseForm?.headline}
-                  onChange={(e) =>
-                    dispatch(addCourseField({ headline: e.target.value }))
-                  }
-                  error={errors?.headline?.msg}
-                />
-                <InputBox
-                  name="bio"
-                  label="Bio"
-                  placeholder="Course bio"
-                  value={courseForm?.bio}
-                  onChange={(e) =>
-                    dispatch(addCourseField({ bio: e.target.value }))
-                  }
-                  error={errors?.bio?.msg}
-                />
                 <SelectBox
                   name="category"
                   label="Category"
@@ -195,67 +175,6 @@ export default function CreateClassForm({
                   ]}
                   error={errors?.status?.msg}
                 />
-                <InputBox
-                  name="date"
-                  label="Date"
-                  placeholder="Sun 6/18 - Sun 7/18"
-                  value={courseForm.date}
-                  onChange={(e) =>
-                    dispatch(addCourseField({ date: e.target.value }))
-                  }
-                  error={errors?.date?.msg}
-                />
-                <InputBox
-                  name="time"
-                  label="Time"
-                  placeholder="10:00 am est | q&a 1hr - 1 1/2hr"
-                  value={courseForm.time}
-                  onChange={(e) =>
-                    dispatch(addCourseField({ time: e.target.value }))
-                  }
-                  error={errors?.time?.msg}
-                />
-                <InputBox
-                  name="lectures"
-                  label="Lectures"
-                  placeholder="4 classes 1 Q&A"
-                  value={courseForm.lectures}
-                  onChange={(e) =>
-                    dispatch(addCourseField({ lectures: e.target.value }))
-                  }
-                  error={errors?.lectures?.msg}
-                />
-                <div className="flex items-end gap-x-0.5 min-w-full">
-                  <InputBox
-                    parentClassName="w-full"
-                    name="durationNumber"
-                    label="Duration"
-                    placeholder="0"
-                    type="number"
-                    value={courseForm.durationNumber}
-                    onChange={(e) =>
-                      dispatch(addCourseField({ durationNumber: e.target.value }))
-                    }
-                    error={errors?.durationNumber?.msg}
-                  />
-                  <SelectBox
-                    name="durationType"
-                    label=""
-                    defaultValue={courseForm.durationType}
-                    value={courseForm.durationType}
-                    onChange={(val) =>
-                      dispatch(addCourseField({ durationType: val }))
-                    }
-                    options={[
-                    { label: "Month(s)", value: "Month" },
-                    { label: "Week(s)", value: "Week" },
-                    { label: "Minute(s)", value: "Minute" },
-                    { label: "Day(s)", value: "Day" },
-                    { label: "Hour(s)", value: "Hour" },
-                    ]}
-                    error={errors?.durationType?.msg}
-                />
-                </div>
               </div>
             </div>
           </div>
@@ -428,7 +347,7 @@ export default function CreateClassForm({
         
         {step === 4 && (
           <div className="w-full">
-            <CourseTabs/>
+            <ClassContents/>
           </div>
         )}
         {step === 5 && (
