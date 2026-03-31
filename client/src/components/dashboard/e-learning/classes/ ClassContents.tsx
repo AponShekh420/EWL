@@ -25,7 +25,7 @@ const supportedAudioFormat = [
   "audio/mp4",    // m4a
   "audio/webm",
   "audio/aac"
-];
+]
 
 
 export function ClassContents() {

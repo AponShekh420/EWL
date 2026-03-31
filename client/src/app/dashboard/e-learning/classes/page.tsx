@@ -22,7 +22,7 @@ export default async function Courses({
   return (
     <div>
       <PageHeading
-        pageTitle="Courses"
+        pageTitle="Classes"
         breadcrumbList={[
           { name: "E-Learning", href: "" },
           { name: "Course List", href: "/e-learning/courses" },

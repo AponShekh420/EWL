@@ -16,7 +16,7 @@ export default async function CreateCourse() {
   return (
     <div>
       <PageHeading
-        pageTitle="Add Course"
+        pageTitle="Add Class"
         breadcrumbList={[
           { name: "E-Learning", href: "" },
           { name: "Courses", href: "/e-learning/courses" },
