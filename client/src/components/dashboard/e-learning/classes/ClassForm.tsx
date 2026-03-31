@@ -14,7 +14,6 @@ import { Icon } from "@iconify/react";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import dynamic from "next/dynamic";
-import { CourseType, CourseValidationErrors } from "@/types/Course";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { createFormData } from "@/utils/createFormData";
@@ -22,7 +21,8 @@ import { BASE_URL } from "@/utils/envVariable";
 import toast from "react-hot-toast";
 import { getImageUrl } from "@/utils/getImageUrl";
 import { nextStep, activeStep, prevStep } from "@/redux/features/stepper/courseStepperSlice";
-import { ClassContents } from "./ ClassContents";
+import { ClassContents } from "./ClassContents";
+import { ClassType, ClassValidationErrors } from "@/types/Class";
 const Editor = dynamic(
   () => import("@/components/dashboard/common/editor/Editor"),
   {
@@ -30,21 +30,19 @@ const Editor = dynamic(
   }
 );
 
-
-
 export default function CreateClassForm({
   speakers,
   courseData,
 }: {
   speakers?: { label: string; value: string }[];
-  courseData?: CourseType;
+  classData?: ClassType;
 }) {
   const dispatch = useDispatch();
   const { step } = useSelector((state: RootState) => state.courseStepper);
   const courseForm = useSelector((state: RootState) => state.courseForm);
   const path = usePathname();
   const router = useRouter();
-  const [errors, setErrors] = useState<CourseValidationErrors>({});
+  const [errors, setErrors] = useState<ClassValidationErrors>({});
   const totalStep = 6;
 
   const onHandleSubmit = async (e: React.FormEvent) => {
@@ -347,7 +345,7 @@ export default function CreateClassForm({
         
         {step === 4 && (
           <div className="w-full">
-            <ClassContents/>
+            <ClassContents errors={errors}/>
           </div>
         )}
         {step === 5 && (
