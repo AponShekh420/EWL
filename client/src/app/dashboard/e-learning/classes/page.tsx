@@ -13,11 +13,11 @@ export default async function Courses({
 }) {
   const query = await queryFormatter(searchParams);
   const res = await fetch(
-    BASE_URL + "/api/e-learning/courses-by-filter?" + query,
+    BASE_URL + "/api/e-learning/classes-by-filter?" + query,
   );
-  const { data: coursesData, pagination } = await res.json();
+  const { data: classesData, pagination } = await res.json();
   if (!res.ok) {
-    throw new Error("Failed to fetch courses");
+    throw new Error("Failed to fetch classes");
   }
   return (
     <div>
@@ -25,24 +25,24 @@ export default async function Courses({
         pageTitle="Classes"
         breadcrumbList={[
           { name: "E-Learning", href: "" },
-          { name: "Course List", href: "/e-learning/courses" },
+          { name: "Class List", href: "/e-learning/classes" },
         ]}
       >
         <Button variant="outline">
           <Icon icon="charm:upload" width="32" height="32" />
           <span>Export</span>
         </Button>
-        <Link href="/dashboard/e-learning/courses/add">
+        <Link href="/dashboard/e-learning/classes/add">
           <Button variant="blue">
             <Icon icon="ic:baseline-plus" width="32" height="32" />
-            <span>Add Courses</span>
+            <span>Add Classes</span>
           </Button>
         </Link>
       </PageHeading>
 
       {
-        coursesData && (
-          <ClassTable courses={coursesData} pagination={pagination}/>
+        classesData && (
+          <ClassTable classes={classesData} pagination={pagination}/>
         )
       }
     </div>

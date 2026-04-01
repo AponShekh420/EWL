@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { addCourseField, deleteExistingThumb, resetCourseFields } from "@/redux/features/course/courseFormSlice";
 import { RootState } from "@/redux/store";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
@@ -20,9 +19,10 @@ import { createFormData } from "@/utils/createFormData";
 import { BASE_URL } from "@/utils/envVariable";
 import toast from "react-hot-toast";
 import { getImageUrl } from "@/utils/getImageUrl";
-import { nextStep, activeStep, prevStep } from "@/redux/features/stepper/courseStepperSlice";
+import { nextStep, activeStep, prevStep } from "@/redux/features/stepper/classStepperSlice";
 import { ClassContents } from "./ClassContents";
 import { ClassType, ClassValidationErrors } from "@/types/Class";
+import { addClassField, deleteExistingThumb, resetClassFields } from "@/redux/features/class/classFormSlice";
 const Editor = dynamic(
   () => import("@/components/dashboard/common/editor/Editor"),
   {
@@ -32,14 +32,14 @@ const Editor = dynamic(
 
 export default function CreateClassForm({
   speakers,
-  courseData,
+  classData,
 }: {
   speakers?: { label: string; value: string }[];
   classData?: ClassType;
 }) {
   const dispatch = useDispatch();
-  const { step } = useSelector((state: RootState) => state.courseStepper);
-  const courseForm = useSelector((state: RootState) => state.courseForm);
+  const { step } = useSelector((state: RootState) => state.classStepper);
+  const classForm = useSelector((state: RootState) => state.classForm);
   const path = usePathname();
   const router = useRouter();
   const [errors, setErrors] = useState<ClassValidationErrors>({});
@@ -47,12 +47,12 @@ export default function CreateClassForm({
 
   const onHandleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const formData = createFormData(courseForm);
+    const formData = createFormData(classForm);
 
     if (path.includes("edit")) {
-      if (!courseData?._id) return;
+      if (!classData?._id) return;
       const res = await fetch(
-        BASE_URL + "/api/e-learning/course/" + courseData?._id,
+        BASE_URL + "/api/e-learning/class/" + classData?._id,
         {
           method: "PUT",
           body: formData,
@@ -66,14 +66,14 @@ export default function CreateClassForm({
       }
       if (data.success) {
         toast.success(data.message);
-        dispatch(resetCourseFields());
+        dispatch(resetClassFields());
         setTimeout(() => {
-          router.push("/dashboard/e-learning/courses");
+          router.push("/dashboard/e-learning/classes");
         }, 2000);
       }
     } else {
       setErrors({});
-      const res = await fetch(BASE_URL + "/api/e-learning/course", {
+      const res = await fetch(BASE_URL + "/api/e-learning/class", {
         method: "POST",
         body: formData,
       });
@@ -84,27 +84,31 @@ export default function CreateClassForm({
       }
       if (data.success) {
         toast.success(data.message);
-        dispatch(resetCourseFields());
+        dispatch(resetClassFields());
         dispatch(activeStep(1));
       }
     }
   };
 
   useEffect(() => {
-    if (!courseData) return;
-    const [durationNumber, durationType] = courseData?.duration
-      ? courseData?.duration.split(" ")
-      : ["", ""];
+    if (!classData) return;
+    
     dispatch(
-      addCourseField({
-        ...courseData,
+      addClassField({
+        ...classData,
         thumbnail: null,
-        speaker: courseData?.speaker,
-        category: courseData?.category,
-        durationType: durationType.trim() || "",
-        durationNumber: durationNumber.trim() || "",
-        existingThumbnail: courseData?.thumbnail,
-        existingAttachment: courseData?.attachment,
+        speaker: classData?.speaker,
+        category: classData?.category,
+        existingThumbnail: classData?.thumbnail,
+        existingAttachment: classData?.attachment,
+        audiosOne: [],
+        existingAudiosOne: classData?.audiosOne,
+        audiosTwo: [],
+        existingAudiosTwo: classData?.audiosTwo,
+        videosTwo: [],
+        videosOne: [],
+        existingVideosTwo: classData?.videosTwo,
+        existingVideosOne: classData?.videosOne,
       })
     );
   }, []);
@@ -115,9 +119,9 @@ export default function CreateClassForm({
         {step === 1 && (
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-8 lg:gap-4">
             <div>
-              <h5 className="font-bold text-lg">Course information</h5>
+              <h5 className="font-bold text-lg">Class information</h5>
               <p className=" text-gray-700 mt-2">
-                Add your course necessary information from here
+                Add your class necessary information from here
               </p>
             </div>
             <div>
@@ -125,20 +129,20 @@ export default function CreateClassForm({
                 <InputBox
                   name="title"
                   label="title"
-                  placeholder="Course title"
-                  value={courseForm.title}
+                  placeholder="Class title"
+                  value={classForm.title}
                   onChange={(e) =>
-                    dispatch(addCourseField({ title: e.target.value }))
+                    dispatch(addClassField({ title: e.target.value }))
                   }
                   error={errors?.title?.msg}
                 />
                 <SelectBox
                   name="category"
                   label="Category"
-                  defaultValue={courseForm?.category}
-                  value={courseForm.category}
+                  defaultValue={classForm?.category}
+                  value={classForm.category}
                   onChange={(val) =>
-                    dispatch(addCourseField({ category: val }))
+                    dispatch(addClassField({ category: val }))
                   }
                   options={[
                   { label: "Men", value: "men" },
@@ -150,10 +154,10 @@ export default function CreateClassForm({
                 <SelectBox
                   name="speaker"
                   label="Speaker"
-                  value={courseForm.speaker}
-                  defaultValue={courseForm?.speaker}
+                  value={classForm.speaker}
+                  defaultValue={classForm?.speaker}
                   onChange={(val) =>
-                    dispatch(addCourseField({ speaker: val }))
+                    dispatch(addClassField({ speaker: val }))
                   }
                   options={speakers ? speakers : []}
                   error={errors?.speaker?.msg}
@@ -161,10 +165,10 @@ export default function CreateClassForm({
                 <SelectBox
                   name="status"
                   label="Status"
-                  value={courseForm.status}
-                  defaultValue={courseForm?.status || "publish"}
+                  value={classForm.status}
+                  defaultValue={classForm?.status || "publish"}
                   onChange={(val) =>
-                    dispatch(addCourseField({ status: val }))
+                    dispatch(addClassField({ status: val }))
                   }
                   options={[
                     { label: "Pending", value: "pending" },
@@ -182,7 +186,7 @@ export default function CreateClassForm({
             <div>
               <h5 className="text-lg font-bold">Upload images</h5>
               <p className=" text-gray-700 mt-2">
-                Upload your course thumbnail image here
+                Upload your class thumbnail image here
               </p>
             </div>
             <div className="grid sm:grid-cols-1 gap-8">
@@ -194,7 +198,7 @@ export default function CreateClassForm({
                   onFileChange={(files) => {
                     if (files && files?.length > 0) {
                       console.log(files);
-                      dispatch(addCourseField({ thumbnail: files[0] }));
+                      dispatch(addClassField({ thumbnail: files[0] }));
                     }
                   }}
                 />
@@ -205,10 +209,10 @@ export default function CreateClassForm({
                 )}
 
                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-4">
-                  {courseForm.thumbnail && (
+                  {classForm.thumbnail && (
                     <div className="relative w-fit">
                       <Image
-                        src={URL.createObjectURL(courseForm?.thumbnail)}
+                        src={URL.createObjectURL(classForm?.thumbnail)}
                         alt="preview"
                         width={220}
                         height={220}
@@ -218,7 +222,7 @@ export default function CreateClassForm({
                         className="p-1 bg-gray-200 rounded-md absolute top-2 right-2 hover:text-red-500"
                         type="button"
                         onClick={() =>
-                          dispatch(addCourseField({ thumbnail: null }))
+                          dispatch(addClassField({ thumbnail: null }))
                         }
                       >
                         <Icon
@@ -229,12 +233,12 @@ export default function CreateClassForm({
                       </button>
                     </div>
                   )}
-                  {courseForm.existingThumbnail && (
+                  {classForm.existingThumbnail && (
                     <div className="relative w-fit">
                       <Image
                         src={getImageUrl(
-                          courseForm.existingThumbnail,
-                          "courses"
+                          classForm.existingThumbnail,
+                          "classes"
                         )}
                         alt="preview"
                         width={220}
@@ -245,12 +249,12 @@ export default function CreateClassForm({
                         className="p-1 bg-gray-200 rounded-md absolute top-2 right-2 hover:text-red-500"
                         type="button"
                         onClick={() => {
-                          if (!courseForm.existingThumbnail) {
+                          if (!classForm.existingThumbnail) {
                             return;
                           }
 
                           dispatch(
-                            deleteExistingThumb(courseForm.existingThumbnail)
+                            deleteExistingThumb(classForm.existingThumbnail)
                           );
                         }}
                       >
@@ -282,11 +286,11 @@ export default function CreateClassForm({
                 name="installment-months"
                 label="Installment Months"
                 placeholder="25"
-                disabled={(courseForm.module == "" || courseForm.module == "0") ? false : true}
+                disabled={(classForm.module == "" || classForm.module == "0") ? false : true}
                 icon="$"
-                value={courseForm.installmentMonths}
+                value={classForm.installmentMonths}
                 onChange={(e) =>
-                  dispatch(addCourseField({ installmentMonths: e.target.value, module: 0 }))
+                  dispatch(addClassField({ installmentMonths: e.target.value, module: 0 }))
                 }
                 error={errors?.installmentMonths?.msg}
               />
@@ -295,11 +299,11 @@ export default function CreateClassForm({
                 name="Module"
                 label="Module"
                 placeholder="0"
-                disabled={(courseForm.installmentMonths == "" || courseForm.installmentMonths == "0") ? false : true}
+                disabled={(classForm.installmentMonths == "" || classForm.installmentMonths == "0") ? false : true}
                 icon="$"
-                value={courseForm.module}
+                value={classForm.module}
                 onChange={(e) =>
-                  dispatch(addCourseField({ module: e.target.value, installmentMonths: 0 }))
+                  dispatch(addClassField({ module: e.target.value, installmentMonths: 0 }))
                 }
                 error={errors?.module?.msg}
               />
@@ -309,32 +313,32 @@ export default function CreateClassForm({
                 label="Price"
                 placeholder="20"
                 icon="$"
-                value={courseForm.price}
+                value={classForm.price}
                 onChange={(e) =>
-                  dispatch(addCourseField({ price: e.target.value }))
+                  dispatch(addClassField({ price: e.target.value }))
                 }
                 error={errors?.price?.msg}
               />
             
-              <div className={`${courseForm?.offline ? "-space-y-1.5" : "space-y-6"}`}>
+              <div className={`${classForm?.offline ? "-space-y-1.5" : "space-y-6"}`}>
                 <div className="flex items-center gap-x-2">
                   <Checkbox
                     className="size-5 checkbox-t"
-                    checked={courseForm.offline}
+                    checked={classForm.offline}
                     onCheckedChange={(val) =>
-                      dispatch(addCourseField({ offline: val }))
+                      dispatch(addClassField({ offline: val }))
                     }
                   />
-                  <Label>Enable offline course</Label>
+                  <Label>Enable offline class</Label>
                 </div>
                 <InputBox
-                parentClassName={courseForm?.offline ? "block" : "hidden"}
+                parentClassName={classForm?.offline ? "block" : "hidden"}
                 name="externalLink"
                 label=""
                 placeholder="Normally used for offline classes. External link:"
-                value={courseForm.externalLink}
+                value={classForm.externalLink}
                 onChange={(e) =>
-                  dispatch(addCourseField({ externalLink: e.target.value }))
+                  dispatch(addClassField({ externalLink: e.target.value }))
                 }
                 error={errors?.externalLink?.msg}
                 />
@@ -361,7 +365,7 @@ export default function CreateClassForm({
                 <Label htmlFor={"custom-message"} className="capitalize mb-4">
                   Order confirmation Email
                 </Label>
-                <Editor onChange={(val) => dispatch(addCourseField({ customMessage: val }))} value={courseForm.customMessage}/>
+                <Editor onChange={(val) => dispatch(addClassField({ customMessage: val }))} value={classForm.customMessage}/>
                 <div>
                   <Input
                     name="attachment"
@@ -370,12 +374,12 @@ export default function CreateClassForm({
                     onChange={(e) => {
                       if (e.target.files) {
                         dispatch(
-                          addCourseField({
+                          addClassField({
                             attachment: e.target.files[0] as File,
                           })
                         );
                         dispatch(
-                          addCourseField({
+                          addClassField({
                             existingAttachment: "",
                           })
                         );
@@ -394,10 +398,10 @@ export default function CreateClassForm({
                 label="Message on checkout page"
                 name="checkout-message"
                 placeholder="Write checkout page message"
-                value={courseForm.checkoutPageMessage}
+                value={classForm.checkoutPageMessage}
                 onChange={(e) =>
                   dispatch(
-                    addCourseField({ checkoutPageMessage: e.target.value })
+                    addClassField({ checkoutPageMessage: e.target.value })
                   )
                 }
                 error={errors?.checkoutPageMessage?.msg}
@@ -418,9 +422,9 @@ export default function CreateClassForm({
                 name="meta-title"
                 label="Meta Title"
                 placeholder="Meta Title"
-                value={courseForm.metaTitle}
+                value={classForm.metaTitle}
                 onChange={(e) =>
-                  dispatch(addCourseField({ metaTitle: e.target.value }))
+                  dispatch(addClassField({ metaTitle: e.target.value }))
                 }
                 error={errors?.metaTitle?.msg}
               />
@@ -429,9 +433,9 @@ export default function CreateClassForm({
                   name="meta-slug"
                   label="Meta Slug"
                   placeholder="Meta slug"
-                  value={courseForm.slug}
+                  value={classForm.slug}
                   onChange={(e) =>
-                    dispatch(addCourseField({ slug: e.target.value }))
+                    dispatch(addClassField({ slug: e.target.value }))
                   }
                   error={errors?.slug?.msg}
                 />
@@ -442,9 +446,9 @@ export default function CreateClassForm({
                 name="Meta Description"
                 placeholder="Write meta description"
                 className="min-h-30"
-                value={courseForm.metaDescription}
+                value={classForm.metaDescription}
                 onChange={(e) =>
-                  dispatch(addCourseField({ metaDescription: e.target.value }))
+                  dispatch(addClassField({ metaDescription: e.target.value }))
                 }
                 error={errors?.metaDescription?.msg}
               />

@@ -19,13 +19,13 @@ export default async function CreateCourse() {
         pageTitle="Add Class"
         breadcrumbList={[
           { name: "E-Learning", href: "" },
-          { name: "Courses", href: "/e-learning/courses" },
-          { name: "Add", href: "/e-learning/courses/add" },
+          { name: "Classes", href: "/e-learning/classes" },
+          { name: "Add", href: "/e-learning/classes/add" },
         ]}
       >
-        <Link href="/dashboard/e-learning/courses">
+        <Link href="/dashboard/e-learning/classes">
           <Button variant="blue">
-            <span>See Courses</span>
+            <span>See Classes</span>
           </Button>
         </Link>
       </PageHeading>

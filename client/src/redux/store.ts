@@ -11,6 +11,7 @@ import shippingFormReducer from "@/redux/features/shipping/shippingFormSlice";
 import sidebarReducer from "@/redux/features/sidebar/sidebarSlice";
 import stepperReducer from "@/redux/features/stepper/stepperSlice";
 import CourseStepperReducer from "@/redux/features/stepper/courseStepperSlice";
+import ClassStepperReducer from "@/redux/features/stepper/classStepperSlice";
 import userFormReducer from "@/redux/features/user/userFormSlice";
 import { configureStore } from "@reduxjs/toolkit";
 export const store = configureStore({
@@ -18,6 +19,7 @@ export const store = configureStore({
     sidebar: sidebarReducer,
     stepper: stepperReducer,
     courseStepper: CourseStepperReducer,
+    classStepper: ClassStepperReducer,
     productForm: productFormReducer,
     categoryForm: categoryFormReducer,
     shippingForm: shippingFormReducer,

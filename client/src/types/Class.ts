@@ -30,6 +30,8 @@ export type ClassType = {
   module: number;
   audiosTwo?: string[];
   audiosOne?: string[];
+  videosOne?: string[];
+  videosTwo?: string[];
   contentOne?: string;
   contentTwo?: string;
 };
