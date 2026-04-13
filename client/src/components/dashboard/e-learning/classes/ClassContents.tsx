@@ -96,7 +96,7 @@ export function ClassContents({errors}: {errors: ClassValidationErrors}) {
             classForm.existingAudiosOne.length > 0 &&
             classForm.existingAudiosOne.map(
               (audio: string, index: number) => (
-                <div key={index} className="relative w-fit">
+                <div key={index} className="relative w-full h-full">
                   <div className='bg-black p-2'>
                     <AudioPlayer url={getImageUrl(audio, "classes")}/>
                   </div>

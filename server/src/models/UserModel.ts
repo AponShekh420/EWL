@@ -68,6 +68,7 @@ const userSchema = new Schema({
     required: true
   },
   courses: [{ type: Schema.Types.ObjectId, ref: "Course" }],
+  classes: [{ type: Schema.Types.ObjectId, ref: "Class" }],
   passwordResetToken: String,
   passwordResetExpires: Date,
 }, {timestamps: true});

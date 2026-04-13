@@ -17,6 +17,7 @@ export default function AudioPlayer({ url }: { url: string }) {
     <MediaController
       style={{
         width: "100%",
+        height: "50px",
       }}
     >
       <ReactPlayer

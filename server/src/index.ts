@@ -13,6 +13,8 @@ import recordingRouter from "./routes/e-learning/recordingRouter";
 import ecommerceRouter from "./routes/ecommerceRouter";
 import paidHotlineSpeakerRouter from "./routes/paidHotlineSpeakerRouter";
 import userRouter from "./routes/userRouter";
+import classRouter from "./routes/e-learning/classRouter";
+
 dotenv.config();
 
 const app = express();
@@ -57,6 +59,10 @@ app.use("/api/account", userRouter);
 app.use("/api/ecommerce", ecommerceRouter);
 // Paid speaker
 app.use("/api/paid-hotline", paidHotlineSpeakerRouter);
+
+// e-learning
+app.use("/api/e-learning", courseRouter);
+app.use("/api/e-learning", classRouter);
 
 app.get("/", (req: Request, res: Response) => {
   res.status(200).json({ msg: "Welcome to the home page" });
