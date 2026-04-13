@@ -66,7 +66,7 @@ export function ClassContents({errors}: {errors: ClassValidationErrors}) {
           {classForm.audiosOne &&
             classForm.audiosOne.length > 0 &&
             classForm.audiosOne.map((file: File, index) => (
-              <div key={index} className="relative w-fit h-full">
+              <div key={index} className="relative w-fit w-full">
                 <div className='bg-black p-2'>
                   <AudioPlayer url={URL.createObjectURL(file)}/>
                 </div>
@@ -222,7 +222,7 @@ export function ClassContents({errors}: {errors: ClassValidationErrors}) {
           {classForm.audiosTwo &&
             classForm.audiosTwo.length > 0 &&
             classForm.audiosTwo.map((file: File, index) => (
-              <div key={index} className="relative w-full">
+              <div key={index} className="relative w-fit w-full">
                 <div className='bg-black p-2'>
                   <AudioPlayer url={URL.createObjectURL(file)}/>
                 </div>
@@ -252,7 +252,7 @@ export function ClassContents({errors}: {errors: ClassValidationErrors}) {
             classForm.existingAudiosTwo.length > 0 &&
             classForm.existingAudiosTwo.map(
               (audio: string, index: number) => (
-                <div key={index} className="relative w-full h-full">
+                <div key={index} className="relative w-fit">
                   <div className='bg-black p-2'>
                     <AudioPlayer url={getImageUrl(audio, "classes")}/>
                   </div>

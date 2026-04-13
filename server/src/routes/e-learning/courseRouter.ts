@@ -6,7 +6,11 @@ import { getCourseBySlug } from "../../controllers/e-learning/course/getCourseBy
 import { updateCourse } from "../../controllers/e-learning/course/updateCourse";
 import { updateCourseStatus } from "../../controllers/e-learning/course/updateCourseStatus";
 import { multerUploader } from "../../lib/multer";
-import { courseValidationRules, validateCourse, validateUpdateCourse } from "../../middleware/course/courseValidator";
+import {
+  courseValidationRules,
+  validateCourse,
+  validateUpdateCourse,
+} from "../../middleware/course/courseValidator";
 
 import { Router } from "express";
 const router = Router();
@@ -22,7 +26,7 @@ router.post(
 
   courseValidationRules,
   validateCourse,
-  createCourse
+  createCourse,
 );
 router.put(
   "/course/:id",
@@ -32,12 +36,13 @@ router.put(
   ]),
   courseValidationRules,
   validateUpdateCourse,
-  updateCourse
+  updateCourse,
 );
 router.put("/course-status/:id", updateCourseStatus);
 router.delete("/course/:id", deleteCourse);
-router.get("/course/:slug", getCourseBySlug);
+
 router.get("/courses", getAllCourses);
 router.get("/courses-by-filter", getCourseByFilter);
+router.get("/course/:slug", getCourseBySlug);
 
 export default router;

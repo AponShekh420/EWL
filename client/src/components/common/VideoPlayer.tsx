@@ -1,4 +1,3 @@
-"use client"
 import ReactPlayer from "react-player";
 import {
   MediaController,
