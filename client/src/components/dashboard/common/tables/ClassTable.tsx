@@ -34,7 +34,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { CourseType } from "@/types/Course";
 import { PaginationType } from "@/types/Pagination";
 import { debounce } from "@/utils/debounce";
 import { BASE_URL } from "@/utils/envVariable";
@@ -48,19 +47,20 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 import toast from "react-hot-toast";
+import { ClassType } from "@/types/Class";
 
 
 export default function ClassTable({
-  courses,
+  classes,
   pagination,
 }: {
-  courses: CourseType[];
+  classes: ClassType[];
   pagination: PaginationType;
 }) {
   const router = useRouter();
     const deleteHandler = async (id: string) => {
       if (!id) return;
-      const res = await fetch(BASE_URL + "/api/e-learning/course/" + id, {
+      const res = await fetch(BASE_URL + "/api/e-learning/class/" + id, {
         method: "DELETE",
       });
       const data = await res.json();
@@ -70,7 +70,7 @@ export default function ClassTable({
     };
     const handleStatusChange = async (status: string, id: string) => {
       if (!id) return;
-      const res = await fetch(BASE_URL + "/api/e-learning/course-status/" + id, {
+      const res = await fetch(BASE_URL + "/api/e-learning/class-status/" + id, {
         method: "PUT",
         body: JSON.stringify({ status }),
         headers: {
@@ -89,7 +89,7 @@ export default function ClassTable({
     const debouncedSearch = useMemo(
       () =>
         debounce((value: string) => {
-          router.push(`/dashboard/e-learning/courses?search=${value}`);
+          router.push(`/dashboard/e-learning/classes?search=${value}`);
         }, 500),
       [router]
     );
@@ -99,7 +99,7 @@ export default function ClassTable({
       <div className="my-5">
         <div className="flex justify-between flex-col-reverse sm:flex-row gap-4 mt-5">
           <SearchBox
-            placeholder="Search by course title..."
+            placeholder="Search by class title..."
             onChange={(e) => debouncedSearch(e.target.value)}
           />
           <div className="space-x-4">
@@ -113,7 +113,7 @@ export default function ClassTable({
               </SheetTrigger>
               <SheetContent>
                 <SheetHeader>
-                  <SheetTitle>Course Filters</SheetTitle>
+                  <SheetTitle>Class Filters</SheetTitle>
                   <hr className="mt-2" />
                   <SheetDescription>
                     <span className="mt-4 inline-block">
@@ -161,15 +161,14 @@ export default function ClassTable({
       </div>
      <ScrollArea className="lg:w-[750px] xl:w-full overflow-x-scroll">
         <Table className=" !rounded-md border">
-          <TableCaption>A list of course list</TableCaption>
+          <TableCaption>A list of class list</TableCaption>
           <TableHeader className="bg-stone-100 ">
             <TableRow className="uppercase !h-13">
               <TableHead className="w-[400px] space-x-5 font-bold text-gray-500">
                 <Checkbox className="checkbox-t" />
-                <span>Course</span>
+                <span>Class</span>
               </TableHead>
               <TableHead className="font-bold text-gray-500">Price</TableHead>
-              <TableHead className="font-bold text-gray-500">Students</TableHead>
               <TableHead className="font-bold text-gray-500">Speaker</TableHead>
               <TableHead className="font-bold text-gray-500">Date</TableHead>
               <TableHead className="font-bold text-gray-500">Status</TableHead>
@@ -177,43 +176,42 @@ export default function ClassTable({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {courses?.map((course) => (
-              <TableRow key={course?._id}>
+            {classes?.map((classItem) => (
+              <TableRow key={classItem?._id}>
                 <TableCell>
                   <div className="flex gap-4 items-center">
                     <Checkbox className="checkbox-t" />
                     <div className="flex items-center gap-x-4">
                       <Image
-                        src={getImageUrl(course.thumbnail, "courses")}
-                        alt={course.title}
+                        src={getImageUrl(classItem.thumbnail, "classes")}
+                        alt={classItem.title}
                         width={50}
                         height={50}
                         className="size-12 object-cover rounded-md"
                       />
                       <div className="font-lexend-deca">
-                        <h5 className="font-medium">{course.title}</h5>
+                        <h5 className="font-medium">{classItem.title}</h5>
                         <p className="text-gray-500  mt-0.5">
-                          {course.category}
+                          {classItem.category}
                         </p>
                       </div>
                     </div>
                   </div>
                 </TableCell>
-                <TableCell>{course?.price}</TableCell>
-                <TableCell>{course?.students}</TableCell>
-                <TableCell>{course?.speaker?.firstName} {course?.speaker?.lastName}</TableCell>
+                <TableCell>{classItem?.price}</TableCell>
+                <TableCell>{classItem?.speaker?.firstName} {classItem?.speaker?.lastName}</TableCell>
                 
-                <TableCell className="font-medium">{moment(course?.updatedAt).format("lll")}</TableCell>
+                <TableCell className="font-medium">{moment(classItem?.updatedAt).format("lll")}</TableCell>
                 <TableCell>
                   <SelectBox
                     name="status"
                     label=""
-                    value={course?.status?.toLowerCase()}
+                    value={classItem?.status?.toLowerCase()}
                     className={`w-[150px] ${getProductStatusColor(
-                      course?.status as string
+                      classItem?.status as string
                     )}`}
                     placeholder="Change status"
-                    onChange={(val) => handleStatusChange(val, course?._id || "")}
+                    onChange={(val) => handleStatusChange(val, classItem?._id || "")}
                     options={[
                       { label: "Pending", value: "pending" },
                       { label: "Publish", value: "publish" },
@@ -224,7 +222,7 @@ export default function ClassTable({
                 <TableCell>
                   <div className="flex items-center gap-x-3">
                     <Link
-                      href={`/dashboard/e-learning/courses/edit/${course?.slug}`}
+                      href={`/dashboard/e-learning/classes/edit/${classItem?.slug}`}
                     >
                       <Button
                         size="icon"
@@ -239,7 +237,7 @@ export default function ClassTable({
                       </Button>
                     </Link>
                     <Link
-                      href={`/dashboard/e-learning/courses/${course?.slug}`}
+                      href={`/dashboard/e-learning/classes/${classItem?.slug}`}
                     >
                       <Button
                         size="icon"
@@ -250,7 +248,7 @@ export default function ClassTable({
                       </Button>
                     </Link>
                     <DeleteModal
-                      deleteAction={() => course?._id && deleteHandler(course._id)}
+                      deleteAction={() => classItem?._id && deleteHandler(classItem._id)}
                     >
                       <Button
                         size="icon"
@@ -277,7 +275,7 @@ export default function ClassTable({
             <PaginationItem>
               {pagination.page > 1 ? (
                 <PaginationPrevious
-                  href={`/dashboard/e-learning/courses?page=${
+                  href={`/dashboard/e-learning/classes?page=${
                     pagination.page - 1
                   }`}
                 />
@@ -295,7 +293,7 @@ export default function ClassTable({
                 <PaginationLink
                   className={pagination.page === page ? "bg-gray-100" : ""}
                   key={index}
-                  href={`/dashboard/e-learning/courses?page=${page}`}
+                  href={`/dashboard/e-learning/classes?page=${page}`}
                 >
                   {page}
                 </PaginationLink>
@@ -307,7 +305,7 @@ export default function ClassTable({
             <PaginationItem>
               {pagination.totalPages > pagination.page ? (
                 <PaginationNext
-                  href={`/dashboard/e-learning/courses?page=${
+                  href={`/dashboard/e-learning/classes?page=${
                     pagination.page + 1
                   }`}
                 />

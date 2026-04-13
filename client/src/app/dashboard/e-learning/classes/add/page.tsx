@@ -1,5 +1,5 @@
 import PageHeading from "@/components/dashboard/common/PageHeading";
-import CreateCourseForm from "@/components/dashboard/e-learning/courses/CourseForm";
+import CreateClassForm from "@/components/dashboard/e-learning/classes/ClassForm";
 import { Button } from "@/components/ui/button";
 import { BASE_URL } from "@/utils/envVariable";
 import Link from "next/link";
@@ -16,20 +16,20 @@ export default async function CreateCourse() {
   return (
     <div>
       <PageHeading
-        pageTitle="Add Course"
+        pageTitle="Add Class"
         breadcrumbList={[
           { name: "E-Learning", href: "" },
-          { name: "Courses", href: "/e-learning/courses" },
-          { name: "Add", href: "/e-learning/courses/add" },
+          { name: "Classes", href: "/e-learning/classes" },
+          { name: "Add", href: "/e-learning/classes/add" },
         ]}
       >
-        <Link href="/dashboard/e-learning/courses">
+        <Link href="/dashboard/e-learning/classes">
           <Button variant="blue">
-            <span>See Courses</span>
+            <span>See Classes</span>
           </Button>
         </Link>
       </PageHeading>
-      <CreateCourseForm speakers={speakers} />
+      <CreateClassForm speakers={speakers} />
     </div>
   );
 }
