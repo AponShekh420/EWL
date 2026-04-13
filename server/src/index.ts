@@ -9,10 +9,10 @@ import { errorHandler, notFoundHandler } from "./middleware/errorMiddleware";
 // routes
 import authRouter from "./routes/authRouter";
 import courseRouter from "./routes/e-learning/courseRouter";
+import recordingRouter from "./routes/e-learning/recordingRouter";
 import ecommerceRouter from "./routes/ecommerceRouter";
 import paidHotlineSpeakerRouter from "./routes/paidHotlineSpeakerRouter";
 import userRouter from "./routes/userRouter";
-
 dotenv.config();
 
 const app = express();
@@ -46,7 +46,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "../public")));
 app.use(express.urlencoded({ extended: true, limit: "5000mb" }));
 app.use(express.json({ limit: "5000mb" }));
-
+// e-learning
+app.use("/api/e-learning", recordingRouter);
+app.use("/api/e-learning", courseRouter);
 // Authentication
 app.use("/api/auth", authRouter);
 app.use("/api/account", userRouter);
@@ -55,9 +57,6 @@ app.use("/api/account", userRouter);
 app.use("/api/ecommerce", ecommerceRouter);
 // Paid speaker
 app.use("/api/paid-hotline", paidHotlineSpeakerRouter);
-
-// e-learning
-app.use("/api/e-learning", courseRouter);
 
 app.get("/", (req: Request, res: Response) => {
   res.status(200).json({ msg: "Welcome to the home page" });
