@@ -12,6 +12,7 @@ import courseRouter from "./routes/e-learning/courseRouter";
 import ecommerceRouter from "./routes/ecommerceRouter";
 import paidHotlineSpeakerRouter from "./routes/paidHotlineSpeakerRouter";
 import userRouter from "./routes/userRouter";
+import classRouter from "./routes/e-learning/classRouter";
 
 dotenv.config();
 
@@ -58,6 +59,7 @@ app.use("/api/paid-hotline", paidHotlineSpeakerRouter);
 
 // e-learning
 app.use("/api/e-learning", courseRouter);
+app.use("/api/e-learning", classRouter);
 
 app.get("/", (req: Request, res: Response) => {
   res.status(200).json({ msg: "Welcome to the home page" });

@@ -1,23 +1,23 @@
 import PageHeading from "@/components/dashboard/common/PageHeading";
-import CourseForm from "@/components/dashboard/e-learning/courses/CourseForm";
+import ClassForm from "@/components/dashboard/e-learning/classes/ClassForm";
 import { Button } from "@/components/ui/button";
 import { BASE_URL } from "@/utils/envVariable";
 import Link from "next/link";
 
-export default async function EditCourse({ params }: { params: { slug: string } }) {
+export default async function EditClass({ params }: { params: { slug: string } }) {
   const { slug } = await params;
 
-  const [courseRes, speakerRes] = await Promise.all([
-    fetch(BASE_URL + "/api/e-learning/course/" + slug),
+  const [classRes, speakerRes] = await Promise.all([
+    fetch(BASE_URL + "/api/e-learning/class/" + slug),
     fetch(BASE_URL + "/api/account/speakers"),
   ]);
 
-  const [courseData, speakersData] = await Promise.all([
-    courseRes.json(),
+  const [classData, speakersData] = await Promise.all([
+    classRes.json(),
     speakerRes.json(),
   ]);
-  if (!courseRes.ok) {
-    throw new Error("Failed to fetch course details");
+  if (!classRes.ok) {
+    throw new Error("Failed to fetch class details");
   }
   if (!speakerRes.ok) {
     throw new Error("Failed to fetch speakers");
@@ -31,21 +31,21 @@ export default async function EditCourse({ params }: { params: { slug: string } 
   return (
     <div>
       <PageHeading
-        pageTitle="Edit Course"
+        pageTitle="Edit Class"
         breadcrumbList={[
           { name: "E-learning", href: "" },
-          { name: "Courses", href: "/e-learning/courses" },
-          { name: `Edit`, href: `/e-learning/courses/edit/${slug}` },
-          { name: `${slug}`, href: `/e-learning/courses/edit/${slug}` },
+          { name: "Classes", href: "/e-learning/classes" },
+          { name: `Edit`, href: `/e-learning/classes/edit/${slug}` },
+          { name: `${slug}`, href: `/e-learning/classes/edit/${slug}` },
         ]}
       >
-        <Link href="/dashboard/e-learning/courses">
+        <Link href="/dashboard/e-learning/classes">
           <Button variant="blue">
-            <span>See Courses</span>
+            <span>See Classes</span>
           </Button>
         </Link>
       </PageHeading>
-      <CourseForm courseData={courseData?.data} speakers={speakers}/>
+      <ClassForm classData={classData?.data} speakers={speakers}/>
     </div>
   );
 }
