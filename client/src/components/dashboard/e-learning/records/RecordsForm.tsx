@@ -1,80 +1,54 @@
 "use client";
 
-import React, { useState, useRef } from 'react';
-import { Check, ChevronsUpDown, Plus, ChevronUp, Upload, Link as LinkIcon, Play, Pause, Volume2, Settings } from "lucide-react";
-import { cn } from "@/lib/utils";
+import SelectBox from "@/components/common/SelectBox";
 import { Button } from "@/components/ui/button";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Icon } from '@iconify/react';
-import ReactPlayer from 'react-player'
-
-// --- CUSTOM PLAYER COMPONENT (Matches your Orange/Black Screenshot) ---
-const CustomPlayer = ({ url, type }: { url: string; type: 'audio' | 'video' }) => {
-  const mediaRef = useRef<HTMLMediaElement>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [progress, setProgress] = useState(0);
-
-  const togglePlay = () => {
-    if (mediaRef.current?.paused) {
-      mediaRef.current.play();
-      setIsPlaying(true);
-    } else {
-      mediaRef.current?.pause();
-      setIsPlaying(false);
-    }
-  };
-
-  const handleTimeUpdate = () => {
-    if (mediaRef.current) {
-      const current = (mediaRef.current.currentTime / mediaRef.current.duration) * 100;
-      setProgress(current || 0);
-    }
-  };
-
-  // Convert YouTube link to embed if necessary
-  const getDisplayUrl = (link: string) => {
-    if (link.includes("youtube.com/watch?v=")) return link.replace("watch?v=", "embed/");
-    return link;
-  };
-
-  if (url.includes("youtube.com") || url.includes("youtu.be")) {
-    return (
-      <div className="aspect-video w-full rounded-xl overflow-hidden bg-black border-2 border-slate-800">
-        <iframe className="w-full h-full" src={getDisplayUrl(url)} allowFullScreen />
-      </div>
-    );
-  }
-
-  return (
-    <div className={`w-full ${type === 'video' ? 'bg-black p-2' : 'bg-[#111] p-4'} rounded-xl flex flex-col gap-2 border-2 border-slate-800`}>
-      {type === 'video' ? (
-        <video ref={mediaRef as any} onTimeUpdate={handleTimeUpdate} className="w-full rounded-lg" src={url} />
-      ) : (
-        <audio ref={mediaRef as any} onTimeUpdate={handleTimeUpdate} src={url} className="hidden" />
-      )}
-      
-      <div className="flex items-center gap-4">
-        <button onClick={togglePlay} className="text-[#FF9F00] hover:scale-110 transition-transform">
-          {isPlaying ? <Pause fill="#FF9F00" size={24} /> : <Play fill="#FF9F00" size={24} />}
-        </button>
-
-        <div className="flex-1 h-1 bg-slate-700 rounded-full relative overflow-hidden">
-          <div className="absolute top-0 left-0 h-full bg-white transition-all" style={{ width: `${progress}%` }} />
-        </div>
-
-        <div className="flex items-center gap-3 text-[#FF9F00]">
-          <Volume2 size={18} />
-          <Settings size={18} />
-        </div>
-      </div>
-    </div>
-  );
-};
+import { cn } from "@/lib/utils";
+import {
+  addRecordingField,
+  addRecordInsideList,
+  deleteExistingRecordInsideList,
+  deleteRecordInsideList,
+  resetRecordingFields,
+} from "@/redux/features/recording/recordingSlice";
+import { AppDispatch, RootState } from "@/redux/store";
+import {
+  IRecording,
+  IRecordingItem,
+  recordingCatType,
+  RecordingValidationErrors,
+} from "@/types/Recording";
+import { BASE_URL } from "@/utils/envVariable";
+import { getImageUrl } from "@/utils/getImageUrl";
+import { Icon } from "@iconify/react";
+import {
+  Check,
+  ChevronsUpDown,
+  ChevronUp,
+  Link as LinkIcon,
+  Plus,
+  Upload,
+} from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import ReactPlayer from "react-player";
+import { useDispatch, useSelector } from "react-redux";
 
 // --- MOCK DATA ---
 const classes = [
@@ -88,203 +62,665 @@ const speakers = [
   { value: "shipon-reich", label: "Shipon Reich" },
 ];
 
-export default function AddClassPage() {
+export default function AddClassPage({ record }: { record?: IRecording }) {
   // Select States
   const [openClass, setOpenClass] = useState(false);
-  const [classValue, setClassValue] = useState("");
+  const [openCourse, setOpenCourse] = useState(false);
   const [openSpeaker, setOpenSpeaker] = useState(false);
-  const [speakerValue, setSpeakerValue] = useState("");
-
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<RecordingValidationErrors>({});
+  const path = usePathname();
+  const router = useRouter();
   // Media States
   const [mediaType, setMediaType] = useState<"audio" | "video">("video");
-  const [sourceType, setSourceType] = useState<"external" | "internal">("external");
-  const [externalLink, setExternalLink] = useState("");
-  const [localFileUrl, setLocalFileUrl] = useState<string | null>(null);
-  const [classNumber, setClassNumber] = useState("");
-  
+
   // The Dynamic List
-  const [addedClasses, setAddedClasses] = useState<any[]>([]);
+  const [recordData, setRecordData] = useState({
+    externalLink: "",
+    sourceType: "internal",
+    recordNumber: "",
+    file: null as File | null,
+  });
+
+  const {
+    heading,
+    classId,
+    courseId,
+    gender,
+    speakerId,
+    recordingCategory,
+    recordings,
+    existingRecordings,
+    deletedRecordings,
+  } = useSelector((state: RootState) => state.recording);
+
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (localFileUrl) URL.revokeObjectURL(localFileUrl);
-      setLocalFileUrl(URL.createObjectURL(file));
+      setRecordData({ ...recordData, file: file });
+      setLoading(true);
     }
   };
 
   const handleAddClass = () => {
     const newEntry = {
       id: Date.now(),
-      number: classNumber || (addedClasses.length + 1),
-      url: sourceType === "external" ? externalLink : localFileUrl,
-      type: mediaType
+      recordNumber: Number(recordData.recordNumber) + 1,
+      sourceType: recordData.sourceType,
+      mediaType: mediaType,
+      externalLink: recordData.externalLink ? recordData.externalLink : "",
+      url:
+        recordData.sourceType === "external"
+          ? recordData.externalLink
+          : recordData.file
+            ? URL.createObjectURL(recordData.file)
+            : "",
+      file: recordData.file ? recordData.file : "",
     };
+
     if (newEntry.url) {
-      setAddedClasses([...addedClasses, newEntry]);
+      dispatch(addRecordInsideList(newEntry));
       // Reset form part
-      setExternalLink("");
-      setLocalFileUrl(null);
+      setRecordData({
+        externalLink: "",
+        sourceType: "internal",
+        recordNumber: "",
+        file: null as File | null,
+      });
     }
   };
 
+  const handleSubmit = async () => {
+    const formData = new FormData();
+    formData.append("heading", heading);
+    formData.append("recordingCategory", recordingCategory);
+    if (recordingCategory === "class") {
+      formData.append("classId", "696c6bf810f05265251fc23d");
+    }
+    if (recordingCategory === "course") {
+      formData.append("courseId", courseId);
+    }
+    if (recordingCategory === "free") {
+      formData.append("gender", gender);
+      formData.append("speakerId", speakerId);
+    }
+    recordings.forEach((rec: IRecordingItem, index) => {
+      formData.append(`recordings[${index}][id]`, rec.id);
+      if (rec.recordNumber) {
+        formData.append(
+          `recordings[${index}][recordNumber]`,
+          String(rec.recordNumber),
+        );
+      }
+
+      formData.append(`recordings[${index}][sourceType]`, rec.sourceType);
+      formData.append(`recordings[${index}][mediaType]`, rec.mediaType);
+      if (rec.externalLink) {
+        formData.append(`recordings[${index}][externalLink]`, rec.externalLink);
+      }
+
+      if (rec.file) {
+        formData.append(`recordings[${index}][file]`, rec.file);
+      }
+    });
+
+    if (path.includes("edit") && deletedRecordings.length > 0) {
+      deletedRecordings.forEach((rec: IRecordingItem) => {
+        if (rec.file) {
+          formData.append(`deletedImages`, rec.file as string);
+        }
+      });
+    }
+    try {
+      if (path.includes("edit")) {
+        if (!record?._id) return;
+        const response = await fetch(
+          BASE_URL + "/api/e-learning/recording/" + record._id,
+          {
+            method: "PUT",
+            body: formData,
+          },
+        );
+        const data = await response.json();
+        console.log("Server Response:", data);
+        if (data.errors && !data.success) {
+          setErrors(data.errors);
+          toast.error("Recording updated Fail!");
+        } else {
+          toast.success("Recording updated successfully");
+          dispatch(resetRecordingFields());
+          router.push("/dashboard/e-learning/records");
+        }
+      } else {
+        const response = await fetch(BASE_URL + "/api/e-learning/recording", {
+          method: "POST",
+          body: formData,
+        });
+        const data = await response.json();
+        console.log("Server Response:", data);
+
+        if (data.errors && !data.success) {
+          setErrors(data.errors);
+          toast.error("Recording created Fail!");
+        } else {
+          toast.success("Recording created successfully");
+          dispatch(resetRecordingFields());
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error((error as Error)?.message || "An error occurred");
+    }
+  };
+
+  useEffect(() => {
+    if (record) {
+      dispatch(
+        addRecordingField({
+          ...record,
+          classId: record.class || "",
+          speakerId: record.speaker || "",
+          courseId: record.course || "",
+          recordingCategory: record.recordingCategory as recordingCatType,
+          recordings: [],
+          existingRecordings: record.recordings,
+        }),
+      );
+    }
+  }, []);
   return (
     <div className="max-w-4xl mx-auto p-8 space-y-12 bg-white min-h-screen font-sans text-slate-900">
-      
+      <Button
+        onClick={handleSubmit}
+        variant="outline"
+        className="border-slate-300 px-6 text-lg uppercase  bg-teal text-white hover:bg-teal/80 transition-colors fixed bottom-10 right-10"
+      >
+        Submit
+      </Button>
       {/* SECTION 1: Header Inputs */}
       <div className="space-y-6">
-
-        <RadioGroup defaultValue="free" className="flex gap-8 py-2">
-          {['Free', 'Class', 'Course'].map((item) => (
-            <div key={item} className="flex items-center space-x-2 cursor-pointer">
-              <RadioGroupItem value={item.toLowerCase()} id={item} className="border-slate-300 text-teal focus:ring-teal" />
-              <Label htmlFor={item} className="text-slate-700 cursor-pointer">For {item}</Label>
+        <RadioGroup
+          defaultValue="free"
+          value={recordingCategory}
+          onValueChange={(value) =>
+            dispatch(
+              addRecordingField({
+                recordingCategory: value as recordingCatType,
+              }),
+            )
+          }
+          className="flex gap-8 py-2"
+        >
+          {["Free", "Class", "Course"].map((item) => (
+            <div
+              key={item}
+              className="flex items-center space-x-2 cursor-pointer"
+            >
+              <RadioGroupItem
+                value={item.toLowerCase()}
+                id={item}
+                className="border-slate-300 text-teal focus:ring-teal"
+              />
+              <Label htmlFor={item} className="text-slate-700 cursor-pointer">
+                For {item}
+              </Label>
             </div>
           ))}
         </RadioGroup>
 
         <div className="space-y-2">
           <Label className="text-slate-600 font-medium">Type Heading</Label>
-          <Input 
-            type="text" 
-            placeholder="Enter heading..." 
-            className="border-slate-200 focus-visible:ring-teal rounded-lg h-11 transition-all focus-visible:ring-2" 
+          <Input
+            type="text"
+            value={heading}
+            onChange={(e) =>
+              dispatch(addRecordingField({ heading: e.target.value }))
+            }
+            placeholder="Enter heading..."
+            className="border-slate-200 focus-visible:ring-teal rounded-lg h-11 transition-all focus-visible:ring-2"
           />
+          {errors?.heading && (
+            <p className="text-xs pl-1.5 text-red-500">
+              {errors?.heading?.msg}
+            </p>
+          )}
         </div>
-
+        {recordingCategory === "free" && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <SelectBox
+              error={errors?.gender?.msg}
+              name="gender"
+              label="Gender"
+              value={gender}
+              onChange={(val) => dispatch(addRecordingField({ gender: val }))}
+              options={[
+                { label: "Male", value: "male" },
+                { label: "Female", value: "female" },
+              ]}
+            />
+            <div className="space-y-3.5 flex flex-col">
+              <Label className="text-slate-600 font-medium">
+                Select Speaker or Type Name
+              </Label>
+              <Popover open={openSpeaker} onOpenChange={setOpenSpeaker}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    className="w-full justify-between border-slate-200 h-11 hover:border-teal rounded-lg"
+                  >
+                    {speakerId
+                      ? speakers.find((s) => s.value === speakerId)?.label
+                      : "Search or add speaker..."}
+                    <Plus className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-full p-0">
+                  <Command>
+                    <CommandInput
+                      placeholder="Type speaker name..."
+                      className="h-9"
+                    />
+                    <CommandEmpty>No speaker found.</CommandEmpty>
+                    <CommandGroup>
+                      {speakers.map((s) => (
+                        <CommandItem
+                          key={s.value}
+                          value={s.value}
+                          onSelect={(val) => {
+                            dispatch(addRecordingField({ speakerId: val }));
+                            setOpenSpeaker(false);
+                          }}
+                        >
+                          <Check
+                            className={cn(
+                              "mr-2 h-4 w-4",
+                              speakerId === s.value
+                                ? "opacity-100 text-teal"
+                                : "opacity-0",
+                            )}
+                          />
+                          {s.label}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+              {errors?.speakerId && (
+                <p className="text-xs pl-1.5 text-red-500">
+                  {errors?.speakerId?.msg}
+                </p>
+              )}
+            </div>
+          </div>
+        )}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-2 flex flex-col">
-            <Label className="text-slate-600 font-medium">Select Class</Label>
-            <Popover open={openClass} onOpenChange={setOpenClass}>
-              <PopoverTrigger asChild>
-                <Button variant="outline" role="combobox" className="w-full justify-between border-slate-200 h-11 hover:border-teal rounded-lg">
-                  {classValue ? classes.find((c) => c.value === classValue)?.label : "Select or search class..."}
-                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-full p-0">
-                <Command>
-                  <CommandInput placeholder="Search class..." className="h-9" />
-                  <CommandEmpty>No class found.</CommandEmpty>
-                  <CommandGroup>
-                    {classes.map((c) => (
-                      <CommandItem key={c.value} value={c.value} onSelect={(val) => { setClassValue(val); setOpenClass(false); }}>
-                        <Check className={cn("mr-2 h-4 w-4", classValue === c.value ? "opacity-100 text-teal" : "opacity-0")} />
-                        {c.label}
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                </Command>
-              </PopoverContent>
-            </Popover>
-          </div>
-
-          <div className="space-y-2 flex flex-col">
-            <Label className="text-slate-600 font-medium">Select Speaker or Type Name</Label>
-            <Popover open={openSpeaker} onOpenChange={setOpenSpeaker}>
-              <PopoverTrigger asChild>
-                <Button variant="outline" role="combobox" className="w-full justify-between border-slate-200 h-11 hover:border-teal rounded-lg">
-                  {speakerValue ? speakers.find((s) => s.value === speakerValue)?.label : "Search or add speaker..."}
-                  <Plus className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-full p-0">
-                <Command>
-                  <CommandInput placeholder="Type speaker name..." className="h-9" />
-                  <CommandEmpty>No speaker found.</CommandEmpty>
-                  <CommandGroup>
-                    {speakers.map((s) => (
-                      <CommandItem key={s.value} value={s.value} onSelect={(val) => { setSpeakerValue(val); setOpenSpeaker(false); }}>
-                        <Check className={cn("mr-2 h-4 w-4", speakerValue === s.value ? "opacity-100 text-teal" : "opacity-0")} />
-                        {s.label}
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                </Command>
-              </PopoverContent>
-            </Popover>
-          </div>
+          {recordingCategory === "class" && (
+            <div className="space-y-2 flex flex-col">
+              <Label className="text-slate-600 font-medium">Select Class</Label>
+              <Popover open={openClass} onOpenChange={setOpenClass}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    className="w-full justify-between border-slate-200 h-11 hover:border-teal rounded-lg"
+                  >
+                    {classId
+                      ? classes.find((c) => c.value === classId)?.label
+                      : "Select or search class..."}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-full p-0">
+                  <Command>
+                    <CommandInput
+                      placeholder="Search class..."
+                      className="h-9"
+                    />
+                    <CommandEmpty>No class found.</CommandEmpty>
+                    <CommandGroup>
+                      {classes.map((c) => (
+                        <CommandItem
+                          key={c.value}
+                          value={c.value}
+                          onSelect={(val) => {
+                            dispatch(addRecordingField({ classId: val }));
+                            setOpenClass(false);
+                          }}
+                        >
+                          <Check
+                            className={cn(
+                              "mr-2 h-4 w-4",
+                              classId === c.value
+                                ? "opacity-100 text-teal"
+                                : "opacity-0",
+                            )}
+                          />
+                          {c.label}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+              {errors?.classId && (
+                <p className="text-xs pl-1.5 text-red-500">
+                  {errors?.classId?.msg}
+                </p>
+              )}
+            </div>
+          )}
+          {recordingCategory === "course" && (
+            <div className="space-y-2 flex flex-col">
+              <Label className="text-slate-600 font-medium">
+                Select Course
+              </Label>
+              <Popover open={openCourse} onOpenChange={setOpenCourse}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    className="w-full justify-between border-slate-200 h-11 hover:border-teal rounded-lg"
+                  >
+                    {courseId
+                      ? classes.find((c) => c.value === courseId)?.label
+                      : "Select or search course..."}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-full p-0">
+                  <Command>
+                    <CommandInput
+                      placeholder="Search course..."
+                      className="h-9"
+                    />
+                    <CommandEmpty>No course found.</CommandEmpty>
+                    <CommandGroup>
+                      {classes.map((c) => (
+                        <CommandItem
+                          key={c.value}
+                          value={c.value}
+                          onSelect={(val) => {
+                            dispatch(addRecordingField({ courseId: val }));
+                            setOpenCourse(false);
+                          }}
+                        >
+                          <Check
+                            className={cn(
+                              "mr-2 h-4 w-4",
+                              courseId === c.value
+                                ? "opacity-100 text-teal"
+                                : "opacity-0",
+                            )}
+                          />
+                          {c.label}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+              {errors?.courseId && (
+                <p className="text-xs pl-1.5 text-red-500">
+                  {errors?.courseId?.msg}
+                </p>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
       {/* SECTION 2: Dynamic Class List */}
       <div className="space-y-6">
-        <h2 className="text-2xl font-bold tracking-tight">Class List:</h2>
-        {
-          addedClasses.length === 0 ? (
-            <p className="text-slate-500">No classes added yet. Use the form below to add your first class!</p>
-          ) : (
-            <div className="bg-teal rounded-2xl p-6 space-y-6">
-              <h4 className='text-center bg-[#270034] px-4 py-2 w-fit mx-auto rounded-md text-white'>Apon shekh</h4>
-              {addedClasses.map((item) => (
-                <div key={item.id}>
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="font-bold text-white">Class {item.number}</span>
-                    <div className='flex gap-4 items-center'>
-                      <span className='text-green-500 hover:text-green-800 font-semibold flex items-center gap-1 cursor-pointer transition-all duration-200'><Icon icon="material-symbols:edit-outline" width="20" height="20"/> Edit</span>
-                      <span className='text-red-800 hover:text-red-950 font-semibold flex items-center gap-1 cursor-pointer transition-all duration-200'><Icon icon="material-symbols:delete" width="20" height="20"/> Delete</span>
-                    </div>
+        <h2 className="text-2xl font-bold tracking-tight">
+          {recordingCategory === "free"
+            ? "Free Record List"
+            : recordingCategory === "class"
+              ? "Class List"
+              : "Course List"}
+        </h2>
+
+        {recordings.length === 0 && existingRecordings.length === 0 && (
+          <p className="text-slate-500">
+            No{" "}
+            {recordingCategory === "free"
+              ? "Free Records"
+              : recordingCategory === "class"
+                ? "Classes"
+                : "Courses"}{" "}
+            added yet. Use the form below to add your first{" "}
+            {recordingCategory === "free"
+              ? "free record"
+              : recordingCategory === "class"
+                ? "class List"
+                : "course List"}
+            !
+          </p>
+        )}
+        {recordings.length > 0 && (
+          <div className="bg-teal rounded-2xl p-6 space-y-6">
+            <h4 className="text-center bg-[#270034] px-4 py-2 w-fit mx-auto rounded-md text-white">
+              {heading}
+            </h4>
+            {recordings.map((item: IRecordingItem) => (
+              <div key={item.id}>
+                <div className="flex justify-between items-center mb-2">
+                  <span className="font-bold text-white">
+                    Class {item.recordNumber}
+                  </span>
+                  <div className="flex gap-4 items-center">
+                    <span className="text-green-500 hover:text-green-800 font-semibold flex items-center gap-1 cursor-pointer transition-all duration-200">
+                      <Icon
+                        icon="material-symbols:edit-outline"
+                        width="20"
+                        height="20"
+                      />{" "}
+                      Edit
+                    </span>
+                    <span
+                      onClick={() => dispatch(deleteRecordInsideList(item.id))}
+                      className="text-red-800 hover:text-red-950 font-semibold flex items-center gap-1 cursor-pointer transition-all duration-200"
+                    >
+                      <Icon
+                        icon="material-symbols:delete"
+                        width="20"
+                        height="20"
+                      />{" "}
+                      Delete
+                    </span>
                   </div>
-                  {/* <CustomPlayer url={item.url} type={item.type} /> */}
-                  {item.type === "audio" ? (
-                     <div className='bg-black p-2'>
-                      <ReactPlayer src={item.url} controls width="100%" height="50px"/>
-                     </div>
-                  ) : (
-                  <div className="aspect-video w-full overflow-hidden rounded-xl bg-black">
-                    <ReactPlayer 
-                      src={item.url} 
-                      controls 
-                      width="100%" 
-                      height="100%" 
+                </div>
+                {/* <CustomPlayer url={item.url} type={item.type} /> */}
+                {item.mediaType === "audio" ? (
+                  <div className="bg-black p-2">
+                    <ReactPlayer
+                      src={item.url}
+                      controls
+                      width="100%"
+                      height="50px"
                     />
                   </div>
-                  )}
+                ) : (
+                  <div className="aspect-video w-full overflow-hidden rounded-xl bg-black">
+                    <ReactPlayer
+                      src={item.url}
+                      controls
+                      width="100%"
+                      height="100%"
+                    />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+        {existingRecordings.length > 0 && (
+          <div className="bg-teal rounded-2xl p-6 space-y-6">
+            <h4 className="text-center bg-[#270034] px-4 py-2 w-fit mx-auto rounded-md text-white capitalize">
+              {heading}
+            </h4>
+            {existingRecordings.map((item: IRecordingItem) => (
+              <div key={item.id}>
+                <div className="flex justify-between items-center mb-2">
+                  <span className="font-bold text-white">
+                    Class {item.recordNumber}
+                  </span>
+                  <div className="flex gap-4 items-center">
+                    <span className="text-green-500 hover:text-green-800 font-semibold flex items-center gap-1 cursor-pointer transition-all duration-200">
+                      <Icon
+                        icon="material-symbols:edit-outline"
+                        width="20"
+                        height="20"
+                      />{" "}
+                      Edit
+                    </span>
+                    <span
+                      onClick={() => {
+                        dispatch(deleteExistingRecordInsideList(item.id));
+                      }}
+                      className="text-red-800 hover:text-red-950 font-semibold flex items-center gap-1 cursor-pointer transition-all duration-200"
+                    >
+                      <Icon
+                        icon="material-symbols:delete"
+                        width="20"
+                        height="20"
+                      />{" "}
+                      Delete
+                    </span>
+                  </div>
                 </div>
-              ))}
-            </div>
-          )
-        }
+                {/* <CustomPlayer url={item.url} type={item.type} /> */}
+                {item.mediaType === "audio" ? (
+                  <div className="bg-black p-2">
+                    <ReactPlayer
+                      src={
+                        item.file
+                          ? getImageUrl(item.file as string, "recording")
+                          : item.externalLink
+                      }
+                      controls
+                      width="100%"
+                      height="50px"
+                    />
+                  </div>
+                ) : (
+                  <div className="aspect-video w-full overflow-hidden rounded-xl bg-black">
+                    <ReactPlayer
+                      src={
+                        item.file
+                          ? getImageUrl(item.file as string, "recording")
+                          : item.externalLink
+                      }
+                      controls
+                      width="100%"
+                      height="100%"
+                    />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+        {errors?.recordings && (
+          <p className="text-xs pl-1.5 text-red-500">
+            {errors?.recordings?.msg}
+          </p>
+        )}
       </div>
 
       {/* SECTION 3: Add Class Form (Your Red-Bordered Layout) */}
       <div className="space-y-6 pt-4">
-        <h2 className="text-2xl font-bold tracking-tight">Add Class:</h2>
-        
-        <RadioGroup defaultValue="video" onValueChange={(v) => setMediaType(v as any)} className="flex gap-8">
+        <h2 className="text-2xl font-bold tracking-tight">
+          Add{" "}
+          {recordingCategory === "free"
+            ? "Free Record"
+            : recordingCategory === "class"
+              ? "Class"
+              : "Course"}
+          :
+        </h2>
+
+        <RadioGroup
+          defaultValue="video"
+          onValueChange={(v) => setMediaType(v as "audio" | "video")}
+          className="flex gap-8"
+        >
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="audio" id="audio_main" className="text-teal" />
-            <Label htmlFor="audio_main" className="font-medium">Audio</Label>
+            <RadioGroupItem
+              value="audio"
+              id="audio_main"
+              className="text-teal"
+            />
+            <Label htmlFor="audio_main" className="font-medium">
+              Audio
+            </Label>
           </div>
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="video" id="video_main" className="text-teal" />
-            <Label htmlFor="video_main" className="font-medium">Video</Label>
+            <RadioGroupItem
+              value="video"
+              id="video_main"
+              className="text-teal"
+            />
+            <Label htmlFor="video_main" className="font-medium">
+              Video
+            </Label>
           </div>
         </RadioGroup>
 
         <Card className="border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
           <CardContent className="p-8 space-y-8 bg-white">
-            
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-3">
-                <Label className="text-slate-600 font-bold uppercase text-xs">Class number*</Label>
-                <Input 
-                  type="number" 
-                  value={classNumber}
-                  onChange={(e) => setClassNumber(e.target.value)}
-                  className="border-slate-200 focus-visible:ring-teal rounded-lg h-11" 
+                <Label className="text-slate-600 font-bold uppercase text-xs">
+                  {recordingCategory === "free"
+                    ? "Free Record"
+                    : recordingCategory === "class"
+                      ? "Class"
+                      : "Course"}{" "}
+                  number*
+                </Label>
+                <Input
+                  type="number"
+                  min="0"
+                  value={recordData.recordNumber}
+                  onChange={(e) =>
+                    setRecordData({
+                      ...recordData,
+                      recordNumber: e.target.value,
+                    })
+                  }
+                  className="border-slate-200 focus-visible:ring-teal rounded-lg h-11"
                 />
               </div>
 
               <div className="space-y-3">
-                <Label className="text-slate-600 font-bold uppercase text-xs">Source Type</Label>
-                <RadioGroup defaultValue="external" onValueChange={(v) => setSourceType(v as any)} className="flex gap-8 pt-2">
+                <Label className="text-slate-600 font-bold uppercase text-xs">
+                  Source Type
+                </Label>
+                <RadioGroup
+                  defaultValue="internal"
+                  onValueChange={(v) =>
+                    setRecordData({ ...recordData, sourceType: v })
+                  }
+                  className="flex gap-8 pt-2"
+                >
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="external" id="external" className="text-teal" />
+                    <RadioGroupItem
+                      value="external"
+                      id="external"
+                      className="text-teal"
+                    />
                     <Label htmlFor="external">Link (YouTube/Web)</Label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="internal" id="internal" className="text-teal" />
+                    <RadioGroupItem
+                      value="internal"
+                      id="internal"
+                      className="text-teal"
+                    />
                     <Label htmlFor="internal">Local File</Label>
                   </div>
                 </RadioGroup>
@@ -292,28 +728,46 @@ export default function AddClassPage() {
             </div>
 
             <div className="space-y-4">
-              {sourceType === "external" ? (
+              {recordData.sourceType === "external" ? (
                 <div className="relative">
-                  <Input 
-                    placeholder="Paste YouTube or Video link here..." 
+                  <Input
+                    placeholder="Paste YouTube or Video link here..."
                     className="border-slate-200 focus-visible:ring-teal rounded-lg h-12 pl-10"
-                    onChange={(e) => setExternalLink(e.target.value)}
-                    value={externalLink}
+                    onChange={(e) =>
+                      setRecordData({
+                        ...recordData,
+                        externalLink: e.target.value,
+                      })
+                    }
+                    value={recordData.externalLink}
                   />
-                  <LinkIcon className="absolute left-3 top-3.5 text-slate-400" size={18} />
+                  <LinkIcon
+                    className="absolute left-3 top-3.5 text-slate-400"
+                    size={18}
+                  />
                 </div>
               ) : (
                 <div className="border-2 border-dashed border-slate-200 rounded-2xl p-8 text-center relative bg-slate-50/30">
-                  <input type="file" className="absolute inset-0 opacity-0 cursor-pointer" onChange={handleFileChange} />
+                  <input
+                    type="file"
+                    className="absolute inset-0 opacity-0 cursor-pointer"
+                    onChange={handleFileChange}
+                  />
                   <Upload className="mx-auto text-slate-300 mb-2" />
-                  <p className="text-sm text-slate-500">Click or drag {mediaType} file to upload</p>
-                  {localFileUrl && <p className="text-xs text-teal mt-2 font-bold">File ready!</p>}
+                  <p className="text-sm text-slate-500">
+                    Click or drag {mediaType} file to upload
+                  </p>
+                  {loading && (
+                    <p className="text-xs text-teal mt-2 font-bold">
+                      File ready!
+                    </p>
+                  )}
                 </div>
               )}
             </div>
 
             <div className="flex justify-end pt-4">
-              <Button 
+              <Button
                 onClick={handleAddClass}
                 className="bg-[#FFF9C4] hover:bg-[#FFF176] text-slate-900 border-2 border-slate-900 px-8 py-6 rounded-xl font-bold transition-all flex items-center gap-2"
               >
