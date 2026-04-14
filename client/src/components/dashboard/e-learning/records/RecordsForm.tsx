@@ -49,19 +49,10 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import ReactPlayer from "react-player";
 import { useDispatch, useSelector } from "react-redux";
-
-// --- MOCK DATA ---
-const classes = [
-  { value: "halacha-101", label: "Halacha 101" },
-  { value: "parsha-insights", label: "Parsha Insights" },
-];
-
-const speakers = [
-  { value: "avrohom-reich", label: "Avrohom Hillel Reich" },
-  { value: "apon-shekh", label: "Apon Shekh" },
-  { value: "shipon-reich", label: "Shipon Reich" },
-];
-
+type dropdownType = {
+  value: string;
+  label: string;
+};
 export default function AddClassPage({ record }: { record?: IRecording }) {
   // Select States
   const [openClass, setOpenClass] = useState(false);
@@ -71,6 +62,9 @@ export default function AddClassPage({ record }: { record?: IRecording }) {
   const [errors, setErrors] = useState<RecordingValidationErrors>({});
   const path = usePathname();
   const router = useRouter();
+  const [allSpeaker, setAllSpeaker] = useState<dropdownType[]>([]);
+  const [allClass, setAllClass] = useState<dropdownType[]>([]);
+  const [allCourse, setAllCourse] = useState<dropdownType[]>([]);
   // Media States
   const [mediaType, setMediaType] = useState<"audio" | "video">("video");
 
@@ -105,9 +99,20 @@ export default function AddClassPage({ record }: { record?: IRecording }) {
   };
 
   const handleAddClass = () => {
+    const merseRecordings = [...recordings, ...existingRecordings];
+    const maxRecording = merseRecordings.length
+      ? merseRecordings.reduce((max, item) =>
+          item.recordNumber > max.recordNumber ? item : max,
+        )
+      : null;
+
     const newEntry = {
       id: Date.now(),
-      recordNumber: Number(recordData.recordNumber) + 1,
+      recordNumber: recordData.recordNumber
+        ? Number(recordData.recordNumber)
+        : maxRecording?.recordNumber
+          ? Number(maxRecording?.recordNumber) + 1
+          : 1,
       sourceType: recordData.sourceType,
       mediaType: mediaType,
       externalLink: recordData.externalLink ? recordData.externalLink : "",
@@ -166,12 +171,20 @@ export default function AddClassPage({ record }: { record?: IRecording }) {
       }
     });
 
-    if (path.includes("edit") && deletedRecordings.length > 0) {
-      deletedRecordings.forEach((rec: IRecordingItem) => {
-        if (rec.file) {
-          formData.append(`deletedImages`, rec.file as string);
-        }
-      });
+    if (path.includes("edit")) {
+      if (deletedRecordings.length > 0) {
+        deletedRecordings.forEach((rec: IRecordingItem) => {
+          if (rec.file) {
+            formData.append(`deletedImages`, rec.file as string);
+          }
+        });
+      }
+      if (existingRecordings.length > 0) {
+        formData.append(
+          `existingRecordings`,
+          JSON.stringify(existingRecordings),
+        );
+      }
     }
     try {
       if (path.includes("edit")) {
@@ -230,6 +243,52 @@ export default function AddClassPage({ record }: { record?: IRecording }) {
       );
     }
   }, []);
+  const getApiData = async (url: string) => {
+    const res = await fetch(BASE_URL + url);
+    return res.json();
+  };
+  useEffect(() => {
+    const classUrl = "/api/e-learning/classes";
+    const courseUrl = "/api/e-learning/courses";
+    const speakerUrl = "/api/account/speakers";
+    if (recordingCategory === "class") {
+      getApiData(classUrl)
+        .then((data) => {
+          const classes = data.data.map(
+            (item: { title: string; _id: string }) => ({
+              label: item.title,
+              value: item._id,
+            }),
+          );
+          setAllClass(classes);
+        })
+        .catch((err) => console.log(err));
+    } else if (recordingCategory === "course") {
+      getApiData(courseUrl)
+        .then((data) => {
+          const courses = data.data.map(
+            (item: { title: string; _id: string }) => ({
+              label: item.title,
+              value: item._id,
+            }),
+          );
+          setAllCourse(courses);
+        })
+        .catch((err) => console.log(err));
+    } else {
+      getApiData(speakerUrl)
+        .then((data) => {
+          const speakers = data.data.map(
+            (item: { firstName: string; lastName: string; _id: string }) => ({
+              label: item.firstName + " " + item.lastName,
+              value: item._id,
+            }),
+          );
+          setAllSpeaker(speakers);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [recordingCategory]);
   return (
     <div className="max-w-4xl mx-auto p-8 space-y-12 bg-white min-h-screen font-sans text-slate-900">
       <Button
@@ -312,7 +371,7 @@ export default function AddClassPage({ record }: { record?: IRecording }) {
                     className="w-full justify-between border-slate-200 h-11 hover:border-teal rounded-lg"
                   >
                     {speakerId
-                      ? speakers.find((s) => s.value === speakerId)?.label
+                      ? allSpeaker.find((s) => s.value === speakerId)?.label
                       : "Search or add speaker..."}
                     <Plus className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
@@ -325,7 +384,7 @@ export default function AddClassPage({ record }: { record?: IRecording }) {
                     />
                     <CommandEmpty>No speaker found.</CommandEmpty>
                     <CommandGroup>
-                      {speakers.map((s) => (
+                      {allSpeaker.map((s) => (
                         <CommandItem
                           key={s.value}
                           value={s.value}
@@ -369,7 +428,7 @@ export default function AddClassPage({ record }: { record?: IRecording }) {
                     className="w-full justify-between border-slate-200 h-11 hover:border-teal rounded-lg"
                   >
                     {classId
-                      ? classes.find((c) => c.value === classId)?.label
+                      ? allClass.find((c) => c.value === classId)?.label
                       : "Select or search class..."}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
@@ -382,7 +441,7 @@ export default function AddClassPage({ record }: { record?: IRecording }) {
                     />
                     <CommandEmpty>No class found.</CommandEmpty>
                     <CommandGroup>
-                      {classes.map((c) => (
+                      {allClass.map((c) => (
                         <CommandItem
                           key={c.value}
                           value={c.value}
@@ -426,7 +485,7 @@ export default function AddClassPage({ record }: { record?: IRecording }) {
                     className="w-full justify-between border-slate-200 h-11 hover:border-teal rounded-lg"
                   >
                     {courseId
-                      ? classes.find((c) => c.value === courseId)?.label
+                      ? allCourse.find((c) => c.value === courseId)?.label
                       : "Select or search course..."}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
@@ -439,7 +498,7 @@ export default function AddClassPage({ record }: { record?: IRecording }) {
                     />
                     <CommandEmpty>No course found.</CommandEmpty>
                     <CommandGroup>
-                      {classes.map((c) => (
+                      {allCourse.map((c) => (
                         <CommandItem
                           key={c.value}
                           value={c.value}

@@ -35,10 +35,20 @@ export const createRecording = async (
         ? JSON.parse(body.recordings)
         : body.recordings;
 
-    const recordings = parsedRecordings.map((rec, index) => ({
-      ...rec,
-      file: files[index]?.filename || null,
-    }));
+    let index = 0;
+
+    const recordings = parsedRecordings.map((rec) => {
+      if (rec.externalLink) {
+        return rec;
+      } else {
+        const fileWithRec = {
+          ...rec,
+          file: files[index]?.filename || null,
+        };
+        index++;
+        return fileWithRec;
+      }
+    });
 
     const recordingsObj: {
       heading: string;

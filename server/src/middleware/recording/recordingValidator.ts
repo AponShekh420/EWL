@@ -119,7 +119,7 @@ export const validateRecording = (
         req.files as any,
       ).flat() as Express.Multer.File[];
       files.forEach((file) => {
-        deleteFileFromLocal(file.filename, "recordings");
+        deleteFileFromLocal(file.filename, "recording");
       });
     }
   };
