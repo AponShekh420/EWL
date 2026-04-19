@@ -36,7 +36,6 @@ export const createRecording = async (
         : body.recordings;
 
     let index = 0;
-
     const recordings = parsedRecordings.map((rec) => {
       if (rec.externalLink) {
         return rec;

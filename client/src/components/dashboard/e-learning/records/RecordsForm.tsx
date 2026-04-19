@@ -142,7 +142,7 @@ export default function AddClassPage({ record }: { record?: IRecording }) {
     formData.append("heading", heading);
     formData.append("recordingCategory", recordingCategory);
     if (recordingCategory === "class") {
-      formData.append("classId", "696c6bf810f05265251fc23d");
+      formData.append("classId", classId);
     }
     if (recordingCategory === "course") {
       formData.append("courseId", courseId);
