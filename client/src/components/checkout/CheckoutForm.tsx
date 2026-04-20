@@ -1,16 +1,57 @@
 "use client";
 import { addCheckoutField } from "@/redux/features/checkout/checkoutFormSlice";
 import { RootState } from "@/redux/store";
+import { Country, State } from "country-state-city";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import InputBox from "../common/InputBox";
 import SelectBox from "../common/SelectBox";
 import TextBox from "../common/TextBox";
 import { Checkbox } from "../ui/checkbox";
 import { Label } from "../ui/label";
-
+type SelectBoxFiled = {
+  label: string;
+  value: string;
+};
 export default function CheckoutForm() {
   const checkoutForm = useSelector((state: RootState) => state.checkout);
   const dispach = useDispatch();
+  const [countries] = useState(
+    Country.getAllCountries().map((item) => ({
+      label: item.name,
+      value: item.isoCode,
+    })),
+  );
+  const [states, setStates] = useState<SelectBoxFiled[]>([]);
+  const [statesDifferent, setStatesDifferent] = useState<SelectBoxFiled[]>([]);
+
+  // Update states whenever the country changes
+  useEffect(() => {
+    if (checkoutForm.country) {
+      const countryStates = State.getStatesOfCountry(checkoutForm.country);
+      const filterState = countryStates.map((item) => ({
+        label: item.name,
+        value: item.name.toLowerCase().replaceAll(" ", "-"),
+      }));
+      setStates(filterState);
+    } else {
+      setStates([]);
+    }
+  }, [checkoutForm.country]);
+  useEffect(() => {
+    if (checkoutForm.differentBillingAddress.country) {
+      const countryStates = State.getStatesOfCountry(
+        checkoutForm.differentBillingAddress.country,
+      );
+      const filterState = countryStates.map((item) => ({
+        label: item.name,
+        value: item.name.toLowerCase().replaceAll(" ", "-"),
+      }));
+      setStatesDifferent(filterState);
+    } else {
+      setStatesDifferent([]);
+    }
+  }, [checkoutForm.differentBillingAddress.country]);
   return (
     <form action="" className="my-10  ">
       {/* billing address */}
@@ -75,11 +116,7 @@ export default function CheckoutForm() {
             placeholder="Choose country"
             value={checkoutForm.country}
             onChange={(val) => dispach(addCheckoutField({ country: val }))}
-            options={[
-              { label: "Bangladesh", value: "bangladesh" },
-              { label: "United States", value: "united-states" },
-              { label: "England", value: "england" },
-            ]}
+            options={countries}
           />
         </div>
         <InputBox
@@ -109,11 +146,7 @@ export default function CheckoutForm() {
             placeholder="Choose state"
             value={checkoutForm.state}
             onChange={(val) => dispach(addCheckoutField({ state: val }))}
-            options={[
-              { label: "Newyork", value: "newyork" },
-              { label: "Barginia", value: "barginia" },
-              { label: "Ireland", value: "ireland" },
-            ]}
+            options={states}
           />
           <InputBox
             name="city"
@@ -262,10 +295,7 @@ export default function CheckoutForm() {
               )
             }
             placeholder="Choose country"
-            options={[
-              { label: "Bangladesh", value: "bangladesh" },
-              { label: "United States", value: "united-states" },
-            ]}
+            options={countries}
           />
 
           <InputBox
@@ -318,10 +348,7 @@ export default function CheckoutForm() {
                 )
               }
               placeholder="Choose state"
-              options={[
-                { label: "New York", value: "new-york" },
-                { label: "Virginia", value: "virginia" },
-              ]}
+              options={statesDifferent}
             />
 
             <InputBox

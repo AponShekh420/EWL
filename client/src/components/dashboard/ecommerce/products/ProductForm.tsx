@@ -634,10 +634,8 @@ export default function CreateProductForm({
                     dispatch(addProductField({ shippingClass: val }))
                   }
                   options={[
-                    { label: "Fruits", value: "fruits" },
-                    { label: "Grocery", value: "grocery" },
-                    { label: "Meat", value: "meat" },
-                    { label: "Cat Food", value: "cat-food" },
+                    { label: "none", value: "none" },
+                    { label: "My Shemen Class", value: "my-shemen-class" },
                   ]}
                   error={errors?.shippingClass?.msg}
                 />
