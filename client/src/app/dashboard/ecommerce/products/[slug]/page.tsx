@@ -54,20 +54,23 @@ export default async function ProductDetails({
           <div>
             <div className="flex items-center gap-2 ">
               <p className="font-semibold text-3xl">${product.salePrice}</p>
-              <div className="flex gap-2">
-                <p className="line-through text-gray-500 text-xl">
-                  ${Number(product.regularPrice)}.00
-                </p>
-                <span className="text-red-500">
-                  {" "}
-                  (
-                  {((product.regularPrice - product.salePrice) /
-                    product.regularPrice) *
-                    100}
-                  {"% "}
-                  OFF)
-                </span>
-              </div>
+              {product.regularPrice && (
+                <div className="flex gap-2">
+                  <p className="line-through text-gray-500 text-xl">
+                    ${Number(product.regularPrice)}.00
+                  </p>
+
+                  <span className="text-red-500">
+                    (
+                    {Math.round(
+                      ((product.regularPrice - product.salePrice) /
+                        product.regularPrice) *
+                        100,
+                    )}
+                    % OFF)
+                  </span>
+                </div>
+              )}
             </div>
             <p className="text-green-700 text-sm mt-2">
               Inclusive of all taxes
@@ -82,9 +85,14 @@ export default async function ProductDetails({
           <div className="mt-8">
             <h5 className="text-xl font-medium ">Products Description</h5>
             <hr className="my-4" />
-            <div
-              dangerouslySetInnerHTML={{ __html: product?.description }}
-            ></div>
+            {product.description ? (
+              <div
+                dangerouslySetInnerHTML={{ __html: product?.description }}
+              ></div>
+            ) : (
+              <p>{product.shortDescription}</p>
+            )}
+
             <div className="flex items-center gap-2 mt-5">
               <div className="flex items-center gap-1">
                 <Icon icon="cil:tags" width="25" height="25" />

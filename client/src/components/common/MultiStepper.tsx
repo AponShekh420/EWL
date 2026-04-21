@@ -1,13 +1,17 @@
 "use client";
+import { ProductValidationErrors } from "@/types/Product";
+import { UnknownAction } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import { Button } from "../ui/button";
-import { UnknownAction } from "@reduxjs/toolkit";
-
+type StepFields = {
+  [key: string]: string[];
+};
 export default function MultiStepper({
   children,
   className,
   totalStep = 2,
   step,
+  errorTrack,
   nextStep,
   prevStep,
   activeStep,
@@ -16,11 +20,26 @@ export default function MultiStepper({
   className?: string;
   totalStep: number;
   step: number;
+  errorTrack?: {
+    errors: ProductValidationErrors;
+    fields: StepFields;
+  };
   nextStep: () => UnknownAction;
   prevStep: () => UnknownAction;
   activeStep: (step: number) => UnknownAction;
 }) {
   const dispatch = useDispatch();
+
+  const isError = (index: number) => {
+    if (!errorTrack) return false;
+    const errorArray = errorTrack?.errors
+      ? Object.keys(errorTrack?.errors)
+      : [];
+    const fields = errorTrack?.fields;
+    const key = `step${index}` as keyof typeof errorTrack.fields;
+    const isTrue = fields[key].some((item) => errorArray.includes(item));
+    return isTrue;
+  };
 
   return (
     <div className={`mt-8 ${className}`}>
@@ -30,7 +49,8 @@ export default function MultiStepper({
             <div
               onClick={() => dispatch(activeStep(index + 1))}
               className={`flex-1 flex items-center before:absolute  before:size-4 before:rounded-full before:z-10 before:top-9 before:left-0 relative ${
-                index < step ? "before:bg-blue-500" : "before:bg-gray-300"}
+                index < step ? "before:bg-blue-500" : "before:bg-gray-300"
+              }
               }`}
               key={index}
             >
@@ -40,7 +60,11 @@ export default function MultiStepper({
                     "polygon(50% 0%, 100% 0, 100% 73%, 50% 100%, 1% 73%, 0 0)",
                 }}
                 className={`text-sm  px-2  pb-1.5 pt-0.5 rounded-t-md ${
-                  index < step ? "bg-blue-600 text-white" : "bg-gray-200"
+                  index < step
+                    ? isError(index + 1)
+                      ? "bg-red-500 text-white"
+                      : "bg-blue-600 text-white"
+                    : "bg-gray-200"
                 }`}
               >
                 {index + 1}
@@ -60,7 +84,7 @@ export default function MultiStepper({
         >
           {" "}
           <span
-            style={{ width: `${((step) / totalStep) * 100 + 1}%` }}
+            style={{ width: `${(step / totalStep) * 100 + 1}%` }}
             className={`bg-blue-500 h-full w-full absolute top-0 left-0 rounded-r-full`}
           ></span>
         </div>

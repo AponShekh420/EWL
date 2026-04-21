@@ -14,7 +14,7 @@ export const productValidationRules = [
   body("shortDescription")
     .notEmpty()
     .withMessage("Short description is required"),
-  body("description").notEmpty().withMessage("Description is required"),
+  body("description").optional(),
   body("sku")
     .notEmpty()
     .withMessage("SKU is required")
@@ -26,11 +26,9 @@ export const productValidationRules = [
     .isNumeric()
     .withMessage("Isbn must be a number"),
 
-  body("regularPrice")
-    .isNumeric()
-    .withMessage("Regular price must be a number"),
+  body("regularPrice").optional(),
   body("salePrice").isNumeric().withMessage("Sale price must be a number"),
-  body("stock").isNumeric().withMessage("Stock must be a number"),
+  body("stock").optional(),
   body("stockStatus").notEmpty().withMessage("Stock status is required"),
   body("isVisibleProductPage")
     .isBoolean()
@@ -53,13 +51,10 @@ export const productValidationRules = [
     .notEmpty()
     .withMessage("Dimension height is required"),
   body("taxStatus").notEmpty().withMessage("Tax status is required"),
-  body("taxClass").notEmpty().withMessage("Tax class is required"),
   body("shippingClass").notEmpty().withMessage("Shipping class is required"),
   body("enelope").isBoolean().withMessage("Enelope must be boolean"),
-  body("customMessage").notEmpty().withMessage("Custom message is required"),
-  body("checkoutPageMessage")
-    .notEmpty()
-    .withMessage("Checkout page message is required"),
+  body("customMessage").optional(),
+  body("checkoutPageMessage").optional(),
   body("metaTitle").optional(),
   body("metaDescription").optional(),
   body("slug").optional(),
@@ -68,7 +63,7 @@ export const productValidationRules = [
 export const validateProduct = (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const errors = validationResult(req).mapped();
 
@@ -94,20 +89,20 @@ export const validateProduct = (
     };
   }
 
-  if (!attachment?.length) {
-    errors.attachment = {
-      type: "field",
-      msg: "Attachment is required",
-      path: "attachment",
-      location: "body",
-    };
-  }
+  // if (!attachment?.length) {
+  //   errors.attachment = {
+  //     type: "field",
+  //     msg: "Attachment is required",
+  //     path: "attachment",
+  //     location: "body",
+  //   };
+  // }
 
   //Delete handler for uploaded files if has error
   const imageDeleteHandler = () => {
     if (req.files) {
       const files = Object.values(
-        req.files as any
+        req.files as any,
       ).flat() as Express.Multer.File[];
       files.forEach((file) => {
         deleteFileFromLocal(file.filename, "products");
@@ -128,13 +123,13 @@ export const validateProduct = (
 export const validateUpdateProduct = (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const errors = validationResult(req).mapped();
   const imageDeleteHandler = () => {
     if (req.files) {
       const files = Object.values(
-        req.files as any
+        req.files as any,
       ).flat() as Express.Multer.File[];
       files.forEach((file) => {
         deleteFileFromLocal(file.filename, "products");

@@ -70,9 +70,13 @@ const CartProduct = ({ item }: { item: CartItemType }) => {
         </p>
 
         <div className="mt-2">
-          <p className="text-gray-400 line-through text-xs">
-            ${item?.product?.regularPrice}
-          </p>
+          {item?.product?.regularPrice ? (
+            <p className="text-gray-400 line-through text-xs">
+              ${item?.product?.regularPrice}
+            </p>
+          ) : (
+            ""
+          )}
           <p className="text-[#FF4D00] text-xs font-bold">
             ${item?.product?.salePrice}
           </p>

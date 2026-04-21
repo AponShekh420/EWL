@@ -69,7 +69,6 @@ export type ProductFormState = {
   dimensionHeight: string;
   dimensionWidth: string;
   taxStatus: string;
-  taxClass: string;
   shippingClass: string;
   enelope: boolean;
 

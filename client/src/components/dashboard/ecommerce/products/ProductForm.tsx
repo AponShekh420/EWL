@@ -14,7 +14,13 @@ import {
   deleteExistingImages,
   deleteExistingThumb,
   resetProductFields,
+  stepProductFields,
 } from "@/redux/features/product/productFormSlice";
+import {
+  activeStep,
+  nextStep,
+  prevStep,
+} from "@/redux/features/stepper/stepperSlice";
 import { RootState } from "@/redux/store";
 import { ProductType, ProductValidationErrors } from "@/types/Product";
 import { createFormData } from "@/utils/createFormData";
@@ -27,11 +33,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  activeStep,
-  nextStep,
-  prevStep,
-} from "@/redux/features/stepper/stepperSlice";
 
 const Editor = dynamic(
   () => import("@/components/dashboard/common/editor/Editor"),
@@ -123,7 +124,14 @@ export default function CreateProductForm({
   }, []);
 
   return (
-    <MultiStepper totalStep={totalStep} step={step} activeStep={activeStep} nextStep={nextStep} prevStep={prevStep}>
+    <MultiStepper
+      totalStep={totalStep}
+      step={step}
+      activeStep={activeStep}
+      nextStep={nextStep}
+      prevStep={prevStep}
+      errorTrack={{ errors, fields: stepProductFields }}
+    >
       <form className="min-h-[50vh]" onSubmit={onHandleSubmit}>
         {step === 1 && (
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-8 lg:gap-4">
@@ -137,7 +145,7 @@ export default function CreateProductForm({
               <div className="grid sm:grid-cols-2 gap-8">
                 <InputBox
                   name="title"
-                  label="title"
+                  label="title *"
                   placeholder="Product title"
                   value={productForm.title}
                   onChange={(e) =>
@@ -148,7 +156,7 @@ export default function CreateProductForm({
 
                 <SelectBox
                   name="category"
-                  label="Category"
+                  label="Category *"
                   value={productForm?.category}
                   defaultValue={productForm?.category}
                   onChange={(val) =>
@@ -160,7 +168,7 @@ export default function CreateProductForm({
 
                 <InputBox
                   name="product-tags"
-                  label="Product tags"
+                  label="Product tags *"
                   placeholder='Write tags separated by comma (" , ")'
                   value={productForm.tags}
                   onChange={(e) =>
@@ -173,7 +181,7 @@ export default function CreateProductForm({
               <div className="mt-8">
                 <TextBox
                   label="Short description"
-                  name="Short description"
+                  name="Short description *"
                   placeholder="Write short description"
                   className="min-h-30"
                   value={productForm.shortDescription}
@@ -213,7 +221,7 @@ export default function CreateProductForm({
             <div className="grid sm:grid-cols-1 gap-8">
               <div className="">
                 <label htmlFor="" className="mb-4 inline-block font-medium">
-                  Thumbnail image
+                  Thumbnail image *
                 </label>
                 <DragAndDropFiles
                   onFileChange={(files) => {
@@ -290,7 +298,7 @@ export default function CreateProductForm({
               </div>
               <div className="">
                 <label htmlFor="" className="mb-4 inline-block font-medium">
-                  Product Gallery Image
+                  Product Gallery Image *
                 </label>
                 <DragAndDropFiles
                   MAX_FILES={5}
@@ -384,7 +392,7 @@ export default function CreateProductForm({
             <div className="grid sm:grid-cols-2 gap-8">
               <InputBox
                 name="sku"
-                label="SKU"
+                label="SKU *"
                 placeholder="SKU"
                 value={productForm.sku}
                 onChange={(e) =>
@@ -394,7 +402,7 @@ export default function CreateProductForm({
               />
               <InputBox
                 name="isbn"
-                label="GTIN, UPC, EAN, OR ISBN"
+                label="GTIN, UPC, EAN, OR ISBN *"
                 placeholder="978-3-16-148410-0"
                 value={productForm.isbn}
                 onChange={(e) =>
@@ -419,7 +427,7 @@ export default function CreateProductForm({
               <InputBox
                 type="number"
                 name="sale-price"
-                label="Sale Price"
+                label="Sale Price *"
                 placeholder="20"
                 min="0"
                 icon="$"
@@ -535,7 +543,7 @@ export default function CreateProductForm({
                 <InputBox
                   type="number"
                   name="weight"
-                  label="Weight (LBS)"
+                  label="Weight (LBS) *"
                   placeholder="0"
                   min="0"
                   value={productForm.weight}
@@ -547,7 +555,7 @@ export default function CreateProductForm({
                 <InputBox
                   type="number"
                   name="declared-value"
-                  label="Declared Value ($)"
+                  label="Declared Value ($) *"
                   placeholder="Use product's price"
                   min="0"
                   value={productForm.declaredValue}
@@ -558,7 +566,7 @@ export default function CreateProductForm({
                 />
               </div>
               <div>
-                <Label className="mb-4 mt-8">Dimensions (cm)</Label>
+                <Label className="mb-4 mt-8">Dimensions (cm) *</Label>
                 <div className="grid sm:grid-cols-3 gap-8">
                   <InputBox
                     type="number"
@@ -613,40 +621,21 @@ export default function CreateProductForm({
                     dispatch(addProductField({ taxStatus: val }))
                   }
                   options={[
-                    { label: "Fruits", value: "fruits" },
-                    { label: "Grocery", value: "grocery" },
-                    { label: "Meat", value: "meat" },
-                    { label: "Cat Food", value: "cat-food" },
+                    { label: "Yes", value: "yes" },
+                    { label: "No", value: "no" },
                   ]}
                   error={errors?.taxStatus?.msg}
                 />
                 <SelectBox
-                  name="tax-class"
-                  label="Tax class"
-                  value={productForm.taxClass}
-                  onChange={(val) =>
-                    dispatch(addProductField({ taxClass: val }))
-                  }
-                  options={[
-                    { label: "Fruits", value: "fruits" },
-                    { label: "Grocery", value: "grocery" },
-                    { label: "Meat", value: "meat" },
-                    { label: "Cat Food", value: "cat-food" },
-                  ]}
-                  error={errors?.taxClass?.msg}
-                />
-                <SelectBox
                   name="shipping-class"
-                  label="Shipping Class"
+                  label="Shipping Class *"
                   value={productForm.shippingClass}
                   onChange={(val) =>
                     dispatch(addProductField({ shippingClass: val }))
                   }
                   options={[
-                    { label: "Fruits", value: "fruits" },
-                    { label: "Grocery", value: "grocery" },
-                    { label: "Meat", value: "meat" },
-                    { label: "Cat Food", value: "cat-food" },
+                    { label: "none", value: "none" },
+                    { label: "My Shemen Class", value: "my-shemen-class" },
                   ]}
                   error={errors?.shippingClass?.msg}
                 />
@@ -673,43 +662,45 @@ export default function CreateProductForm({
                 Add your custom and checkout message
               </p>
             </div>
-            <div className="grid sm:grid-cols-2 gap-8">
-              <TextBox
-                label="Add a custom message"
-                name="custom-message"
-                placeholder="Write custom message"
-                value={productForm.customMessage}
-                onChange={(e) =>
-                  dispatch(addProductField({ customMessage: e.target.value }))
-                }
-                error={errors?.customMessage?.msg}
-              />
+            <div className="space-y-15">
               <div>
-                <Label className="mb-4">Upload Attachment</Label>{" "}
-                <Input
-                  name="attachment"
-                  type="file"
-                  onChange={(e) => {
-                    if (e.target.files) {
-                      dispatch(
-                        addProductField({
-                          attachment: e.target.files[0] as File,
-                        }),
-                      );
-                      dispatch(
-                        addProductField({
-                          existingAttachment: "",
-                        }),
-                      );
-                    }
-                  }}
+                <Label htmlFor={"custom-message"} className="capitalize mb-4">
+                  Order confirmation Email
+                </Label>
+                <Editor
+                  onChange={(val) =>
+                    dispatch(addProductField({ customMessage: val }))
+                  }
+                  value={productForm.customMessage}
                 />
-                {errors.customMessage && (
-                  <span className="text-red-500 text-xs mt-2 ml-1">
-                    {errors?.customMessage?.msg}
-                  </span>
-                )}
+                <div>
+                  <Input
+                    name="attachment"
+                    type="file"
+                    className="cursor-pointer rounded-t-none"
+                    onChange={(e) => {
+                      if (e.target.files) {
+                        dispatch(
+                          addProductField({
+                            attachment: e.target.files[0] as File,
+                          }),
+                        );
+                        dispatch(
+                          addProductField({
+                            existingAttachment: "",
+                          }),
+                        );
+                      }
+                    }}
+                  />
+                  {errors.customMessage && (
+                    <span className="text-red-500 text-xs mt-2 ml-1">
+                      {errors?.customMessage?.msg}
+                    </span>
+                  )}
+                </div>
               </div>
+
               <TextBox
                 label="Message on checkout page"
                 name="checkout-message"
@@ -724,6 +715,64 @@ export default function CreateProductForm({
               />
             </div>
           </div>
+          // <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-8 lg:gap-4">
+          //   <div>
+          //     <h5 className="text-lg font-bold">Message management</h5>
+          //     <p className=" text-gray-700 mt-2">
+          //       Add your custom and checkout message
+          //     </p>
+          //   </div>
+          //   <div className="grid sm:grid-cols-2 gap-8">
+          //     <TextBox
+          //       label="Add a custom message"
+          //       name="custom-message"
+          //       placeholder="Write custom message"
+          //       value={productForm.customMessage}
+          //       onChange={(e) =>
+          //         dispatch(addProductField({ customMessage: e.target.value }))
+          //       }
+          //       error={errors?.customMessage?.msg}
+          //     />
+          //     <div>
+          //       <Label className="mb-4">Upload Attachment</Label>{" "}
+          //       <Input
+          //         name="attachment"
+          //         type="file"
+          //         onChange={(e) => {
+          //           if (e.target.files) {
+          //             dispatch(
+          //               addProductField({
+          //                 attachment: e.target.files[0] as File,
+          //               }),
+          //             );
+          //             dispatch(
+          //               addProductField({
+          //                 existingAttachment: "",
+          //               }),
+          //             );
+          //           }
+          //         }}
+          //       />
+          //       {errors.customMessage && (
+          //         <span className="text-red-500 text-xs mt-2 ml-1">
+          //           {errors?.customMessage?.msg}
+          //         </span>
+          //       )}
+          //     </div>
+          //     <TextBox
+          //       label="Message on checkout page"
+          //       name="checkout-message"
+          //       placeholder="Write checkout page message"
+          //       value={productForm.checkoutPageMessage}
+          //       onChange={(e) =>
+          //         dispatch(
+          //           addProductField({ checkoutPageMessage: e.target.value }),
+          //         )
+          //       }
+          //       error={errors?.checkoutPageMessage?.msg}
+          //     />
+          //   </div>
+          // </div>
         )}
         {step === 6 && (
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-8 lg:gap-4">

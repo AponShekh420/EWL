@@ -19,3 +19,13 @@ export const getProductByQuery = async (query: string) => {
   }
   return res.json();
 };
+
+export const getProductByQueryWithVisible = async (query: string) => {
+  const res = await fetch(
+    BASE_URL + "/api/ecommerce/product-by-filter?visible=yes" + query,
+  );
+  if (!res.ok) {
+    throw new Error("Failed to fetch product by slug");
+  }
+  return res.json();
+};

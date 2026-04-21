@@ -26,6 +26,12 @@ export const getProductByFilter = async (
     if (query.tag) {
       searchQuery.tags = { $in: [query.tag] };
     }
+    if (query.tag) {
+      searchQuery.tags = { $in: [query.tag] };
+    }
+    if (query.visible) {
+      searchQuery.isVisibleProductPage = true;
+    }
     if (query.minPrice && query.maxPrice) {
       searchQuery.salePrice = {
         $gte: Number(query.minPrice),
