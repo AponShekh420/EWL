@@ -77,6 +77,7 @@ const singleFileUploader = multerUploader("category");
 import { getTaxAndShipping } from "../controllers/ecommerce/cart/getTaxAndShipping";
 import shipping from "../middleware/shipping/shipping";
 import createBox from "../controllers/ecommerce/usps/createBox";
+import shippingClassRulseHandler from "../helpers/shippingClassRulseHandler";
 
 /* 
 Developed by:Shipon islam 
@@ -125,7 +126,7 @@ router.delete("/cart/:productId", authCheck, deleteCart);
 router.get("/cart-list", authCheck, getAllCart);
 
 // cart tax and shipping calculation route
-router.post("/cart/tax-shipping", shipping, getTaxAndShipping);
+router.post("/cart/tax-shipping", shippingClassRulseHandler, shipping, getTaxAndShipping);
 
 router.post("/usps/create-box", createBox);
 

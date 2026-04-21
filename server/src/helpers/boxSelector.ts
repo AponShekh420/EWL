@@ -5,7 +5,7 @@ import UspsBoxModel from "../models/UspsBoxModel";
 export const findBestBoxForCart = async (items: { weight: number }[]) => {
 
   const boxes = await UspsBoxModel.find({ isActive: true });
-  console.log("Available boxes:", boxes);
+  // console.log("Available boxes:", boxes);
     if (!boxes.length) {
     return null; // no boxes configured
   }

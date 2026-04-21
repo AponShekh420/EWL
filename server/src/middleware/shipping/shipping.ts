@@ -10,10 +10,15 @@ import { DistanceUnitEnum, WeightUnitEnum } from "shippo";
 
 const shipping = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { cart, shippingAddress } = req.body;
+    const { shippingResultAndProducts, shippingAddress } = req.body;
+
+    if(!shippingResultAndProducts.uspsProducts || shippingResultAndProducts.uspsProducts.length === 0) {
+        next();
+        return;
+    }
 
     // 1. expand cart
-    const items = expandCart(cart);
+    const items = expandCart(shippingResultAndProducts.uspsProducts);
 
     // 2. total weight (lbs)
     const totalWeight = getTotalWeight(items);
@@ -85,7 +90,7 @@ const shipping = async (req: Request, res: Response, next: NextFunction) => {
       async: false
     });
 
-    req.body.shippingResult = {
+    req.body.usps = {
       success: true,
       boxUsed: result?.box?.name || "CUSTOM PARCEL",
       finalWeightOz: finalWeightLbs || (totalWeight * 16).toFixed(2),

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "asdfasdfasdf");
+const stripe = new Stripe("ssdkfjsdj");
 
 
 
@@ -24,7 +24,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "asdfasdfasdf");
 
 export const getTaxAndShipping = async (req: Request, res: Response) => {
   try {
-    const { cart, shippingAddress, shippingResult } = req.body;
+    const { cart, shippingAddress, shippingResultAndProducts, usps } = req.body;
     
     const TAX_CODE_MAP: Record<string, string> = {
       default: "txcd_99999999",        // general goods
@@ -60,8 +60,19 @@ export const getTaxAndShipping = async (req: Request, res: Response) => {
         }
     });
 
+    let shippingClassRates = [];
+
+    shippingResultAndProducts.myShemenClassProducts.length > 0 && shippingClassRates.push({myShemen: shippingResultAndProducts.myShemenClassProducts});
+    shippingResultAndProducts.ebookClassProducts.length > 0 && shippingClassRates.push({ebook: shippingResultAndProducts.ebookClassProducts});
+
     res.json({
-        shipping: shippingResult || null,
+        shipping: {
+          flatRate: shippingResultAndProducts.flatRate,
+          localPickup: shippingResultAndProducts.localPickup,
+          usps: usps,
+          impossibleProducts: shippingResultAndProducts.impossibleProducts,
+          shippingClassRates: shippingClassRates,
+        },
         tax: calculation.tax_amount_exclusive / 100,
         // shipping: {
         //   flatRate: 20,
