@@ -74,6 +74,11 @@ const router = Router();
 
 const multiFileUploader = multerUploader("products");
 const singleFileUploader = multerUploader("category");
+import { getTaxAndShipping } from "../controllers/ecommerce/cart/getTaxAndShipping";
+import shipping from "../middleware/shipping/shipping";
+import createBox from "../controllers/ecommerce/usps/createBox";
+import shippingClassRulseHandler from "../helpers/shippingClassRulseHandler";
+
 /* 
 Developed by:Shipon islam 
 Date: 31-10-2025
@@ -119,6 +124,13 @@ router.post("/cart", authCheck, addToCart);
 router.put("/cart/:productId", authCheck, updateCart);
 router.delete("/cart/:productId", authCheck, deleteCart);
 router.get("/cart-list", authCheck, getAllCart);
+
+// cart tax and shipping calculation route
+router.post("/cart/tax-shipping", shippingClassRulseHandler, shipping, getTaxAndShipping);
+
+router.post("/usps/create-box", createBox);
+
+
 //cart routes
 router.post("/wishlist", authCheck, addToWishlist);
 router.delete("/wishlist/:productId", authCheck, deleteWishlist);
