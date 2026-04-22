@@ -2,7 +2,7 @@
 import { Shippo } from "shippo";
 
 const client = new Shippo({
-  apiKeyHeader: `ShippoToken ${"sdfjdsjf"}`,
+  apiKeyHeader: `ShippoToken asdjfladjkf`,
 });
 
 export default client;

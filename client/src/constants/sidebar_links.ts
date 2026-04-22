@@ -17,14 +17,15 @@ export const sidebar_links = [
 
       { id: 102, name: "categories", url: "/dashboard/ecommerce/categories" },
       { id: 103, name: "shipping", url: "/dashboard/ecommerce/shipping" },
+      { id: 104, name: "USPS Configuration", url: "/dashboard/ecommerce/usps-configuration" },
       {
-        id: 104,
+        id: 105,
         name: "reviews",
         url: "/dashboard/ecommerce/products/reviews",
       },
-      { id: 105, name: "orders", url: "/dashboard/ecommerce/orders" },
+      { id: 106, name: "orders", url: "/dashboard/ecommerce/orders" },
 
-      { id: 106, name: "shop", url: "/dashboard/ecommerce/shop" },
+      { id: 107, name: "shop", url: "/dashboard/ecommerce/shop" },
     ],
   },
 

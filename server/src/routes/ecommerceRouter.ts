@@ -78,6 +78,7 @@ import { getTaxAndShipping } from "../controllers/ecommerce/cart/getTaxAndShippi
 import shipping from "../middleware/shipping/shipping";
 import createBox from "../controllers/ecommerce/usps/createBox";
 import shippingClassRulseHandler from "../helpers/shippingClassRulseHandler";
+import { getBoxes } from "../controllers/ecommerce/usps/getBoxes";
 
 /* 
 Developed by:Shipon islam 
@@ -128,7 +129,8 @@ router.get("/cart-list", authCheck, getAllCart);
 // cart tax and shipping calculation route
 router.post("/cart/tax-shipping", shippingClassRulseHandler, shipping, getTaxAndShipping);
 
-router.post("/usps/create-box", createBox);
+router.put("/usps/boxes/bulk-update", createBox);
+router.get("/usps/boxes", getBoxes);
 
 
 //cart routes

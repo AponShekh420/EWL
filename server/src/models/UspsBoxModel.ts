@@ -2,18 +2,37 @@
 import mongoose from "mongoose";
 
 const boxSchema = new mongoose.Schema({
-  name: String,
+  name: {
+    type: String,
+    required: true,
+    unique: true
+  },
   type: {
     type: String,
     enum: ["ENVELOPE", "BOX"]
   },
-  emptyWeight: Number, // lbs
-  dimensions: {
-    length: Number,
-    width: Number,
-    height: Number
+  emptyWeight: {
+    type: Number,
+    default: 0
   },
-  maxWeight: Number, // lbs
+  dimensions: {
+    length: {
+      type: Number,
+      default: 0
+    },
+    width: {
+      type: Number,
+      default: 0
+    },
+    height: {
+      type: Number,
+      default: 0
+    }
+  },
+  maxWeight: {
+    type: Number,
+    default: 0
+  },
   isActive: {
     type: Boolean,
     default: true

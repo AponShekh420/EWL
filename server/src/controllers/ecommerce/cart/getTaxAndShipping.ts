@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import Stripe from "stripe";
 
-const stripe = new Stripe("ssdkfjsdj");
+const stripe = new Stripe("ssdfsdfds");
 
 
 
@@ -36,7 +36,7 @@ export const getTaxAndShipping = async (req: Request, res: Response) => {
       TAX_CODE_MAP[item.category] || TAX_CODE_MAP.default;
 
     return {
-        amount: Math.round(item.price * 100),
+        amount: Math.round((item.price * item.qty) * 100),
         quantity: item.qty,
         reference: item.name + index || `product_${index}`,
         tax_code
@@ -60,10 +60,7 @@ export const getTaxAndShipping = async (req: Request, res: Response) => {
         }
     });
 
-    let shippingClassRates = [];
-
-    shippingResultAndProducts.myShemenClassProducts.length > 0 && shippingClassRates.push({myShemen: shippingResultAndProducts.myShemenClassProducts});
-    shippingResultAndProducts.ebookClassProducts.length > 0 && shippingClassRates.push({ebook: shippingResultAndProducts.ebookClassProducts});
+    let shippingClassRates = [...shippingResultAndProducts.myShemenClassProducts, ...shippingResultAndProducts.ebookClassProducts, ...shippingResultAndProducts.onePointFiveLbClassProducts];
 
     res.json({
         shipping: {
@@ -90,7 +87,7 @@ export const getTaxAndShipping = async (req: Request, res: Response) => {
         //     ]
         //   }
         // },
-        // breakdown: calculation
+        // breakdown: calculation.tax_breakdown,
     });
   } catch (error) {
     console.error('Error fetching tax and shipping:', error);
