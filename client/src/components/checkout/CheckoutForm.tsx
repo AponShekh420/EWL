@@ -29,15 +29,17 @@ export default function CheckoutForm() {
   useEffect(() => {
     if (checkoutForm.country) {
       const countryStates = State.getStatesOfCountry(checkoutForm.country);
+      console.log(countryStates);
       const filterState = countryStates.map((item) => ({
         label: item.name,
-        value: item.name.toLowerCase().replaceAll(" ", "-"),
+        value: item.isoCode,
       }));
       setStates(filterState);
     } else {
       setStates([]);
     }
   }, [checkoutForm.country]);
+
   useEffect(() => {
     if (checkoutForm.differentBillingAddress.country) {
       const countryStates = State.getStatesOfCountry(
@@ -45,7 +47,7 @@ export default function CheckoutForm() {
       );
       const filterState = countryStates.map((item) => ({
         label: item.name,
-        value: item.name.toLowerCase().replaceAll(" ", "-"),
+        value: item.isoCode,
       }));
       setStatesDifferent(filterState);
     } else {

@@ -146,11 +146,11 @@ export default function ProfileArea({ user }: { user: UserType }) {
     }
   };
   return (
-    <div className="mt-10 grid sm:grid-cols-[300px_2fr] gap-8">
+    <div className="my-10 grid md:grid-cols-[250px_2fr] lg:grid-cols-[300px_2fr] gap-8">
       <div>
         <div>
           <h1 className="font-bold font-inter text-lg mb-4 text-gray-700">
-            Account management
+            Profile Picture
           </h1>
           <div>
             <Image
@@ -158,7 +158,7 @@ export default function ProfileArea({ user }: { user: UserType }) {
               width={300}
               height={300}
               alt="avatar"
-              className="border p-4 rounded-lg w-full"
+              className="border p-4 rounded-lg w-full h-80 object-cover"
             />
 
             <input
@@ -178,41 +178,6 @@ export default function ProfileArea({ user }: { user: UserType }) {
             </Button>
           </div>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handlePasswordChange}>
-          <InputBox
-            name="old-password"
-            placeholder="Enter old password"
-            label="Old Password"
-            value={passwordForm.oldPassword}
-            onChange={(e) =>
-              setPasswordForm((prev) => ({
-                ...prev,
-                oldPassword: e.target.value,
-              }))
-            }
-            error={errors?.oldPassword?.msg}
-          />
-          <InputBox
-            name="new-password"
-            placeholder="Enter new password"
-            label="New Password"
-            value={passwordForm.newPassword}
-            onChange={(e) =>
-              setPasswordForm((prev) => ({
-                ...prev,
-                newPassword: e.target.value,
-              }))
-            }
-            error={errors?.newPassword?.msg}
-          />
-          <Button
-            variant="outline"
-            className="w-full mt-2"
-            onClick={handlePasswordChange}
-          >
-            Change Password
-          </Button>
-        </form>
       </div>
       <div className="border-l pl-8">
         <h1 className="font-bold font-inter text-lg mb-4 text-gray-700">
@@ -266,6 +231,41 @@ export default function ProfileArea({ user }: { user: UserType }) {
 
             <Button className="ml-auto w-fit block my-8" variant="blue">
               Update
+            </Button>
+          </form>
+          <form className="mt-8 space-y-6" onSubmit={handlePasswordChange}>
+            <InputBox
+              name="old-password"
+              placeholder="Enter old password"
+              label="Old Password"
+              value={passwordForm.oldPassword}
+              onChange={(e) =>
+                setPasswordForm((prev) => ({
+                  ...prev,
+                  oldPassword: e.target.value,
+                }))
+              }
+              error={errors?.oldPassword?.msg}
+            />
+            <InputBox
+              name="new-password"
+              placeholder="Enter new password"
+              label="New Password"
+              value={passwordForm.newPassword}
+              onChange={(e) =>
+                setPasswordForm((prev) => ({
+                  ...prev,
+                  newPassword: e.target.value,
+                }))
+              }
+              error={errors?.newPassword?.msg}
+            />
+            <Button
+              variant="blue"
+              className="w-fit mt-2 ml-auto block"
+              onClick={handlePasswordChange}
+            >
+              Change Password
             </Button>
           </form>
         </div>
