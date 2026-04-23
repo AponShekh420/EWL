@@ -636,6 +636,8 @@ export default function CreateProductForm({
                   options={[
                     { label: "none", value: "none" },
                     { label: "My Shemen Class", value: "my-shemen-class" },
+                    { label: "1.5 lb Class", value: "1.5-lb-class" },
+                    { label: "Ebook Class", value: "ebook-class" },
                   ]}
                   error={errors?.shippingClass?.msg}
                 />

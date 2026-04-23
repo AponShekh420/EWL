@@ -62,7 +62,6 @@ export default function ShippingForm({
       formData.append("zoneName", zoneName);
       formData.append("region", region);
       formData.append("shippingMethods", JSON.stringify(shippingMethods));
-      console.log(zoneName, region);
       if (path.includes("edit")) {
         if (!shipping?._id) return;
         const res = await fetch(
@@ -166,7 +165,10 @@ export default function ShippingForm({
               label="region"
               value={region}
               onChange={(val) => dispatch(addShippingField({ region: val }))}
-              options={countries}
+              options={[
+                { label: "Everywhere", value: "everywhere" },
+                ...countries,
+              ]}
               error={errors?.taxStatus?.msg}
             />
           </div>
