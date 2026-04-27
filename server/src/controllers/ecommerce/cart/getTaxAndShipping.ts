@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import Stripe from "stripe";
-
-const stripe = new Stripe("ssdfsdfds");
+import dotenv from "dotenv"
+dotenv.config();
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "asfasdfasdasdf");
 
 
 
@@ -67,10 +68,12 @@ export const getTaxAndShipping = async (req: Request, res: Response) => {
           flatRate: shippingResultAndProducts.flatRate,
           localPickup: shippingResultAndProducts.localPickup,
           usps: usps,
-          impossibleProducts: shippingResultAndProducts.impossibleProducts,
+          impossibleProducts: shippingResultAndProducts.impossibleProducts.map((p: any) => p._id),
           shippingClassRates: shippingClassRates,
         },
         tax: calculation.tax_amount_exclusive / 100,
+        success: true,
+        message: "Tax and shipping calculated successfully",
         // shipping: {
         //   flatRate: 20,
         //   localPickup: 0,

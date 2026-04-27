@@ -6,10 +6,16 @@ const initialState = {
   email: "",
   spouseName: "",
   howDidYouHearAboutUs: "",
-  country: "",
+  country: {
+    label: "",
+    value: ""
+  },
   streetAddress: "",
   apartment: "",
-  state: "",
+  state: {
+    label: "",
+    value: ""
+  },
   city: "",
   zipCode: "",
   phoneNumber: "",
@@ -21,15 +27,45 @@ const initialState = {
     lastName: "",
     email: "",
     spouseName: "",
-    country: "",
+    country: {
+      label: "",
+      value: ""
+    },
     streetAddress: "",
     apartment: "",
-    state: "",
+    state: {
+      label: "",
+      value: ""
+    },
     city: "",
     zipCode: "",
     phoneNumber: "",
     otherPhoneNumber: "",
   },
+  shippingAndTaxDetails: {
+    shipping: {
+      usps: {
+        boxUsed: "",
+        finalWeightOz: 0,
+        rates: [],
+      },
+      flatRate: 0,
+      localPickup: 0,
+      shippingClassRates: [{
+        shippingCost: 0
+      }],
+      impossibleProducts: [],
+    },
+    tax: 0,
+  },
+  shipping: {
+      methodName: "",
+      cost: 0,
+      boxUsed: "",
+      finalWeightOz: 0,
+      servicelevel: "",
+  },
+  errors: {}
 };
 export type CheckoutFormState = typeof initialState;
 export const checkoutFormSlice = createSlice({

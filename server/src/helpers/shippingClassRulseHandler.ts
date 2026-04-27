@@ -46,11 +46,12 @@ const shippingClassRulseHandler = async (req: Request, res: Response, next: Next
     });
     
 
-    const cart = products.map((item: { _id: string, qty: number }) => {
+    const cart = products.map((item: { _id: string, quantity: number }) => {
         const product = dbProducts.find((p) => p._id.toString() === item._id);
         if (product) {
             return {
                 ...item,
+                qty: item.quantity, // Use quantity from request or fallback to qty
                 weight: Number(product.weight),
                 length: Number(product.dimensionLength),
                 width: Number(product.dimensionWidth),

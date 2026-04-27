@@ -13,7 +13,7 @@ import { addToCart } from "../controllers/ecommerce/cart/addToCart";
 import { deleteCart } from "../controllers/ecommerce/cart/deleteCart";
 import { getAllCart } from "../controllers/ecommerce/cart/getAllCart";
 import { updateCart } from "../controllers/ecommerce/cart/updateCart";
-import { createOrder } from "../controllers/ecommerce/order/createOrder";
+import createOrder  from "../controllers/ecommerce/order/createOrder";
 import { deleteOrder } from "../controllers/ecommerce/order/deleteOrder";
 import { getAllOrder } from "../controllers/ecommerce/order/getAllOrders";
 import { getOrderById } from "../controllers/ecommerce/order/getOrderById";
@@ -79,7 +79,8 @@ import shipping from "../middleware/shipping/shipping";
 import createBox from "../controllers/ecommerce/usps/createBox";
 import shippingClassRulseHandler from "../helpers/shippingClassRulseHandler";
 import { getBoxes } from "../controllers/ecommerce/usps/getBoxes";
-
+import orderSuccess from "../controllers/ecommerce/order/orderSuccess";
+import express from "express"
 /* 
 Developed by:Shipon islam 
 Date: 31-10-2025
@@ -113,7 +114,8 @@ router.get("/products/:slug", getProductBySlug);
 router.get("/products", getAllProduct);
 router.get("/product-by-filter", getProductByFilter);
 //order routes
-router.post("/order", orderValidationRules, validateOrder, createOrder);
+router.post("/order/create-order", authCheck, orderValidationRules, validateOrder, createOrder);
+router.post("/order/webhook", express.raw({type:"application/json"}), orderSuccess)
 router.put("/orders/:id", orderValidationRules, validateOrder, updateOrder);
 router.put("/order-status/:id", updateOrder);
 router.delete("/orders/:id", deleteOrder);

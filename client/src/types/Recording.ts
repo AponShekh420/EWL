@@ -1,4 +1,5 @@
 export interface IRecordingItem {
+  url: string | undefined;
   id: string;
   recordNumber: number;
   file?: string | File;
