@@ -3,9 +3,20 @@ import CartDetails from "@/components/cart/CartDetails";
 import BreadcrumbPath from "@/components/common/BreadcrumbPath";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@iconify/react";
+import { redirect } from "next/navigation";
 
 export default async function Cart() {
-  const { data: cart } = await getCartList();
+  let cart;
+
+  try {
+    const { data } = await getCartList();
+    if(data.items.length == 0) {
+      return redirect("/shop")
+    }
+    cart = data;
+  } catch(err) {
+    return redirect("/shop")
+  }
 
   return (
     <main>

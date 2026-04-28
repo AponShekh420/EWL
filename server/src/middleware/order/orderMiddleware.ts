@@ -63,7 +63,7 @@ export const orderValidationRules = [
     .notEmpty()
     .withMessage("Street address is required"),
 
-  body("streetAddressTwo")
+  body("apartment")
     .optional()
     .isString(),
 

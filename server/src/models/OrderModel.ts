@@ -174,7 +174,7 @@ const orderSchema = new Schema(
       default: [],
     },
     tax: {
-      type: String,
+      type: Number,
       default: 0
     },
     stripePaymentIntentId: {

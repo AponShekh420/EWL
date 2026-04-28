@@ -15,7 +15,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { addCheckoutField } from "@/redux/features/checkout/checkoutFormSlice";
+import { addCheckoutField, resetCheckoutFields } from "@/redux/features/checkout/checkoutFormSlice";
 import { Badge } from "@/components/ui/badge";
 import {
 CardElement,
@@ -26,7 +26,7 @@ from "@stripe/react-stripe-js";
 import { BASE_URL } from "@/utils/envVariable";
 import getOrderRequestData from "@/lib/getOrderRequestData";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 
 
 
@@ -77,7 +77,7 @@ export default function CheckoutDetails({ cart }: { cart: CartType }) {
   const {shippingAndTaxDetails} = useSelector((state: RootState) => state.checkout);
   const dispatch = useDispatch();
   const checkoutForm = useSelector((state: RootState) => state.checkout);
-  const router = useRouter();
+  // const router = useRouter();
 
   useEffect(() => {
     console.log("Shipping and Tax Details:", checkoutForm.shipping);
@@ -94,6 +94,7 @@ export default function CheckoutDetails({ cart }: { cart: CartType }) {
 
   const submitOrder= async(e: { preventDefault: () => void; })=>{
     e.preventDefault();
+    dispatch(addCheckoutField({errors: {}}))
     const requestData = getOrderRequestData(cart, checkoutForm)
 
     if (!stripe || !elements) {
@@ -113,6 +114,28 @@ export default function CheckoutDetails({ cart }: { cart: CartType }) {
       }
     );
     const data= await orderRes.json();
+    if(data.errors) {
+      console.log(data.errors)
+      const differentBillingAddressErrors = {
+        city: data?.errors?.["differentBillingAddress.city"],
+        email: data?.errors?.["differentBillingAddress.email"],
+        firstName: data?.errors?.["differentBillingAddress.firstName"],
+        lastName: data?.errors?.["differentBillingAddress.lastName"],
+        phoneNumber: data?.errors?.["differentBillingAddress.phoneNumber"],
+        spouseName: data?.errors?.["differentBillingAddress.spouseName"],
+        zip: data?.errors?.["differentBillingAddress.zip"],
+        country: data?.errors?.["differentBillingAddress.country"],
+        state: data?.errors?.["differentBillingAddress.state"],
+        streetAddress: data?.errors?.["differentBillingAddress.streetAddress"],
+      }
+      console.log(differentBillingAddressErrors)
+      dispatch(addCheckoutField({errors:  {
+        ...data.errors,
+        differentBillingAddress: differentBillingAddressErrors
+      }}));
+      setLoading(false);
+      return;
+    }
     const card = elements.getElement(CardElement);
     if (!card) {
       await fetch(BASE_URL + "/api/ecommerce/orders/" + data?.orderId,
@@ -128,8 +151,6 @@ export default function CheckoutDetails({ cart }: { cart: CartType }) {
       setLoading(false);
       return;
     }
-
-    console.log("data stripe:", data)
 
     const result = await stripe.confirmCardPayment(
       data.clientSecret,
@@ -161,9 +182,19 @@ export default function CheckoutDetails({ cart }: { cart: CartType }) {
     }
 
     if(result.paymentIntent.status=== "succeeded"){
+      await fetch(BASE_URL + "/api/ecommerce/carts/items",
+        {
+          headers:{
+          "Content-Type": "application/json",
+          },
+          method:"DELETE",
+          credentials: "include",
+        }
+      );
+      dispatch(resetCheckoutFields())
       toast.success("Paid successfully");
       setTimeout(()=> {
-        router.push("/profile/my-orders")
+        window.location.replace("/profile/my-orders")
       }, 3000)
     }
     setLoading(false);
@@ -176,7 +207,14 @@ export default function CheckoutDetails({ cart }: { cart: CartType }) {
 
   return (
     <div className="px-8 py-20 bg-teal/5 mt-14 lg:mt-0 rounded-t-xl ">
-      <div className="max-w-[450px] mx-auto">
+      <div className="max-w-[450px] mx-auto relative">
+        {/* loading */}
+        {checkoutForm.loading && (
+          <div className="w-full h-full bg-[#F4F9FC] absolute z-10 opacity-50 flex items-center justify-center">
+            <Icon icon="eos-icons:bubble-loading" width="40" height="40" />
+          </div>
+        )}
+        {/* loading */}
         <h4 className="font-bold text-xl">Review your cart</h4>
         <div className="mt-8">
           <ScrollArea className="h-80">
@@ -396,6 +434,12 @@ export default function CheckoutDetails({ cart }: { cart: CartType }) {
                   }}
                 />
               </div>
+
+              {/* <div className="grid grid-cols-2 gap-4 mt-8">
+                <CardNumberElement className="border-2 col-span-2 p-2"/>
+                <CardExpiryElement className=""/>
+                <CardCvcElement />
+              </div> */}
               <label className="flex gap-2 mt-2">
                 <input
                 type="checkbox"

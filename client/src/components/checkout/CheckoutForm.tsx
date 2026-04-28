@@ -17,6 +17,7 @@ import { Button } from "../ui/button";
 import { ChevronsUpDown, Check } from "lucide-react";
 import { CommandEmpty, CommandGroup, CommandInput, CommandItem, Command } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
+import { FieldDescription } from "../ui/field";
 type SelectBoxFiled = {
   label: string;
   value: string;
@@ -26,6 +27,7 @@ type SelectBoxFiled = {
 let shippingTimeOut: NodeJS.Timeout;
 export default function CheckoutForm({cart}: {cart: CartType}) {
   const checkoutForm = useSelector((state: RootState) => state.checkout);
+  const {errors} = useSelector((state: RootState) => state.checkout);
   const dispatch = useDispatch();
   const [countries] = useState(
     Country.getAllCountries().map((item) => ({
@@ -72,7 +74,7 @@ export default function CheckoutForm({cart}: {cart: CartType}) {
 
   
   const handleShippingAndTax = async (cartData: CartType) => {
-    console.log("cart", cartData);
+    dispatch(addCheckoutField({loading: true}))
     const bilingAddress = {
       name: checkoutForm.firstName || "Anonymous",
       country: checkoutForm.country.value,
@@ -112,6 +114,7 @@ export default function CheckoutForm({cart}: {cart: CartType}) {
         },
       );
       const data = await res.json();
+      dispatch(addCheckoutField({loading: false}))
       if (!data.success) {
         toast.error(data.message);
       }
@@ -123,6 +126,7 @@ export default function CheckoutForm({cart}: {cart: CartType}) {
       );
       }
     } catch (error: unknown) {
+      dispatch(addCheckoutField({loading: false}))
       const errorMessage =
         error instanceof Error ? error.message : "An error occurred";
       console.log(errorMessage);
@@ -174,53 +178,88 @@ export default function CheckoutForm({cart}: {cart: CartType}) {
       {/* billing address */}
       <div className="space-y-8">
         <div className="grid grid-cols-2 gap-4">
-          <InputBox
-            name="FistName"
-            label="First name"
-            value={checkoutForm.firstName}
-            onChange={(e) =>
-              dispatch(addCheckoutField({ firstName: e.target.value }))
-            }
-            placeholder="Enter first name"
-          />
-          <InputBox
-            name="lastName"
-            label="Last name"
-            value={checkoutForm.lastName}
-            onChange={(e) =>
-              dispatch(addCheckoutField({ lastName: e.target.value }))
-            }
-            placeholder="Enter last name"
-          />
+          <div>
+            <InputBox
+              name="FistName"
+              label="First name"
+              value={checkoutForm.firstName}
+              onChange={(e) =>
+                dispatch(addCheckoutField({ firstName: e.target.value }))
+              }
+              placeholder="Enter first name"
+            />
+            {errors?.firstName && (
+              <FieldDescription className="text-red-600">
+                {errors?.firstName?.msg}
+              </FieldDescription>
+            )}
+          </div>
+          <div>
+            <InputBox
+              name="lastName"
+              label="Last name"
+              value={checkoutForm.lastName}
+              onChange={(e) =>
+                dispatch(addCheckoutField({ lastName: e.target.value }))
+              }
+              placeholder="Enter last name"
+            />
+            {errors?.lastName && (
+              <FieldDescription className="text-red-600">
+                {errors?.lastName?.msg}
+              </FieldDescription>
+            )}
+          </div>
         </div>
-        <InputBox
-          name="email"
-          label="Email"
-          value={checkoutForm.email}
-          onChange={(e) => dispatch(addCheckoutField({ email: e.target.value }))}
-          placeholder="Enter email address"
-        />
+        <div>
+          <InputBox
+            name="email"
+            label="Email"
+            value={checkoutForm.email}
+            onChange={(e) => dispatch(addCheckoutField({ email: e.target.value }))}
+            placeholder="Enter email address"
+          />
+          {errors?.email && (
+            <FieldDescription className="text-red-600">
+              {errors?.email?.msg}
+            </FieldDescription>
+          )}
+        </div>
         <div className="grid grid-cols-2 gap-4">
-          <InputBox
-            name="spouseName"
-            label="Spouse name"
-            placeholder="Enter Spouse name"
-            value={checkoutForm.spouseName}
-            onChange={(e) =>
-              dispatch(addCheckoutField({ spouseName: e.target.value }))
-            }
-          />
-          <InputBox
-            name="hearAboutUs"
-            label="How did you hear about us"
-            placeholder="Enter your answer"
-            value={checkoutForm.howDidYouHearAboutUs}
-            onChange={(e) =>
-              dispatch(
-                addCheckoutField({ howDidYouHearAboutUs: e.target.value }),
-              )
-            }
-          />
+          <div>
+            <InputBox
+              name="spouseName"
+              label="Spouse name"
+              placeholder="Enter Spouse name"
+              value={checkoutForm.spouseName}
+              onChange={(e) =>
+                dispatch(addCheckoutField({ spouseName: e.target.value }))
+              }
+            />
+            {errors?.spouseName && (
+              <FieldDescription className="text-red-600">
+                {errors?.spouseName?.msg}
+              </FieldDescription>
+            )}
+          </div>
+          <div>
+            <InputBox
+              name="hearAboutUs"
+              label="How did you hear about us"
+              placeholder="Enter your answer"
+              value={checkoutForm.howDidYouHearAboutUs}
+              onChange={(e) =>
+                dispatch(
+                  addCheckoutField({ howDidYouHearAboutUs: e.target.value }),
+                )
+              }
+            />
+            {errors?.howDidYouHearAboutUs && (
+              <FieldDescription className="text-red-600">
+                {errors?.howDidYouHearAboutUs?.msg}
+              </FieldDescription>
+            )}
+          </div>
         </div>
 
         <div className="space-y-2 flex flex-col">
@@ -271,31 +310,45 @@ export default function CheckoutForm({cart}: {cart: CartType}) {
               </Command>
             </PopoverContent>
           </Popover>
-          {/* {errors?.classId && (
-            <p className="text-xs pl-1.5 text-red-500">
-              {errors?.classId?.msg}
-            </p>
-          )} */}
+          {errors?.country && (
+            <FieldDescription className="text-red-600">
+              {errors?.country?.msg}
+            </FieldDescription>
+          )}
         </div>
 
 
-        <InputBox
-          name="streetAddress"
-          label="Street address"
-          placeholder="Enter your street address"
-          value={checkoutForm.streetAddress}
-          onChange={(e) =>dispatch(addCheckoutField({ streetAddress: e.target.value }))}
-        />
+        <div>
+          <InputBox
+            name="streetAddress"
+            label="Street address"
+            placeholder="Enter your street address"
+            value={checkoutForm.streetAddress}
+            onChange={(e) =>dispatch(addCheckoutField({ streetAddress: e.target.value }))}
+          />
+          {errors?.streetAddress && (
+            <FieldDescription className="text-red-600">
+              {errors?.streetAddress?.msg}
+            </FieldDescription>
+          )}
+        </div>
 
-        <InputBox
-          name=""
-          label=""
-          placeholder="Appartment, suite, unit, etc (optional)"
-          value={checkoutForm.apartment}
-          onChange={(e) =>
-            dispatch(addCheckoutField({ apartment: e.target.value }))
-          }
-        />
+        <div>
+          <InputBox
+            name=""
+            label=""
+            placeholder="Appartment, suite, unit, etc (optional)"
+            value={checkoutForm.apartment}
+            onChange={(e) =>
+              dispatch(addCheckoutField({ apartment: e.target.value }))
+            }
+          />
+          {errors?.apartment && (
+            <FieldDescription className="text-red-600">
+              {errors?.apartment?.msg}
+            </FieldDescription>
+          )}
+        </div>
         <div className="grid grid-cols-3 gap-4 items-center">
           <div className="space-y-4 flex flex-col">
             <Label className="font-semibold">State</Label>
@@ -345,26 +398,40 @@ export default function CheckoutForm({cart}: {cart: CartType}) {
                 </Command>
               </PopoverContent>
             </Popover>
-            {/* {errors?.classId && (
-              <p className="text-xs pl-1.5 text-red-500">
-                {errors?.classId?.msg}
-              </p>
-            )} */}
+            {errors?.state && (
+              <FieldDescription className="text-red-600">
+                {errors?.state?.msg}
+              </FieldDescription>
+            )}
           </div>
-          <InputBox
-            name="city"
-            label="Town/City"
-            placeholder="Enter city"
-            value={checkoutForm.city}
-            onChange={(e) => dispatch(addCheckoutField({ city: e.target.value }))}
-          />
-          <InputBox
-            name="zip"
-            label="ZIP Code"
-            placeholder="Enter ZIP code"
-            value={checkoutForm.zipCode}
-            onChange={(e) => dispatch(addCheckoutField({ zipCode: e.target.value }))}
-          />
+          <div>
+            <InputBox
+              name="city"
+              label="Town/City"
+              placeholder="Enter city"
+              value={checkoutForm.city}
+              onChange={(e) => dispatch(addCheckoutField({ city: e.target.value }))}
+            />
+            {errors?.city && (
+              <FieldDescription className="text-red-600">
+                {errors?.city?.msg}
+              </FieldDescription>
+            )}
+          </div>
+          <div>
+            <InputBox
+              name="zip"
+              label="ZIP Code"
+              placeholder="Enter ZIP code"
+              value={checkoutForm.zipCode}
+              onChange={(e) => dispatch(addCheckoutField({ zipCode: e.target.value }))}
+            />
+            {errors?.zip && (
+              <FieldDescription className="text-red-600">
+                {errors?.zip?.msg}
+              </FieldDescription>
+            )}
+          </div>
         </div>
 
         
@@ -372,15 +439,22 @@ export default function CheckoutForm({cart}: {cart: CartType}) {
 
 
         <div className="grid grid-cols-2 gap-4">
-          <InputBox
-            name="phone"
-            label="Phone number"
-            placeholder="Enter phone number"
-            value={checkoutForm.phoneNumber}
-            onChange={(e) =>
-              dispatch(addCheckoutField({ phoneNumber: e.target.value }))
-            }
-          />
+          <div>
+            <InputBox
+              name="phone"
+              label="Phone number"
+              placeholder="Enter phone number"
+              value={checkoutForm.phoneNumber}
+              onChange={(e) =>
+                dispatch(addCheckoutField({ phoneNumber: e.target.value }))
+              }
+            />
+            {errors?.phoneNumber && (
+              <FieldDescription className="text-red-600">
+                {errors?.phoneNumber?.msg}
+              </FieldDescription>
+            )}
+          </div>
           <InputBox
             name="otherPhone"
             label="Other Phone number (optional)"
@@ -390,6 +464,11 @@ export default function CheckoutForm({cart}: {cart: CartType}) {
               dispatch(addCheckoutField({ otherPhoneNumber: e.target.value }))
             }
           />
+          {errors?.otherPhoneNumber && (
+            <FieldDescription className="text-red-600">
+              {errors?.otherPhoneNumber?.msg}
+            </FieldDescription>
+          )}
         </div>
       </div>
 
@@ -414,74 +493,102 @@ export default function CheckoutForm({cart}: {cart: CartType}) {
       {checkoutForm.isDifferentBillingAddress && (
         <div className="space-y-8 mb-8">
           <div className="grid grid-cols-2 gap-4">
-            <InputBox
-              name="differentBillingAddress.firstName"
-              label="First name"
-              value={checkoutForm.differentBillingAddress.firstName}
-              onChange={(e) =>
-                dispatch(
-                  addCheckoutField({
-                    differentBillingAddress: {
-                      ...checkoutForm.differentBillingAddress,
-                      firstName: e.target.value,
-                    },
-                  }),
-                )
-              }
-              placeholder="Enter first name"
-            />
+            <div>
+              <InputBox
+                name="differentBillingAddress.firstName"
+                label="First name"
+                value={checkoutForm.differentBillingAddress.firstName}
+                onChange={(e) =>
+                  dispatch(
+                    addCheckoutField({
+                      differentBillingAddress: {
+                        ...checkoutForm.differentBillingAddress,
+                        firstName: e.target.value,
+                      },
+                    }),
+                  )
+                }
+                placeholder="Enter first name"
+              />
+              {errors?.differentBillingAddress?.firstName && (
+                <FieldDescription className="text-red-600">
+                  {errors?.differentBillingAddress?.firstName?.msg}
+                </FieldDescription>
+              )}
+            </div>
 
-            <InputBox
-              name="differentBillingAddress.lastName"
-              label="Last name"
-              value={checkoutForm.differentBillingAddress.lastName}
-              onChange={(e) =>
-                dispatch(
-                  addCheckoutField({
-                    differentBillingAddress: {
-                      ...checkoutForm.differentBillingAddress,
-                      lastName: e.target.value,
-                    },
-                  }),
-                )
-              }
-              placeholder="Enter last name"
-            />
+            <div>
+              <InputBox
+                name="differentBillingAddress.lastName"
+                label="Last name"
+                value={checkoutForm.differentBillingAddress.lastName}
+                onChange={(e) =>
+                  dispatch(
+                    addCheckoutField({
+                      differentBillingAddress: {
+                        ...checkoutForm.differentBillingAddress,
+                        lastName: e.target.value,
+                      },
+                    }),
+                  )
+                }
+                placeholder="Enter last name"
+              />
+              {errors?.differentBillingAddress?.lastName && (
+                <FieldDescription className="text-red-600">
+                  {errors?.differentBillingAddress?.lastName?.msg}
+                </FieldDescription>
+              )}
+            </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <InputBox
-              name="differentBillingAddress.email"
-              label="Email"
-              value={checkoutForm.differentBillingAddress.email}
-              onChange={(e) =>
-                dispatch(
-                  addCheckoutField({
-                    differentBillingAddress: {
-                      ...checkoutForm.differentBillingAddress,
-                      email: e.target.value,
-                    },
-                  }),
-                )
-              }
-              placeholder="Enter email address"
-            />
-            <InputBox
-              name="differentBillingAddress.spouseName"
-              label="Spouse name"
-              value={checkoutForm.differentBillingAddress.spouseName}
-              onChange={(e) =>
-                dispatch(
-                  addCheckoutField({
-                    differentBillingAddress: {
-                      ...checkoutForm.differentBillingAddress,
-                      spouseName: e.target.value,
-                    },
-                  }),
-                )
-              }
-              placeholder="Enter spouse name"
-            />
+            <div>
+              <InputBox
+                name="differentBillingAddress.email"
+                label="Email"
+                value={checkoutForm.differentBillingAddress.email}
+                onChange={(e) =>
+                  dispatch(
+                    addCheckoutField({
+                      differentBillingAddress: {
+                        ...checkoutForm.differentBillingAddress,
+                        email: e.target.value,
+                      },
+                    }),
+                  )
+                }
+                placeholder="Enter email address"
+              />
+              {errors?.differentBillingAddress?.email && (
+                <FieldDescription className="text-red-600">
+                  {errors?.differentBillingAddress?.email?.msg}
+                </FieldDescription>
+              )}
+            </div>
+            <div>
+              <InputBox
+                name="differentBillingAddress.spouseName"
+                label="Spouse name"
+                value={checkoutForm.differentBillingAddress.spouseName}
+                onChange={(e) =>
+                  dispatch(
+                    addCheckoutField({
+                      differentBillingAddress: {
+                        ...checkoutForm.differentBillingAddress,
+                        spouseName: e.target.value,
+                      },
+                    }),
+                  )
+                }
+                placeholder="Enter spouse name"
+              />
+              {errors?.differentBillingAddress?.spouseName && (
+                <FieldDescription className="text-red-600">
+                  {errors?.differentBillingAddress?.spouseName?.msg}
+                </FieldDescription>
+              )}
+            </div>
           </div>
 
 
@@ -541,46 +648,55 @@ export default function CheckoutForm({cart}: {cart: CartType}) {
                 </Command>
               </PopoverContent>
             </Popover>
-            {/* {errors?.classId && (
-              <p className="text-xs pl-1.5 text-red-500">
-                {errors?.classId?.msg}
-              </p>
-            )} */}
+            {errors?.differentBillingAddress?.country && (
+              <FieldDescription className="text-red-600">
+                {errors?.differentBillingAddress?.country?.msg}
+              </FieldDescription>
+            )}
           </div>
 
-          <InputBox
-            name="differentBillingAddress.streetAddress"
-            label="Street address"
-            value={checkoutForm.differentBillingAddress.streetAddress}
-            onChange={(e) =>
-              dispatch(
-                addCheckoutField({
-                  differentBillingAddress: {
-                    ...checkoutForm.differentBillingAddress,
-                    streetAddress: e.target.value,
-                  },
-                }),
-              )
-            }
-            placeholder="Enter street address"
-          />
+          <div>
+            <InputBox
+              name="differentBillingAddress.streetAddress"
+              label="Street address"
+              value={checkoutForm.differentBillingAddress.streetAddress}
+              onChange={(e) =>
+                dispatch(
+                  addCheckoutField({
+                    differentBillingAddress: {
+                      ...checkoutForm.differentBillingAddress,
+                      streetAddress: e.target.value,
+                    },
+                  }),
+                )
+              }
+              placeholder="Enter street address"
+            />
+            {errors?.differentBillingAddress?.streetAddress && (
+              <FieldDescription className="text-red-600">
+                {errors?.differentBillingAddress?.streetAddress?.msg}
+              </FieldDescription>
+            )}
+          </div>
 
-          <InputBox
-            name="differentBillingAddress.apartment"
-            label=""
-            value={checkoutForm.differentBillingAddress.apartment}
-            onChange={(e) =>
-              dispatch(
-                addCheckoutField({
-                  differentBillingAddress: {
-                    ...checkoutForm.differentBillingAddress,
-                    apartment: e.target.value,
-                  },
-                }),
-              )
-            }
-            placeholder="Apartment, suite, unit, etc"
-          />
+          <div>
+            <InputBox
+              name="differentBillingAddress.apartment"
+              label=""
+              value={checkoutForm.differentBillingAddress.apartment}
+              onChange={(e) =>
+                dispatch(
+                  addCheckoutField({
+                    differentBillingAddress: {
+                      ...checkoutForm.differentBillingAddress,
+                      apartment: e.target.value,
+                    },
+                  }),
+                )
+              }
+              placeholder="Apartment, suite, unit, etc"
+            />
+          </div>
 
           <div className="grid grid-cols-3 gap-4 ">
             <div className="space-y-4 flex flex-col">
@@ -638,82 +754,105 @@ export default function CheckoutForm({cart}: {cart: CartType}) {
                   </Command>
                 </PopoverContent>
               </Popover>
-              {/* {errors?.classId && (
-                <p className="text-xs pl-1.5 text-red-500">
-                  {errors?.classId?.msg}
-                </p>
-              )} */}
+              {errors?.differentBillingAddress?.state && (
+                <FieldDescription className="text-red-600">
+                  {errors?.differentBillingAddress?.state?.msg}
+                </FieldDescription>
+              )}
             </div>
 
-            <InputBox
-              name="differentBillingAddress.city"
-              label="Town/City"
-              value={checkoutForm.differentBillingAddress.city}
-              onChange={(e) =>
-                dispatch(
-                  addCheckoutField({
-                    differentBillingAddress: {
-                      ...checkoutForm.differentBillingAddress,
-                      city: e.target.value,
-                    },
-                  }),
-                )
-              }
-              placeholder="Enter city"
-            />
+            <div>
+              <InputBox
+                name="differentBillingAddress.city"
+                label="Town/City"
+                value={checkoutForm.differentBillingAddress.city}
+                onChange={(e) =>
+                  dispatch(
+                    addCheckoutField({
+                      differentBillingAddress: {
+                        ...checkoutForm.differentBillingAddress,
+                        city: e.target.value,
+                      },
+                    }),
+                  )
+                }
+                placeholder="Enter city"
+              />
+              {errors?.differentBillingAddress?.city && (
+                <FieldDescription className="text-red-600">
+                  {errors?.differentBillingAddress?.city?.msg}
+                </FieldDescription>
+              )}
+            </div>
 
-            <InputBox
-              name="differentBillingAddress.zipCode"
-              label="ZIP Code"
-              value={checkoutForm.differentBillingAddress.zipCode}
-              onChange={(e) =>
-                dispatch(
-                  addCheckoutField({
-                    differentBillingAddress: {
-                      ...checkoutForm.differentBillingAddress,
-                      zipCode: e.target.value,
-                    },
-                  }),
-                )
-              }
-              placeholder="Enter ZIP code"
-            />
+            <div>
+              <InputBox
+                name="differentBillingAddress.zipCode"
+                label="ZIP Code"
+                value={checkoutForm.differentBillingAddress.zipCode}
+                onChange={(e) =>
+                  dispatch(
+                    addCheckoutField({
+                      differentBillingAddress: {
+                        ...checkoutForm.differentBillingAddress,
+                        zipCode: e.target.value,
+                      },
+                    }),
+                  )
+                }
+                placeholder="Enter ZIP code"
+              />
+              {errors?.differentBillingAddress?.zip && (
+                <FieldDescription className="text-red-600">
+                  {errors?.differentBillingAddress?.zip?.msg}
+                </FieldDescription>
+              )}
+            </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <InputBox
-              name="differentBillingAddress.phoneNumber"
-              label="Phone number"
-              value={checkoutForm.differentBillingAddress.phoneNumber}
-              onChange={(e) =>
-                dispatch(
-                  addCheckoutField({
-                    differentBillingAddress: {
-                      ...checkoutForm.differentBillingAddress,
-                      phoneNumber: e.target.value,
-                    },
-                  }),
-                )
-              }
-              placeholder="Enter phone number"
-            />
+            <div>
+              <InputBox
+                name="differentBillingAddress.phoneNumber"
+                label="Phone number"
+                value={checkoutForm.differentBillingAddress.phoneNumber}
+                onChange={(e) =>
+                  dispatch(
+                    addCheckoutField({
+                      differentBillingAddress: {
+                        ...checkoutForm.differentBillingAddress,
+                        phoneNumber: e.target.value,
+                      },
+                    }),
+                  )
+                }
+                placeholder="Enter phone number"
+              />
+              {errors?.differentBillingAddress?.phoneNumber && (
+                <FieldDescription className="text-red-600">
+                  {errors?.differentBillingAddress?.phoneNumber?.msg}
+                </FieldDescription>
+              )}
+            </div>
 
-            <InputBox
-              name="differentBillingAddress.otherPhoneNumber"
-              label="Other Phone number"
-              value={checkoutForm.differentBillingAddress.otherPhoneNumber}
-              onChange={(e) =>
-                dispatch(
-                  addCheckoutField({
-                    differentBillingAddress: {
-                      ...checkoutForm.differentBillingAddress,
-                      otherPhoneNumber: e.target.value,
-                    },
-                  }),
-                )
-              }
-              placeholder="Enter other phone number"
-            />
+            <div>
+              <InputBox
+                name="differentBillingAddress.otherPhoneNumber"
+                label="Other Phone number"
+                value={checkoutForm.differentBillingAddress.otherPhoneNumber}
+                onChange={(e) =>
+                  dispatch(
+                    addCheckoutField({
+                      differentBillingAddress: {
+                        ...checkoutForm.differentBillingAddress,
+                        otherPhoneNumber: e.target.value,
+                      },
+                    }),
+                  )
+                }
+                placeholder="Enter other phone number"
+              />
+            </div>
           </div>
         </div>
       )}
@@ -722,6 +861,7 @@ export default function CheckoutForm({cart}: {cart: CartType}) {
         name="oderNote"
         label="Order notes (optional)"
         placeholder="Notes about your e.g. special notes for delivery"
+        onChange={(e)=> dispatch(addCheckoutField({orderNotes: e.target.value}))}
       />
     </form>
   );

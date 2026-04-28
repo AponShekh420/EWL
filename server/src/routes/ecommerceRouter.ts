@@ -81,6 +81,7 @@ import shippingClassRulseHandler from "../helpers/shippingClassRulseHandler";
 import { getBoxes } from "../controllers/ecommerce/usps/getBoxes";
 import orderSuccess from "../controllers/ecommerce/order/orderSuccess";
 import express from "express"
+import { deleteCartItems } from "../controllers/ecommerce/cart/deleteCartItems";
 /* 
 Developed by:Shipon islam 
 Date: 31-10-2025
@@ -126,6 +127,7 @@ router.get("/orders", getAllOrder);
 router.post("/cart", authCheck, addToCart);
 router.put("/cart/:productId", authCheck, updateCart);
 router.delete("/cart/:productId", authCheck, deleteCart);
+router.delete("/carts/items", authCheck, deleteCartItems);
 router.get("/cart-list", authCheck, getAllCart);
 
 // cart tax and shipping calculation route

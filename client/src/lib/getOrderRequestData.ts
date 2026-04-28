@@ -18,11 +18,11 @@ const getOrderRequestData = (cart: CartType, checkoutForm: { firstName?: string;
         zip: checkoutForm.zipCode,
 
         streetAddress: checkoutForm.streetAddress,
-        streetAddressTwo: checkoutForm.apartment,
+        apartment: checkoutForm.apartment,
 
         totalProduct: cart.totalProduct,
         subtotal: cart.totalPrice,
-        tax: checkoutForm.shippingAndTaxDetails?.tax,
+        tax: Number(checkoutForm.shippingAndTaxDetails?.tax),
 
         orderNotes: checkoutForm.orderNotes,
 

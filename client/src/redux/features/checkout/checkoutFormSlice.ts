@@ -1,5 +1,49 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+
+const orderErrors = {
+  firstName: { msg: "" },
+  lastName: { msg: "" },
+  email: { msg: "" },
+  spouseName: { msg: "" },
+  howDidYouHearAboutUs: { msg: "" },
+  phoneNumber: { msg: "" },
+  otherPhoneNumber: { msg: "" },
+
+  country: { msg: "" },
+  state: { msg: "" },
+  city: { msg: "" },
+  zip: { msg: "" },
+  streetAddress: { msg: "" },
+  apartment: { msg: "" },
+
+  orderNotes: { msg: "" },
+
+  shipping: {
+    methodName: { msg: "" },
+    cost: { msg: "" },
+    boxUsed: { msg: "" },
+    finalWeightOz: { msg: "" },
+    servicelevel: { msg: "" },
+  },
+
+  isDifferentBillingAddress: { msg: "" },
+
+  differentBillingAddress: {
+    firstName: { msg: "" },
+    lastName: { msg: "" },
+    email: { msg: "" },
+    spouseName: { msg: "" },
+    phoneNumber: { msg: "" },
+    country: { msg: "" },
+    state: { msg: "" },
+    city: { msg: "" },
+    zip: { msg: "" },
+    streetAddress: { msg: "" },
+  }
+};
+
+
 const initialState = {
   firstName: "",
   lastName: "",
@@ -65,7 +109,8 @@ const initialState = {
       finalWeightOz: 0,
       servicelevel: "",
   },
-  errors: {}
+  errors: orderErrors,
+  loading: false
 };
 export type CheckoutFormState = typeof initialState;
 export const checkoutFormSlice = createSlice({

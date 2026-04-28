@@ -31,6 +31,7 @@ const createOrder = async(req: Request,res: Response) =>{
     const paymentIntent= await stripe.paymentIntents.create({
         amount:Math.round(totalPrice*100),
         currency:"usd",
+        description:`Order #${createdOrder.orderId}`,
         metadata:{
           orderId:createdOrder._id.toString()
         }
