@@ -7,10 +7,10 @@ import { getCourseByFilter } from "../../controllers/e-learning/course/getCourse
 import { getCourseBySlug } from "../../controllers/e-learning/course/getCourseById";
 import { updateCourse } from "../../controllers/e-learning/course/updateCourse";
 import { updateCourseStatus } from "../../controllers/e-learning/course/updateCourseStatus";
-import { deleteCourseOrder } from "../../controllers/ecommerce/course-order/deleteCourseOrder";
-import { getAllCourseOrder } from "../../controllers/ecommerce/course-order/getAllCourseOrders";
-import { getCourseOrderById } from "../../controllers/ecommerce/course-order/getCourseOrderById";
-import { updateCourseOrder } from "../../controllers/ecommerce/course-order/updateCourseOrder";
+import { deleteCourseOrder } from "../../controllers/e-learning/course-order/deleteCourseOrder";
+import { getAllCourseOrder } from "../../controllers/e-learning/course-order/getAllCourseOrders";
+import { getCourseOrderById } from "../../controllers/e-learning/course-order/getCourseOrderById";
+import { updateCourseOrder } from "../../controllers/e-learning/course-order/updateCourseOrder";
 import { multerUploader } from "../../lib/multer";
 import authCheck from "../../middleware/common/authCheck";
 import { courseOrderValidationRules, validateCourseOrder } from "../../middleware/course/courseOrderMiddleware";

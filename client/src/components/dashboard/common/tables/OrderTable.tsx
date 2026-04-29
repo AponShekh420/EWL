@@ -233,6 +233,7 @@ export default function OrderTable({
                     onChange={(val) => handleStatusChange(val, order._id)}
                     options={[
                       { label: "Pending", value: "pending" },
+                      { label: "processing", value: "processing" },
                       { label: "Completed", value: "completed" },
                       { label: "Cancelled", value: "cancelled" },
                       { label: "Refunded", value: "refunded" },

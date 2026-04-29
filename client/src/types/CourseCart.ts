@@ -1,7 +1,7 @@
-import { ProductType } from "./Product";
+import { CourseType } from "./Course";
 export type CourseCartItemType = {
   price: number;
-  course: ProductType;
+  course: CourseType;
   quantity: number;
 };
 export type CourseCartType = {

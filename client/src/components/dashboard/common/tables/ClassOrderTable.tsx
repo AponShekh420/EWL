@@ -32,7 +32,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { CourseOrderType } from "@/types/CourseOrder";
+import { ClassOrderType } from "@/types/ClassOrder";
 import { PaginationType } from "@/types/Pagination";
 import { debounce } from "@/utils/debounce";
 import { BASE_URL } from "@/utils/envVariable";
@@ -44,11 +44,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 import toast from "react-hot-toast";
-export default function CourseOrderTable({
+export default function ClassOrderTable({
   orders,
   pagination,
 }: {
-  orders: CourseOrderType[];
+  orders: ClassOrderType[];
   pagination: PaginationType;
 }) {
   console.log("order", orders)
@@ -56,7 +56,7 @@ export default function CourseOrderTable({
   const deleteHandler = async (id: string) => {
     if (!id) return;
     try {
-      const res = await fetch(BASE_URL + "/api/e-learning/orders/" + id, {
+      const res = await fetch(BASE_URL + "/api/e-learning/class-orders/" + id, {
         method: "DELETE",
       });
       const data = await res.json();
@@ -74,7 +74,7 @@ export default function CourseOrderTable({
   };
   const handleStatusChange = async (status: string, id: string) => {
     try {
-      const res = await fetch(BASE_URL + "/api/e-learning/order-status/" + id, {
+      const res = await fetch(BASE_URL + "/api/e-learning/class-order-status/" + id, {
         method: "PUT",
         body: JSON.stringify({ status }),
         headers: {
@@ -97,7 +97,7 @@ export default function CourseOrderTable({
   const debouncedSearch = useMemo(
     () =>
       debounce((value: string) => {
-        router.push(`/dashboard/e-learning/orders?search=${value}`);
+        router.push(`/dashboard/e-learning/class-orders?search=${value}`);
       }, 500),
     [router],
   );
@@ -121,7 +121,7 @@ export default function CourseOrderTable({
 
               <SheetContent>
                 <SheetHeader>
-                  <SheetTitle>Course Filters</SheetTitle>
+                  <SheetTitle>Class Filters</SheetTitle>
                   <hr className="mt-2" />
                   <SheetDescription>
                     <span className="mt-4 inline-block">
@@ -184,7 +184,7 @@ export default function CourseOrderTable({
             </TableHead>
             <TableHead className="font-bold text-gray-500">Email</TableHead>
             <TableHead className="font-bold text-gray-500">Date</TableHead>
-            <TableHead className="font-bold text-gray-500">Course</TableHead>
+            <TableHead className="font-bold text-gray-500">Class</TableHead>
             <TableHead className="font-bold text-gray-500">Total</TableHead>
 
             <TableHead className="font-bold text-gray-500">Status</TableHead>
@@ -214,8 +214,8 @@ export default function CourseOrderTable({
 
               <TableCell>
                 <div className="flex gap-2 items-start flex-col text-wrap">
-                  <span>{order?.courses[0]?._id.title}</span>
-                  <span className="text-red-400">{order.courses[0]?._id?.category}</span>
+                  <span>{order?.classes[0]?._id.title}</span>
+                  <span className="text-red-400">{order.classes[0]?._id?.category}</span>
                 </div>
               </TableCell>
               <TableCell className="font-medium">${(order.totalPrice).toFixed(2)}</TableCell>
@@ -243,7 +243,7 @@ export default function CourseOrderTable({
               </TableCell>
               <TableCell>
                 <div className="flex items-center gap-x-3">
-                  <Link href={`/dashboard/e-learning/orders/edit/${order._id}`}>
+                  <Link href={`/dashboard/e-learning/class-orders/edit/${order._id}`}>
                     <Button
                       size="icon"
                       variant="outline"
@@ -256,7 +256,7 @@ export default function CourseOrderTable({
                       />
                     </Button>
                   </Link>
-                  <Link href={`/dashboard/e-learning/orders/${order._id}`}>
+                  <Link href={`/dashboard/e-learning/class-orders/${order._id}`}>
                     <Button
                       size="icon"
                       variant="outline"

@@ -14,6 +14,7 @@ interface SpeakerType {
   __v: number;
 }
 export type ClassType = {
+  orderId: string,
   speaker: SpeakerType;
   offline?: boolean;
   externalLink?: string;
