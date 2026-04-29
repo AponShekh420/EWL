@@ -46,7 +46,6 @@ export default function CheckoutForm({cart}: {cart: CartType}) {
   useEffect(() => {
     if (checkoutForm.country) {
       const countryStates = State.getStatesOfCountry(checkoutForm.country.value);
-      console.log(countryStates);
       const filterState = countryStates.map((item) => ({
         label: item.name,
         value: item.isoCode,
