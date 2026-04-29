@@ -1,5 +1,5 @@
 export interface IRecordingItem {
-  url: string | undefined;
+  url?: string | undefined;
   id: string;
   recordNumber: number;
   file?: string | File;
@@ -10,10 +10,24 @@ export interface IRecordingItem {
 export type recordingCatType = "free" | "class" | "course" | "course-demo";
 export interface IRecording {
   _id: string;
+  speaker?: string;
+  course?: string;
+  class?: string;
+  heading: string;
+  gender?: "male" | "female";
+  recordingCategory: recordingCatType;
+  recordings: IRecordingItem[];
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface IDisplayRecording {
+  _id: string;
   speaker?: {
     firstName: string,
     lastName: string,
-  };
+    gender: string
+  } | string;
   course?: {
     title: string,
     speaker: {
@@ -21,7 +35,7 @@ export interface IRecording {
       lastName: string,
       gender: string,
     }
-  };
+  } | string;
   class?: {
     title: string,
     speaker: {
@@ -29,7 +43,7 @@ export interface IRecording {
       lastName: string,
       gender: string,
     }
-  };
+  } | string;
   heading: string;
   gender?: "male" | "female";
   recordingCategory: recordingCatType;

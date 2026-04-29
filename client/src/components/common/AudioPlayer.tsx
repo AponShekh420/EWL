@@ -1,4 +1,6 @@
-import ReactPlayer from "react-player";
+"use client";
+
+import dynamic from "next/dynamic";
 import {
   MediaController,
   MediaControlBar,
@@ -12,7 +14,10 @@ import {
   MediaMuteButton,
 } from "media-chrome/react";
 
-export default function AudioPlayer({ url }: { url: string }) {
+const ReactPlayer = dynamic(() => import("react-player"), { ssr: false });
+
+
+export default function AudioPlayer({ url, recordNumber }: { url: string, recordNumber: number }) {
   return (
     <MediaController
       style={{
@@ -21,6 +26,7 @@ export default function AudioPlayer({ url }: { url: string }) {
       }}
     >
       <ReactPlayer
+        tabIndex={(recordNumber + 1000)}
         slot="media"
         src={url}
         controls={false}

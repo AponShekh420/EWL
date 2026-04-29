@@ -76,11 +76,11 @@ const CoursePage = async ({params}: {params: {slug: string}}) => {
         <div className="lg:col-span-2">
           {/* Navigation Tabs */}
           <div className="w-full max-w-5xl mx-auto p-4">
-            <Tabs defaultValue="testimonial" className="w-full">
+            <Tabs defaultValue="testimonial" className="w-full !relative">
               {/* 1. Use -space-x-6 or -space-x-8 to ensure overlap 
                 2. Use items-end to align them to the bottom content border
               */}
-              <TabsList className="flex flex-wrap h-auto w-full justify-start items-end bg-transparent p-0 sm:-space-x-6 gap-y-2 overflow-visible">
+              <TabsList className="flex flex-wrap w-full justify-start items-end bg-transparent p-0 sm:-space-x-6 gap-y-1 overflow-visible !h-fit">
                 {availableTabs?.map((tab, index) => (
                   <TabsTrigger
                     key={tab + index}
@@ -89,7 +89,7 @@ const CoursePage = async ({params}: {params: {slug: string}}) => {
                       relative h-11 px-8 text-[12px] md:text-[13px] font-bold uppercase tracking-tight
                       /* Use a slightly less aggressive clip-path for better wrapping look */
                       [clip-path:polygon(10%_0%,_90%_0%,_100%_100%,_0%_100%)]
-                      transition-all duration-200 min-w-[120px] md:min-w-[140px]
+                      transition-all duration-200 min-w-[130px] sm:min-w-[150px] md:min-w-[145px] max-w-[170px]
                       
                       bg-[#cbd5e1] text-[#64748b] border-none
                       
@@ -117,7 +117,7 @@ const CoursePage = async ({params}: {params: {slug: string}}) => {
               </TabsList>
 
               {/* Content Container */}
-              <div className="relative z-40 -mt-[1px] bg-white border-t-2 border-t-[#0266a1] shadow-lg rounded-b-xl p-8">
+              <div className="-mt-[1px] bg-white border-t-2 border-t-[#0266a1] shadow-lg rounded-b-xl p-8 z-30 sticky !top-full !w-full">
                 <TabsContent value="about">
                   <div
                     className="text-base"
@@ -174,7 +174,7 @@ const CoursePage = async ({params}: {params: {slug: string}}) => {
                 </span>
               )}
 
-              <Link href={offline ? externalLink : `/course/checkout?slug=${slug}`} className='!h-full p-6 block'>
+              <Link href={offline ? externalLink : `/course/checkout/${slug}`} className='!h-full p-6 block'>
                 <div 
                   className="w-full flex items-center justify-between"
                 >
@@ -203,7 +203,7 @@ const CoursePage = async ({params}: {params: {slug: string}}) => {
             </div>
 
                 
-            <Link href={`/preview/${slug}`} className='mb-8 block'>
+            <Link href={`/course/preview/${slug}`} className='mb-8 block'>
               <button className="w-full bg-teal hover:bg-teal-600 text-white font-bold py-4 rounded-xl transition-colors shadow-lg/50 shadow-teal hover:shadow-teal-600">
                 Preview
               </button>
