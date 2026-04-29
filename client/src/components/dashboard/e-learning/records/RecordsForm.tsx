@@ -107,13 +107,13 @@ export default function AddClassPage({ record }: { record?: IRecording }) {
       : null;
 
     const newEntry = {
-      id: Date.now(),
+      id: String(Date.now()),
       recordNumber: recordData.recordNumber
         ? Number(recordData.recordNumber)
         : maxRecording?.recordNumber
           ? Number(maxRecording?.recordNumber) + 1
           : 1,
-      sourceType: recordData.sourceType,
+      sourceType: recordData.sourceType as "internal" | "external",
       mediaType: mediaType,
       externalLink: recordData.externalLink ? recordData.externalLink : "",
       url:

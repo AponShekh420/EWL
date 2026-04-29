@@ -13,8 +13,13 @@ export const getOrderById = async (
     if (!id) return next(createError(400, "Order ID is required"));
 
     const order = await OrderModel.findById(id).populate([
-      "products",
-      "customer",
+      {
+        path: "products._id", // populate product refs inside products array
+      },
+      {
+        path: "customer",
+        select: "-password"
+      }
     ]);
     if (!order) {
       return next(createError(400, "Not found order"));

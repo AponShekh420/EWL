@@ -4,6 +4,8 @@ import userSlice from "@/redux/auth/userSlice";
 import cartSlice from "@/redux/features/cart/cartSlice";
 import categoryFormReducer from "@/redux/features/category/categoryFormSlice";
 import checkoutReducer from "@/redux/features/checkout/checkoutFormSlice";
+import courseCheckoutReducer from "@/redux/features/checkout/courseCheckoutFormSlice";
+import classCheckoutReducer from "@/redux/features/checkout/classCheckoutFormSlice";
 import classFormReducer from "@/redux/features/class/classFormSlice";
 import courseFormReducer from "@/redux/features/course/courseFormSlice";
 import paidHotlineSpeakerReducer from "@/redux/features/paid-hotline-speaker/paidHotlinSpeaker";
@@ -34,6 +36,8 @@ export const store = configureStore({
     user: userSlice,
     cart: cartSlice,
     checkout: checkoutReducer,
+    courseCheckout: courseCheckoutReducer,
+    classCheckout: classCheckoutReducer,
     paidHotlineSpeaker: paidHotlineSpeakerReducer,
   },
   middleware: (getDefaultMiddleware) =>

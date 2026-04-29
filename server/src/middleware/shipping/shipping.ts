@@ -71,7 +71,7 @@ const shipping = async (req: Request, res: Response, next: NextFunction) => {
     };
 
     const addressTo: AddressCreateRequest = {
-      name: shippingAddress?.name,
+      name: shippingAddress?.name || "Anonymous",
       street1: shippingAddress.line1,
       city: shippingAddress.city,
       state: shippingAddress.state,

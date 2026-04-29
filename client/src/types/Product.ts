@@ -10,6 +10,7 @@ export interface ProductReviewType {
   createdAt: Date;
 }
 export type ProductType = {
+  orderId?: number
   name: string;
   _id: string;
   title: string;

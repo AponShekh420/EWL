@@ -1,23 +1,53 @@
 import { Request, Response } from "express";
 import UspsBoxModel from "../../../models/UspsBoxModel";
 
+interface BoxUpdate {
+    name: string;
+    type: string;
+    emptyWeight: number;
+    dimensions: {
+        length: number;
+        width: number;
+        height: number;
+    };
+    maxWeight: number;
+    isActive: boolean;
+}
+
 export const createBox = async (req: Request, res: Response) => {
+    console.log("Received box data:", req.body); // Debug log to check incoming data
+    try {
+    const updates: BoxUpdate[] = req.body;
 
-    const newBox = req.body;
-
-    if(newBox) {
-        const createdBox = await UspsBoxModel.insertMany(newBox);
-        if(createdBox) {
-            return res.status(201).json({
-                message: "Box created successfully",
-                box: createdBox
-            });
-        } else {
-            return res.status(500).json({ message: "Failed to create box" });
+    const bulkOps = updates.map((box: BoxUpdate) => ({
+        updateOne:{
+            filter:{
+                name: box.name
+            },
+            update:{
+                $set:{
+                    name: box.name,
+                    type: box.type,
+                    emptyWeight: box.emptyWeight,
+                    dimensions: box.dimensions,
+                    maxWeight: box.maxWeight,
+                    isActive: box.isActive
+                }
+            },
+            upsert:true
         }
-    } else {
-        return res.status(400).json({ message: "Invalid box data" });
-    }
+    }));
+
+    const result = await UspsBoxModel.bulkWrite(bulkOps);
+
+    res.json({
+      success: true,
+      message: "Boxes upserted successfully",
+      result,
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: (err as Error).message });
+  }
 
 };
 

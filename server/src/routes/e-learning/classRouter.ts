@@ -9,6 +9,15 @@ import { multerUploader } from "../../lib/multer";
 import { classValidationRules, validateClass, validateUpdateClass } from "../../middleware/class/classValidator";
 
 import { Router } from "express";
+import authCheck from "../../middleware/common/authCheck";
+import { classOrderValidationRules, validateClassOrder } from "../../middleware/class/classOrderMiddleware";
+import createClassOrder from "../../controllers/e-learning/class-order/createClassOrder";
+import classOrderSuccess from "../../controllers/e-learning/class-order/classOrderSuccess";
+import express from "express"
+import { updateClassOrder } from "../../controllers/e-learning/class-order/updateClassOrder";
+import { deleteClassOrder } from "../../controllers/e-learning/class-order/deleteClassOrder";
+import { getClassOrderById } from "../../controllers/e-learning/class-order/getClassOrderById";
+import { getAllClassOrder } from "../../controllers/e-learning/class-order/getAllClassOrders";
 const router = Router();
 
 const supportedAudioFormat = [
@@ -64,5 +73,15 @@ router.delete("/class/:id", deleteClass);
 router.get("/class/:slug", getClassBySlug);
 router.get("/classes", getAllClasses);
 router.get("/classes-by-filter", getClassByFilter);
+
+
+// order
+router.post("/class-order/create-order", authCheck, classOrderValidationRules, validateClassOrder, createClassOrder);
+router.post("/class-order/webhook", express.raw({type:"application/json"}), classOrderSuccess);
+// router.put("/orders/:id", courseOrderValidationRules, validateCourseOrder, updateOrder);
+router.put("/class-order-status/:id", updateClassOrder);
+router.delete("/class-orders/:id", deleteClassOrder);
+router.get("/class-orders/:id", getClassOrderById);
+router.get("/class-orders", getAllClassOrder);
 
 export default router;

@@ -51,6 +51,7 @@ export default function OrderTable({
   orders: OrderType[];
   pagination: PaginationType;
 }) {
+  console.log("order", orders)
   const router = useRouter();
   const deleteHandler = async (id: string) => {
     if (!id) return;
@@ -213,11 +214,11 @@ export default function OrderTable({
 
               <TableCell>
                 <div className="flex gap-2 items-start flex-col text-wrap">
-                  <span>{order.products[0].title}</span>
-                  <span>{order.products[0].category}</span>
+                  <span>{order?.products[0]?._id.title}</span>
+                  <span className="text-red-400">{order.products[0]?._id?.category}</span>
                 </div>
               </TableCell>
-              <TableCell className="font-medium">${order.totalPrice}</TableCell>
+              <TableCell className="font-medium">${(order.totalPrice).toFixed(2)}</TableCell>
               <TableCell>
                 {" "}
                 <div className="relative mt-[-20px]">
@@ -232,6 +233,7 @@ export default function OrderTable({
                     onChange={(val) => handleStatusChange(val, order._id)}
                     options={[
                       { label: "Pending", value: "pending" },
+                      { label: "processing", value: "processing" },
                       { label: "Completed", value: "completed" },
                       { label: "Cancelled", value: "cancelled" },
                       { label: "Refunded", value: "refunded" },

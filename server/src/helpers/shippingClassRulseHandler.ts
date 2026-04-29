@@ -39,11 +39,37 @@ interface mixedItem {
 
 
 const shippingClassRulseHandler = async (req: Request, res: Response, next: NextFunction) => {
-    const {shippingAddress, cart} = req.body;
+    const {shippingAddress, products} = req.body;
 
-    // const products = await productModel.find({
-    //     _id: { $in: cart.map((item: { _id: string }) => item._id) }
-    // });
+    const dbProducts = await productModel.find({
+        _id: { $in: products.map((item: { _id: string }) => item._id) }
+    });
+    
+
+    const cart = products.map((item: { _id: string, quantity: number }) => {
+        const product = dbProducts.find((p) => p._id.toString() === item._id);
+        if (product) {
+            return {
+                ...item,
+                qty: item.quantity, // Use quantity from request or fallback to qty
+                weight: Number(product.weight),
+                length: Number(product.dimensionLength),
+                width: Number(product.dimensionWidth),
+                height: Number(product.dimensionHeight),
+                price: Number(product.salePrice),
+                shippingClass: product.shippingClass,
+                category: product.category,
+                name: product.title
+            };
+        } else {
+            // Handle case where product is not found (optional)
+            console.error(`Product with ID ${item._id} not found.`);
+            return item; // or you could choose to exclude it from the cart
+        }
+    });
+
+    req.body.cart = cart; // Add enriched cart to request body for downstream middleware/controllers
+
 
     let flatRate;
     let localPickup = false;
@@ -51,6 +77,7 @@ const shippingClassRulseHandler = async (req: Request, res: Response, next: Next
     // these are classes name, if you need more class then extend variable and add logic in loop
     let myShemenClass: mixedItem[] = [];
     let ebookClass: mixedItem[] = [];
+    let onePointFiveLbClass: mixedItem[] = [];
     // end
 
 
@@ -70,14 +97,22 @@ const shippingClassRulseHandler = async (req: Request, res: Response, next: Next
         console.log("Shipping Methods for Zone:", methods);
         
         for (const method of shippingMethods) { 
-            if (method.methodName === "flatRate" && method?.cost > 0) {
+            if (method.methodName === "flat-rate" && method?.cost > 0) {
                 flatRate = cart.filter((item: { qty: number, shippingClass: string }) => !methods.includes(item?.shippingClass)).reduce((acc: number, item: mixedItem) =>  (item.qty * method.cost) + acc, 0);
-            } else if (method.methodName === "localPickup") {
+            } else if (method.methodName === "local-pickup") {
                 localPickup = true;
             }  else if (method.methodName === "my-shemen-class") {
                 // ✅ your special class if you need more class then add else if and add logic in loop
                 myShemenClass = cart
                 .filter((item: { shippingClass: string }) => item.shippingClass === "my-shemen-class")
+                .map((item: { qty: number, shippingClass: string }) => ({
+                    ...item,
+                    shippingCost: shippingZone.region === "IL" ? ((method.cost) + (item.qty * 2)) : (shippingZone.region === "GB" ? ((method.cost) + (item.qty * 10)) : method.cost * item.qty),
+                }));
+            } else if (method.methodName === "1.5-lb-class") {
+                // ✅ your special class if you need more class then add else if and add logic in loop
+                onePointFiveLbClass = cart
+                .filter((item: { shippingClass: string }) => item.shippingClass === "1.5-lb-class")
                 .map((item: { qty: number, shippingClass: string }) => ({
                     ...item,
                     shippingCost: method.cost * item.qty
@@ -103,18 +138,11 @@ const shippingClassRulseHandler = async (req: Request, res: Response, next: Next
         }
 
         
-        mixData = [...myShemenClass, ...usps, ...ebookClass];
+        mixData = [...myShemenClass, ...usps, ...ebookClass, ...onePointFiveLbClass];
         others = cart.filter((item1: { _id: string }) => {
             return !mixData.some((item2: { _id: string }) => item2._id === item1._id);
         });
 
-        console.log("Shipping Zone:", shippingZone);
-        console.log("Flat Rate:", flatRate);
-        console.log("Local Pickup Available:", localPickup);
-        console.log("My Shemen Class Items:", myShemenClass);
-        console.log("USPS Items:", usps);
-        console.log("Other Items:", others);
-        console.log("Final Mix Data:", mixData);
 
         if(mixData.length === 0) {
             res.status(404).json({ error: "No valid shipping methods found for the items in the cart." });
@@ -125,19 +153,11 @@ const shippingClassRulseHandler = async (req: Request, res: Response, next: Next
                 uspsProducts: usps,
                 impossibleProducts: others,
                 myShemenClassProducts: myShemenClass,
-                ebookClassProducts: ebookClass
+                ebookClassProducts: ebookClass,
+                onePointFiveLbClassProducts: onePointFiveLbClass
             };
             next();
-            // res.status(200).json({
-            //     mixData,
-            //     others,
-            //     flatRate,
-            //     localPickup,
-            //     myShemenClass,
-            //     ebookClass,       
-            //     usps: usps,
-            //     message: "Shipping methods determined based on shipping class rules."
-            // });
+            
         } 
     } else {
         const shippingWorldwide = await ShippingModel.findOne({
@@ -151,14 +171,22 @@ const shippingClassRulseHandler = async (req: Request, res: Response, next: Next
             console.log("Shipping Methods for Zone:", methods);
             
             for (const method of shippingMethods) { 
-                if (method.methodName === "Flat Rate" && method?.cost > 0) {
+                if (method.methodName === "flat-rate" && method?.cost > 0) {
                     flatRate = cart.filter((item: { qty: number, shippingClass: string }) => !methods.includes(item?.shippingClass)).reduce((acc: number, item: mixedItem) =>  (item.qty * method.cost) + acc, 0);
-                } else if (method.methodName === "Local Pickup") {
+                } else if (method.methodName === "local-pickup") {
                     localPickup = true;
                 } else if (method.methodName === "my-shemen-class") {
                     // ✅ your special case
                     myShemenClass = cart
                     .filter((item: { shippingClass: string }) => item.shippingClass === "my-shemen-class")
+                    .map((item: { qty: number, shippingClass: string }) => ({
+                        ...item,
+                        shippingCost: shippingWorldwide.region === "IL" ? ((method.cost) + (item.qty * 2)) : (shippingWorldwide.region === "GB" ? ((method.cost) + (item.qty * 10)) : method.cost * item.qty),
+                    }));
+                } else if (method.methodName === "1.5-lb-class") {
+                    // ✅ your special case
+                    onePointFiveLbClass = cart
+                    .filter((item: { shippingClass: string }) => item.shippingClass === "1.5-lb-class")
                     .map((item: { qty: number, shippingClass: string }) => ({
                         ...item,
                         shippingCost: method.cost * item.qty
@@ -185,18 +213,11 @@ const shippingClassRulseHandler = async (req: Request, res: Response, next: Next
             }
 
             
-            mixData = [...myShemenClass, ...usps, ...ebookClass];
+            mixData = [...myShemenClass, ...usps, ...ebookClass, ...onePointFiveLbClass];
             others = cart.filter((item1: { _id: string }) => {
                 return !mixData.some((item2: { _id: string }) => item2._id === item1._id);
             });
 
-            console.log("Shipping Zone:", shippingZone);
-            console.log("Flat Rate:", flatRate);
-            console.log("Local Pickup Available:", localPickup);
-            console.log("My Shemen Class Items:", myShemenClass);
-            console.log("USPS Items:", usps);
-            console.log("Other Items:", others);
-            console.log("Final Mix Data:", mixData);
 
             if(mixData.length === 0) {
                 res.status(404).json({ error: "No valid shipping methods found for the items in the cart." });
@@ -207,30 +228,15 @@ const shippingClassRulseHandler = async (req: Request, res: Response, next: Next
                     uspsProducts: usps,
                     impossibleProducts: others,
                     myShemenClassProducts: myShemenClass,
-                    ebookClassProducts: ebookClass
+                    ebookClassProducts: ebookClass,
+                    onePointFiveLbClassProducts: onePointFiveLbClass
                 };
                 next();
-                // res.status(200).json({
-                //     mixData,
-                //     others,
-                //     flatRate,
-                //     localPickup,
-                //     myShemenClass,
-                //     ebookClass,       
-                //     usps,
-                //     message: "Shipping methods determined based on shipping class rules."
-                // });
+                
             }
         }
-        // res.json({
-        //     shipping: shippingWorldwide ? shippingWorldwide.shippingMethods : null,
-        //     message: "No specific shipping zone found for this address, showing worldwide options if available."
-        // });
+        
     }
-
-    // req.body.shippingClass = shippingZone;
-    
-
 }
 
 export default shippingClassRulseHandler;
