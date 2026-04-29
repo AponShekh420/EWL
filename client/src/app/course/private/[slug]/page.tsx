@@ -13,11 +13,11 @@ const page = async ({
     try {
     const { data } = await getPrivateRecords("course", slug);
     if(!data) {
-        return redirect(`/class/${slug}`)
+        return redirect(`/course/${slug}`)
     }
     records = data
     } catch (err) {
-        return redirect(`/class/${slug}`)
+        return redirect(`/course/${slug}`)
     }
 
     return (
