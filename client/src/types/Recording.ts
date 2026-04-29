@@ -7,12 +7,29 @@ export interface IRecordingItem {
   mediaType: "audio" | "video";
   externalLink?: string;
 }
-export type recordingCatType = "free" | "class" | "course";
+export type recordingCatType = "free" | "class" | "course" | "course-demo";
 export interface IRecording {
   _id: string;
-  speaker?: string;
-  course?: string;
-  class?: string;
+  speaker?: {
+    firstName: string,
+    lastName: string,
+  };
+  course?: {
+    title: string,
+    speaker: {
+      firstName: string,
+      lastName: string,
+      gender: string,
+    }
+  };
+  class?: {
+    title: string,
+    speaker: {
+      firstName: string,
+      lastName: string,
+      gender: string,
+    }
+  };
   heading: string;
   gender?: "male" | "female";
   recordingCategory: recordingCatType;

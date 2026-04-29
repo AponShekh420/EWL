@@ -33,7 +33,7 @@ export const recordingValidationRules = [
 
   // course → required only when recordingCategory = "course"
   body("courseId")
-    .if(body("recordingCategory").equals("course"))
+    .if(body("recordingCategory").equals("course") || body("recordingCategory").equals("course-demo"))
     .notEmpty()
     .withMessage("Course is required when category is course")
     .isMongoId()
@@ -99,7 +99,7 @@ export const recordingUpdateValidationRules = [
 
   // course → required only when recordingCategory = "course"
   body("courseId")
-    .if(body("recordingCategory").equals("course"))
+    .if(body("recordingCategory").equals("course") || body("recordingCategory").equals("course-demo"))
     .notEmpty()
     .withMessage("Course is required when category is course")
     .isMongoId()

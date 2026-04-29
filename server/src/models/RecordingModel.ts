@@ -9,7 +9,7 @@ const recordingSchema = new Schema(
     gender: { type: String, enum: ["male", "female"] },
     recordingCategory: {
       type: String,
-      enum: ["free", "class", "course"],
+      enum: ["free", "class", "course", "course-demo"],
       required: true,
     },
     recordings: [

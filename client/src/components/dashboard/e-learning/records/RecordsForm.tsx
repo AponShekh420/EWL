@@ -144,7 +144,7 @@ export default function AddClassPage({ record }: { record?: IRecording }) {
     if (recordingCategory === "class") {
       formData.append("classId", classId);
     }
-    if (recordingCategory === "course") {
+    if (recordingCategory === "course" || recordingCategory === "course-demo") {
       formData.append("courseId", courseId);
     }
     if (recordingCategory === "free") {
@@ -263,7 +263,7 @@ export default function AddClassPage({ record }: { record?: IRecording }) {
           setAllClass(classes);
         })
         .catch((err) => console.log(err));
-    } else if (recordingCategory === "course") {
+    } else if (recordingCategory === "course" || recordingCategory === "course-demo") {
       getApiData(courseUrl)
         .then((data) => {
           const courses = data.data.map(
@@ -312,7 +312,7 @@ export default function AddClassPage({ record }: { record?: IRecording }) {
           }
           className="flex gap-8 py-2"
         >
-          {["Free", "Class", "Course"].map((item) => (
+          {["Free", "Class", "Course", "Course-Demo"].map((item) => (
             <div
               key={item}
               className="flex items-center space-x-2 cursor-pointer"
@@ -472,7 +472,7 @@ export default function AddClassPage({ record }: { record?: IRecording }) {
               )}
             </div>
           )}
-          {recordingCategory === "course" && (
+          {(recordingCategory === "course" || recordingCategory === "course-demo") && (
             <div className="space-y-2 flex flex-col">
               <Label className="text-slate-600 font-medium">
                 Select Course
@@ -539,7 +539,9 @@ export default function AddClassPage({ record }: { record?: IRecording }) {
             ? "Free Record List"
             : recordingCategory === "class"
               ? "Class List"
-              : "Course List"}
+              : recordingCategory === "course-demo"
+              ? "Course Demo List"
+              :"Course List"}
         </h2>
 
         {recordings.length === 0 && existingRecordings.length === 0 && (
@@ -549,12 +551,16 @@ export default function AddClassPage({ record }: { record?: IRecording }) {
               ? "Free Records"
               : recordingCategory === "class"
                 ? "Classes"
+                : recordingCategory === "course-demo"
+                ? "Course Demo"
                 : "Courses"}{" "}
             added yet. Use the form below to add your first{" "}
             {recordingCategory === "free"
               ? "free record"
               : recordingCategory === "class"
                 ? "class List"
+                : recordingCategory === "course-demo"
+                ? "course demo List"
                 : "course List"}
             !
           </p>
@@ -698,6 +704,8 @@ export default function AddClassPage({ record }: { record?: IRecording }) {
             ? "Free Record"
             : recordingCategory === "class"
               ? "Class"
+              : recordingCategory === "course-demo"
+              ? "Course Demo"
               : "Course"}
           :
         </h2>
@@ -738,6 +746,8 @@ export default function AddClassPage({ record }: { record?: IRecording }) {
                     ? "Free Record"
                     : recordingCategory === "class"
                       ? "Class"
+                      : recordingCategory === "course-demo"
+                      ? "Course Demo"
                       : "Course"}{" "}
                   number*
                 </Label>
