@@ -1,3 +1,4 @@
+import { getCourseOrderById } from "@/actions/courseOrder";
 import PageHeading from "@/components/dashboard/common/PageHeading";
 import { EmptyItemIcon } from "@/components/svg";
 import { Button } from "@/components/ui/button";
@@ -12,11 +13,10 @@ import {
 } from "@/components/ui/table";
 import {
   orderStatus,
-  shippingCharge,
   transactionsList,
 } from "@/constants/order-data";
-import { OrderType } from "@/types/Order";
-import { BASE_URL } from "@/utils/envVariable";
+import { CourseOrderType, OrderedCourseType } from "@/types/CourseOrder";
+import { getImageUrl } from "@/utils/getImageUrl";
 import { GetTime } from "@/utils/getTime";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
@@ -28,25 +28,21 @@ export default async function OrderDetails({
   params: { id: string };
 }) {
   const { id } = await params;
-  const res = await fetch(BASE_URL + "/api/ecommerce/orders/" + id);
-  const { data: order }: { data: OrderType } = await res.json();
-  if (!res.ok) {
-    throw new Error("Failed to fetch order details");
-  }
+  const { data: order }: { data: CourseOrderType } = await getCourseOrderById(id);
   return (
     <div>
       <PageHeading
         pageTitle={`Order #${order.orderId}`}
         breadcrumbList={[
           { name: "E-commerce", href: "" },
-          { name: "Orders", href: "/ecommerce/orders" },
+          { name: "Orders", href: "/e-learning/orders" },
           {
             name: `#${id}`,
-            href: `/ecommerce/orders/${id}`,
+            href: `/e-learning/orders/${id}`,
           },
         ]}
       >
-        <Link href={`/dashboard/ecommerce/orders/edit/${id}`}>
+        <Link href={`/dashboard/e-learning/orders/edit/${id}`}>
           <Button variant="blue">
             <span>Edit Orders</span>
           </Button>
@@ -55,12 +51,12 @@ export default async function OrderDetails({
 
       <div className="hidden sm:flex gap-4 flex-col sm:flex-row items-start sm:items-center text-sm font-lexend-deca text-gray-600 border-y py-4 my-5 ">
         <p className="sm:border-r w-fit pr-4">
-          {GetTime(new Date(order.createdAt), true)}
+          {GetTime(new Date(order?.createdAt), true)}
         </p>
-        <p className="sm:border-r w-fit sm:px-4">{order.totalProduct} Items</p>
-        <p className="sm:border-r w-fit sm:px-4">Total ${order.totalPrice}</p>
+        <p className="sm:border-r w-fit sm:px-4">{order?.totalCourse} Items</p>
+        <p className="sm:border-r w-fit sm:px-4">Total ${(order?.totalPrice).toFixed(2)}</p>
         <button className="bg-green-300 text-green-800 px-3 py-1 text-sm rounded-2xl sm:ml-4">
-          Paid
+          {order?.paymentStatus}
         </button>
       </div>
 
@@ -71,11 +67,11 @@ export default async function OrderDetails({
             <TableHeader className="bg-stone-100 ">
               <TableRow className="uppercase !h-11">
                 <TableHead className="w-[400px] space-x-5 font-bold text-gray-500">
-                  Product
+                  Course
                 </TableHead>
 
                 <TableHead className="font-bold text-gray-500">
-                  Product Price
+                  Course Price
                 </TableHead>
 
                 <TableHead className="font-bold text-gray-500">
@@ -89,33 +85,33 @@ export default async function OrderDetails({
             </TableHeader>
 
             <TableBody>
-              {order.products.map((product, index) => (
-                <TableRow key={product._id + index}>
+              {order.courses?.map((courseInfo: OrderedCourseType, index: number) => (
+                <TableRow key={courseInfo?._id?.orderId || + index}>
                   <TableCell>
-                    <div>
+                    <Link href={`/shop/${courseInfo?._id?.slug}`}>
                       <Image
-                        src={product.thumbnail}
+                        src={getImageUrl(courseInfo._id.thumbnail, "courses")}
                         width={100}
                         height={100}
-                        alt={product.title}
+                        alt={courseInfo._id.title}
                         className="w-25 h-25 object-cover rounded-lg"
                       />
-                      <h5 className="font-semibold mt-2">{product.title}</h5>
+                      <h5 className="font-semibold mt-2">{courseInfo._id.title}</h5>
                       <p className="text-sm text-gray-600">
-                        {product.category}
+                        {courseInfo._id.category}
                       </p>
-                    </div>
+                    </Link>
                   </TableCell>
-                  <TableCell>${product.salePrice}</TableCell>
-                  <TableCell>{1}</TableCell>
+                  <TableCell>${courseInfo.price}</TableCell>
+                  <TableCell>{courseInfo.quantity}</TableCell>
                   <TableCell className="font-medium">
-                    ${Number(product.salePrice) * Number(1)}
+                    ${Number(courseInfo.price) * Number(courseInfo.quantity)}
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
-          {order.products.length < 1 && (
+          {order.courses.length < 1 && (
             <div className="w-fit mx-auto">
               <EmptyItemIcon />
               <p className="text-gray-500 text-center">No Data</p>
@@ -123,24 +119,21 @@ export default async function OrderDetails({
           )}
 
           <hr className="mt-10 mb-8" />
-          <div className="max-w-[400px] ml-auto space-y-4">
-            <div className="flex justify-between items-center">
-              <span>Subtotal</span>
-              <span>${order.totalPrice}</span>
+          <div className="flex gap-10 lg:flex-col flex-col md:flex-row xl:flex-row">
+            
+            {/* cart */}
+            <div className="md:w-1/2 w-full lg:w-full xl:w-1/2 ml-auto space-y-4 border-2 p-5 shadow">
+              <div className="flex justify-between items-center">
+                <span>Subtotal</span>
+                <span>${(order.subtotal).toFixed(2)}</span>
+              </div>
+              <hr />
+              <div className="flex justify-between items-center">
+                <span className="font-bold">Total</span>
+                <span>${(order.totalPrice).toFixed(2)}</span>
+              </div>
             </div>
-            <div className="flex justify-between items-center">
-              <span>Store Credit</span>
-              <span>$0.00</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span>Shipping</span>
-              <span>${shippingCharge}.00</span>
-            </div>
-            <hr />
-            <div className="flex justify-between items-center">
-              <span className="font-bold">Total</span>
-              <span>${order.totalPrice + shippingCharge}</span>
-            </div>
+            {/* cart end */}
           </div>
           <div>
             <h5 className="text-xl font-bold mt-10">Transactions</h5>
@@ -160,7 +153,7 @@ export default async function OrderDetails({
                     </div>
                   </div>
                   <h2 className="font-bold text-gray-500">
-                    ${transaction.amount}
+                    ${(order.totalPrice).toFixed(2)}
                   </h2>
                 </div>
               ))}
@@ -173,9 +166,9 @@ export default async function OrderDetails({
             <ul className="border-l-2 space-y-5">
               {orderStatus.map((step, index) => (
                 <li className="pl-5 relative" key={index}>
-                  {step.status}
+                  Order {step.status}
                   <span className="size-5 bg-gray-200 rounded-full inline-block absolute -left-2.5 top-1/2 -translate-y-1/2 z-[1]"></span>
-                  {step.isStep && (
+                  {step.status == order.status && (
                     <span className="size-5 bg-blue-500 rounded-full inline-flex justify-center text-white items-center absolute -left-2.5 top-1/2 -translate-y-1/2 z-[2] ">
                       ✓
                     </span>
@@ -190,7 +183,10 @@ export default async function OrderDetails({
           </h5>
           <div className="flex flex-col lg:flex-row gap-4 mt-5 shadow border rounded-md p-6">
             <Image
-              src={order?.customer?.avatar || "/images/user.png"}
+              src={
+                getImageUrl(order?.customer?.avatar, "profile") ||
+                "/images/user.png"
+              }
               width={80}
               height={80}
               alt="customer"
@@ -201,34 +197,7 @@ export default async function OrderDetails({
                 {order?.customer?.firstName + " " + order?.customer?.lastName}
               </h5>
               <p className="text-sm text-gray-500">{order.customer?.email}</p>
-              <p className="text-gray-500 text-sm">(316) 555-0116</p>
-            </div>
-          </div>
-          <h5 className="font-bold text-lg font-lexend-deca mt-8">
-            Shipping Address
-          </h5>
-          <div className=" mt-5 shadow border rounded-md p-6">
-            <div className="space-y-2">
-              <div className="font-lexend-deca capitalize">
-                <span className="font-medium">Address: </span>{" "}
-                <span className="text-gray-500">
-                  {order.shippingInfo.streetAddress +
-                    ", " +
-                    order.shippingInfo.city}
-                </span>
-              </div>
-              <div className="font-lexend-deca capitalize">
-                <span className="font-medium">state: </span>{" "}
-                <span className="text-gray-500">
-                  {order.shippingInfo.state}
-                </span>
-              </div>
-              <div className="font-lexend-deca  capitalize">
-                <span className="font-medium">country: </span>{" "}
-                <span className="text-gray-500">
-                  {order.shippingInfo.country}
-                </span>
-              </div>
+              {/* <p className="text-gray-500 text-sm">(316) 555-0116</p> */}
             </div>
           </div>
           <h5 className="font-bold text-lg font-lexend-deca mt-8">
@@ -239,19 +208,71 @@ export default async function OrderDetails({
               <div className="font-lexend-deca capitalize">
                 <span className="font-medium">Address: </span>{" "}
                 <span className="text-gray-500">
-                  {order.billingInfo.streetAddress +
-                    ", " +
-                    order.billingInfo.city}
+                  {order?.streetAddress}
+                </span>
+              </div>
+              <div className="font-lexend-deca capitalize">
+                <span className="font-medium">zip: </span>{" "}
+                <span className="text-gray-500">
+                  {order?.zip}
+                </span>
+              </div>
+              <div className="font-lexend-deca capitalize">
+                <span className="font-medium">City: </span>{" "}
+                <span className="text-gray-500">
+                  {order?.city}
                 </span>
               </div>
               <div className="font-lexend-deca capitalize">
                 <span className="font-medium">state: </span>{" "}
-                <span className="text-gray-500">{order.billingInfo.state}</span>
+                <span className="text-gray-500">{order?.state}</span>
               </div>
               <div className="font-lexend-deca  capitalize">
                 <span className="font-medium">country: </span>{" "}
                 <span className="text-gray-500">
-                  {order.billingInfo.country}
+                  {order?.country}
+                </span>
+              </div>
+              <div className="font-lexend-deca  capitalize">
+                <span className="font-medium">phone: </span>{" "}
+                <span className="text-gray-500">
+                  {order?.phoneNumber}
+                </span>
+              </div>
+              <div className="font-lexend-deca  capitalize">
+                <span className="font-medium">phone 2: </span>{" "}
+                <span className="text-gray-500">
+                  {order?.otherPhoneNumber}
+                </span>
+              </div>
+              <div className="font-lexend-deca  capitalize">
+                <span className="font-medium">apartment: </span>{" "}
+                <span className="text-gray-500">
+                  {order?.apartment}
+                </span>
+              </div>
+              <div className="font-lexend-deca  capitalize">
+                <span className="font-medium">Full Name: </span>{" "}
+                <span className="text-gray-500">
+                  {order?.fullName}
+                </span>
+              </div>
+              <div className="font-lexend-deca  capitalize">
+                <span className="font-medium">Spouse Name: </span>{" "}
+                <span className="text-gray-500">
+                  {order?.spouseName}
+                </span>
+              </div>
+              <div className="font-lexend-deca  capitalize">
+                <span className="font-medium">how Did You Hear About Us: </span>{" "}
+                <span className="text-gray-500">
+                  {order?.howDidYouHearAboutUs}
+                </span>
+              </div>
+              <div className="font-lexend-deca  capitalize">
+                <span className="font-medium">Order Notes: </span>{" "}
+                <span className="text-gray-500">
+                  {order?.orderNotes}
                 </span>
               </div>
             </div>

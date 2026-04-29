@@ -54,7 +54,7 @@ export default async function OrderDetails({
           {GetTime(new Date(order?.createdAt), true)}
         </p>
         <p className="sm:border-r w-fit sm:px-4">{order?.totalProduct} Items</p>
-        <p className="sm:border-r w-fit sm:px-4">Total ${order?.totalPrice}</p>
+        <p className="sm:border-r w-fit sm:px-4">Total ${(order?.totalPrice).toFixed(2)}</p>
         <button className="bg-green-300 text-green-800 px-3 py-1 text-sm rounded-2xl sm:ml-4">
           {order?.paymentStatus}
         </button>
@@ -200,7 +200,7 @@ export default async function OrderDetails({
                     </div>
                   </div>
                   <h2 className="font-bold text-gray-500">
-                    ${order.totalPrice}
+                    ${(order.totalPrice).toFixed(2)}
                   </h2>
                 </div>
               ))}

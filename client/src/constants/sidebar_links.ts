@@ -40,6 +40,8 @@ export const sidebar_links = [
       { id: 101, name: "Courses", url: "/dashboard/e-learning/courses" },
       { id: 102, name: "Classes", url: "/dashboard/e-learning/classes" },
       { id: 103, name: "Records", url: "/dashboard/e-learning/records" },
+      { id: 104, name: "Orders", url: "/dashboard/e-learning/orders" },
+      { id: 105, name: "Class Orders", url: "/dashboard/e-learning/class-orders" },
     ],
   },
   {

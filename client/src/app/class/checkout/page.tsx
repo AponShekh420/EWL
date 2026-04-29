@@ -9,14 +9,12 @@ export default async function Checkout() {
   try {
     const { data } = await getCartList();
     if(data.items.length == 0) {
-      return redirect("/shop")
+      return redirect("/classes")
     }
     cart = data;
   } catch(err) {
-    return redirect("/shop")
+    return redirect("/classes")
   }
-
-  console.log("cart", cart)
   return (
     <main className="min-h-screen">
       <section className="container">
