@@ -72,7 +72,7 @@ router.put(
 );
 router.put("/class-status/:id", updateClassStatus);
 router.delete("/class/:id", deleteClass);
-router.get("/class/:slug", getClassBySlug);
+router.get("/class/:slug", authCheck, getClassBySlug);
 router.get("/classes", getAllClasses);
 router.get("/classes-by-filter", getClassByFilter);
 

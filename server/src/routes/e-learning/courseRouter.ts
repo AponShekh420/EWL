@@ -54,7 +54,7 @@ router.delete("/course/:id", deleteCourse);
 
 router.get("/courses", getAllCourses);
 router.get("/courses-by-filter", getCourseByFilter);
-router.get("/course/:slug", getCourseBySlug);
+router.get("/course/:slug", authCheck, getCourseBySlug);
 
 
 

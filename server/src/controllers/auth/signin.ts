@@ -10,7 +10,12 @@ const signin = async (req: Request, res: Response, next: NextFunction) => {
   if(userInfo) {
     const passCheck = await bcrypt.compare(password, userInfo?.password);
     if(passCheck) {
-      const {_id, userName, firstName, lastName, email, gender, isOrthodoxJew, maritalStatus, keepsMitzvos, chafifaDuration, chickenSoupInDairySink, avatar, role} = userInfo;
+      const {_id, userName, firstName, lastName, email, gender, isOrthodoxJew, maritalStatus, keepsMitzvos, chafifaDuration, chickenSoupInDairySink, avatar, role, status} = userInfo;
+
+      if(status == "pending") {
+        res.status(401).json({errors: {failure: {msg: "Your account has been created successfully but is awaiting approval. You’ll be able to log in once it’s approved."}}})
+      }
+
       const modifiedUser = {
           id: _id,
           userName,

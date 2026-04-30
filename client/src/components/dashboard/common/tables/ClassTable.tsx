@@ -237,7 +237,7 @@ export default function ClassTable({
                       </Button>
                     </Link>
                     <Link
-                      href={`/dashboard/e-learning/classes/${classItem?.slug}`}
+                      href={`/class/${classItem?.slug}`}
                     >
                       <Button
                         size="icon"

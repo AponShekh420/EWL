@@ -239,7 +239,7 @@ export default function CourseTable({
                       </Button>
                     </Link>
                     <Link
-                      href={`/dashboard/e-learning/courses/${course?.slug}`}
+                      href={`/course/${course?.slug}`}
                     >
                       <Button
                         size="icon"

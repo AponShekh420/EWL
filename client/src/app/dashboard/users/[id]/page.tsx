@@ -23,10 +23,10 @@ export default async function UserDetails({
           { name: user.userName, href: `/users/${id}` },
         ]}
       >
-        <Link href="/dashboard/users/create">
+        <Link href="/dashboard/users">
           <Button variant="blue">
-            <Icon icon="ic:baseline-plus" width="32" height="32" />
-            <span>Create User</span>
+            <Icon icon="ep:arrow-up-bold" width="800" height="800" rotate={3}/>
+            <span>Users</span>
           </Button>
         </Link>
       </PageHeading>
@@ -50,6 +50,9 @@ export default async function UserDetails({
               <h5 className="font-bold text-lg mb-5">Profile info</h5>
               <div className="space-y-8">
                 <p className="border py-3 px-4 rounded-sm">
+                  <strong>Username:</strong> {user.userName}
+                </p>
+                <p className="border py-3 px-4 rounded-sm">
                   <strong>Name:</strong> {user.firstName} {user.lastName}
                 </p>
                 <p className="border py-3 px-4 rounded-sm">
@@ -57,6 +60,24 @@ export default async function UserDetails({
                 </p>
                 <p className="border py-3 px-4 rounded-sm">
                   <strong>Role:</strong> {user.role}
+                </p>
+                <p className="border py-3 px-4 rounded-sm">
+                  <strong>Gender:</strong> {user.gender}
+                </p>
+                <p className="border py-3 px-4 rounded-sm">
+                  <strong>Orthodox Jew:</strong> {user.isOrthodoxJew ? "Yes" : "No"}
+                </p>
+                <p className="border py-3 px-4 rounded-sm">
+                  <strong>Marital Status:</strong> {user.maritalStatus}
+                </p>
+                <p className="border py-3 px-4 rounded-sm">
+                  <strong>keeps Mitzvos:</strong> {user.keepsMitzvos ? "Yes" : "No"}
+                </p>
+                <p className="border py-3 px-4 rounded-sm">
+                  <strong>Chafifa Duration:</strong> {user.chafifaDuration}
+                </p>
+                <p className="border py-3 px-4 rounded-sm">
+                  <strong>ChickenSoupInDairySink:</strong> {user.chickenSoupInDairySink}
                 </p>
                 <p className="border py-3 px-4 rounded-sm">
                   <strong>Joined:</strong> {GetTime(user.createdAt)}

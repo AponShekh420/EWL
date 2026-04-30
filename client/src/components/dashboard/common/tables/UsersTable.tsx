@@ -27,7 +27,7 @@ import { UserType } from "@/types/User";
 import { debounce } from "@/utils/debounce";
 import { BASE_URL } from "@/utils/envVariable";
 import { getImageUrl } from "@/utils/getImageUrl";
-import { getUserRoleColor } from "@/utils/getStatusColor";
+import { getUserRoleColor, getUserStatusColor } from "@/utils/getStatusColor";
 import { GetTime } from "@/utils/getTime";
 import { paginationCounter } from "@/utils/paginationCounter";
 import { Icon } from "@iconify/react";
@@ -68,6 +68,31 @@ export default function UsersTable({
       const res = await fetch(BASE_URL + "/api/account/user-role/" + id, {
         method: "PUT",
         body: JSON.stringify({ role }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      if (!data.success) {
+        toast.error(data.message);
+      }
+      if (data.success) {
+        toast.success(data.message);
+        router.refresh();
+      }
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      console.log(errorMessage);
+      toast.error(errorMessage);
+    }
+  };
+  const handleStatusChange = async (status: string, id: string) => {
+    if (!id) return;
+    try {
+      const res = await fetch(BASE_URL + "/api/account/user-status/" + id, {
+        method: "PUT",
+        body: JSON.stringify({ status }),
         headers: {
           "Content-Type": "application/json",
         },
@@ -130,6 +155,7 @@ export default function UsersTable({
             <TableHead className="font-bold text-gray-500">email</TableHead>
             <TableHead className="font-bold text-gray-500">created</TableHead>
             <TableHead className="font-bold text-gray-500">Role</TableHead>
+            <TableHead className="font-bold text-gray-500">Status</TableHead>
             <TableHead className="font-bold text-gray-500">Action</TableHead>
           </TableRow>
         </TableHeader>
@@ -174,6 +200,22 @@ export default function UsersTable({
                     { label: "Customer", value: "customer" },
                     { label: "Speaker", value: "speaker" },
                     { label: "Viewer", value: "viewer" },
+                  ]}
+                />
+              </TableCell>
+              <TableCell>
+                <SelectBox
+                  name="status"
+                  label=""
+                  value={user.status?.toLowerCase()}
+                  className={`w-[150px] ${getUserStatusColor(
+                    user.status as string,
+                  )}`}
+                  placeholder="Change status"
+                  onChange={(val) => handleStatusChange(val, user._id)}
+                  options={[
+                    { label: "Active", value: "active" },
+                    { label: "Pending", value: "pending" },
                   ]}
                 />
               </TableCell>

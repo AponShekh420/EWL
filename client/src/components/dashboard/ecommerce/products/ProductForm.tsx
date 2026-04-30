@@ -108,6 +108,7 @@ export default function CreateProductForm({
   };
 
   useEffect(() => {
+    console.log('category', productData)
     if (!productData) return;
     dispatch(
       addProductField({

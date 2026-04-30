@@ -11,7 +11,7 @@ import Link from 'next/link';
 const CoursePage = async ({params}: {params: {slug: string}}) => {
   const availableTabs:string[] = [];
   const {slug} = await params;
-  const {data: course} = await getCourseBySlug(slug);
+  const {data: course, ordered} = await getCourseBySlug(slug);
   const { 
   speaker,
   date,
@@ -174,13 +174,13 @@ const CoursePage = async ({params}: {params: {slug: string}}) => {
                 </span>
               )}
 
-              <Link href={offline ? externalLink : `/course/checkout/${slug}`} className='!h-full p-6 block'>
+              <Link href={ordered ? `/course/private/${slug}` : offline ? externalLink : `/course/checkout/${slug}`} className='!h-full p-6 block'>
                 <div 
                   className="w-full flex items-center justify-between"
                 >
                   {/* 2. Action Text (Added a tiny bit of left padding to clear the tape) */}
                   <div className='flex flex-col'>
-                    <span className={`text-xl font-bold tracking-tight ${(modulePricePerMonth || installmentPricePerMonth) ? 'pl-5' : 'pl-2'}`}>GET COURSE</span>
+                    <span className={`text-xl font-bold tracking-tight ${(modulePricePerMonth || installmentPricePerMonth) ? 'pl-5' : 'pl-2'}`}>{ordered ? "Go to Course" : "GET COURSE"}</span>
                     {(installmentPricePerMonth || modulePricePerMonth)  && (
                       <span className="text-[10px] opacity-70 uppercase tracking-wider mt-1 pl-5">
                         Limited Time Offer
