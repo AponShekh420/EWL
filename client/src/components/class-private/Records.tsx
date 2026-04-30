@@ -15,8 +15,12 @@ const Records = ({ recording, classes }: RecordsProps) => {
     <div className="w-full grid gap-4 mt-10 grid-cols-[repeat(auto-fit,minmax(400px,1fr))]">
       {recording?.map((record, recordIndex) => (
         <div className={`rounded-2xl space-y-6 ${classes || ""}`} key={recordIndex}>
-          <h4 className="text-center bg-[#270034] px-4 py-2 w-fit mx-auto rounded-md text-white">
-            {record.heading}
+          <h4 className="text-center bg-[#270034] px-4 py-2 w-fit mx-auto rounded-md text-white capitalize">
+              {record.recordingCategory === "free"
+                ? typeof record?.speaker === "object" && record?.speaker !== null
+                  ? `${record.speaker.firstName}  ${record.speaker.lastName}`
+                  : record?.speaker
+                : record.heading}
           </h4>
 
           {record.recordings

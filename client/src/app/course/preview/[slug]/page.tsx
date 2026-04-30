@@ -1,41 +1,37 @@
 import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import Records from "@/components/class-private/Records";
-
-interface recordedProps {
-    id: number;
-    type: "audio" | "video";
-    url: string;
-}
+import { getPrivateRecords } from "@/actions/getPrivateRecords";
+import { redirect } from "next/navigation";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 
-const ClassRecording: recordedProps[] = [
-    {
-        id: 1,
-        type: "audio",
-        url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
-    },
-    {
-        id: 2,
-        type: "video",
-        url: "https://www.w3schools.com/html/mov_bbb.mp4"
-    },
-    {
-        id: 3,
-        type: "video",
-        url: "https://www.w3schools.com/html/movie.mp4"
+
+export default async function page({
+  params
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const {slug} = await params;
+  let records;
+  try {
+    const { data } = await getPrivateRecords("course-demo", slug);
+    console.log(data)
+    if(!data || data.length == 0) {
+        return redirect(`/course/${slug}`)
     }
-]
-
-export default function page() {
+    records = data
+  } catch (err) {
+      return redirect(`/course/${slug}`)
+  }
   return (
     <div className="min-h-screen bg-[#1f6fa5] py-16 px-6">
       <div className="max-w-6xl mx-auto">
 
         {/* Title */}
         <h1 className="text-3xl font-semibold text-white mb-8">
-          Rabbi Yehoshua Berman
+          {records?.course?.title}
         </h1>
 
         <Card className="rounded-2xl shadow-xl bg-[#2a7db5] border-none">
@@ -43,7 +39,7 @@ export default function page() {
 
             {/* Audio and video Section */}
             <div className="w-full md:border-r-1 md:border-gray-300 border-r-none">
-              <Records title="Class Recordings" recording={ClassRecording} classes="bg-none px-6"/>
+              <Records recording={records} classes="bg-none px-6"/>
             </div>
 
             {/* Image Section */}
@@ -57,11 +53,11 @@ export default function page() {
                     className="object-cover"
                 />
               </div>
-
-              <Button className="bg-[#270033] hover:bg-purple-800 rounded-full px-8">
-                More Info
-              </Button>
-
+              <Link href={`/course/${slug}`}>
+                <Button className="bg-[#270033] hover:bg-purple-800 rounded-full px-8">
+                  More Info
+                </Button>
+              </Link>
             </div>
 
           </CardContent>

@@ -82,6 +82,8 @@ import { getBoxes } from "../controllers/ecommerce/usps/getBoxes";
 import orderSuccess from "../controllers/ecommerce/order/orderSuccess";
 import express from "express"
 import { deleteCartItems } from "../controllers/ecommerce/cart/deleteCartItems";
+import { getPrivateOrderById } from "../controllers/ecommerce/order/getPrivateOrderById";
+import { getAllPrivateOrder } from "../controllers/ecommerce/order/getAllPrivateOrders";
 /* 
 Developed by:Shipon islam 
 Date: 31-10-2025
@@ -122,6 +124,11 @@ router.put("/order-status/:id", updateOrder);
 router.delete("/orders/:id", deleteOrder);
 router.get("/orders/:id", getOrderById);
 router.get("/orders", getAllOrder);
+
+
+// private orders
+router.get("/my-orders/:id", authCheck, getPrivateOrderById);
+router.get("/my-orders", authCheck, getAllPrivateOrder);
 
 //cart routes
 router.post("/cart", authCheck, addToCart);

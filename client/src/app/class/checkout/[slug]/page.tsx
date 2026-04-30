@@ -14,11 +14,9 @@ export default async function Checkout({
   
   try {
     const { data } = await getClassCartList(slug);
-    console.log("data", data)
 
     if(!data) {
-      // return redirect("/classes")
-      console.log(data)
+      return redirect("/classes")
     }
     cart = {
       _id: 'temp-id', // Temporary ID, replace with actual if available
@@ -33,7 +31,6 @@ export default async function Checkout({
         }
       ]
     };
-    console.log("cart", cart)
   } catch(err) {
     return redirect("/classes")
   }

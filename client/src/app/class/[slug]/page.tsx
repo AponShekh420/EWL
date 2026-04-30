@@ -3,6 +3,7 @@ import { getClassBySlug } from '@/actions/class';
 import AudioList from '@/components/courses/AudioList';
 import VideoList from '@/components/courses/VideoList';
 import { Icon } from '@iconify/react';
+import Link from 'next/link';
 
 
 const CoursePage = async ({params}: {params: {slug: string}}) => {
@@ -38,10 +39,12 @@ const CoursePage = async ({params}: {params: {slug: string}}) => {
         {<AudioList audios={audiosTwo} />}
         {<VideoList videos={videosTwo} />}
 
-        <button className="self-end bg-teal font-semibold text-white px-4 py-2 rounded hover:bg-black transition flex items-center gap-1">
+        <Link href={`/class/checkout/${classItem.slug}`} className='self-end'>
+        <button className="bg-teal font-semibold text-white px-4 py-2 rounded hover:bg-black transition flex items-center gap-1">
           Get Class
           <Icon icon="maki:arrow" width="15" height="15" />
         </button>
+        </Link>
       </main>
     </div>
   );

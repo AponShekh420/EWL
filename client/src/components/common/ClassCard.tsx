@@ -14,14 +14,15 @@ interface ClassProps {
   };
   thumbnail: string;
   slug: string;
+  privateClass?: boolean,
 }
 
-export default function ClassCard({ title, speaker, thumbnail, slug }: ClassProps) {
+export default function ClassCard({ title, speaker, thumbnail, slug, privateClass }: ClassProps) {
   return (
     <div className="bg-gray-50 rounded-lg overflow-hidden shadow-sm border border-gray-100 group transition-all hover:shadow-md">
       {/* Course Image & Badge */}
       <div className="relative w-full aspect-[16/10] overflow-hidden">
-        <Link href={`/class/${slug}`}>
+        <Link href={privateClass ? `/class/private/${slug}` : `/class/${slug}`}>
           <Image 
             src={getImageUrl(thumbnail, "classes")}
             alt={title}
@@ -41,18 +42,18 @@ export default function ClassCard({ title, speaker, thumbnail, slug }: ClassProp
 
         {/* Title */}
         <h3 className="text-lg font-bold text-gray-800 leading-tight mb-3">
-          <Link href={`/class/${slug}`} className="hover:text-teal transition-colors">
+          <Link href={privateClass ? `/class/private/${slug}` : `/class/${slug}`} className="hover:text-teal transition-colors">
             {title}
           </Link>
         </h3>
 
         {/* Description Placeholder */}
         <p className="text-gray-400 text-xs leading-relaxed mb-3 line-clamp-2">
-          <Link href={`/class/${slug}`}>Lorem ipsum dolor sit amet consectetur adipiscing elit, sed do eiusmod tempor...</Link>
+          <Link href={privateClass ? `/class/private/${slug}` : `/class/${slug}`}>Lorem ipsum dolor sit amet consectetur adipiscing elit, sed do eiusmod tempor...</Link>
         </p>
 
         {/* Action Button (Circle) */}
-        <Link href={`/class/${slug}`} className="absolute -top-6 right-5 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg border border-gray-50 text-teal group-hover:bg-black group-hover:text-white transition-colors">
+        <Link href={privateClass ? `/class/private/${slug}` : `/class/${slug}`} className="absolute -top-6 right-5 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg border border-gray-50 text-teal group-hover:bg-black group-hover:text-white transition-colors">
           <Icon icon="maki:arrow" width="15" height="15" />
         </Link>
       </div>

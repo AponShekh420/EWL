@@ -18,6 +18,8 @@ import { updateClassOrder } from "../../controllers/e-learning/class-order/updat
 import { deleteClassOrder } from "../../controllers/e-learning/class-order/deleteClassOrder";
 import { getClassOrderById } from "../../controllers/e-learning/class-order/getClassOrderById";
 import { getAllClassOrder } from "../../controllers/e-learning/class-order/getAllClassOrders";
+import { getPrivateClassOrderById } from "../../controllers/e-learning/class-order/getPrivateClassOrderById";
+import { getAllPrivateClassOrder } from "../../controllers/e-learning/class-order/getAllPrivateClassOrders";
 const router = Router();
 
 const supportedAudioFormat = [
@@ -83,5 +85,10 @@ router.put("/class-order-status/:id", updateClassOrder);
 router.delete("/class-orders/:id", deleteClassOrder);
 router.get("/class-orders/:id", getClassOrderById);
 router.get("/class-orders", getAllClassOrder);
+
+
+// private orders
+router.get("/my-class-orders/:id", authCheck, getPrivateClassOrderById);
+router.get("/my-class-orders", authCheck, getAllPrivateClassOrder);
 
 export default router;

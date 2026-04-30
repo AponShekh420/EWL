@@ -87,7 +87,12 @@ export const getPrivateRecords = async (
         return next(createError(400, "Not found class"));
       }
     } else if(recordCategory == "free") {
-        const records = await RecordingModel.find({gender: req.user?.gender, recordingCategory: "free"})
+        const records = await RecordingModel.find({gender: req.user?.gender, recordingCategory: "free"}).populate([
+            {
+              path: "speaker",
+              select: "firstName lastName gender"
+            }
+          ])
         if(records) {
           res.status(200).json({
             success: true,

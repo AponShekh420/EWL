@@ -22,6 +22,8 @@ import {
 
 import { Router } from "express";
 import express from "express"
+import { getPrivateCourseOrderById } from "../../controllers/e-learning/course-order/getPrivateCourseOrderById";
+import { getAllPrivateCourseOrder } from "../../controllers/e-learning/course-order/getAllPrivateCourseOrders";
 const router = Router();
 
 const multiFileUploader = multerUploader("courses");
@@ -64,5 +66,10 @@ router.put("/order-status/:id", updateCourseOrder);
 router.delete("/orders/:id", deleteCourseOrder);
 router.get("/orders/:id", getCourseOrderById);
 router.get("/orders", getAllCourseOrder);
+
+
+// private orders
+router.get("/my-orders/:id", authCheck, getPrivateCourseOrderById);
+router.get("/my-orders", authCheck, getAllPrivateCourseOrder);
 
 export default router;
