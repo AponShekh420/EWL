@@ -46,7 +46,7 @@ router.get("/users/:id", getUserById);
 router.get("/speaker/:username", getSpeakerByUsername);
 
 
-router.post("/users/export", usersExport)
+// router.post("/users/export", usersExport)
 
 
 
