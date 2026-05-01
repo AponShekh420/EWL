@@ -3,12 +3,13 @@ import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcryptjs"
 import UserModel from "../../models/UserModel";
 import tokenGenerator from '../../helpers/tokenGenerator';
+import wpCheckPassword from '../../lib/wpCheckPassword';
 
 const signin = async (req: Request, res: Response, next: NextFunction) => {
   const {email, password} = req.body;
   const userInfo = await UserModel.findOne({$or: [{email: email.toLowerCase()}, {userName: email.toLowerCase()}]}); ;
   if(userInfo) {
-    const passCheck = await bcrypt.compare(password, userInfo?.password);
+    const passCheck = await wpCheckPassword(password, userInfo?.password)
     if(passCheck) {
       const {_id, userName, firstName, lastName, email, gender, isOrthodoxJew, maritalStatus, keepsMitzvos, chafifaDuration, chickenSoupInDairySink, avatar, role, status} = userInfo;
 
