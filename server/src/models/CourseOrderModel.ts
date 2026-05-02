@@ -38,7 +38,7 @@ const orderSchema = new Schema(
     },
     status: {
       type: String,
-      enum: ["pending", "completed", "cancelled", "refunded", "processing", "Failed"],
+      enum: ["pending", "completed", "cancelled", "refunded", "processing", "failed"],
       default: "pending",
     },
     totalCourse: {
