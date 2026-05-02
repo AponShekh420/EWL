@@ -4,13 +4,12 @@ import { catchErrorSend } from "../../../utils/catchErrorSend";
 import courseModel from "../../../models/CourseModel";
 import { CourseOrderModel } from "../../../models/CourseOrderModel";
 
-export const getCourseBySlug = async (
+export const getPrivateCourseBySlug = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    let ordered = false;
     const slug = req.params?.slug;
     if (!slug) return next(createError(400, "Course slug is required"));
 
@@ -18,22 +17,11 @@ export const getCourseBySlug = async (
     if (!course) {
       return next(createError(400, "Not found course"));
     }
-
-    // this is checking if the user is order this product then i should not allow him or her for order again
-    if(req.user) {
-      const order = await CourseOrderModel.findOne({
-        "courses._id": course._id,
-        customer: req?.user?._id
-      });
-      if(order) {
-        ordered = true
-      }
-    }
+    
     return res.status(200).json({
       success: true,
       data: course,
       message: "Course fetched by slug successfully",
-      ordered
     });
   } catch (error: unknown) {
     catchErrorSend(next, error);

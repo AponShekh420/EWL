@@ -116,7 +116,7 @@ export default function UsersTable({
   const debouncedSearch = useMemo(
     () =>
       debounce((value: string) => {
-        router.push(`/dashboard/account/users?search=${value}`);
+        router.push(`/dashboard/users?search=${value}`);
       }, 500),
     [router],
   );
@@ -126,7 +126,7 @@ export default function UsersTable({
       <div className="my-5">
         <div className="flex justify-between flex-col-reverse sm:flex-row gap-4 mt-5">
           <SearchBox
-            placeholder="Search by product name..."
+            placeholder="Search by user name..."
             onChange={(e) => debouncedSearch(e.target.value)}
           />
           <div className="space-x-4">

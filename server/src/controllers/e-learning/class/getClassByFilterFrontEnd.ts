@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import createError from "http-errors";
 import { catchErrorSend } from "../../../utils/catchErrorSend";
-import courseModel from "../../../models/CourseModel";
+import classModel from "../../../models/ClassModel";
 
-export const getCourseByFilter = async (
+export const getClassByFilterFrontEnd = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -25,28 +25,26 @@ export const getCourseByFilter = async (
         ];
     }
 
-    const courses = await courseModel
+    const classes = await classModel
       .find(searchQuery)
-      .skip(skip)
-      .limit(limit)
       .sort({ createdAt: -1 })
       .populate("speaker", "-passwordResetExpires -passwordResetToken -password -isOrthodoxJew -maritalStatus -keepsMitzvos -chafifaDuration -chickenSoupInDairySink");
 
-    if (!courses) {
-      return next(createError(400, "Not found courses"));
+    if (!classes) {
+      return next(createError(400, "Not found classes"));
     }
 
-    const total = await courseModel.countDocuments();
+    const total = classes.length;
     res.status(200).json({
       success: true,
-      data: courses,
+      data: classes,
       pagination: {
         page: page,
         limit: limit,
         total: total,
         totalPages: Math.ceil(total / limit),
       },
-      message: "All Courses fetched successfully",
+      message: "All Classes fetched successfully",
     });
   } catch (error: unknown) {
     catchErrorSend(next, error);

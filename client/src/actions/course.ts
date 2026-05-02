@@ -18,7 +18,7 @@ export const getCourseBySlug = async (slug: string) => {
 };
 export const getCourseByQuery = async (query: string) => {
   const res = await fetch(
-    BASE_URL + "/api/e-learning/courses-by-filter?" + query,
+    BASE_URL + "/api/e-learning/courses-by-filter-frontend?" + query,
   );
   if (!res.ok) {
     throw new Error("Failed to fetch course by query");

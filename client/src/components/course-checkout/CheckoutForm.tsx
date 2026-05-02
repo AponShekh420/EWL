@@ -55,13 +55,13 @@ export default function CheckoutForm() {
         <div className="grid grid-cols-2 gap-4">
           <div>
             <InputBox
-              name="FistName"
-              label="First name"
+              name="FullName"
+              label="Full name"
               value={checkoutForm.fullName}
               onChange={(e) =>
                 dispatch(addCourseCheckoutField({ fullName: e.target.value }))
               }
-              placeholder="Enter first name"
+              placeholder="Enter full name"
             />
             {errors?.fullName && (
               <FieldDescription className="text-red-600">

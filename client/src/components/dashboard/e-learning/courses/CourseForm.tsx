@@ -254,11 +254,11 @@ export default function CreateCourseForm({
                       dispatch(addCourseField({ durationType: val }))
                     }
                     options={[
-                    { label: "Month(s)", value: "Month" },
-                    { label: "Week(s)", value: "Week" },
-                    { label: "Minute(s)", value: "Minute" },
-                    { label: "Day(s)", value: "Day" },
-                    { label: "Hour(s)", value: "Hour" },
+                    { label: "Month(s)", value: "months" },
+                    { label: "Week(s)", value: "weeks" },
+                    { label: "Minute(s)", value: "minutes" },
+                    { label: "Day(s)", value: "days" },
+                    { label: "Hour(s)", value: "hours" },
                     ]}
                     error={errors?.durationType?.msg}
                 />

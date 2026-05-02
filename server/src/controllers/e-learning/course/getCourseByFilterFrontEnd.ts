@@ -3,7 +3,7 @@ import createError from "http-errors";
 import { catchErrorSend } from "../../../utils/catchErrorSend";
 import courseModel from "../../../models/CourseModel";
 
-export const getCourseByFilter = async (
+export const getCourseByFilterFrontEnd = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -27,8 +27,6 @@ export const getCourseByFilter = async (
 
     const courses = await courseModel
       .find(searchQuery)
-      .skip(skip)
-      .limit(limit)
       .sort({ createdAt: -1 })
       .populate("speaker", "-passwordResetExpires -passwordResetToken -password -isOrthodoxJew -maritalStatus -keepsMitzvos -chafifaDuration -chickenSoupInDairySink");
 
