@@ -81,7 +81,7 @@ router.get("/my-orders", authCheck, getAllPrivateCourseOrder);
 
 
 // export all course to database
-router.post("/courses/export", exportCourses);
-router.post("/course/orders/export", exportCourseOrders);
+// router.post("/courses/export", exportCourses);
+// router.post("/course/orders/export", exportCourseOrders);
 
 export default router;

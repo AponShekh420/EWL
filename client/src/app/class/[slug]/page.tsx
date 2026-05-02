@@ -33,8 +33,8 @@ const CoursePage = async ({params}: {params: {slug: string}}) => {
         )}
         {<AudioList audios={audiosOne} />}
         {<VideoList videos={videosOne} />}
-        {contentOne != "<p><br></p>" && (
-          <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: contentOne }} />
+        {contentTwo != "<p><br></p>" && (
+          <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: contentTwo }} />
         )}
         {<AudioList audios={audiosTwo} />}
         {<VideoList videos={videosTwo} />}

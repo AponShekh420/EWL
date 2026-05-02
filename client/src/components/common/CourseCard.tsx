@@ -39,7 +39,7 @@ export default function CourseCard({ title, speaker, thumbnail, slug, previewslu
       <div className="p-5 relative">
         {/* Instructor Info */}
         <Link className="flex items-center gap-2 mb-3" href={`/speaker/${speaker?.userName}`}>
-          <Image src={getImageUrl(speaker?.avatar, "profile")} alt={speaker?.firstName} className="w-8 h-8 rounded-full object-cover" width={100} height={100} />
+          <Image src={getImageUrl(speaker?.avatar, "profile")} alt={speaker?.firstName ? `${speaker.firstName} ${speaker.lastName ?? ''}`.trim() : 'Instructor profile picture'} className="w-8 h-8 rounded-full object-cover" width={100} height={100} />
           <span className="text-gray-600 hover:text-teal transition-colors text-sm font-medium">{speaker?.firstName} {speaker?.lastName}</span>
         </Link>
 
