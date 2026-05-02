@@ -226,7 +226,7 @@ router.get("/shipping", getAllShipping);
 
 
 // export product
-router.post("/products/export", exportProducts);
+// router.post("/products/export", exportProducts);
 
 
 export default router;

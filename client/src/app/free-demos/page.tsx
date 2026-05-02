@@ -1,5 +1,6 @@
 import { getPrivateRecords } from "@/actions/getPrivateRecords";
 import Records from "@/components/class-private/Records";
+import { getSession } from "@/lib/authLib";
 import { redirect } from "next/navigation";
 
 const page = async ({
@@ -7,16 +8,20 @@ const page = async ({
 }: {
   params: Promise<{ slug: string }>;
 }) => {
+    const user = await getSession();
+    if(!user) {
+        return redirect("/login")
+    }
     const {slug} = await params;
     let records;
     try {
-    const { data } = await getPrivateRecords("free", slug);
-    if(!data) {
-        return redirect(`/course/${slug}`)
-    }
-    records = data
+        const { data } = await getPrivateRecords("free", slug);
+        if(!data) {
+            return redirect(`/`)
+        }
+        records = data
     } catch (err) {
-        return redirect(`/course/${slug}`)
+        return redirect(`/`)
     }
 
     return (

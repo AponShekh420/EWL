@@ -35,13 +35,13 @@ const CoursePage = async ({params}: {params: {slug: string}}) => {
   module,
   } = course;
 
-  overviewTab != "<p><br></p>" && availableTabs.push("Overview");
-  courseTopicsTab != "<p><br></p>" && availableTabs.push("Course Topics");
-  speakerProfileTab != "<p><br></p>" && availableTabs.push("Speaker Profile");
-  aboutTab != "<p><br></p>" && availableTabs.push("About");
-  FAQsTab != "<p><br></p>" && availableTabs.push("FAQs");
-  testimonialsTab != "<p><br></p>" && availableTabs.push("Testimonial");
-  moreInfoTab != "<p><br></p>" && availableTabs.push("More Info");
+  overviewTab && overviewTab != "<p><br></p>" && availableTabs.push("Overview");
+  courseTopicsTab && courseTopicsTab != "<p><br></p>" && availableTabs.push("Course Topics");
+  speakerProfileTab && speakerProfileTab != "<p><br></p>" && availableTabs.push("Speaker Profile");
+  aboutTab && aboutTab != "<p><br></p>" && availableTabs.push("About");
+  FAQsTab && FAQsTab != "<p><br></p>" && availableTabs.push("FAQs");
+  testimonialsTab && testimonialsTab != "<p><br></p>" && availableTabs.push("Testimonial");
+  moreInfoTab && moreInfoTab != "<p><br></p>" && availableTabs.push("More Info");
 
   const installmentPricePerMonth = installmentMonths > 0 ? (price / installmentMonths).toFixed(2) : null;
   const modulePricePerMonth = module > 0 ? (price / module).toFixed(2) : null;
@@ -60,9 +60,7 @@ const CoursePage = async ({params}: {params: {slug: string}}) => {
                 {speaker.firstName} {speaker.lastName}
               </Link> - <span className="text-blue-700">{title}</span>
             </h1>
-            <p className="text-lg italic text-gray-600 mt-2">
-              {headline}
-            </p>
+            <div className="prose prose-lg max-w-none mt-2" dangerouslySetInnerHTML={{ __html: headline }} />
             <p className="text-lg italic text-gray-600 mt-2">
               {bio}
             </p>
@@ -76,7 +74,7 @@ const CoursePage = async ({params}: {params: {slug: string}}) => {
         <div className="lg:col-span-2">
           {/* Navigation Tabs */}
           <div className="w-full max-w-5xl mx-auto p-4">
-            <Tabs defaultValue="testimonial" className="w-full !relative">
+            <Tabs defaultValue={(availableTabs[0])?.toLowerCase()} className="w-full !relative">
               {/* 1. Use -space-x-6 or -space-x-8 to ensure overlap 
                 2. Use items-end to align them to the bottom content border
               */}
@@ -120,38 +118,44 @@ const CoursePage = async ({params}: {params: {slug: string}}) => {
               <div className="-mt-[1px] bg-white border-t-2 border-t-[#0266a1] shadow-lg rounded-b-xl p-8 z-30 sticky !top-full !w-full">
                 <TabsContent value="about">
                   <div
-                    className="text-base"
+                    className="prose max-w-none"
                     dangerouslySetInnerHTML={{ __html: aboutTab }}
                   />
                 </TabsContent>
                 <TabsContent value="overview">
                   <div
-                    className="text-base"
+                    className="prose max-w-none"
                     dangerouslySetInnerHTML={{ __html: overviewTab }}
                   />
                 </TabsContent>
                 <TabsContent value="course topics">
                   <div
-                    className="text-base"
+                    className="prose max-w-none"
                     dangerouslySetInnerHTML={{ __html: courseTopicsTab }}
                   />
                 </TabsContent>
                 <TabsContent value="speaker profile">
                   <div
-                    className="text-base"
+                    className="prose max-w-none"
                     dangerouslySetInnerHTML={{ __html: speakerProfileTab }}
                   />
                 </TabsContent>
                 <TabsContent value="faqs">
                   <div
-                    className="text-base"
+                    className="prose max-w-none"
                     dangerouslySetInnerHTML={{ __html: FAQsTab }}
                   />
                 </TabsContent>
                 <TabsContent value="testimonial">
                   <div
-                    className="text-base"
+                    className="prose max-w-none"
                     dangerouslySetInnerHTML={{ __html: testimonialsTab}}
+                  />
+                </TabsContent>
+                <TabsContent value="more info">
+                  <div
+                    className="prose max-w-none"
+                    dangerouslySetInnerHTML={{ __html: moreInfoTab}}
                   />
                 </TabsContent>
               </div>

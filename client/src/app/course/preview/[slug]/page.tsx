@@ -5,6 +5,7 @@ import { getPrivateRecords } from "@/actions/getPrivateRecords";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { getSession } from "@/lib/authLib";
 
 
 
@@ -13,6 +14,11 @@ export default async function page({
 }: {
   params: Promise<{ slug: string }>;
 }) {
+  const user = await getSession();
+  if(!user) {
+    return redirect("/login")
+  }
+
   const {slug} = await params;
   let records;
   try {

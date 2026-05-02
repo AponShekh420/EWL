@@ -275,8 +275,8 @@ export default function CheckoutDetails({ cart }: { cart: CartType }) {
           </div>
           <div className="flex justify-between">
             <span className="text-gray-800 font-semibold text-semibold">Tax:</span>
-            <span className="font-bold text-red-500 ">
-              {shippingAndTaxDetails.tax}
+            <span className="font-bold ">
+              ${shippingAndTaxDetails.tax}
             </span>
           </div>
 
