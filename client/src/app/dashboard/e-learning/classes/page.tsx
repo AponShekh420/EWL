@@ -14,6 +14,7 @@ export default async function Courses({
   const query = await queryFormatter(searchParams);
   const res = await fetch(
     BASE_URL + "/api/e-learning/classes-by-filter?" + query,
+    {cache: "no-store",}
   );
   const { data: classesData, pagination } = await res.json();
   if (!res.ok) {

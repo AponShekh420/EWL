@@ -5,7 +5,7 @@ import { BASE_URL } from "@/utils/envVariable";
 import Link from "next/link";
 
 export default async function CreateCourse() {
-    const res = await fetch(BASE_URL + "/api/account/speakers");
+    const res = await fetch(BASE_URL + "/api/account/speakers", {cache: "no-store"});
     const { data: speakersData } = await res?.json();
     const speakers = speakersData?.map(
       (speaker: { firstName: string; lastName: string; _id: string }) => ({

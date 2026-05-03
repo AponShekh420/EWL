@@ -244,7 +244,7 @@ export default function AddClassPage({ record }: { record?: IRecording }) {
     }
   }, []);
   const getApiData = async (url: string) => {
-    const res = await fetch(BASE_URL + url);
+    const res = await fetch(BASE_URL + url, {cache: "no-store"});
     return res.json();
   };
   useEffect(() => {

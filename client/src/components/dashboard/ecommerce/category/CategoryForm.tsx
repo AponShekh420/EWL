@@ -104,7 +104,7 @@ export default function CategoryForm({
     }
   };
   useEffect(() => {
-    fetch(BASE_URL + "/api/ecommerce/categories")
+    fetch(BASE_URL + "/api/ecommerce/categories", {cache: "no-store"})
       .then((res) => res.json())
       .then((data) => {
         const formattedCategories = data.data.map(

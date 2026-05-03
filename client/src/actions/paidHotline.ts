@@ -5,6 +5,7 @@ import { BASE_URL } from "@/utils/envVariable";
 export const getPaidSpeakerWithFilter = async (query: string) => {
   const res = await fetch(
     BASE_URL + "/api/paid-hotline/filter-by-speaker?" + query,
+    {cache: "no-store",}
   );
   if (!res.ok) {
     throw new Error("Failed to fetch categories");
@@ -13,14 +14,18 @@ export const getPaidSpeakerWithFilter = async (query: string) => {
 };
 
 export const getAllPaidSpeaker = async () => {
-  const res = await fetch(BASE_URL + "/api/paid-hotline/speaker");
+  const res = await fetch(BASE_URL + "/api/paid-hotline/speaker", {
+    cache: "no-store",
+  });
   if (!res.ok) {
     throw new Error("Failed to fetch categories");
   }
   return res.json();
 };
 export const getPaidSpeakerById = async (id: string) => {
-  const res = await fetch(BASE_URL + "/api/paid-hotline/speaker/" + id);
+  const res = await fetch(BASE_URL + "/api/paid-hotline/speaker/" + id, {
+    cache: "no-store",
+  });
   if (!res.ok) {
     throw new Error("Failed to fetch categories");
   }

@@ -3,7 +3,9 @@
 import { BASE_URL } from "@/utils/envVariable";
 
 export const getCategories = async () => {
-  const res = await fetch(BASE_URL + "/api/ecommerce/categories/");
+  const res = await fetch(BASE_URL + "/api/ecommerce/categories/", {
+    cache: "no-store",
+  });
   if (!res.ok) {
     throw new Error("Failed to fetch categories");
   }
@@ -11,7 +13,9 @@ export const getCategories = async () => {
 };
 
 export const getCategoryBySlug = async (slug: string) => {
-  const res = await fetch(BASE_URL + "/api/ecommerce/categories/" + slug);
+  const res = await fetch(BASE_URL + "/api/ecommerce/categories/" + slug, {
+    cache: "no-store",
+  });
   if (!res.ok) {
     throw new Error("Failed to fetch categories");
   }
@@ -21,6 +25,9 @@ export const getCategoryBySlug = async (slug: string) => {
 export const getCategoriesByQuery = async (query: string) => {
   const res = await fetch(
     BASE_URL + "/api/ecommerce/categories-by-filter?" + query,
+    {
+      cache: "no-store",
+    }
   );
   if (!res.ok) {
     throw new Error("Failed to fetch categories");

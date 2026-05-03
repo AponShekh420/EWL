@@ -10,7 +10,7 @@ export default async function UpdateRecords({
   params: { id: string };
 }) {
   const { id } = await params;
-  const res = await fetch(BASE_URL + "/api/e-learning/recording/" + id);
+  const res = await fetch(BASE_URL + "/api/e-learning/recording/" + id, {cache: "no-store"});
   const { data: record } = await res.json();
   if (!res.ok) {
     throw new Error("Failed to fetch order details");

@@ -151,7 +151,7 @@ export default function FlatRateBoxes() {
   useEffect(() => {
     const fetchBoxes = async () => {
       try {
-        const res = await fetch(`${BASE_URL}/api/ecommerce/usps/boxes`);
+        const res = await fetch(`${BASE_URL}/api/ecommerce/usps/boxes`, {cache: "no-store"});
         const data = await res.json();
 
         if (data?.data?.length) {
