@@ -1,5 +1,6 @@
 import { getClassCartList } from "@/actions/classCart";
 import CheckoutContent from "@/components/class-checkout/CheckoutContent";
+import { getSession } from "@/lib/authLib";
 
 import { redirect } from "next/navigation";
 
@@ -8,6 +9,10 @@ export default async function Checkout({
 }: {
   params: Promise<{ slug: string }>;
 }) {
+  const user = await getSession();
+  if(!user) {
+    return redirect("/login")
+  }
   const {slug} = await params;
 
   let cart;

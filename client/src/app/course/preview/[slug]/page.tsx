@@ -23,7 +23,6 @@ export default async function page({
   let records;
   try {
     const { data } = await getPrivateRecords("course-demo", slug);
-    console.log(data)
     if(!data || data.length == 0) {
         return redirect(`/course/${slug}`)
     }
@@ -37,7 +36,7 @@ export default async function page({
 
         {/* Title */}
         <h1 className="text-3xl font-semibold text-white mb-8">
-          {records?.course?.title}
+          {records[0]?.course?.speaker?.firstName + " " + records[0]?.course?.speaker?.lastName}
         </h1>
 
         <Card className="rounded-2xl shadow-xl bg-[#2a7db5] border-none">
