@@ -9,6 +9,9 @@ export default async function RelatedProductSection({
 }) {
   const res = await fetch(
     BASE_URL + `/api/ecommerce/product-by-filter?category=${category}&limit=10`,
+    {
+      cache: "no-store"
+    }
   );
   const { data: productsData } = await res.json();
   if (!res.ok) {

@@ -11,6 +11,7 @@ export const getPrivateOrdersByQuery = async (query: string) => {
       "Content-Type": "application/json",
       Cookie: cookieStore.toString(), // forward cookies
     },
+    cache: "no-store",
   });
 
   if (!res.ok) {
@@ -26,6 +27,7 @@ export const getPrivateOrderById = async (id: string) => {
       "Content-Type": "application/json",
       Cookie: cookieStore.toString(), // forward cookies
     },
+    cache: "no-store",
   });
   console.log("pr")
   if (!res.ok) {

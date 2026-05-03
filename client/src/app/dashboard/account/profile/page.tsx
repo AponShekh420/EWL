@@ -10,7 +10,7 @@ import ProfileArea from "./ProfileArea";
 export default async function Profile() {
   const session = await getSession();
 
-  const res = await fetch(`${BASE_URL}/api/account/users/${session?.id}`);
+  const res = await fetch(`${BASE_URL}/api/account/users/${session?.id}`, {cache: "no-store",});
   const { data: user } = await res.json();
   return (
     <div>

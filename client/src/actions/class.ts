@@ -10,6 +10,7 @@ export const getClassBySlug = async (slug: string) => {
       "Content-Type": "application/json",
       Cookie: cookieStore.toString(), // forward cookies
     },
+    cache: "no-store",
   });
   if (!res.ok) {
     throw new Error("Failed to fetch class by slug");
@@ -19,6 +20,9 @@ export const getClassBySlug = async (slug: string) => {
 export const getClassByQuery = async (query: string) => {
   const res = await fetch(
     BASE_URL + "/api/e-learning/classes-by-filter-frontend?" + query,
+    {
+      cache: "no-store",
+    }
   );
   if (!res.ok) {
     throw new Error("Failed to fetch class by query");

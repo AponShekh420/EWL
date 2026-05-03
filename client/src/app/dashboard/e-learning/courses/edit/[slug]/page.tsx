@@ -8,8 +8,8 @@ export default async function EditCourse({ params }: { params: { slug: string } 
   const { slug } = await params;
 
   const [courseRes, speakerRes] = await Promise.all([
-    fetch(BASE_URL + "/api/e-learning/course/" + slug),
-    fetch(BASE_URL + "/api/account/speakers"),
+    fetch(BASE_URL + "/api/e-learning/course/" + slug, {cache: "no-store"}),
+    fetch(BASE_URL + "/api/account/speakers", {cache: "no-store"}),
   ]);
 
   const [courseData, speakersData] = await Promise.all([
