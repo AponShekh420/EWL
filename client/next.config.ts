@@ -13,6 +13,10 @@ const nextConfig: NextConfig = {
         hostname: "localhost",
       },
       {
+        protocol: "https",
+        hostname: "ohelmiriam.org",
+      },
+      {
         protocol: "http",
         hostname: "image.jpg",
       },
