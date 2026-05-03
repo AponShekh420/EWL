@@ -3,14 +3,18 @@
 import { BASE_URL } from "@/utils/envVariable";
 
 export const getUsersByQuery = async (query: string) => {
-  const res = await fetch(BASE_URL + "/api/account/users?" + query);
+  const res = await fetch(BASE_URL + "/api/account/users?" + query, {
+    cache: "no-store",
+  });
   if (!res.ok) {
     throw new Error("Failed to fetch users data");
   }
   return res.json();
 };
 export const getUserById = async (id: string) => {
-  const res = await fetch(BASE_URL + "/api/account/users/" + id);
+  const res = await fetch(BASE_URL + "/api/account/users/" + id, {
+    cache: "no-store",
+  });
   if (!res.ok) {
     throw new Error("Failed to fetch user data");
   }

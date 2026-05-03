@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import LinkWrapper from "./LinkWrapper";
+import Image from "next/image";
 
 export default function Sidebar() {
   const pathname = usePathname();
@@ -26,14 +27,13 @@ export default function Sidebar() {
       }`}
     >
       <div className="relative">
-        <h5 className="pl-2 font-medium text-xl text-gray-800 py-4 flex">
-          <Icon
-            icon="streamline:global-learning-remix"
-            width="32"
-            height="32"
-          />{" "}
-          eLearning
-        </h5>
+        {/* logo */}
+        <Link
+          className="sm:min-w-[130px] w-[130px] sm:max-w-[130px] h-full mx-auto py-4 flex justify-center"
+          href={"/"}
+        >
+          <Image src="/logo.png" alt="logo" width={100} height={100} className="h-full w-auto" />
+        </Link>
         <h5 className="px-2 mt-8 pb-2 uppercase text-sm font-semibold">
           Overview
         </h5>

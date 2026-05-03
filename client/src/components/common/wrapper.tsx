@@ -12,6 +12,7 @@ const Wrapper = ({ children }: { children: React.ReactNode }) => {
         `${BASE_URL}/api/auth/login/success`,
         {
           credentials: "include",
+          cache: "no-store"
         }
       );
       const data = await res.json();

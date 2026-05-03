@@ -3,7 +3,9 @@
 import { BASE_URL } from "@/utils/envVariable";
 
 export const getClassOrdersByQuery = async (query: string) => {
-  const res = await fetch(BASE_URL + "/api/e-learning/class-orders?" + query);
+  const res = await fetch(BASE_URL + "/api/e-learning/class-orders?" + query, {
+    cache: "no-store",
+  });
 
   if (!res.ok) {
     throw new Error("Failed to fetch orders detail");
@@ -11,7 +13,9 @@ export const getClassOrdersByQuery = async (query: string) => {
   return res.json();
 };
 export const getClassOrderById = async (id: string) => {
-  const res = await fetch(BASE_URL + "/api/e-learning/class-orders/" + id);
+  const res = await fetch(BASE_URL + "/api/e-learning/class-orders/" + id, {
+    cache: "no-store",
+  });
   if (!res.ok) {
     throw new Error("Failed to fetch orders detail");
   }

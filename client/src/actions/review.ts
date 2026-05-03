@@ -3,7 +3,9 @@
 import { BASE_URL } from "@/utils/envVariable";
 
 export const getReviewsByQuery = async (query: string) => {
-  const res = await fetch(BASE_URL + "/api/ecommerce/reviews?" + query);
+  const res = await fetch(BASE_URL + "/api/ecommerce/reviews?" + query, {
+    cache: "no-store",
+  });
   if (!res.ok) {
     throw new Error("Failed to fetch reviews");
   }

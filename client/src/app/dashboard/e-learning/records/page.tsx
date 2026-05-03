@@ -13,6 +13,7 @@ export default async function Records({
   const query = await queryFormatter(searchParams);
   const res = await fetch(
     BASE_URL + "/api/e-learning/recording-by-filter" + query,
+    {cache: "no-store"}
   );
   const { data: recordings, pagination } = await res.json();
 
