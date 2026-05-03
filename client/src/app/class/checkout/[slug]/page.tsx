@@ -1,5 +1,6 @@
 import { getClassCartList } from "@/actions/classCart";
 import CheckoutContent from "@/components/class-checkout/CheckoutContent";
+import { getSession } from "@/lib/authLib";
 
 import { redirect } from "next/navigation";
 
@@ -8,17 +9,19 @@ export default async function Checkout({
 }: {
   params: Promise<{ slug: string }>;
 }) {
+  const user = await getSession();
+  if(!user) {
+    return redirect("/login")
+  }
   const {slug} = await params;
 
   let cart;
   
   try {
     const { data } = await getClassCartList(slug);
-    console.log("data", data)
 
     if(!data) {
-      // return redirect("/classes")
-      console.log(data)
+      return redirect("/classes")
     }
     cart = {
       _id: 'temp-id', // Temporary ID, replace with actual if available
@@ -33,7 +36,6 @@ export default async function Checkout({
         }
       ]
     };
-    console.log("cart", cart)
   } catch(err) {
     return redirect("/classes")
   }

@@ -52,10 +52,10 @@ const Footer = () => {
               Free Conferences
             </Link>
             <Link
-              href="/free-recordings"
+              href="/free-demos"
               className="mt-2 sm:mt-3 transition-all hover:text-[#270034] text-white duration-150"
             >
-              Free Recordings
+              Free Demos
             </Link>
             <Link
               href="/shop"

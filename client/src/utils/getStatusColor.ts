@@ -38,3 +38,14 @@ export const getUserRoleColor = (status: string) => {
     return "text-red-500";
   }
 };
+
+export const getUserStatusColor = (status: string) => {
+  if (status.toLowerCase() === "active") {
+    return "text-green-500";
+  } else if (status.toLowerCase() === "pending") {
+    return "text-yellow-500";
+  } else {
+    return "text-red-500";
+  }
+};
+

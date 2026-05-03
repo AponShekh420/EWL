@@ -3,14 +3,20 @@ import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcryptjs"
 import UserModel from "../../models/UserModel";
 import tokenGenerator from '../../helpers/tokenGenerator';
+import wpCheckPassword from '../../lib/wpCheckPassword';
 
 const signin = async (req: Request, res: Response, next: NextFunction) => {
   const {email, password} = req.body;
   const userInfo = await UserModel.findOne({$or: [{email: email.toLowerCase()}, {userName: email.toLowerCase()}]}); ;
   if(userInfo) {
-    const passCheck = await bcrypt.compare(password, userInfo?.password);
+    const passCheck = await wpCheckPassword(password, userInfo?.password)
     if(passCheck) {
-      const {_id, userName, firstName, lastName, email, gender, isOrthodoxJew, maritalStatus, keepsMitzvos, chafifaDuration, chickenSoupInDairySink, avatar, role} = userInfo;
+      const {_id, userName, firstName, lastName, email, gender, isOrthodoxJew, maritalStatus, keepsMitzvos, chafifaDuration, chickenSoupInDairySink, avatar, role, status} = userInfo;
+
+      if(status == "pending") {
+        res.status(401).json({errors: {failure: {msg: "Your account has been created successfully but is awaiting approval. You’ll be able to log in once it’s approved."}}})
+      }
+
       const modifiedUser = {
           id: _id,
           userName,

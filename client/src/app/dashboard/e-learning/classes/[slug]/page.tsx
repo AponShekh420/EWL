@@ -21,9 +21,9 @@ export default async function ProductDetails({
       <PageHeading
         pageTitle="Product details"
         breadcrumbList={[
-          { name: "E-commerce", href: "" },
-          { name: "Products", href: `/ecommerce/products` },
-          { name: product?.name, href: `/ecommerce/products/${product.slug}` },
+          { name: "E-learning", href: "" },
+          { name: "Products", href: `/e-learning/courses` },
+          { name: product?.name, href: `/ecommerce/courses/${product.slug}` },
         ]}
       >
         <Link href="/dashboard/ecommerce/products">

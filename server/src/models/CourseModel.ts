@@ -8,6 +8,7 @@ const courseSchema = new Schema(
       required: true,
     },
     headline: { type: String },
+    courseId: { type: String },
     bio: { type: String },
     slug: { type: String, required: true },
     time: { type: String },

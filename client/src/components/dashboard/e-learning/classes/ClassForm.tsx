@@ -22,7 +22,7 @@ import { getImageUrl } from "@/utils/getImageUrl";
 import { nextStep, activeStep, prevStep } from "@/redux/features/stepper/classStepperSlice";
 import { ClassContents } from "./ClassContents";
 import { ClassType, ClassValidationErrors } from "@/types/Class";
-import { addClassField, deleteExistingThumb, resetClassFields } from "@/redux/features/class/classFormSlice";
+import { addClassField, deleteExistingThumb, resetClassFields, stepClassFields } from "@/redux/features/class/classFormSlice";
 const Editor = dynamic(
   () => import("@/components/dashboard/common/editor/Editor"),
   {
@@ -97,7 +97,7 @@ export default function CreateClassForm({
       addClassField({
         ...classData,
         thumbnail: null,
-        speaker: classData?.speaker,
+        speaker: classData?.speaker._id,
         category: classData?.category,
         existingThumbnail: classData?.thumbnail,
         existingAttachment: classData?.attachment,
@@ -114,7 +114,14 @@ export default function CreateClassForm({
   }, []);
 
   return (
-    <MultiStepper totalStep={totalStep} step={step} activeStep={activeStep} nextStep={nextStep} prevStep={prevStep}>
+    <MultiStepper 
+    totalStep={totalStep} 
+    step={step} 
+    activeStep={activeStep} 
+    nextStep={nextStep} 
+    prevStep={prevStep}
+    errorTrack={{ errors, fields: stepClassFields }}
+    >
       <form action="#" className="min-h-[50vh]" onSubmit={onHandleSubmit}>
         {step === 1 && (
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-8 lg:gap-4">

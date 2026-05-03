@@ -24,3 +24,8 @@ export async function getSession() {
   if (!session) return null;
   return await decrypt(session);
 }
+
+
+export const getSessionToken = async () => {
+  return (await cookies()).get("session")?.value;
+}

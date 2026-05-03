@@ -10,6 +10,8 @@ import {
   recordingValidationRules,
   validateRecording,
 } from "../../middleware/recording/recordingValidator";
+import { getPrivateRecords } from "../../controllers/e-learning/recording/getPrivateRecords";
+import authCheck from "../../middleware/common/authCheck";
 const router = Router();
 
 const multiFileUploader = multerUploader(
@@ -35,5 +37,9 @@ router.put(
 router.get("/recording-by-filter", getRecordingByFilters);
 router.get("/recording/:id", getRecordingById);
 router.delete("/recording/:id", deleteRecording);
+
+
+// get private
+router.post("/private/records", authCheck, getPrivateRecords)
 
 export default router;

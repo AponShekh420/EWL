@@ -19,7 +19,28 @@ export const getRecordingByFilters = async (
     };
   }
   try {
-    const recordings = await RecordingModel.find(searchQuery)
+    const recordings = await RecordingModel.find(searchQuery).populate([
+      {
+        path: "class", // populate class refs inside classes array
+        select: "title",
+        populate: {
+          path: "speaker",
+          select: "firstName lastName gender"
+        }
+      },
+      {
+        path: "course", // populate class refs inside classes array
+        select: "title",
+        populate: {
+          path: "speaker",
+          select: "firstName lastName gender"
+        }
+      },
+      {
+        path: "speaker", // populate class refs inside classes array
+        select: "firstName lastName gender"
+      },
+    ])
       .skip(skip)
       .limit(limit)
       .sort({ createdAt: -1 });

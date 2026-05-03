@@ -13,7 +13,7 @@ const courseOrderSuccess = (req: Request,res: Response)=>{
     stripe.webhooks.constructEvent(
     req.body,
     req.headers["stripe-signature"],
-    process.env.STRIPE_WEBHOOK_SECRET
+    process.env.STRIPE_WEBHOOK_SECRET_COURSE
     );
 
 

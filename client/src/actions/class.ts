@@ -1,9 +1,16 @@
 "use server";
 
 import { BASE_URL } from "@/utils/envVariable";
+import { cookies } from "next/headers";
 
 export const getClassBySlug = async (slug: string) => {
-  const res = await fetch(BASE_URL + "/api/e-learning/class/" + slug);
+  const cookieStore = await cookies();
+  const res = await fetch(BASE_URL + "/api/e-learning/class/" + slug, {
+    headers: {
+      "Content-Type": "application/json",
+      Cookie: cookieStore.toString(), // forward cookies
+    },
+  });
   if (!res.ok) {
     throw new Error("Failed to fetch class by slug");
   }
@@ -11,7 +18,7 @@ export const getClassBySlug = async (slug: string) => {
 };
 export const getClassByQuery = async (query: string) => {
   const res = await fetch(
-    BASE_URL + "/api/e-learning/classes-by-filter?" + query,
+    BASE_URL + "/api/e-learning/classes-by-filter-frontend?" + query,
   );
   if (!res.ok) {
     throw new Error("Failed to fetch class by query");

@@ -11,7 +11,7 @@ import Link from 'next/link';
 const CoursePage = async ({params}: {params: {slug: string}}) => {
   const availableTabs:string[] = [];
   const {slug} = await params;
-  const {data: course} = await getCourseBySlug(slug);
+  const {data: course, ordered} = await getCourseBySlug(slug);
   const { 
   speaker,
   date,
@@ -35,13 +35,13 @@ const CoursePage = async ({params}: {params: {slug: string}}) => {
   module,
   } = course;
 
-  overviewTab != "<p><br></p>" && availableTabs.push("Overview");
-  courseTopicsTab != "<p><br></p>" && availableTabs.push("Course Topics");
-  speakerProfileTab != "<p><br></p>" && availableTabs.push("Speaker Profile");
-  aboutTab != "<p><br></p>" && availableTabs.push("About");
-  FAQsTab != "<p><br></p>" && availableTabs.push("FAQs");
-  testimonialsTab != "<p><br></p>" && availableTabs.push("Testimonial");
-  moreInfoTab != "<p><br></p>" && availableTabs.push("More Info");
+  overviewTab && overviewTab != "<p><br></p>" && availableTabs.push("Overview");
+  courseTopicsTab && courseTopicsTab != "<p><br></p>" && availableTabs.push("Course Topics");
+  speakerProfileTab && speakerProfileTab != "<p><br></p>" && availableTabs.push("Speaker Profile");
+  aboutTab && aboutTab != "<p><br></p>" && availableTabs.push("About");
+  FAQsTab && FAQsTab != "<p><br></p>" && availableTabs.push("FAQs");
+  testimonialsTab && testimonialsTab != "<p><br></p>" && availableTabs.push("Testimonial");
+  moreInfoTab && moreInfoTab != "<p><br></p>" && availableTabs.push("More Info");
 
   const installmentPricePerMonth = installmentMonths > 0 ? (price / installmentMonths).toFixed(2) : null;
   const modulePricePerMonth = module > 0 ? (price / module).toFixed(2) : null;
@@ -60,9 +60,7 @@ const CoursePage = async ({params}: {params: {slug: string}}) => {
                 {speaker.firstName} {speaker.lastName}
               </Link> - <span className="text-blue-700">{title}</span>
             </h1>
-            <p className="text-lg italic text-gray-600 mt-2">
-              {headline}
-            </p>
+            <div className="prose prose-lg max-w-none mt-2" dangerouslySetInnerHTML={{ __html: headline }} />
             <p className="text-lg italic text-gray-600 mt-2">
               {bio}
             </p>
@@ -76,11 +74,11 @@ const CoursePage = async ({params}: {params: {slug: string}}) => {
         <div className="lg:col-span-2">
           {/* Navigation Tabs */}
           <div className="w-full max-w-5xl mx-auto p-4">
-            <Tabs defaultValue="testimonial" className="w-full">
+            <Tabs defaultValue={(availableTabs[0])?.toLowerCase()} className="w-full !relative">
               {/* 1. Use -space-x-6 or -space-x-8 to ensure overlap 
                 2. Use items-end to align them to the bottom content border
               */}
-              <TabsList className="flex flex-wrap h-auto w-full justify-start items-end bg-transparent p-0 sm:-space-x-6 gap-y-2 overflow-visible">
+              <TabsList className="flex flex-wrap w-full justify-start items-end bg-transparent p-0 sm:-space-x-6 gap-y-1 overflow-visible !h-fit">
                 {availableTabs?.map((tab, index) => (
                   <TabsTrigger
                     key={tab + index}
@@ -89,7 +87,7 @@ const CoursePage = async ({params}: {params: {slug: string}}) => {
                       relative h-11 px-8 text-[12px] md:text-[13px] font-bold uppercase tracking-tight
                       /* Use a slightly less aggressive clip-path for better wrapping look */
                       [clip-path:polygon(10%_0%,_90%_0%,_100%_100%,_0%_100%)]
-                      transition-all duration-200 min-w-[120px] md:min-w-[140px]
+                      transition-all duration-200 min-w-[130px] sm:min-w-[150px] md:min-w-[145px] max-w-[170px]
                       
                       bg-[#cbd5e1] text-[#64748b] border-none
                       
@@ -117,41 +115,47 @@ const CoursePage = async ({params}: {params: {slug: string}}) => {
               </TabsList>
 
               {/* Content Container */}
-              <div className="relative z-40 -mt-[1px] bg-white border-t-2 border-t-[#0266a1] shadow-lg rounded-b-xl p-8">
+              <div className="-mt-[1px] bg-white border-t-2 border-t-[#0266a1] shadow-lg rounded-b-xl p-8 z-30 sticky !top-full !w-full">
                 <TabsContent value="about">
                   <div
-                    className="text-base"
+                    className="prose max-w-none"
                     dangerouslySetInnerHTML={{ __html: aboutTab }}
                   />
                 </TabsContent>
                 <TabsContent value="overview">
                   <div
-                    className="text-base"
+                    className="prose max-w-none"
                     dangerouslySetInnerHTML={{ __html: overviewTab }}
                   />
                 </TabsContent>
                 <TabsContent value="course topics">
                   <div
-                    className="text-base"
+                    className="prose max-w-none"
                     dangerouslySetInnerHTML={{ __html: courseTopicsTab }}
                   />
                 </TabsContent>
                 <TabsContent value="speaker profile">
                   <div
-                    className="text-base"
+                    className="prose max-w-none"
                     dangerouslySetInnerHTML={{ __html: speakerProfileTab }}
                   />
                 </TabsContent>
                 <TabsContent value="faqs">
                   <div
-                    className="text-base"
+                    className="prose max-w-none"
                     dangerouslySetInnerHTML={{ __html: FAQsTab }}
                   />
                 </TabsContent>
                 <TabsContent value="testimonial">
                   <div
-                    className="text-base"
+                    className="prose max-w-none"
                     dangerouslySetInnerHTML={{ __html: testimonialsTab}}
+                  />
+                </TabsContent>
+                <TabsContent value="more info">
+                  <div
+                    className="prose max-w-none"
+                    dangerouslySetInnerHTML={{ __html: moreInfoTab}}
                   />
                 </TabsContent>
               </div>
@@ -174,13 +178,13 @@ const CoursePage = async ({params}: {params: {slug: string}}) => {
                 </span>
               )}
 
-              <Link href={offline ? externalLink : `/course/checkout?slug=${slug}`} className='!h-full p-6 block'>
+              <Link href={ordered ? `/course/private/${slug}` : offline ? externalLink : `/course/checkout/${slug}`} className='!h-full p-6 block'>
                 <div 
                   className="w-full flex items-center justify-between"
                 >
                   {/* 2. Action Text (Added a tiny bit of left padding to clear the tape) */}
                   <div className='flex flex-col'>
-                    <span className={`text-xl font-bold tracking-tight ${(modulePricePerMonth || installmentPricePerMonth) ? 'pl-5' : 'pl-2'}`}>GET COURSE</span>
+                    <span className={`text-xl font-bold tracking-tight ${(modulePricePerMonth || installmentPricePerMonth) ? 'pl-5' : 'pl-2'}`}>{ordered ? "Go to Course" : "GET COURSE"}</span>
                     {(installmentPricePerMonth || modulePricePerMonth)  && (
                       <span className="text-[10px] opacity-70 uppercase tracking-wider mt-1 pl-5">
                         Limited Time Offer
@@ -203,7 +207,7 @@ const CoursePage = async ({params}: {params: {slug: string}}) => {
             </div>
 
                 
-            <Link href={`/preview/${slug}`} className='mb-8 block'>
+            <Link href={`/course/preview/${slug}`} className='mb-8 block'>
               <button className="w-full bg-teal hover:bg-teal-600 text-white font-bold py-4 rounded-xl transition-colors shadow-lg/50 shadow-teal hover:shadow-teal-600">
                 Preview
               </button>

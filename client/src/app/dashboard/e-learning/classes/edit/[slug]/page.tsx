@@ -8,7 +8,7 @@ export default async function EditClass({ params }: { params: { slug: string } }
   const { slug } = await params;
 
   const [classRes, speakerRes] = await Promise.all([
-    fetch(BASE_URL + "/api/e-learning/class/" + slug),
+    fetch(BASE_URL + "/api/e-learning/class/private/" + slug),
     fetch(BASE_URL + "/api/account/speakers"),
   ]);
 

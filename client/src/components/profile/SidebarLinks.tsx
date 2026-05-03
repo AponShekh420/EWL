@@ -20,6 +20,12 @@ export default function SidebarLinks() {
         <Icon icon="mage:book" width="24" height="24" /> my courses
       </Link>
       <Link
+        className={`flex gap-2 items-center capitalize py-4 hover:bg-teal px-4 hover:text-white border-b ${pathname.includes("my-classes") ? "bg-teal text-white" : ""}`}
+        href="/profile/my-classes"
+      >
+        <Icon icon="ic:outline-class" width="24" height="24" /> my classes
+      </Link>
+      <Link
         className={`flex gap-2 items-center capitalize py-4 hover:bg-teal px-4 hover:text-white border-b ${pathname.includes("my-orders") ? "bg-teal text-white" : ""}`}
         href="/profile/my-orders"
       >

@@ -11,14 +11,20 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { getSession } from "@/lib/authLib";
 import { paginationCounter } from "@/utils/paginationCounter";
 import { queryFormatter } from "@/utils/queryFormatter";
+import { redirect } from "next/navigation";
 
 export default async function Shop({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
+  const user = await getSession();
+  if(!user) {
+    return redirect("/login")
+  }
   const query = await queryFormatter(searchParams);
   const {
     data: productsData,

@@ -1,6 +1,23 @@
 import { ClassFormState } from "@/types/Class";
 import { createSlice } from "@reduxjs/toolkit";
 
+
+export const stepClassFields = {
+  step1: ["title", "category", "speaker", "status"],
+  step2: ["thumbnail"],
+  step3: ["price", "installmentMonths", "module", "offline", "externalLink"],
+  step4: [
+    "audiosOne",
+    "audiosTwo",
+    "videosOne",
+    "videosTwo",
+    "contentOne",
+    "contentTwo",
+  ],
+  step5: ["customMessage", "attachment", "checkoutPageMessage"],
+  step6: ["metaTitle", "metaDescription"],
+};
+
 const initialState: ClassFormState = {
   title: "",
   category: "",// Men | Women | Couples

@@ -1,9 +1,14 @@
 import { getCartList } from "@/actions/cart";
 
 import CheckoutContent from "@/components/checkout/CheckoutContent";
+import { getSession } from "@/lib/authLib";
 import { redirect } from "next/navigation";
 
 export default async function Checkout() {
+  const user = await getSession();
+  if(!user) {
+    return redirect("/login")
+  }
   let cart;
   
   try {

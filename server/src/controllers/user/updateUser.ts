@@ -24,6 +24,9 @@ export const updateUser = async (
     if (body.role) {
       updatedData.role = body.role;
     }
+    if (body.status) {
+      updatedData.status = body.status;
+    }
     if (file) {
       updatedData.avatar = file.filename;
     }

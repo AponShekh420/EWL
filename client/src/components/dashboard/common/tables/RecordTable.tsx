@@ -32,7 +32,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { PaginationType } from "@/types/Pagination";
-import { IRecording } from "@/types/Recording";
+import { IDisplayRecording } from "@/types/Recording";
 import { debounce } from "@/utils/debounce";
 import { BASE_URL } from "@/utils/envVariable";
 import { paginationCounter } from "@/utils/paginationCounter";
@@ -45,7 +45,7 @@ export default function RecordTable({
   records,
   pagination,
 }: {
-  records: IRecording[];
+  records: IDisplayRecording[];
   pagination: PaginationType;
 }) {
   const router = useRouter();
@@ -155,16 +155,16 @@ export default function RecordTable({
           <TableRow className="uppercase !h-13">
             <TableHead className="w-[300px] space-x-5 font-bold text-gray-500">
               <Checkbox className="checkbox-t" />
-              <span>Record Id</span>
+              <span>Heading</span>
             </TableHead>
             <TableHead className="font-bold text-gray-500">
-              Category Id
+              Ref Title
             </TableHead>
 
             <TableHead className="font-bold text-gray-500">
               Recording For
             </TableHead>
-            <TableHead className="font-bold text-gray-500">Heading</TableHead>
+            <TableHead className="font-bold text-gray-500">Speaker</TableHead>
             <TableHead className="font-bold text-gray-500">gender</TableHead>
             <TableHead className="font-bold text-gray-500">
               Record List
@@ -178,27 +178,23 @@ export default function RecordTable({
               <TableCell>
                 <div className="flex gap-4 items-center">
                   <Checkbox className="checkbox-t" />
-                  <div className="flex items-center gap-x-4">
-                    <div className="font-lexend-deca flex items-center gap-1">
-                      <h5 className="font-medium">#{record._id}</h5>
-                    </div>
-                  </div>
+                  {record?.heading}
                 </div>
               </TableCell>
               <TableCell>
                 {record.recordingCategory === "class"
-                  ? record?.class
-                  : record.recordingCategory === "course"
-                    ? record?.course
-                    : record?.speaker}
+                  ? record?.class?.title
+                  : (record.recordingCategory === "course" || record?.recordingCategory === "course-demo")
+                    ? record?.course?.title
+                    : <span className="text-red-500">No title for free recording</span>}
               </TableCell>
               <TableCell className="font-medium">
                 {record.recordingCategory}
               </TableCell>
-              <TableCell>{record?.heading}</TableCell>
+              <TableCell>{((record.recordingCategory === "course" || record.recordingCategory === "course-demo") ? (record?.course?.speaker?.firstName + " " + record?.course?.speaker?.lastName) : record.recordingCategory === "class" ? (record?.class?.speaker.firstName + " " + record?.class?.speaker.lastName) : (record?.speaker?.firstName + " " + record?.speaker?.lastName))}</TableCell>
 
               <TableCell className="font-medium">
-                {record?.gender || "-"}
+                {((record.recordingCategory === "course" || record.recordingCategory === "course-demo") ? record?.course?.speaker.gender : record.recordingCategory === "class" ? record?.class?.speaker.gender : record?.gender)}
               </TableCell>
               <TableCell className="font-medium">
                 {record.recordings.length}

@@ -15,6 +15,7 @@ export interface UserType {
   chickenSoupInDairySink: "yes" | "no";
   createdAt: Date;
   updatedAt: Date;
+  status: "pending" | "active"
 }
 
 type ValidationErrorItem = {

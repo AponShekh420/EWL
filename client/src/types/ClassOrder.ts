@@ -58,7 +58,55 @@ export type ClassOrderType = {
   status: string,
   stripePaymentIntentId: string,
   paymentStatus: string,
-  classes: ClassesPros,
+  classes: ClassesPros[],
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+};
+
+
+type ClassesCardPros = {
+  _id: {
+    _id: string;
+    slug: string;
+    title: string;
+    thumbnail: string;
+    speaker:{ firstName: string; lastName: string; gender: string, avatar: string, userName: string };
+  };
+  quantity: number;
+  price: number;
+}
+
+
+export type ClassOrderCardType = {
+  orderId: number,
+  _id: string,
+  customer: Customer
+  fullName?: string;
+  email?: string;
+  spouseName?: string;
+  howDidYouHearAboutUs?: string;
+
+  country: string;
+  state?: string;
+  city?: string;
+  zip?: string;
+
+  streetAddress?: string;
+  apartment?: string;
+
+  phoneNumber?: string;
+  otherPhoneNumber?: string;
+
+  orderNotes?: string;
+
+  totalClass: number,
+  subtotal: number,
+  totalPrice: number,
+  status: string,
+  stripePaymentIntentId: string,
+  paymentStatus: string,
+  classes: ClassesCardPros[],
   createdAt: string;
   updatedAt: string;
   __v: number;

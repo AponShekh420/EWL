@@ -6,6 +6,14 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  bio: {
+    type: String,
+    required: false
+  },
+  userId: {
+    type: String,
+    required: false
+  },
   firstName: {
     type: String,
     required: true

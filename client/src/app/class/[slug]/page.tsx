@@ -3,12 +3,13 @@ import { getClassBySlug } from '@/actions/class';
 import AudioList from '@/components/courses/AudioList';
 import VideoList from '@/components/courses/VideoList';
 import { Icon } from '@iconify/react';
+import Link from 'next/link';
 
 
 const CoursePage = async ({params}: {params: {slug: string}}) => {
   const availableTabs:string[] = [];
   const {slug} = await params;
-  const {data: classItem} = await getClassBySlug(slug);
+  const {data: classItem, ordered} = await getClassBySlug(slug);
   const { 
   contentOne,
   contentTwo,
@@ -32,16 +33,18 @@ const CoursePage = async ({params}: {params: {slug: string}}) => {
         )}
         {<AudioList audios={audiosOne} />}
         {<VideoList videos={videosOne} />}
-        {contentOne != "<p><br></p>" && (
-          <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: contentOne }} />
+        {contentTwo != "<p><br></p>" && (
+          <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: contentTwo }} />
         )}
         {<AudioList audios={audiosTwo} />}
         {<VideoList videos={videosTwo} />}
 
-        <button className="self-end bg-teal font-semibold text-white px-4 py-2 rounded hover:bg-black transition flex items-center gap-1">
-          Get Class
+        <Link href={ordered ? `/class/private/${classItem.slug}` : `/class/checkout/${classItem.slug}`} className='self-end'>
+        <button className="bg-teal font-semibold text-white px-4 py-2 rounded hover:bg-black transition flex items-center gap-1">
+          {ordered ? "Go to Class" : "Get Class"}
           <Icon icon="maki:arrow" width="15" height="15" />
         </button>
+        </Link>
       </main>
     </div>
   );

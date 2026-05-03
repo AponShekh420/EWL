@@ -4,16 +4,22 @@ import BreadcrumbPath from "@/components/common/BreadcrumbPath";
 import MoreProductInfoSection from "@/components/shop/product-details/MoreProductInfoSection";
 import RelatedProductSection from "@/components/shop/product-details/RelatedProductSection";
 import ShopDetailSection from "@/components/shop/product-details/ShopDetailSection";
+import { getSession } from "@/lib/authLib";
 import { CategoryType } from "@/types/Category";
 import { getImageUrl } from "@/utils/getImageUrl";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default async function ProductDetails({
   params,
 }: {
   params: { slug: string };
 }) {
+  const user = await getSession();
+  if(!user) {
+    return redirect("/login")
+  }
   const { slug } = await params;
   const { data: product } = await getProductBySlug(slug);
   const { data: bestSelling } = await getProductByQuery("?sort=popularity");

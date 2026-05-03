@@ -13,6 +13,7 @@ import {
 } from "../middleware/user/userValidator";
 import { getAllSpeakers } from "../controllers/user/getAllSpeakers";
 import { getSpeakerByUsername } from "../controllers/user/getSpeakerByUsername";
+import usersExport from "../controllers/user/usersExport";
 const singleFileUploader = multerUploader("profile");
 const router = express.Router();
 
@@ -38,10 +39,14 @@ router.put(
   updateUser,
 );
 router.put("/user-role/:id", updateUser);
+router.put("/user-status/:id", updateUser);
 router.delete("/users/:id", deleteUser);
 router.get("/users", getAllUsers);
 router.get("/users/:id", getUserById);
 router.get("/speaker/:username", getSpeakerByUsername);
+
+
+// router.post("/users/export", usersExport)
 
 
 

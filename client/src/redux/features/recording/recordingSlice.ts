@@ -8,7 +8,7 @@ export interface RecordingState {
   speakerId: string;
   classId: string;
   courseId: string;
-  recordingCategory: "free" | "course" | "class";
+  recordingCategory: "free" | "course" | "class" | "course-demo";
   recordings: IRecordingItem[];
   existingRecordings: IRecordingItem[];
   deletedRecordings: IRecordingItem[];

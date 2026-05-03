@@ -22,6 +22,13 @@ import {
 
 import { Router } from "express";
 import express from "express"
+import { getPrivateCourseOrderById } from "../../controllers/e-learning/course-order/getPrivateCourseOrderById";
+import { getAllPrivateCourseOrder } from "../../controllers/e-learning/course-order/getAllPrivateCourseOrders";
+import { exportCourses } from "../../controllers/e-learning/course/exportCourses";
+import  exportCourseOrders  from "../../controllers/e-learning/course-order/exportCourseOrders";
+import { getPrivateCourseBySlug } from "../../controllers/e-learning/course/getPrivateCourseById";
+import authCheckToAddUser from "../../middleware/common/authCheckToAddUser";
+import { getCourseByFilterFrontEnd } from "../../controllers/e-learning/course/getCourseByFilterFrontEnd";
 const router = Router();
 
 const multiFileUploader = multerUploader("courses");
@@ -52,7 +59,9 @@ router.delete("/course/:id", deleteCourse);
 
 router.get("/courses", getAllCourses);
 router.get("/courses-by-filter", getCourseByFilter);
-router.get("/course/:slug", getCourseBySlug);
+router.get("/courses-by-filter-frontend", getCourseByFilterFrontEnd);
+router.get("/course/:slug", authCheckToAddUser, getCourseBySlug);
+router.get("/course/private/:slug", getPrivateCourseBySlug);
 
 
 
@@ -64,5 +73,15 @@ router.put("/order-status/:id", updateCourseOrder);
 router.delete("/orders/:id", deleteCourseOrder);
 router.get("/orders/:id", getCourseOrderById);
 router.get("/orders", getAllCourseOrder);
+
+
+// private orders
+router.get("/my-orders/:id", authCheck, getPrivateCourseOrderById);
+router.get("/my-orders", authCheck, getAllPrivateCourseOrder);
+
+
+// export all course to database
+// router.post("/courses/export", exportCourses);
+// router.post("/course/orders/export", exportCourseOrders);
 
 export default router;
