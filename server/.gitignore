@@ -1,6 +1,6 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-/public/images/classes/
+# /public/images/classes/
 
 # dependencies
 /node_modules
@@ -14,6 +14,8 @@
 
 # production
 /build
+
+/public/images
 
 # misc
 .DS_Store
