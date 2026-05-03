@@ -32,7 +32,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { PaginationType } from "@/types/Pagination";
-import { IDisplayRecording, IRecording } from "@/types/Recording";
+import { IDisplayRecording } from "@/types/Recording";
 import { debounce } from "@/utils/debounce";
 import { BASE_URL } from "@/utils/envVariable";
 import { paginationCounter } from "@/utils/paginationCounter";
@@ -191,7 +191,7 @@ export default function RecordTable({
               <TableCell className="font-medium">
                 {record.recordingCategory}
               </TableCell>
-              <TableCell>{((record.recordingCategory === "course" || record.recordingCategory === "course-demo") ? (record?.course?.speaker.firstName + " " + record?.course?.speaker.lastName) : record.recordingCategory === "class" ? (record?.class?.speaker.firstName + " " + record?.class?.speaker.lastName) : (record?.speaker?.firstName + " " + record?.speaker?.lastName))}</TableCell>
+              <TableCell>{((record.recordingCategory === "course" || record.recordingCategory === "course-demo") ? (record?.course?.speaker?.firstName + " " + record?.course?.speaker?.lastName) : record.recordingCategory === "class" ? (record?.class?.speaker.firstName + " " + record?.class?.speaker.lastName) : (record?.speaker?.firstName + " " + record?.speaker?.lastName))}</TableCell>
 
               <TableCell className="font-medium">
                 {((record.recordingCategory === "course" || record.recordingCategory === "course-demo") ? record?.course?.speaker.gender : record.recordingCategory === "class" ? record?.class?.speaker.gender : record?.gender)}
