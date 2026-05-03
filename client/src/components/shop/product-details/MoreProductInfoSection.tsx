@@ -77,10 +77,12 @@ export default function MoreProductInfoSection({
               </TabsTrigger>
             </TabsList>
             <TabsContent value="moreinfo">
-              <div
-                className="p-3 sm:p-4"
-                dangerouslySetInnerHTML={{ __html: product.description }}
-              />
+              {product.description && (
+                <div
+                  className="p-3 sm:p-4"
+                  dangerouslySetInnerHTML={{ __html: product.description }}
+                />
+              )}
             </TabsContent>
             <TabsContent value="additional-info">
               <div className="p-3 sm:p-4">

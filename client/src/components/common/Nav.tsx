@@ -104,8 +104,8 @@ const Nav = ({ cart }: { cart: CartType }) => {
                   >
                     <Link
                       href={
-                        (userInfo as any)?.role == "admin"
-                          ? "/dashboard/profile"
+                        userInfo?.role == "admin"
+                          ? "/dashboard/account/profile"
                           : "/profile"
                       }
                       className="flex items-center gap-[5px] rounded-md p-[8px] pr-[45px] py-[3px] text-[1rem] dark:text-[#abc2d3] dark:hover:bg-slate-900/50 text-gray-600 hover:bg-gray-50"
@@ -114,23 +114,47 @@ const Nav = ({ cart }: { cart: CartType }) => {
                       View Profile
                     </Link>
                     <Link
-                      href={"/settings"}
+                      href={"/profile/my-courses"}
                       className="flex items-center gap-[5px] rounded-md p-[8px] pr-[45px] py-[3px] text-[1rem] dark:text-[#abc2d3] dark:hover:bg-slate-900/50 text-gray-600 hover:bg-gray-50"
                     >
                       <Icon
-                        icon="weui:setting-outlined"
+                        icon="mage:book"
                         width="24"
                         height="24"
                       />
-                      Settings
+                      My Courses
                     </Link>
                     <Link
-                      href={"/dashboard"}
+                      href={"/profile/my-classes"}
                       className="flex items-center gap-[5px] rounded-md p-[8px] pr-[45px] py-[3px] text-[1rem] dark:text-[#abc2d3] dark:hover:bg-slate-900/50 text-gray-600 hover:bg-gray-50"
                     >
-                      <Icon icon="duo-icons:dashboard" width="24" height="24" />
-                      Dashboard
+                      <Icon
+                        icon="ic:outline-class"
+                        width="24"
+                        height="24"
+                      />
+                      My Classes
                     </Link>
+                    <Link
+                      href={"/profile/my-orders"}
+                      className="flex items-center gap-[5px] rounded-md p-[8px] pr-[45px] py-[3px] text-[1rem] dark:text-[#abc2d3] dark:hover:bg-slate-900/50 text-gray-600 hover:bg-gray-50"
+                    >
+                      <Icon
+                        icon="iconoir:cart"
+                        width="24"
+                        height="24"
+                      />
+                      My Orders
+                    </Link>
+                    {userInfo?.role == "admin" && (
+                      <Link
+                        href={"/dashboard"}
+                        className="flex items-center gap-[5px] rounded-md p-[8px] pr-[45px] py-[3px] text-[1rem] dark:text-[#abc2d3] dark:hover:bg-slate-900/50 text-gray-600 hover:bg-gray-50"
+                      >
+                        <Icon icon="duo-icons:dashboard" width="24" height="24" />
+                        Dashboard
+                      </Link>
+                    )}
 
                     <div className="mt-3 border-t dark:border-slate-700 border-gray-200 pt-[5px]">
                       <p
@@ -244,6 +268,14 @@ const Nav = ({ cart }: { cart: CartType }) => {
                       className="block px-4 py-2 text-sm text-[#270034] hover:bg-[#F3F4F6] hover:text-[#0F75BC]"
                     >
                       Courses
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/classes"
+                      className="block px-4 py-2 text-sm text-[#270034] hover:bg-[#F3F4F6] hover:text-[#0F75BC]"
+                    >
+                      Classes
                     </Link>
                   </li>
 

@@ -10,7 +10,7 @@ export default function ProductCard({ product }: { product: ProductType }) {
   return (
     <div>
       <div className="relative ">
-        <Link href={`/dashboard/ecommerce/products/${product._id}`}>
+        <Link href={`/dashboard/ecommerce/products/${product.slug}`}>
           <Image
             src={getImageUrl(product.thumbnail, "products")}
             width={400}

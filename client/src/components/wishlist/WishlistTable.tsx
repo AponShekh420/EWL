@@ -59,7 +59,7 @@ export default function WishlistTable({
     }
   };
   return (
-    <div className="mt-5 md:mt-16">
+    <div className="mt-5">
       <div className="md:hidden">
         {products.map((product) => (
           <div

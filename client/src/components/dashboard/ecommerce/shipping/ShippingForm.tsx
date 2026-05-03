@@ -1,5 +1,6 @@
 "use client";
 import InputBox from "@/components/common/InputBox";
+import SelectBox from "@/components/common/SelectBox";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -10,11 +11,11 @@ import {
 import { RootState } from "@/redux/store";
 import { ShippingErrorType, ShippingType } from "@/types/Shipping";
 import { BASE_URL } from "@/utils/envVariable";
+import { Country } from "country-state-city";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-
 export default function ShippingForm({
   shipping,
 }: {
@@ -34,7 +35,21 @@ export default function ShippingForm({
       shipping?.shippingMethods.find(
         (item) => item.methodName === "my-shemen-class",
       )?.cost || 0,
+    lbClass:
+      shipping?.shippingMethods.find(
+        (item) => item.methodName === "1.5-lb-class",
+      )?.cost || 0,
+    ebookClass:
+      shipping?.shippingMethods.find(
+        (item) => item.methodName === "ebook-class",
+      )?.cost || 0,
   });
+  const [countries] = useState(
+    Country.getAllCountries().map((item) => ({
+      label: item.name,
+      value: item.isoCode,
+    })),
+  );
   const { shippingId, zoneName, region, shippingMethods } = useSelector(
     (state: RootState) => state.shippingForm,
   );
@@ -47,7 +62,6 @@ export default function ShippingForm({
       formData.append("zoneName", zoneName);
       formData.append("region", region);
       formData.append("shippingMethods", JSON.stringify(shippingMethods));
-      console.log(zoneName, region);
       if (path.includes("edit")) {
         if (!shipping?._id) return;
         const res = await fetch(
@@ -146,14 +160,16 @@ export default function ShippingForm({
               }
               error={errors?.zoneName?.msg}
             />
-            <InputBox
-              label="Region's"
-              name="region"
+            <SelectBox
+              name="Region's"
+              label="region"
               value={region}
-              onChange={(e) =>
-                dispatch(addShippingField({ region: e.target.value }))
-              }
-              error={errors?.region?.msg}
+              onChange={(val) => dispatch(addShippingField({ region: val }))}
+              options={[
+                { label: "Everywhere", value: "everywhere" },
+                ...countries,
+              ]}
+              error={errors?.taxStatus?.msg}
             />
           </div>
           <div>
@@ -305,6 +321,76 @@ export default function ShippingForm({
                     setShippingCost((prev) => ({
                       ...prev,
                       myShemenClass: Number(e.target.value),
+                    }))
+                  }
+                />
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center">
+                  <Checkbox
+                    className="size-6"
+                    checked={shippingMethods.some(
+                      (method) => method.methodName === "1.5-lb-class",
+                    )}
+                    onCheckedChange={(value) =>
+                      dispatch(
+                        addShippingMethod({
+                          checked: value,
+                          methodName: "1.5-lb-class",
+                          cost: shippingCost.lbClass,
+                        }),
+                      )
+                    }
+                  />
+                  <span className="ml-2 text-nowrap">1.5 lb class</span>
+                </div>
+                <InputBox
+                  label=""
+                  disabled={shippingMethods.some(
+                    (method) => method.methodName === "1.5-lb-class",
+                  )}
+                  name="cost"
+                  value={shippingCost.lbClass}
+                  className="-mt-4 w-25 sm:w-full"
+                  onChange={(e) =>
+                    setShippingCost((prev) => ({
+                      ...prev,
+                      lbClass: Number(e.target.value),
+                    }))
+                  }
+                />
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center">
+                  <Checkbox
+                    className="size-6"
+                    checked={shippingMethods.some(
+                      (method) => method.methodName === "ebook-class",
+                    )}
+                    onCheckedChange={(value) =>
+                      dispatch(
+                        addShippingMethod({
+                          checked: value,
+                          methodName: "ebook-class",
+                          cost: shippingCost.ebookClass,
+                        }),
+                      )
+                    }
+                  />
+                  <span className="ml-2 text-nowrap">Ebook class</span>
+                </div>
+                <InputBox
+                  label=""
+                  disabled={shippingMethods.some(
+                    (method) => method.methodName === "ebook-class",
+                  )}
+                  name="cost"
+                  value={shippingCost.ebookClass}
+                  className="-mt-4 w-25 sm:w-full"
+                  onChange={(e) =>
+                    setShippingCost((prev) => ({
+                      ...prev,
+                      ebookClass: Number(e.target.value),
                     }))
                   }
                 />

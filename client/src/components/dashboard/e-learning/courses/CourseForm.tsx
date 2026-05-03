@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { addCourseField, deleteExistingThumb, resetCourseFields } from "@/redux/features/course/courseFormSlice";
+import { addCourseField, deleteExistingThumb, resetCourseFields, stepCourseFields } from "@/redux/features/course/courseFormSlice";
 import { RootState } from "@/redux/store";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
@@ -101,7 +101,7 @@ export default function CreateCourseForm({
       addCourseField({
         ...courseData,
         thumbnail: null,
-        speaker: courseData?.speaker,
+        speaker: courseData?.speaker._id,
         category: courseData?.category,
         durationType: durationType.trim() || "",
         durationNumber: durationNumber.trim() || "",
@@ -112,7 +112,14 @@ export default function CreateCourseForm({
   }, []);
 
   return (
-    <MultiStepper totalStep={totalStep} step={step} activeStep={activeStep} nextStep={nextStep} prevStep={prevStep}>
+    <MultiStepper 
+    totalStep={totalStep} 
+    step={step} 
+    activeStep={activeStep} 
+    nextStep={nextStep} 
+    prevStep={prevStep}
+    errorTrack={{ errors, fields: stepCourseFields }}
+    >
       <form action="#" className="min-h-[50vh]" onSubmit={onHandleSubmit}>
         {step === 1 && (
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-8 lg:gap-4">
@@ -247,11 +254,11 @@ export default function CreateCourseForm({
                       dispatch(addCourseField({ durationType: val }))
                     }
                     options={[
-                    { label: "Month(s)", value: "Month" },
-                    { label: "Week(s)", value: "Week" },
-                    { label: "Minute(s)", value: "Minute" },
-                    { label: "Day(s)", value: "Day" },
-                    { label: "Hour(s)", value: "Hour" },
+                    { label: "Month(s)", value: "months" },
+                    { label: "Week(s)", value: "weeks" },
+                    { label: "Minute(s)", value: "minutes" },
+                    { label: "Day(s)", value: "days" },
+                    { label: "Hour(s)", value: "hours" },
                     ]}
                     error={errors?.durationType?.msg}
                 />

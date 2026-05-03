@@ -36,7 +36,7 @@ export const getCourseByFilter = async (
       return next(createError(400, "Not found courses"));
     }
 
-    const total = courses.length;
+    const total = await courseModel.countDocuments();
     res.status(200).json({
       success: true,
       data: courses,

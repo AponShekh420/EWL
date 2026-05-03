@@ -57,7 +57,8 @@ export const createProduct = async (
       slug,
       metaSlug,
       thumbnail: thumbnail[0].filename,
-      attachment: attachment[0].filename,
+      attachment:
+        attachment && attachment.length > 0 ? attachment[0].filename : null,
       images: images.map((file) => file.filename),
     });
 

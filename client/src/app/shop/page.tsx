@@ -1,5 +1,5 @@
 import { getCategories } from "@/actions/category";
-import { getProductByQuery } from "@/actions/product";
+import { getProductByQueryWithVisible } from "@/actions/product";
 import BreadcrumbPath from "@/components/common/BreadcrumbPath";
 import ShopSection from "@/components/shop/ShopSection";
 import {
@@ -11,21 +11,26 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { getSession } from "@/lib/authLib";
 import { paginationCounter } from "@/utils/paginationCounter";
 import { queryFormatter } from "@/utils/queryFormatter";
+import { redirect } from "next/navigation";
 
 export default async function Shop({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
+  const user = await getSession();
+  if(!user) {
+    return redirect("/login")
+  }
   const query = await queryFormatter(searchParams);
-  console.log("query", query);
   const {
     data: productsData,
     price,
     pagination,
-  } = await getProductByQuery(query);
+  } = await getProductByQueryWithVisible(query);
   const { data: categories } = await getCategories();
 
   return (

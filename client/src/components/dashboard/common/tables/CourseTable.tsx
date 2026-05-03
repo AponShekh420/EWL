@@ -191,7 +191,7 @@ export default function CourseTable({
                         className="size-12 object-cover rounded-md"
                       />
                       <div className="font-lexend-deca">
-                        <h5 className="font-medium">{course.title}</h5>
+                        <h5 className="font-medium text-wrap">{course.title}</h5>
                         <p className="text-gray-500  mt-0.5">
                           {course.category}
                         </p>
@@ -199,7 +199,7 @@ export default function CourseTable({
                     </div>
                   </div>
                 </TableCell>
-                <TableCell>{course?.price}</TableCell>
+                <TableCell>${course?.price}</TableCell>
                 <TableCell>{course?.students}</TableCell>
                 <TableCell>{course?.speaker?.firstName} {course?.speaker?.lastName}</TableCell>
                 
@@ -239,7 +239,7 @@ export default function CourseTable({
                       </Button>
                     </Link>
                     <Link
-                      href={`/dashboard/e-learning/courses/${course?.slug}`}
+                      href={`/course/${course?.slug}`}
                     >
                       <Button
                         size="icon"

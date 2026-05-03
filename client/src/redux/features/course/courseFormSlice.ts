@@ -1,6 +1,24 @@
 import { CourseFormState } from "@/types/Course";
 import { createSlice } from "@reduxjs/toolkit";
 
+export const stepCourseFields = {
+  step1: ["title", "category", "headline", "bio", "speaker", "status", "date", "time", "lectures", "durationNumber", "durationType"],
+  step2: ["thumbnail"],
+  step3: ["price", "installmentMonths", "module", "offline", "externalLink"],
+  step4: [
+    "aboutTab",
+    "overviewTab",
+    "courseTopicsTab",
+    "speakerProfileTab",
+    "FAQsTab",
+    "testimonialsTab",
+    "moreInfoTab"
+  ],
+  step5: ["customMessage", "attachment", "checkoutPageMessage"],
+  step6: ["metaTitle", "metaDescription"],
+};
+
+
 const initialState: CourseFormState = {
   title: "",
   bio: "",

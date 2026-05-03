@@ -13,6 +13,7 @@
   "description": "",
   "dependencies": {
     "bcryptjs": "^3.0.2",
+    "check-wordpress-password": "^1.0.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dot-object": "^2.1.5",
@@ -24,7 +25,10 @@
     "mongoose": "^8.19.2",
     "multer": "^2.0.2",
     "nodemailer": "^7.0.12",
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "phpass": "^0.1.1",
+    "shippo": "^2.18.0",
+    "stripe": "^22.0.2"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.9",

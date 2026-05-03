@@ -1,6 +1,21 @@
 import { ProductFormState } from "@/types/Product";
 import { createSlice } from "@reduxjs/toolkit";
-
+export const stepProductFields = {
+  step1: ["title", "category", "shortDescription", "tags", "description"],
+  step2: ["thumbnail", "images"],
+  step3: ["sku", "isbn", "regularPrice", "salePrice", "stock", "stockStatus"],
+  step4: [
+    "weight",
+    "declaredValue",
+    "dimensionLength",
+    "dimensionWidth",
+    "dimensionHeight",
+    "taxStatus",
+    "shippingClass",
+  ],
+  step5: ["customMessage", "attachment", "checkoutPageMessage"],
+  step6: ["metaTitle", "metaDescription"],
+};
 const initialState: ProductFormState = {
   title: "",
   category: "",
@@ -22,8 +37,8 @@ const initialState: ProductFormState = {
   regularPrice: "",
   salePrice: "",
   stock: "",
-  stockStatus: "",
-  isVisibleProductPage: false,
+  stockStatus: "in-stock",
+  isVisibleProductPage: true,
   trackStockQuantity: false,
   limitOneItemPerOrder: false,
   //   4th tab
@@ -33,8 +48,7 @@ const initialState: ProductFormState = {
   dimensionWidth: "",
   dimensionHeight: "",
 
-  taxStatus: "",
-  taxClass: "",
+  taxStatus: "no",
   shippingClass: "",
   enelope: false,
   //   5th tab
@@ -64,7 +78,7 @@ export const productFormSlice = createSlice({
     },
     deleteExistingAttachment: (
       state,
-      action: { type: string; payload: string }
+      action: { type: string; payload: string },
     ) => {
       if (!state.existingAttachment) {
         return;
@@ -74,13 +88,13 @@ export const productFormSlice = createSlice({
     },
     deleteExistingImages: (
       state,
-      action: { type: string; payload: string }
+      action: { type: string; payload: string },
     ) => {
       if (!state.existingImages) {
         return;
       }
       state.existingImages = state?.existingImages.filter(
-        (img) => img !== action.payload
+        (img) => img !== action.payload,
       );
 
       state.deletedImages?.push(action.payload);

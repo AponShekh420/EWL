@@ -14,6 +14,7 @@ interface SpeakerType {
   __v: number;
 }
 export type CourseType = {
+  orderId?: string,
   duration?: string;
   students: number;
   speaker: SpeakerType;

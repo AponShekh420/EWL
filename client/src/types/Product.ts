@@ -10,6 +10,7 @@ export interface ProductReviewType {
   createdAt: Date;
 }
 export type ProductType = {
+  orderId?: number
   name: string;
   _id: string;
   title: string;
@@ -69,7 +70,6 @@ export type ProductFormState = {
   dimensionHeight: string;
   dimensionWidth: string;
   taxStatus: string;
-  taxClass: string;
   shippingClass: string;
   enelope: boolean;
 

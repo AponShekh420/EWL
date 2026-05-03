@@ -30,7 +30,15 @@ export const getAllOrder = async (
       .skip(skip)
       .limit(limit)
       .sort({ createdAt: -1 })
-      .populate(["products", "customer"]);
+      .populate([
+        {
+          path: "products._id", // populate product refs inside products array
+        },
+        {
+          path: "customer",
+          select: "-password"
+        }
+      ]);
     if (!orders) {
       return next(createError(400, "Not found orders"));
     }

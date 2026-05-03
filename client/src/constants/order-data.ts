@@ -1,22 +1,20 @@
 export const orderStatus = [
-  { status: "Order Pending", isStep: true },
-  { status: "Order Processing", isStep: true },
-  { status: "Order At Local Facility", isStep: true },
-  { status: "Order Out For Delivery", isStep: false },
-  { status: "Order Completed", isStep: false },
+  { status: "pending", isStep: true },
+  { status: "processing", isStep: true },
+  { status: "completed", isStep: true },
 ];
 export const shippingCharge = 50;
 export const transactionsList = [
-  {
-    method: "logos:mastercard",
-    name: "MasterCard",
-    amount: 1575,
-  },
-  {
-    method: "logos:paypal",
-    name: "Paypal",
-    amount: 575,
-  },
+  // {
+  //   method: "logos:mastercard",
+  //   name: "MasterCard",
+  //   amount: 1575,
+  // },
+  // {
+  //   method: "logos:paypal",
+  //   name: "Paypal",
+  //   amount: 575,
+  // },
   {
     method: "logos:stripe",
     name: "Stripe",

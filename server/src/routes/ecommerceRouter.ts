@@ -13,7 +13,7 @@ import { addToCart } from "../controllers/ecommerce/cart/addToCart";
 import { deleteCart } from "../controllers/ecommerce/cart/deleteCart";
 import { getAllCart } from "../controllers/ecommerce/cart/getAllCart";
 import { updateCart } from "../controllers/ecommerce/cart/updateCart";
-import { createOrder } from "../controllers/ecommerce/order/createOrder";
+import createOrder  from "../controllers/ecommerce/order/createOrder";
 import { deleteOrder } from "../controllers/ecommerce/order/deleteOrder";
 import { getAllOrder } from "../controllers/ecommerce/order/getAllOrders";
 import { getOrderById } from "../controllers/ecommerce/order/getOrderById";
@@ -74,6 +74,17 @@ const router = Router();
 
 const multiFileUploader = multerUploader("products");
 const singleFileUploader = multerUploader("category");
+import { getTaxAndShipping } from "../controllers/ecommerce/cart/getTaxAndShipping";
+import shipping from "../middleware/shipping/shipping";
+import createBox from "../controllers/ecommerce/usps/createBox";
+import shippingClassRulseHandler from "../helpers/shippingClassRulseHandler";
+import { getBoxes } from "../controllers/ecommerce/usps/getBoxes";
+import orderSuccess from "../controllers/ecommerce/order/orderSuccess";
+import express from "express"
+import { deleteCartItems } from "../controllers/ecommerce/cart/deleteCartItems";
+import { getPrivateOrderById } from "../controllers/ecommerce/order/getPrivateOrderById";
+import { getAllPrivateOrder } from "../controllers/ecommerce/order/getAllPrivateOrders";
+import { exportProducts } from "../controllers/ecommerce/product/exportProducts";
 /* 
 Developed by:Shipon islam 
 Date: 31-10-2025
@@ -107,18 +118,33 @@ router.get("/products/:slug", getProductBySlug);
 router.get("/products", getAllProduct);
 router.get("/product-by-filter", getProductByFilter);
 //order routes
-router.post("/order", orderValidationRules, validateOrder, createOrder);
+router.post("/order/create-order", authCheck, orderValidationRules, validateOrder, createOrder);
+router.post("/order/webhook", express.raw({type:"application/json"}), orderSuccess)
 router.put("/orders/:id", orderValidationRules, validateOrder, updateOrder);
 router.put("/order-status/:id", updateOrder);
 router.delete("/orders/:id", deleteOrder);
 router.get("/orders/:id", getOrderById);
 router.get("/orders", getAllOrder);
 
+
+// private orders
+router.get("/my-orders/:id", authCheck, getPrivateOrderById);
+router.get("/my-orders", authCheck, getAllPrivateOrder);
+
 //cart routes
 router.post("/cart", authCheck, addToCart);
 router.put("/cart/:productId", authCheck, updateCart);
 router.delete("/cart/:productId", authCheck, deleteCart);
+router.delete("/carts/items", authCheck, deleteCartItems);
 router.get("/cart-list", authCheck, getAllCart);
+
+// cart tax and shipping calculation route
+router.post("/cart/tax-shipping", shippingClassRulseHandler, shipping, getTaxAndShipping);
+
+router.put("/usps/boxes/bulk-update", createBox);
+router.get("/usps/boxes", getBoxes);
+
+
 //cart routes
 router.post("/wishlist", authCheck, addToWishlist);
 router.delete("/wishlist/:productId", authCheck, deleteWishlist);
@@ -196,4 +222,11 @@ router.put(
 router.delete("/shipping/:id", deleteShipping);
 router.get("/shipping/:id", getShippingById);
 router.get("/shipping", getAllShipping);
+
+
+
+// export product
+// router.post("/products/export", exportProducts);
+
+
 export default router;

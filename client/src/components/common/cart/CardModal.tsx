@@ -41,7 +41,7 @@ export default function CartModal({ cart }: { cart: CartType }) {
 
           <SheetFooter className="border-t-2">
             <div className="w-full">
-              <p className="text-sm text-gray-500 flex justify-between">
+              {/* <p className="text-sm text-gray-500 flex justify-between">
                 Total Items: <span>{cart?.totalProduct}</span>
               </p>
               <p className="text-sm text-gray-500 flex justify-between">
@@ -49,9 +49,9 @@ export default function CartModal({ cart }: { cart: CartType }) {
               </p>
               <p className="text-sm text-gray-500 flex justify-between">
                 Tax: <span>$12.00</span>
-              </p>
+              </p> */}
               <p className="text-lg font-semibold text-teal flex justify-between">
-                Total Price: <span>${cart?.totalPrice + 50 + 12}</span>
+                Subtotal: <span>${cart?.totalPrice}</span>
               </p>
             </div>
             <Button

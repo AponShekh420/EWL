@@ -17,14 +17,15 @@ export const sidebar_links = [
 
       { id: 102, name: "categories", url: "/dashboard/ecommerce/categories" },
       { id: 103, name: "shipping", url: "/dashboard/ecommerce/shipping" },
+      { id: 104, name: "USPS Configuration", url: "/dashboard/ecommerce/usps-configuration" },
       {
-        id: 104,
+        id: 105,
         name: "reviews",
         url: "/dashboard/ecommerce/products/reviews",
       },
-      { id: 105, name: "orders", url: "/dashboard/ecommerce/orders" },
+      { id: 106, name: "orders", url: "/dashboard/ecommerce/orders" },
 
-      { id: 106, name: "shop", url: "/dashboard/ecommerce/shop" },
+      { id: 107, name: "shop", url: "/dashboard/ecommerce/shop" },
     ],
   },
 
@@ -39,6 +40,8 @@ export const sidebar_links = [
       { id: 101, name: "Courses", url: "/dashboard/e-learning/courses" },
       { id: 102, name: "Classes", url: "/dashboard/e-learning/classes" },
       { id: 103, name: "Records", url: "/dashboard/e-learning/records" },
+      { id: 104, name: "Orders", url: "/dashboard/e-learning/orders" },
+      { id: 105, name: "Class Orders", url: "/dashboard/e-learning/class-orders" },
     ],
   },
   {

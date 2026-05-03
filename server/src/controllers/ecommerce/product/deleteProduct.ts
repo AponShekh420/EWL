@@ -8,7 +8,7 @@ import { deleteFileFromLocal } from "../../../utils/deleteFileFromLocal";
 export const deleteProduct = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const id = req.params?.id;
@@ -18,19 +18,26 @@ export const deleteProduct = async (
     if (!deletedProduct) {
       return next(createError(404, `Product with id ${id} not found`));
     }
+    if (deletedProduct.attachment) {
+      deleteFileFromLocal(
+        [
+          ...deletedProduct.images,
+          deletedProduct.thumbnail,
+          deletedProduct.attachment,
+        ],
+        "products",
+      );
+    } else {
+      deleteFileFromLocal(
+        [...deletedProduct.images, deletedProduct.thumbnail],
+        "products",
+      );
+    }
 
-    deleteFileFromLocal(
-      [
-        ...deletedProduct.images,
-        deletedProduct.thumbnail,
-        deletedProduct.attachment,
-      ],
-      "products"
-    );
     await CategoryModel.findOneAndUpdate(
       { _id: deletedProduct.category },
       { $pull: { products: deletedProduct._id } },
-      { new: true } // Optional: returns the updated document
+      { new: true }, // Optional: returns the updated document
     );
     return res.status(200).json({
       success: true,

@@ -1,11 +1,20 @@
 import Header from "@/components/dashboard/common/header/Header";
 import Sidebar from "@/components/dashboard/common/sidebar/Sidebar";
+import { getSession } from "@/lib/authLib";
+import { redirect } from "next/navigation";
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const user = await getSession();
+  if(!user) {
+    return redirect("/login")
+  }
+  if(user?.role != "admin") {
+    return redirect("/profile")
+  }
   return (
     <div className="min-h-screen">
       <div className="lg:flex">

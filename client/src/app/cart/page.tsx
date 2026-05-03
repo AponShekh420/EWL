@@ -1,12 +1,22 @@
 import { getCartList } from "@/actions/cart";
+import CartDetails from "@/components/cart/CartDetails";
 import BreadcrumbPath from "@/components/common/BreadcrumbPath";
-import CartListTable from "@/components/common/cart/CartListTable";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@iconify/react";
-import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default async function Cart() {
-  const { data: cart } = await getCartList();
+  let cart;
+
+  try {
+    const { data } = await getCartList();
+    if(data.items.length == 0) {
+      return redirect("/shop")
+    }
+    cart = data;
+  } catch(err) {
+    return redirect("/shop")
+  }
 
   return (
     <main>
@@ -20,40 +30,7 @@ export default async function Cart() {
           />
         </div>
         <h2 className="text-4xl font-semibold mt-5 ">Your Shopping Cart</h2>
-        <div className="grid lg:grid-cols-[1fr_300px] xl:grid-cols-[1fr_400px] gap-x-8 mt-12 items-start">
-          <div className="space-y-2">
-            <CartListTable cart={cart} />
-          </div>
-          <div className="px-6 py-6 border shadow rounded-lg">
-            <h5 className="text-lg font-bold capitalize mb-6">order summary</h5>
-            <div className="space-y-4">
-              <div className="flex justify-between">
-                <span className="text-gray-400">Subtotal</span>
-                <span className="font-bold">${cart.totalPrice}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-400">Discount (0%)</span>
-                <span className="font-bold text-red-500 ">-$0</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-400">Delivery fee</span>
-                <span className="font-bold">$15</span>
-              </div>
-              <hr />
-              <div className="flex justify-between">
-                <span className="text-gray-400">Total</span>
-                <span className="font-bold">${cart.totalPrice + 15}</span>
-              </div>
-            </div>
-            <Link
-              href="/checkout"
-              className="w-full mt-15 rounded-4xl uppercase flex justify-center items-center gap-2 bg-black text-white py-3 px-5 text-sm font-medium hover:bg-gray-800 transition"
-            >
-              Go to Checkout{" "}
-              <Icon icon="cil:arrow-right" width="20" height="20" />
-            </Link>
-          </div>
-        </div>
+        <CartDetails cart={cart} />
       </section>
       <section className="container pt-32 pb-20">
         <div className="flex items-center justify-between  rounded-lg px-4 sm:px-14 py-18 lg:py-8  gap-12 lg:gap-10 flex-col lg:flex-row min-h-90 sm:min-h-80 bg-[linear-gradient(135deg,rgba(50,151,168,0.6),rgba(50,151,168,0.6)),url('/images/cart/laptop-bg.webp')] bg-no-repeat bg-bottom bg-cover">

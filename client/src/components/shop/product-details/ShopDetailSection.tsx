@@ -64,14 +64,13 @@ export default function ShopDetailSection({
               <span className="text-teal font-bold text-2xl sm:text-4xl">
                 ${product.salePrice}.00
               </span>
-              <span className="text-gray-500 line-through text-xl sm:text-2xl">
-                ${product.regularPrice}.00
-              </span>
+              {product.regularPrice && (
+                <span className="text-gray-500 line-through text-xl sm:text-2xl">
+                  ${product.regularPrice}.00
+                </span>
+              )}
             </div>
-            <div
-              className="text-base"
-              dangerouslySetInnerHTML={{ __html: product.description }}
-            />
+            <p className="text-base">{product.shortDescription}</p>
             <div className="flex flex-col xs:flex-row xs:items-center gap-8 my-8">
               <div className="flex items-center gap-3">
                 <span>Quantity</span>
