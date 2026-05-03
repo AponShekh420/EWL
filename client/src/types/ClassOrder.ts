@@ -58,7 +58,7 @@ export type ClassOrderType = {
   status: string,
   stripePaymentIntentId: string,
   paymentStatus: string,
-  classes: ClassesPros,
+  classes: ClassesPros[],
   createdAt: string;
   updatedAt: string;
   __v: number;

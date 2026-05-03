@@ -17,7 +17,7 @@ import {
 const ReactPlayer = dynamic(() => import("react-player"), { ssr: false });
 
 
-export default function AudioPlayer({ url, recordNumber }: { url: string, recordNumber: number }) {
+export default function AudioPlayer({ url, recordNumber }: { url: string, recordNumber?: number }) {
   return (
     <MediaController
       style={{
@@ -26,7 +26,7 @@ export default function AudioPlayer({ url, recordNumber }: { url: string, record
       }}
     >
       <ReactPlayer
-        tabIndex={(recordNumber + 1000)}
+        tabIndex={recordNumber ? (recordNumber + 1000) : Date.now()}
         slot="media"
         src={url}
         controls={false}

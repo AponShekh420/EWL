@@ -96,7 +96,7 @@ export type OrderType = {
   status: string,
   stripePaymentIntentId: string,
   paymentStatus: string,
-  products: ProductsPros,
+  products: ProductsPros[],
   createdAt: string;
   updatedAt: string;
   __v: number;

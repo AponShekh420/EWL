@@ -9,7 +9,7 @@ interface CourseProps {
     firstName: string;
     avatar: string;
     lastName: string;
-    _id: string;
+    _id?: string;
     userName: string;
   };
   thumbnail: string;

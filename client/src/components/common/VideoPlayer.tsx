@@ -16,7 +16,7 @@ import {
 } from "media-chrome/react";
 const ReactPlayer = dynamic(() => import("react-player"), { ssr: false });
 
-export default function VideoPlayer({ url, recordNumber }: { url: string, recordNumber: number }) {
+export default function VideoPlayer({ url, recordNumber }: { url: string, recordNumber?: number }) {
   return (
     <MediaController
       style={{
@@ -25,7 +25,7 @@ export default function VideoPlayer({ url, recordNumber }: { url: string, record
       }}
     >
       <ReactPlayer
-        tabIndex={recordNumber}
+        tabIndex={recordNumber ? (recordNumber + 1000) : Date.now()}
         slot="media"
         src={url}
         controls={false}

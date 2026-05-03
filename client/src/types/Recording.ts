@@ -27,7 +27,7 @@ export interface IDisplayRecording {
     firstName: string,
     lastName: string,
     gender: string
-  } | string;
+  };
   course?: {
     title: string,
     speaker: {
@@ -35,7 +35,7 @@ export interface IDisplayRecording {
       lastName: string,
       gender: string,
     }
-  } | string;
+  };
   class?: {
     title: string,
     speaker: {
@@ -43,7 +43,7 @@ export interface IDisplayRecording {
       lastName: string,
       gender: string,
     }
-  } | string;
+  };
   heading: string;
   gender?: "male" | "female";
   recordingCategory: recordingCatType;

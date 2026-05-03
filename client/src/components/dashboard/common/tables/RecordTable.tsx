@@ -32,7 +32,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { PaginationType } from "@/types/Pagination";
-import { IRecording } from "@/types/Recording";
+import { IDisplayRecording, IRecording } from "@/types/Recording";
 import { debounce } from "@/utils/debounce";
 import { BASE_URL } from "@/utils/envVariable";
 import { paginationCounter } from "@/utils/paginationCounter";
@@ -45,7 +45,7 @@ export default function RecordTable({
   records,
   pagination,
 }: {
-  records: IRecording[];
+  records: IDisplayRecording[];
   pagination: PaginationType;
 }) {
   const router = useRouter();

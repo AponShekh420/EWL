@@ -34,7 +34,7 @@ export default async function Myclasses({
         orders.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {orders?.map((order: ClassOrderCardType, index: number) => {
-              return (<ClassCard key={order.classes[0]._id._id + index} privateClass={true} title={order?.classes[0]?._id?.title || ""} slug={`${order.classes[0]._id?.slug}` || ""} thumbnail={order.classes[0]._id?.thumbnail || ""} speaker={order?.classes[0]?._id?.speaker}/>)
+              return (<ClassCard key={order?.classes[0]?._id._id + index} privateClass={true} title={order?.classes[0]?._id?.title || ""} slug={`${order?.classes[0]?._id?.slug}` || ""} thumbnail={order?.classes[0]?._id?.thumbnail || ""} speaker={order?.classes[0]?._id?.speaker}/>)
             })}
           </div>
         ) : (
