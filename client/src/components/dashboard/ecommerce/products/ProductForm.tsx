@@ -54,10 +54,12 @@ export default function CreateProductForm({
   const productForm = useSelector((state: RootState) => state.productForm);
   const path = usePathname();
   const router = useRouter();
+  const [loading, setLoading] = useState(false)
   const totalStep = 6;
 
   const onHandleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true)
     try {
       const formData = createFormData(productForm);
 
@@ -71,7 +73,7 @@ export default function CreateProductForm({
           },
         );
         const data = await res.json();
-
+        setLoading(false)
         if (!data.success) {
           setErrors(data.errors || {});
           toast.error(data.message);
@@ -89,7 +91,7 @@ export default function CreateProductForm({
           body: formData,
         });
         const data = await res.json();
-
+        setLoading(false)
         if (!data.success) {
           setErrors(data.errors || {});
         }
@@ -812,8 +814,8 @@ export default function CreateProductForm({
           </div>
         )}
         {step === totalStep && (
-          <Button variant="blue" type="submit" className="ml-auto block mt-10">
-            {path.includes("edit") ? "Update" : "Submit"}
+          <Button disabled={loading} variant="blue" type="submit" className="ml-auto block mt-10">
+            {loading ? (<Icon icon="eos-icons:loading" width="27" height="27" />) : (path.includes("edit") ? "Update" : "Submit")}
           </Button>
         )}
       </form>
