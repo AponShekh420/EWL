@@ -220,7 +220,12 @@ const shippingClassRulseHandler = async (req: Request, res: Response, next: Next
 
 
             if(mixData.length === 0) {
-                res.status(404).json({ error: "No valid shipping methods found for the items in the cart." });
+                res.status(404).json({
+                    success: false,
+                    errors: {
+                    msg: "No valid shipping methods found for the items in the cart."
+                    } 
+                });
             } else {
                 req.body.shippingResultAndProducts = {
                     flatRate,
