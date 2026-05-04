@@ -46,7 +46,7 @@ export const exportProducts = async (req: Request, res: Response) => {
             dimensionWidth: metaObj?._width,
             dimensionHeight: metaObj?._height,
             taxStatus: metaObj?._tax_status,
-            shippingClass: "none",
+            // shippingClass: "none",
             enelope: false,
             metaTitle: product.post_title,
             metaSlug: product.post_name || (product.post_title).split(" ").join("-").toLowerCase(),
