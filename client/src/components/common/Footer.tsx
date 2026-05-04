@@ -20,12 +20,12 @@ const Footer = () => {
             >
               Home
             </Link>
-            <Link
+            {/* <Link
               href="/about"
               className="mt-2 sm:mt-3 transition-all hover:text-[#270034] text-white duration-150"
             >
               About
-            </Link>
+            </Link> */}
             <Link
               href="/other-resources"
               className="mt-2 sm:mt-3 transition-all hover:text-[#270034] text-white duration-150"
