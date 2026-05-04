@@ -216,12 +216,12 @@ const Nav = ({ cart }: { cart: CartType }) => {
             >
               Home
             </Link>
-            <Link
+            {/* <Link
               href={"/about"}
               className="px-2.5 py-1 text-[#270034] hover:text-[#0F75BC] transition-all duration-150"
             >
               About
-            </Link>
+            </Link> */}
             
             <div className="relative group px-2.5 py-1">
               {/* Parent Menu */}

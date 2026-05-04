@@ -3,6 +3,7 @@ import HelpingHand from "@/assets/about/helping-hend.webp";
 import mission from "@/assets/about/mission.webp";
 import ohelComes from "@/assets/about/ohel-comes.webp";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 const someProblems = [
   "Is what we’re experiencing normal in marriage?",
   "Why do we care about each other but still feel distant?",
@@ -12,6 +13,7 @@ const someProblems = [
   "We were never taught how to navigate this part of marriage.",
 ];
 export default function About() {
+  return redirect("/");
   return (
     <main className="text-center md:text-left">
       <section className="container mt-12 md:mt-16 lg:mt-20">
