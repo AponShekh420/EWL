@@ -115,7 +115,7 @@ export default function CheckoutForm({cart}: {cart: CartType}) {
       const data = await res.json();
       dispatch(addCheckoutField({loading: false}))
       if (!data.success) {
-        toast.error(data.message);
+        toast.error(data?.errors?.msg || "Something is wrong, please try again");
       }
       if (data.success) {
         dispatch(

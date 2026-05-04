@@ -94,6 +94,11 @@ export const getTaxAndShipping = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Error fetching tax and shipping:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ 
+      success: false,
+      errors: {
+        msg: 'Internal Server Error'
+      } 
+    });
   }
 }
