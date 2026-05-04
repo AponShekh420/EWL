@@ -95,9 +95,7 @@ const initialState = {
       },
       flatRate: 0,
       localPickup: 0,
-      shippingClassRates: [{
-        shippingCost: 0
-      }],
+      shippingClassRates: [],
       impossibleProducts: [],
     },
     tax: 0,
