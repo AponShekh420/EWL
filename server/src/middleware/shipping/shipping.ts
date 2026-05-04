@@ -104,7 +104,9 @@ const shipping = async (req: Request, res: Response, next: NextFunction) => {
 
     res.status(500).json({
       success: false,
-      error: message
+      errors: {
+        msg: message
+      }
     });
   }
 };
