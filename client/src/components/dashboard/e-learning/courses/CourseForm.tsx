@@ -45,11 +45,13 @@ export default function CreateCourseForm({
   const path = usePathname();
   const router = useRouter();
   const [errors, setErrors] = useState<CourseValidationErrors>({});
+  const [loading, setLoading] = useState(false)
   const totalStep = 6;
 
   const onHandleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const formData = createFormData(courseForm);
+    setLoading(true);
 
     if (path.includes("edit")) {
       if (!courseData?._id) return;
@@ -61,7 +63,7 @@ export default function CreateCourseForm({
         }
       );
       const data = await res.json();
-
+      setLoading(false)
       if (!data.success) {
         setErrors(data.errors || {});
         toast.error(data.message);
@@ -80,7 +82,7 @@ export default function CreateCourseForm({
         body: formData,
       });
       const data = await res.json();
-
+      setLoading(false)
       if (!data.success) {
         setErrors(data.errors || {});
       }
@@ -542,8 +544,8 @@ export default function CreateCourseForm({
           </div>
         )}
         {step === totalStep && (
-          <Button variant="blue" type="submit" className="ml-auto block mt-10">
-            {path.includes("edit") ? "Update" : "Submit"}
+          <Button disabled={loading} variant="blue" type="submit" className="ml-auto block mt-10">
+            {loading ? (<Icon icon="eos-icons:loading" width="27" height="27" />) : (path.includes("edit") ? "Update" : "Submit")}
           </Button>
         )}
       </form>

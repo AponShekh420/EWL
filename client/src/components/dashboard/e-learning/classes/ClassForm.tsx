@@ -43,12 +43,13 @@ export default function CreateClassForm({
   const path = usePathname();
   const router = useRouter();
   const [errors, setErrors] = useState<ClassValidationErrors>({});
+  const [loading, setLoading] = useState(false);
   const totalStep = 6;
 
   const onHandleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const formData = createFormData(classForm);
-
+    setLoading(true)
     if (path.includes("edit")) {
       if (!classData?._id) return;
       const res = await fetch(
@@ -59,7 +60,7 @@ export default function CreateClassForm({
         }
       );
       const data = await res.json();
-
+      setLoading(false)
       if (!data.success) {
         setErrors(data.errors || {});
         toast.error(data.message);
@@ -78,7 +79,7 @@ export default function CreateClassForm({
         body: formData,
       });
       const data = await res.json();
-
+      setLoading(false)
       if (!data.success) {
         setErrors(data.errors || {});
       }
@@ -463,8 +464,8 @@ export default function CreateClassForm({
           </div>
         )}
         {step === totalStep && (
-          <Button variant="blue" type="submit" className="ml-auto block mt-10">
-            {path.includes("edit") ? "Update" : "Submit"}
+          <Button disabled={loading} variant="blue" type="submit" className="ml-auto block mt-10">
+            {loading ? (<Icon icon="eos-icons:loading" width="27" height="27" />) : (path.includes("edit") ? "Update" : "Submit")}
           </Button>
         )}
       </form>
