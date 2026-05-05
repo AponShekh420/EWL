@@ -631,9 +631,9 @@ export default function CreateProductForm({
                 <SelectBox
                   name="shipping-class"
                   label="Shipping Class *"
-                  value={productForm.shippingClass}
+                  value={productForm.shippingClass == "" ? "none" : productForm.shippingClass}
                   onChange={(val) =>
-                    dispatch(addProductField({ shippingClass: val }))
+                    dispatch(addProductField({ shippingClass: val == "none" ? "" : val }))
                   }
                   options={[
                     { label: "none", value: "none" },
