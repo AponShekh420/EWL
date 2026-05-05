@@ -28,15 +28,6 @@ const Hero = () => {
           scrollTop={{ opacity: 1, y: 0 }}
           scrollBottom={{ opacity: 0, y: 50 }}
           margin="40px 0px -40px 0px"
-          delay={0.5}
-        > 
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl text-white font-bold lg:mt-7 mt-4 sm:mt-5 md:mt-6">Promoting Marital Harmony and<br/> Marital Intimacy from a Torah Perspective</h2>
-        </FadeInSection>
-        <FadeInSection
-          initial={{ opacity: 0, y: 50 }}
-          scrollTop={{ opacity: 1, y: 0 }}
-          scrollBottom={{ opacity: 0, y: 50 }}
-          margin="40px 0px -40px 0px"
           delay={0.7}
         > 
           <h1 className="text-3xl sm:text-4xl lg:text-5xl text-white font-bold lg:mt-7 mt-4 sm:mt-5 md:mt-6">חִיזּוּק מִצְוַת עוֹנָה מִתּוֹךְ אוֹר הַתּוֹרָה</h1>

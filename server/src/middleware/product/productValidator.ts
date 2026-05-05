@@ -7,52 +7,37 @@ export const productValidationRules = [
   body("title").notEmpty().withMessage("Title is required"),
   body("category").notEmpty().withMessage("Category is required"),
   body("tags")
-    .notEmpty()
-    .withMessage("Product tags is required")
-    .isArray({ min: 1 })
-    .withMessage("Product tags must be an array with at least one tag"),
+    .optional(),
   body("shortDescription")
     .notEmpty()
     .withMessage("Short description is required"),
   body("description").optional(),
   body("sku")
-    .notEmpty()
-    .withMessage("SKU is required")
-    .isNumeric()
-    .withMessage("SKU must be a number"),
+    .optional(),
   body("isbn")
-    .notEmpty()
-    .withMessage("ISBN is required")
-    .isNumeric()
-    .withMessage("Isbn must be a number"),
+    .optional(),
 
   body("regularPrice").optional(),
   body("salePrice").isNumeric().withMessage("Sale price must be a number"),
   body("stock").optional(),
-  body("stockStatus").notEmpty().withMessage("Stock status is required"),
+  body("stockStatus").optional(),
   body("isVisibleProductPage")
     .isBoolean()
     .withMessage("isVisibleProductPage must be boolean"),
   body("trackStockQuantity")
-    .isBoolean()
-    .withMessage("trackStockQuantity must be boolean"),
+    .optional(),
   body("limitOneItemPerOrder")
-    .isBoolean()
-    .withMessage("limitOneItemPerOrder must be boolean"),
-  body("weight").notEmpty().withMessage("Weight is required"),
+    .optional(),
+  body("weight").optional(),
   body("declaredValue")
-    .isNumeric()
-    .withMessage("Declared value must be a number"),
+    .optional(),
   body("dimensionLength")
-    .notEmpty()
-    .withMessage("Dimension length is required"),
-  body("dimensionWidth").notEmpty().withMessage("Dimension width is required"),
+    .optional(),
+  body("dimensionWidth").optional(),
   body("dimensionHeight")
-    .notEmpty()
-    .withMessage("Dimension height is required"),
-  body("taxStatus").notEmpty().withMessage("Tax status is required"),
-  body("shippingClass").notEmpty().withMessage("Shipping class is required"),
-  body("enelope").isBoolean().withMessage("Enelope must be boolean"),
+    .optional(),
+  body("taxStatus").optional(),
+  body("enelope").optional(),
   body("customMessage").optional(),
   body("checkoutPageMessage").optional(),
   body("metaTitle").optional(),
