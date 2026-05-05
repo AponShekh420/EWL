@@ -182,19 +182,18 @@ export default function CreateProductForm({
               </div>
 
               <div className="mt-8">
-                <TextBox
-                  label="Short description"
-                  name="Short description *"
-                  placeholder="Write short description"
-                  className="min-h-30"
+                <Label className="mb-4 mt-8">Short description *</Label>
+                <Editor
                   value={productForm.shortDescription}
-                  onChange={(e) =>
-                    dispatch(
-                      addProductField({ shortDescription: e.target.value }),
-                    )
+                  onChange={(val) =>
+                    dispatch(addProductField({ shortDescription: val }))
                   }
-                  error={errors?.shortDescription?.msg}
                 />
+                {errors.shortDescription && (
+                  <span className="text-red-500 text-xs mt-2 ml-1">
+                    {errors?.shortDescription?.msg}
+                  </span>
+                )}
               </div>
               <div>
                 <Label className="mb-4 mt-8">Full description</Label>

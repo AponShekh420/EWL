@@ -12,7 +12,7 @@ export const multerUploader = (
   const uploadDir = path.join(process.cwd(), "public/images", folder);
   // Ensure upload folder exists
   if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: false });
+    fs.mkdirSync(uploadDir, { recursive: true });
   }
 
   const storage = diskStorage({
