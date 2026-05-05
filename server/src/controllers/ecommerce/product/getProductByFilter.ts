@@ -38,7 +38,8 @@ export const getProductByFilter = async (
         $lte: Number(query.maxPrice),
       };
     }
-
+    // console.log("objectserch", searchQuery)
+    // console.log("query", query)
     if (query.sort) {
       if (query.sort === "popularity") {
         sortQuery = { sold: -1 };

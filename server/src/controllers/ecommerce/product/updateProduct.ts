@@ -126,14 +126,16 @@ export const updateProduct = async (
         deleteFileFromLocal(img, "products");
       }
     });
+    // console.log("body category:", body.category)
+    // console.log("oldProduct category:", oldProduct.category)
     if (body.category !== oldProduct.category) {
       await CategoryModel.updateOne(
-        { products: oldProduct._id },
-        { $pull: { products: oldProduct._id } },
+        { products: { $in: [oldProduct._id] } },   // find category that HAS this product
+        { $pull: { products: oldProduct._id } }     // remove from OLD category
       );
       await CategoryModel.updateOne(
-        { name: body.category },
-        { $addToSet: { products: oldProduct._id } },
+        { name: { $regex: `^${body.category}$`, $options: "i" } },
+        { $push: { products: oldProduct._id } },
       );
     }
 
