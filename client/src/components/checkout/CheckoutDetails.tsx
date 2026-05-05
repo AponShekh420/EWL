@@ -95,109 +95,114 @@ export default function CheckoutDetails({ cart }: { cart: CartType }) {
   const submitOrder= async(e: { preventDefault: () => void; })=>{
     e.preventDefault();
     dispatch(addCheckoutField({errors: {}}))
-    const requestData = getOrderRequestData(cart, checkoutForm)
+    try {
+      const requestData = getOrderRequestData(cart, checkoutForm)
 
-    if (!stripe || !elements) {
-      toast.error("Stripe is not loaded yet. Please try again.");
-      return;
-    }
-    setLoading(true);
+      if (!stripe || !elements) {
+        toast.error("Stripe is not loaded yet. Please try again.");
+        return;
+      }
+      setLoading(true);
 
-    const orderRes= await fetch(BASE_URL + "/api/ecommerce/order/create-order",
-      {
-        method:"POST",
-        headers:{
-        "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body:JSON.stringify(requestData)
-      }
-    );
-    const data= await orderRes.json();
-    if(data.errors) {
-      console.log(data.errors)
-      const differentBillingAddressErrors = {
-        city: data?.errors?.["differentBillingAddress.city"],
-        email: data?.errors?.["differentBillingAddress.email"],
-        firstName: data?.errors?.["differentBillingAddress.firstName"],
-        lastName: data?.errors?.["differentBillingAddress.lastName"],
-        phoneNumber: data?.errors?.["differentBillingAddress.phoneNumber"],
-        spouseName: data?.errors?.["differentBillingAddress.spouseName"],
-        zip: data?.errors?.["differentBillingAddress.zip"],
-        country: data?.errors?.["differentBillingAddress.country"],
-        state: data?.errors?.["differentBillingAddress.state"],
-        streetAddress: data?.errors?.["differentBillingAddress.streetAddress"],
-      }
-      console.log(differentBillingAddressErrors)
-      dispatch(addCheckoutField({errors:  {
-        ...data.errors,
-        differentBillingAddress: differentBillingAddressErrors
-      }}));
-      setLoading(false);
-      return;
-    }
-    const card = elements.getElement(CardElement);
-    if (!card) {
-      await fetch(BASE_URL + "/api/ecommerce/orders/" + data?.orderId,
+      const orderRes= await fetch(BASE_URL + "/api/ecommerce/order/create-order",
         {
-          method:"DELETE",
+          method:"POST",
           headers:{
           "Content-Type": "application/json",
           },
           credentials: "include",
+          body:JSON.stringify(requestData)
         }
       );
-      toast.error("Card input is not available. Please try again.")
-      setLoading(false);
-      return;
-    }
-
-    const result = await stripe.confirmCardPayment(
-      data.clientSecret,
-      {
-        payment_method: {
-          card,
-          billing_details: {
-            name: `${checkoutForm.firstName} ${checkoutForm.lastName}`,
-            email: checkoutForm.email
+      const data= await orderRes.json();
+      if(data.errors) {
+        console.log(data.errors)
+        const differentBillingAddressErrors = {
+          city: data?.errors?.["differentBillingAddress.city"],
+          email: data?.errors?.["differentBillingAddress.email"],
+          firstName: data?.errors?.["differentBillingAddress.firstName"],
+          lastName: data?.errors?.["differentBillingAddress.lastName"],
+          phoneNumber: data?.errors?.["differentBillingAddress.phoneNumber"],
+          spouseName: data?.errors?.["differentBillingAddress.spouseName"],
+          zip: data?.errors?.["differentBillingAddress.zip"],
+          country: data?.errors?.["differentBillingAddress.country"],
+          state: data?.errors?.["differentBillingAddress.state"],
+          streetAddress: data?.errors?.["differentBillingAddress.streetAddress"],
+        }
+        console.log(differentBillingAddressErrors)
+        dispatch(addCheckoutField({errors:  {
+          ...data.errors,
+          differentBillingAddress: differentBillingAddressErrors
+        }}));
+        setLoading(false);
+        return;
+      }
+      const card = elements.getElement(CardElement);
+      if (!card) {
+        await fetch(BASE_URL + "/api/ecommerce/orders/" + data?.orderId,
+          {
+            method:"DELETE",
+            headers:{
+            "Content-Type": "application/json",
+            },
+            credentials: "include",
           }
-        },
-        setup_future_usage: saveCard ? "off_session" : undefined
+        );
+        toast.error("Card input is not available. Please try again.")
+        setLoading(false);
+        return;
       }
-    );
 
-    if(result.error){
-      await fetch(BASE_URL + "/api/ecommerce/orders/" + data?.orderId,
+      const result = await stripe.confirmCardPayment(
+        data.clientSecret,
         {
-          method:"DELETE",
-          headers:{
-          "Content-Type": "application/json",
+          payment_method: {
+            card,
+            billing_details: {
+              name: `${checkoutForm.firstName} ${checkoutForm.lastName}`,
+              email: checkoutForm.email
+            }
           },
-          credentials: "include",
+          setup_future_usage: saveCard ? "off_session" : undefined
         }
       );
-      toast.error(result.error.message || "Payment failed. Please try again.");
+
+      if(result.error){
+        await fetch(BASE_URL + "/api/ecommerce/orders/" + data?.orderId,
+          {
+            method:"DELETE",
+            headers:{
+            "Content-Type": "application/json",
+            },
+            credentials: "include",
+          }
+        );
+        toast.error(result.error.message || "Payment failed. Please try again.");
+        setLoading(false);
+        return;
+      }
+
+      if(result.paymentIntent.status=== "succeeded"){
+        await fetch(BASE_URL + "/api/ecommerce/carts/items",
+          {
+            headers:{
+            "Content-Type": "application/json",
+            },
+            method:"DELETE",
+            credentials: "include",
+          }
+        );
+        dispatch(resetCheckoutFields())
+        toast.success("Paid successfully");
+        setTimeout(()=> {
+          window.location.replace("/profile/my-orders")
+        }, 3000)
+      }
       setLoading(false);
-      return;
+    } catch(err) {
+      setLoading(false)
+      toast.error("Something went wrong. Please check your details and card information and try again.")
     }
-
-    if(result.paymentIntent.status=== "succeeded"){
-      await fetch(BASE_URL + "/api/ecommerce/carts/items",
-        {
-          headers:{
-          "Content-Type": "application/json",
-          },
-          method:"DELETE",
-          credentials: "include",
-        }
-      );
-      dispatch(resetCheckoutFields())
-      toast.success("Paid successfully");
-      setTimeout(()=> {
-        window.location.replace("/profile/my-orders")
-      }, 3000)
-    }
-    setLoading(false);
   };
 
   useEffect(()=> {
