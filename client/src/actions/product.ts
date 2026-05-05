@@ -27,7 +27,7 @@ export const getProductByQuery = async (query: string) => {
 
 export const getProductByQueryWithVisible = async (query: string) => {
   const res = await fetch(
-    BASE_URL + "/api/ecommerce/product-by-filter?visible=yes" + query,
+    BASE_URL + "/api/ecommerce/product-by-filter?visible=yes&" + query,
     {
       cache: "no-store",
     }
