@@ -8,7 +8,7 @@ import FadeInSection from "../common/FadeInSection";
 import Link from "next/link";
 export default function Struggle() {
   return (
-    <section className="container mt-20">
+    <section className="container mt-20 overflow-hidden">
       <div className="flex flex-col md:flex-row justify-between items-center mt-8 gap-6 text-center md:text-left">
         <div>
           <FadeInSection
@@ -48,13 +48,13 @@ export default function Struggle() {
           </Button>
         </FadeInSection>
       </div>
-      <div className="mt-20 grid gap-14 md:gap-6 md:grid-cols-[2fr_3fr]">
+      <div className="mt-20 grid gap-14 md:gap-6 md:grid-cols-[2fr_3fr] grid-cols-1">
         <FadeInSection 
           initial={{ opacity: 0, x: -150 }}
           scrollTop={{ opacity: 1, x: 0 }}
           scrollBottom={{ opacity: 0, x: -150 }}
           margin="40px 0px -40px 0px"
-          className="md:max-w-[330px] text-center md:text-left"
+          className="md:max-w-[330px] w-full text-center md:text-left"
         >
           <h3 className="text-2xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold">
             From Struggle to Strength
