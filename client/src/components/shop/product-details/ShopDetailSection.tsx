@@ -70,7 +70,7 @@ export default function ShopDetailSection({
                 </span>
               )}
             </div>
-            <p className="text-base">{product.shortDescription}</p>
+            <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: product.shortDescription }} />
             <div className="flex flex-col xs:flex-row xs:items-center gap-8 my-8">
               <div className="flex items-center gap-3">
                 <span>Quantity</span>
