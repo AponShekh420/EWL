@@ -637,7 +637,7 @@ export default function CreateProductForm({
                     dispatch(addProductField({ shippingClass: val }))
                   }
                   options={[
-                    { label: "none", value: "nonee" },
+                    { label: "noneee", value: "nonee" },
                     { label: "My Shemen Class", value: "my-shemen-class" },
                     { label: "1.5 lb Class", value: "1.5-lb-class" },
                     { label: "Ebook Class", value: "ebook-class" },
