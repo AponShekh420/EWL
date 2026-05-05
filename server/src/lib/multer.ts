@@ -6,7 +6,7 @@ import path from "path";
 
 export const multerUploader = (
   folder: string,
-  acceptedFileTypes: string[] = ["image/jpeg", "image/png", "image/webp"], // defaults
+  acceptedFileTypes: string[] = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/svg+xml"], // defaults
   maxFileSize?: number
 ) => {
   const uploadDir = path.join(process.cwd(), "public/images", folder);

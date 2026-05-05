@@ -1,18 +1,9 @@
 import { getCategories } from "@/actions/category";
 import { getProductByQueryWithVisible } from "@/actions/product";
 import BreadcrumbPath from "@/components/common/BreadcrumbPath";
+import { ShopPagination } from "@/components/shop/ShopPagination";
 import ShopSection from "@/components/shop/ShopSection";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
 import { getSession } from "@/lib/authLib";
-import { paginationCounter } from "@/utils/paginationCounter";
 import { queryFormatter } from "@/utils/queryFormatter";
 import { redirect } from "next/navigation";
 
@@ -53,56 +44,7 @@ export default async function Shop({
         price={price}
       />
       <div className="w-fit ml-auto py-8">
-        <Pagination>
-          <PaginationContent>
-            <PaginationItem>
-              {pagination.page > 1 ? (
-                <PaginationPrevious
-                  href={`/dashboard/ecommerce/categories?page=${
-                    pagination.page - 1
-                  }`}
-                />
-              ) : (
-                <button
-                  disabled
-                  className="disabled:text-gray-400 cursor-not-allowed"
-                >
-                  {"< Previous"}
-                </button>
-              )}
-            </PaginationItem>
-            <PaginationItem>
-              {paginationCounter(pagination).map((page, index) => (
-                <PaginationLink
-                  className={pagination.page === page ? "bg-gray-100" : ""}
-                  key={index}
-                  href={`/dashboard/ecommerce/categories?page=${page}`}
-                >
-                  {page}
-                </PaginationLink>
-              ))}
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-            <PaginationItem>
-              {pagination.totalPages > pagination.page ? (
-                <PaginationNext
-                  href={`/dashboard/ecommerce/categories?page=${
-                    pagination.page + 1
-                  }`}
-                />
-              ) : (
-                <button
-                  disabled
-                  className="disabled:text-gray-400 cursor-not-allowed"
-                >
-                  {"Next >"}
-                </button>
-              )}
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+        <ShopPagination pagination={pagination}/>
       </div>
     </main>
   );

@@ -47,6 +47,13 @@ export default function ShopSection({
           <hr className="mt-2 mb-3" />
           <ScrollArea className="h-70">
             <ul className="space-y-2">
+              <li
+                  className="flex justify-between items-center text-gray-500 text-sm hover:text-teal capitalize cursor-pointer"
+                >
+                <Link href={"/shop"}>
+                  All
+                </Link>
+              </li>
               {categories.map((category) => (
                 <li
                   key={category._id}
