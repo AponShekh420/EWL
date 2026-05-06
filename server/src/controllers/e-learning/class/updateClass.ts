@@ -174,12 +174,12 @@ export const updateClass = async (
     });
     if (body.speaker !== oldClass.speaker) {
       await UserModel.updateOne(
-        { classes: oldClass._id },
+        { classes: {$in: [oldClass._id]} },
         { $pull: { classes: oldClass._id } }
       );
       await UserModel.updateOne(
         { _id: body.speaker },
-        { $addToSet: { classes: oldClass._id } }
+        { $push: { classes: oldClass._id } }
       );
     }
 

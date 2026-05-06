@@ -2,18 +2,11 @@
 import { DeleteModal } from "@/components/common/DeleteModal";
 import PopupButton from "@/components/common/PopupButton";
 import SearchBox from "@/components/common/SearchBox";
+import { ShopPagination } from "@/components/shop/ShopPagination";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
+
 import {
   Sheet,
   SheetContent,
@@ -35,7 +28,6 @@ import { PaginationType } from "@/types/Pagination";
 import { IDisplayRecording } from "@/types/Recording";
 import { debounce } from "@/utils/debounce";
 import { BASE_URL } from "@/utils/envVariable";
-import { paginationCounter } from "@/utils/paginationCounter";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -246,56 +238,7 @@ export default function RecordTable({
         </TableBody>
       </Table>
       <div className="w-fit ml-auto">
-        <Pagination>
-          <PaginationContent>
-            <PaginationItem>
-              {pagination.page > 1 ? (
-                <PaginationPrevious
-                  href={`/dashboard/ecommerce/orders?page=${
-                    pagination.page - 1
-                  }`}
-                />
-              ) : (
-                <button
-                  disabled
-                  className="disabled:text-gray-400 cursor-not-allowed"
-                >
-                  {"< Previous"}
-                </button>
-              )}
-            </PaginationItem>
-            <PaginationItem>
-              {paginationCounter(pagination).map((page, index) => (
-                <PaginationLink
-                  className={pagination.page === page ? "bg-gray-100" : ""}
-                  key={index}
-                  href={`/dashboard/ecommerce/orders?page=${page}`}
-                >
-                  {page}
-                </PaginationLink>
-              ))}
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-            <PaginationItem>
-              {pagination.totalPages > pagination.page ? (
-                <PaginationNext
-                  href={`/dashboard/ecommerce/orders?page=${
-                    pagination.page + 1
-                  }`}
-                />
-              ) : (
-                <button
-                  disabled
-                  className="disabled:text-gray-400 cursor-not-allowed"
-                >
-                  {"Next >"}
-                </button>
-              )}
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+        <ShopPagination pagination={pagination}/>
       </div>
     </div>
   );

@@ -49,7 +49,7 @@ export const updateUser = async (
     });
     if (!updatedUser) return next(createError(400, "Failed to update user"));
 
-    if (file && oldUser.avatar) {
+    if (file && oldUser.avatar && (oldUser?.avatar != "user.png")) {
       deleteFileFromLocal(oldUser.avatar, "profile");
     }
     // ---- RESPONSE ----

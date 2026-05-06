@@ -4,6 +4,7 @@ import { CategoryModel } from "../../../models/CategoryModel";
 import { catchErrorSend } from "../../../utils/catchErrorSend";
 import { deleteFileFromLocal } from "../../../utils/deleteFileFromLocal";
 import classModel from "../../../models/ClassModel";
+import UserModel from "../../../models/UserModel";
 
 export const deleteClass = async (
   req: Request,
@@ -17,6 +18,11 @@ export const deleteClass = async (
     const deletedClass = await classModel.findByIdAndDelete(id);
     if (!deletedClass) {
       return next(createError(404, `Class with id ${id} not found`));
+    } else {
+      await UserModel.updateOne(
+        { classes: { $in: [id] } },   // find category that HAS this product
+        { $pull: { classes: id } }     // remove from OLD category
+      );
     }
 
     deleteFileFromLocal(
