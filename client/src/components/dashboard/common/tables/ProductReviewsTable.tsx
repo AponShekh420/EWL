@@ -3,17 +3,10 @@ import { DeleteModal } from "@/components/common/DeleteModal";
 import Rating from "@/components/common/Rating";
 import SearchBox from "@/components/common/SearchBox";
 import SelectBox from "@/components/common/SelectBox";
+import { ShopPagination } from "@/components/shop/ShopPagination";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
+
 import {
   Table,
   TableBody,
@@ -30,7 +23,6 @@ import { BASE_URL } from "@/utils/envVariable";
 import { getImageUrl } from "@/utils/getImageUrl";
 import { getReviewsStatusColor } from "@/utils/getStatusColor";
 import { GetTime } from "@/utils/getTime";
-import { paginationCounter } from "@/utils/paginationCounter";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -223,56 +215,7 @@ export default function ProductReviewsTable({
         </TableBody>
       </Table>
       <div className="w-fit ml-auto">
-        <Pagination>
-          <PaginationContent>
-            <PaginationItem>
-              {pagination.page > 1 ? (
-                <PaginationPrevious
-                  href={`/dashboard/ecommerce/products/reviews?page=${
-                    pagination.page - 1
-                  }`}
-                />
-              ) : (
-                <button
-                  disabled
-                  className="disabled:text-gray-400 cursor-not-allowed"
-                >
-                  {"< Previous"}
-                </button>
-              )}
-            </PaginationItem>
-            <PaginationItem>
-              {paginationCounter(pagination).map((page, index) => (
-                <PaginationLink
-                  className={pagination.page === page ? "bg-gray-100" : ""}
-                  key={index}
-                  href={`/dashboard/ecommerce/products/reviews?page=${page}`}
-                >
-                  {page}
-                </PaginationLink>
-              ))}
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-            <PaginationItem>
-              {pagination.totalPages > pagination.page ? (
-                <PaginationNext
-                  href={`/dashboard/ecommerce/products/reviews?page=${
-                    pagination.page + 1
-                  }`}
-                />
-              ) : (
-                <button
-                  disabled
-                  className="disabled:text-gray-400 cursor-not-allowed"
-                >
-                  {"Next >"}
-                </button>
-              )}
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+        <ShopPagination pagination={pagination}/>
       </div>
     </div>
   );

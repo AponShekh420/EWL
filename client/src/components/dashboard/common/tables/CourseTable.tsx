@@ -9,15 +9,6 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-import {
   Sheet,
   SheetContent,
   SheetDescription,
@@ -40,7 +31,6 @@ import { debounce } from "@/utils/debounce";
 import { BASE_URL } from "@/utils/envVariable";
 import { getImageUrl } from "@/utils/getImageUrl";
 import { getProductStatusColor } from "@/utils/getStatusColor";
-import { paginationCounter } from "@/utils/paginationCounter";
 
 import { Icon } from "@iconify/react";
 import Image from "next/image";
@@ -48,6 +38,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 import toast from "react-hot-toast";
+import { ShopPagination } from "@/components/shop/ShopPagination";
 
 
 export default function CourseTable({
@@ -272,56 +263,7 @@ export default function CourseTable({
         </Table>
      </ScrollArea>
       <div className="w-fit ml-auto">
-        <Pagination>
-          <PaginationContent>
-            <PaginationItem>
-              {pagination.page > 1 ? (
-                <PaginationPrevious
-                  href={`/dashboard/e-learning/courses?page=${
-                    pagination.page - 1
-                  }`}
-                />
-              ) : (
-                <button
-                  disabled
-                  className="disabled:text-gray-400 cursor-not-allowed"
-                >
-                  {"< Previous"}
-                </button>
-              )}
-            </PaginationItem>
-            <PaginationItem>
-              {paginationCounter(pagination).map((page, index) => (
-                <PaginationLink
-                  className={pagination.page === page ? "bg-gray-100" : ""}
-                  key={index}
-                  href={`/dashboard/e-learning/courses?page=${page}`}
-                >
-                  {page}
-                </PaginationLink>
-              ))}
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-            <PaginationItem>
-              {pagination.totalPages > pagination.page ? (
-                <PaginationNext
-                  href={`/dashboard/e-learning/courses?page=${
-                    pagination.page + 1
-                  }`}
-                />
-              ) : (
-                <button
-                  disabled
-                  className="disabled:text-gray-400 cursor-not-allowed"
-                >
-                  {"Next >"}
-                </button>
-              )}
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+        <ShopPagination pagination={pagination}/>
       </div>
     </div>
   );

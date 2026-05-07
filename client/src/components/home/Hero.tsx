@@ -49,7 +49,7 @@ const Hero = () => {
           scrollTop={{ opacity: 1, y: 0 }}
           scrollBottom={{ opacity: 0, y: 50 }}
           margin="40px 0px -40px 0px"
-          className="flex gap-x-3 mt-7"
+          className="flex gap-3 mt-7 flex-wrap"
           delay={0.11}
         > 
           <Link href={"/free-demos"} className="bg-[#0F75BC] px-5 py-2 h-9 rounded-full font-semibold text-white text-sm lg:text-md text-nowrap shadow-[5px_5px_15px_0px_#2700346c] hover:shadow-[5px_5px_15px_0px_#dad7dc6c] transition-all duration-150 transform hover:translate-y-[-5px]">Free Demos</Link>

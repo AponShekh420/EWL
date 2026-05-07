@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import createError from "http-errors";
-import { CategoryModel } from "../../../models/CategoryModel";
 import { catchErrorSend } from "../../../utils/catchErrorSend";
 import { deleteFileFromLocal } from "../../../utils/deleteFileFromLocal";
 import courseModel from "../../../models/CourseModel";
+import UserModel from "../../../models/UserModel";
 
 export const deleteCourse = async (
   req: Request,
@@ -17,6 +17,11 @@ export const deleteCourse = async (
     const deletedCourse = await courseModel.findByIdAndDelete(id);
     if (!deletedCourse) {
       return next(createError(404, `Course with id ${id} not found`));
+    } else {
+      await UserModel.updateOne(
+        { courses: { $in: [id] } },   // find category that HAS this product
+        { $pull: { courses: id } }     // remove from OLD category
+      );
     }
 
     deleteFileFromLocal(
