@@ -20,7 +20,7 @@ export const updateUser = async (
     const oldUser = await UserModel.findById(id);
     if (!oldUser) return next(createError(404, "User not found"));
 
-    const updatedData: Record<string, any> = { ...body };
+    const updatedData: Record<string, any> = {};
     if (body.role) {
       updatedData.role = body.role;
     }
@@ -30,12 +30,44 @@ export const updateUser = async (
     if (file) {
       updatedData.avatar = file.filename;
     }
-    // if (body.isOrthodoxJew) {
-    //   updatedData.isOrthodoxJew = body.isOrthodoxJew === "true" ? true : false;
-    // }
-    // if (body.keepsMitzvos) {
-    //   updatedData.keepsMitzvos = body.keepsMitzvos === "true" ? true : false;
-    // }
+
+    // start
+    if (body.firstName) {
+      updatedData.firstName = body.firstName;
+    }
+    if (body.lastName) {
+      updatedData.lastName = body.lastName;
+    }
+    if (body.email) {
+      updatedData.email = body.email;
+    }
+    if (body.userName) {
+      updatedData.userName = body.userName;
+    }
+    if (body.gender) {
+      updatedData.gender = body.gender;
+    }
+    if (body.maritalStatus) {
+      updatedData.maritalStatus = body.maritalStatus;
+    }
+    if (body.chafifaDuration) {
+      updatedData.chafifaDuration = body.chafifaDuration;
+    }
+    if (body.chickenSoupInDairySink) {
+      updatedData.chickenSoupInDairySink = body.chickenSoupInDairySink;
+    }
+    if (body.bio) {
+      updatedData.bio = body.bio;
+    }
+    if (body.isOrthodoxJew) {
+      updatedData.isOrthodoxJew = body.isOrthodoxJew === "true" ? true : false;
+    }
+    if (body.keepsMitzvos) {
+      updatedData.keepsMitzvos = body.keepsMitzvos === "true" ? true : false;
+    }
+    // end
+
+
     if (body.password) {
       updatedData.password = bcrypt.hashSync(body.password, 10);
     }

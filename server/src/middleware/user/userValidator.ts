@@ -147,29 +147,29 @@ export const userUpdateValidationRules = [
     })
     .normalizeEmail(),
 
-  // Password
-  body("password")
-    .isStrongPassword({
-      minLength: 8,
-      minLowercase: 1,
-      minUppercase: 1,
-      minNumbers: 1,
-      minSymbols: 1,
-    })
-    .optional()
-    .withMessage(
-      "Password must be at least 8 characters long and include uppercase, lowercase, number, and symbol"
-    ),
+  // // Password
+  // body("password")
+  //   .isStrongPassword({
+  //     minLength: 8,
+  //     minLowercase: 1,
+  //     minUppercase: 1,
+  //     minNumbers: 1,
+  //     minSymbols: 1,
+  //   })
+  //   .optional()
+  //   .withMessage(
+  //     "Password must be at least 8 characters long and include uppercase, lowercase, number, and symbol"
+  //   ),
 
-  // Confirm Password
-  body("cpassword")
-    .optional()
-    .custom((value, { req }) => {
-      if (value !== req.body.password) {
-        throw new Error("Passwords do not match");
-      }
-      return true;
-    }),
+  // // Confirm Password
+  // body("cpassword")
+  //   .optional()
+  //   .custom((value, { req }) => {
+  //     if (value !== req.body.password) {
+  //       throw new Error("Passwords do not match");
+  //     }
+  //     return true;
+  //   }),
 
   // Gender
   body("gender").notEmpty().withMessage("Gender is required").trim(),
