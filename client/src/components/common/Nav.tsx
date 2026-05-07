@@ -100,7 +100,7 @@ const Nav = ({ cart }: { cart: CartType }) => {
                   </h1>
 
                   <div
-                    className={`${accountMenuOpen ? "translate-y-0 opacity-100 z-[1]" : "translate-y-[10px] opacity-0 z-[-1]"} !z-50 bg-white w-max rounded-md absolute dark:bg-slate-800 top-[45px] right-0 p-[10px] flex flex-col transition-all duration-300 gap-[5px]`}
+                    className={`${accountMenuOpen ? "translate-y-0 visiable z-[1]" : "translate-y-[10px] z-[-1] invisible"} !z-50 bg-white w-max rounded-md absolute dark:bg-slate-800 top-[45px] right-0 p-[10px] flex flex-col transition-all duration-300 gap-[5px]`}
                   >
                     <Link
                       href={
