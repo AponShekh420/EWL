@@ -143,7 +143,7 @@ export default function UserForm({ user }: { user?: UserType }) {
                 }
                 error={errors?.password?.msg}
               />
-              <InputBox
+              {/* <InputBox
                 label="Confirm password"
                 placeholder="Confirm password"
                 name="cpassword"
@@ -152,7 +152,7 @@ export default function UserForm({ user }: { user?: UserType }) {
                   dispatch(addUserField({ cpassword: e.target.value }))
                 }
                 error={errors?.cpassword?.msg}
-              />
+              /> */}
               <SelectBox
                 label="Gender"
                 placeholder="Gender"
