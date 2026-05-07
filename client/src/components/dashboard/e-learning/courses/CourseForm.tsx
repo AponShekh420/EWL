@@ -103,7 +103,7 @@ export default function CreateCourseForm({
       addCourseField({
         ...courseData,
         thumbnail: null,
-        speaker: courseData?.speaker._id,
+        speaker: courseData?.speaker?._id,
         category: courseData?.category,
         durationType: durationType.trim() || "",
         durationNumber: durationNumber.trim() || "",

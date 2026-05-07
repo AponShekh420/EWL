@@ -66,7 +66,7 @@ export const createProduct = async (
       return next(createError(400, "Failed to create product"));
     }
     await CategoryModel.findOneAndUpdate(
-      { name: { $regex: `^${createdProduct.category}$`, $options: "i" } },
+      { slug: { $regex: `^${createdProduct.category}$`, $options: "i" } },
       { $push: { products: createdProduct._id } },
       { new: true }, // Optional: returns the updated document
     );

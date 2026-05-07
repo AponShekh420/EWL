@@ -11,6 +11,7 @@ import ListProductCard from "../common/ListProductCard";
 import ScrollArea from "../common/ScrollArea";
 import { Button } from "../ui/button";
 import { Slider } from "../ui/slider";
+import { useSearchParams } from "next/navigation";
 
 const productTags = [
   "creams",
@@ -38,6 +39,9 @@ export default function ShopSection({
     min: price.minPrice,
     max: price.maxPrice,
   });
+  const searchParams = useSearchParams();
+
+  const activeCategory = searchParams.get("category");
 
   return (
     <section className="mt-6 grid lg:grid-cols-[280px_1fr] xl:grid-cols-[300px_1fr] gap-x-6">
@@ -47,29 +51,40 @@ export default function ShopSection({
           <hr className="mt-2 mb-3" />
           <ScrollArea className="h-70">
             <ul className="space-y-2">
-              <li
-                  className="flex justify-between items-center text-gray-500 text-sm hover:text-teal capitalize cursor-pointer"
+              <li className="flex justify-between items-center text-sm">
+                <Link
+                  href="/shop"
+                  className={`capitalize hover:text-teal ${
+                    !activeCategory ? "text-teal" : "text-gray-500"
+                  }`}
                 >
-                <Link href={"/shop"}>
                   All
                 </Link>
               </li>
-              {categories.map((category) => (
-                <li
-                  key={category._id}
-                  className="flex justify-between items-center text-gray-500 text-sm"
-                >
-                  <Link
-                    href={`/shop?category=${category.slug}`}
-                    className="hover:text-teal capitalize"
+
+              {categories.map((category) => {
+                const isActive = activeCategory === category.slug;
+
+                return (
+                  <li
+                    key={category._id}
+                    className="flex justify-between items-center text-sm"
                   >
-                    {category.name}
-                  </Link>
-                  <span>({category.products.length})</span>
-                </li>
-              ))}
+                    <Link
+                      href={`/shop?category=${category.slug}`}
+                      className={`capitalize hover:text-teal ${
+                        isActive ? "text-teal" : "text-gray-500"
+                      }`}
+                    >
+                      {category.name}
+                    </Link>
+
+                    <span>({category.products.length})</span>
+                  </li>
+                );
+              })}
             </ul>
-          </ScrollArea>
+          </ScrollArea>;
         </div>
         <div className="border p-4 my-8">
           <h4 className="uppercase font-medium">Filter by price</h4>

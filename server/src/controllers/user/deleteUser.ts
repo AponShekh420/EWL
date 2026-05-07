@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import createError from "http-errors";
 import UserModel from "../../models/UserModel";
 import { catchErrorSend } from "../../utils/catchErrorSend";
+import { deleteFileFromLocal } from "../../utils/deleteFileFromLocal";
 
 export const deleteUser = async (
   req: Request,
@@ -15,6 +16,9 @@ export const deleteUser = async (
     const deletedUser = await UserModel.findByIdAndDelete(id);
     if (!deletedUser) {
       return next(createError(404, `User with id ${id} not found`));
+    }
+    if(deletedUser?.avatar != "user.png") {
+      deleteFileFromLocal(deletedUser?.avatar, "profile");
     }
 
     return res.status(200).json({

@@ -93,12 +93,12 @@ export const updateCourse = async (
     });
     if (body.speaker !== oldCourse.speaker) {
       await UserModel.updateOne(
-        { courses: oldCourse._id },
+        { courses: {$in: [oldCourse._id]} },
         { $pull: { courses: oldCourse._id } }
       );
       await UserModel.updateOne(
         { _id: body.speaker },
-        { $addToSet: { courses: oldCourse._id } }
+        { $push: { courses: oldCourse._id } }
       );
     }
 
