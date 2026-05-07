@@ -11,6 +11,7 @@ interface InstructorProfileProps {
     avatar: string;
     courses: string[];
     userName: string;
+    bio?: string;
   };
 }
 
@@ -40,8 +41,7 @@ const ModernSpeakerProfile = ({speaker}: InstructorProfileProps) => {
         </div>
         
         <p className="text-lg text-slate-600 leading-relaxed max-w-3xl">
-            Co-founder of the <span className="font-semibold text-slate-900">&quot;How To Make Your Spouse Your Soulmate&quot;</span> series. 
-            A seasoned Chosson teacher and Shalom Bayis mentor with over 30 years of experience serving the Monsey community.
+            {speaker?.bio || ""}
         </p>
         </div>
     </div>
