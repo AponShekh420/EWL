@@ -17,7 +17,7 @@ const CoursePage = async ({params}: {params: {slug: string}}) => {
   date,
   lectures,
   time,
-  aboutTab,
+  // aboutTab,
   overviewTab,
   courseTopicsTab,
   speakerProfileTab,
@@ -35,13 +35,13 @@ const CoursePage = async ({params}: {params: {slug: string}}) => {
   module,
   } = course;
 
-  overviewTab && overviewTab != "<p><br></p>" && availableTabs.push("Overview");
+  moreInfoTab && moreInfoTab != "<p><br></p>" && availableTabs.push("About");
   courseTopicsTab && courseTopicsTab != "<p><br></p>" && availableTabs.push("Course Topics");
-  speakerProfileTab && speakerProfileTab != "<p><br></p>" && availableTabs.push("Speaker Profile");
-  aboutTab && aboutTab != "<p><br></p>" && availableTabs.push("About");
   FAQsTab && FAQsTab != "<p><br></p>" && availableTabs.push("FAQs");
-  testimonialsTab && testimonialsTab != "<p><br></p>" && availableTabs.push("Testimonial");
-  moreInfoTab && moreInfoTab != "<p><br></p>" && availableTabs.push("More Info");
+  speakerProfileTab && speakerProfileTab != "<p><br></p>" && availableTabs.push("Speaker Profile");
+  testimonialsTab && testimonialsTab != "<p><br></p>" && availableTabs.push("Testimonials");
+  overviewTab && overviewTab != "<p><br></p>" && availableTabs.push("Takeaways");
+  // aboutTab && aboutTab != "<p><br></p>" && availableTabs.push("About");
 
   const installmentPricePerMonth = installmentMonths > 0 ? (price / installmentMonths).toFixed(2) : null;
   const modulePricePerMonth = module > 0 ? (price / module).toFixed(2) : null;
@@ -119,10 +119,10 @@ const CoursePage = async ({params}: {params: {slug: string}}) => {
                 <TabsContent value="about">
                   <div
                     className="prose max-w-none"
-                    dangerouslySetInnerHTML={{ __html: aboutTab }}
+                    dangerouslySetInnerHTML={{ __html: moreInfoTab }}
                   />
                 </TabsContent>
-                <TabsContent value="overview">
+                <TabsContent value="takeaways">
                   <div
                     className="prose max-w-none"
                     dangerouslySetInnerHTML={{ __html: overviewTab }}
@@ -146,7 +146,7 @@ const CoursePage = async ({params}: {params: {slug: string}}) => {
                     dangerouslySetInnerHTML={{ __html: FAQsTab }}
                   />
                 </TabsContent>
-                <TabsContent value="testimonial">
+                <TabsContent value="testimonials">
                   <div
                     className="prose max-w-none"
                     dangerouslySetInnerHTML={{ __html: testimonialsTab}}

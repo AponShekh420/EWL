@@ -12,6 +12,7 @@ const Volunteer = async ({ params }: { params: { slug: string } }) => {
     avatar: speakerData.avatar,
     courses: speakerData.courses,
     userName: speakerData.userName,
+    bio: speakerData?.bio || "",
   };
 
   return (
