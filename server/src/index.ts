@@ -47,7 +47,18 @@ mongoose
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "../public")));
 app.use(express.urlencoded({ extended: true, limit: "5000mb" }));
-app.use(express.json({ limit: "5000mb" }));
+// app.use(express.json());
+
+app.use((req, res, next) => {
+  if ((req.originalUrl === "/api/ecommerce/order/webhook") || (req.originalUrl === "/api/e-learning/class-order/webhook") || (req.originalUrl === "/api/e-learning/order/webhook")) {
+    next();
+  } else {
+    express.json({ limit: "5000mb" })(req, res, next);
+  }
+});
+
+
+
 // e-learning
 app.use("/api/e-learning", recordingRouter);
 app.use("/api/e-learning", courseRouter);
