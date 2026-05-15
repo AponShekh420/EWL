@@ -1,7 +1,8 @@
 const nodemailer = require("nodemailer")
 
 interface EmailOptions {
-  email: string
+  fromEmail: string,
+  toEmail: string
   subject: string
   message: string
 }
@@ -18,8 +19,8 @@ const sendEmail = async (options: EmailOptions) => {
   })
 
   const mailOptions = {
-    from: `Apon Shekh <${process.env.EMAIL_USERNAME}>`,
-    to: options.email,
+    from: options.fromEmail,
+    to: options.toEmail,
     subject: options.subject,
     html: options.message,
     //text:

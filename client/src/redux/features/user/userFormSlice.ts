@@ -14,6 +14,7 @@ const initialState = {
   keepsMitzvos: "",
   chafifaDuration: "",
   chickenSoupInDairySink: "",
+  status: "pending",
 };
 export type UserFormState = typeof initialState;
 export const userFormSlice = createSlice({
