@@ -4,6 +4,7 @@ import createError from "http-errors";
 import UserModel from "../../models/UserModel";
 import { catchErrorSend } from "../../utils/catchErrorSend";
 import { deleteFileFromLocal } from "../../utils/deleteFileFromLocal";
+import sendEmail from "../../utils/sendEmail";
 export const updateUser = async (
   req: Request,
   res: Response,
@@ -84,6 +85,142 @@ export const updateUser = async (
     if (file && oldUser.avatar && (oldUser?.avatar != "user.png")) {
       deleteFileFromLocal(oldUser.avatar, "profile");
     }
+
+    // approved user email
+    if(body.status && body.status == "active") {
+      const Approvedtemplate = `<!DOCTYPE html>
+      <html>
+        <body style="margin:0;padding:0;font-family:Arial,Helvetica,sans-serif;background-color:#f3f4f6;">
+          <table width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+              <td align="center" style="padding:40px 0;">
+                <table width="600" cellpadding="0" cellspacing="0"
+                  style="background:#ffffff;border-radius:8px;padding:32px;box-shadow:0 4px 10px rgba(0,0,0,0.05);">
+
+                  <tr>
+                    <td>
+
+                      <h2 style="margin:0 0 16px;color:#111827;">
+                        Account Approved
+                      </h2>
+
+                      <p style="font-size:15px;color:#374151;line-height:1.6;">
+                        Good news! Your <strong>Ohel Miriam</strong> account has been approved by the admin.
+                      </p>
+
+                      <p style="font-size:15px;color:#374151;line-height:1.6;">
+                        Your account is now active and you can log in and access your profile.
+                      </p>
+
+                      <p style="text-align:center;margin:32px 0;">
+                        <a href="${process.env.CLIENT_URL}/login"
+                          style="background:#111827;color:#ffffff;
+                                padding:12px 24px;border-radius:6px;
+                                text-decoration:none;font-size:15px;
+                                font-weight:600;display:inline-block;">
+                          Login to Your Account
+                        </a>
+                      </p>
+
+                      <hr style="margin:30px 0;border:none;border-top:1px solid #e5e7eb;" />
+
+                      <p style="font-size:14px;color:#6b7280;">
+                        Need help? Contact us at
+                        <a href="mailto:ohelmiriam@gmail.com" style="color:#111827;">
+                          ohelmiriam@gmail.com
+                        </a>
+                      </p>
+
+                      <p style="margin-top:24px;font-size:14px;color:#374151;">
+                        Thanks,<br />
+                        <strong>Ohel Miriam</strong><br />
+                        Ohel Miriam Team
+                      </p>
+
+                    </td>
+                  </tr>
+
+                </table>
+              </td>
+            </tr>
+          </table>
+        </body>
+      </html>`;
+
+      // Email send to the user
+      await sendEmail({
+        fromEmail: `${process.env.EMAIL_USERNAME}`,
+        toEmail: updatedUser?.email,
+        subject: "Your Ohel Miriam Account Has Been Approved",
+        message: Approvedtemplate,
+      })
+    }
+
+    // pending user email
+    if(body.status && body.status == "pending") {
+      const Pendingtemplate = `<!DOCTYPE html>
+      <html>
+        <body style="margin:0;padding:0;font-family:Arial,Helvetica,sans-serif;background-color:#f3f4f6;">
+          <table width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+              <td align="center" style="padding:40px 0;">
+                <table width="600" cellpadding="0" cellspacing="0"
+                  style="background:#ffffff;border-radius:8px;padding:32px;box-shadow:0 4px 10px rgba(0,0,0,0.05);">
+
+                  <tr>
+                    <td>
+
+                      <h2 style="margin:0 0 16px;color:#111827;">
+                        Account Status Updated
+                      </h2>
+
+                      <p style="font-size:15px;color:#374151;line-height:1.6;">
+                        Your <strong>Ohel Miriam</strong> account status has been changed back to pending by the admin.
+                      </p>
+
+                      <p style="font-size:15px;color:#374151;line-height:1.6;">
+                        Your account is temporarily under review and access may be limited until approval is completed again.
+                      </p>
+
+                      <p style="font-size:15px;color:#374151;line-height:1.6;">
+                        You will receive another email once your account becomes active again.
+                      </p>
+
+                      <hr style="margin:30px 0;border:none;border-top:1px solid #e5e7eb;" />
+
+                      <p style="font-size:14px;color:#6b7280;">
+                        Need help? Contact us at
+                        <a href="mailto:ohelmiriam@gmail.com" style="color:#111827;">
+                          ohelmiriam@gmail.com
+                        </a>
+                      </p>
+
+                      <p style="margin-top:24px;font-size:14px;color:#374151;">
+                        Thanks,<br />
+                        <strong>Ohel Miriam</strong><br />
+                        Ohel Miriam Team
+                      </p>
+
+                    </td>
+                  </tr>
+
+                </table>
+              </td>
+            </tr>
+          </table>
+        </body>
+      </html>`;
+
+
+      // Email send to the user
+      await sendEmail({
+        fromEmail: `${process.env.EMAIL_USERNAME}`,
+        toEmail: updatedUser?.email,
+        subject: "Your Ohel Miriam Account Has Been Moved Back to Pending Status",
+        message: Pendingtemplate,
+      })
+    }
+
     // ---- RESPONSE ----
     return res.status(200).json({
       success: true,

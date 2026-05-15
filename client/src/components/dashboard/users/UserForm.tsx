@@ -143,7 +143,7 @@ export default function UserForm({ user }: { user?: UserType }) {
                 }
                 error={errors?.password?.msg}
               />
-              {/* <InputBox
+              {!path.includes("edit") && <InputBox
                 label="Confirm password"
                 placeholder="Confirm password"
                 name="cpassword"
@@ -152,7 +152,7 @@ export default function UserForm({ user }: { user?: UserType }) {
                   dispatch(addUserField({ cpassword: e.target.value }))
                 }
                 error={errors?.cpassword?.msg}
-              /> */}
+              />}
               <SelectBox
                 label="Gender"
                 placeholder="Gender"
@@ -164,6 +164,19 @@ export default function UserForm({ user }: { user?: UserType }) {
                   { label: "Male", value: "male" },
                   { label: "Female", value: "female" },
                   { label: "Other", value: "other" },
+                ]}
+                error={errors?.gender?.msg}
+              />
+              <SelectBox
+                label="Status"
+                placeholder="Status"
+                name="status"
+                value={userForm.status}
+                defaultValue={userForm.status}
+                onChange={(val) => dispatch(addUserField({ status: val }))}
+                options={[
+                  { label: "active", value: "active" },
+                  { label: "pending", value: "pending" },
                 ]}
                 error={errors?.gender?.msg}
               />

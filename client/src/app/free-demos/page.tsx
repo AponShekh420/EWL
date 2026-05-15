@@ -1,5 +1,5 @@
 import { getPrivateRecords } from "@/actions/getPrivateRecords";
-import Records from "@/components/class-private/Records";
+import Records from "@/components/free-demos/Records";
 import { getSession } from "@/lib/authLib";
 import { redirect } from "next/navigation";
 

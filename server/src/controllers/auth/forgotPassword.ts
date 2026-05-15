@@ -94,7 +94,8 @@ const forgotPassword = async (req: Request, res: Response) => {
 
       try {
         await sendEmail({
-          email: user.email,
+          fromEmail: `${process.env.EMAIL_USERNAME}`,
+          toEmail: user.email,
           subject: "Instructions for changing your 'Ohel Miriam' Account password",
           message,
         })

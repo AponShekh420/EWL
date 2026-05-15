@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import CartModal from "./cart/CardModal";
 import LoginRegister from "./LoginRegister";
 import MobileMenu from "./MobileMenu";
+import { getImageUrl } from "@/utils/getImageUrl";
 
 const Nav = ({ cart }: { cart: CartType }) => {
   const [toggle, setToggle] = useState<boolean>(false);
@@ -84,10 +85,7 @@ const Nav = ({ cart }: { cart: CartType }) => {
                     <Image
                       width={25}
                       height={25}
-                      src={
-                        `/images/${(userInfo as any)?.avatar}` ||
-                        "/images/avatar.png"
-                      }
+                      src={getImageUrl(userInfo?.avatar, "profile") || "/images/user.png"}
                       alt="avatar"
                       className="w-[22px] h-[22px] rounded-full object-cover"
                     />
