@@ -42,7 +42,7 @@ const Upcoming = () => {
               {/* info */}
               <div className="py-5">
                 <div className="md:border-l-2 md:border-gray-300 h-full md:px-5 flex flex-col justify-center">
-                  <h3 className="lg:text-3xl text-lg sm:text-xl text-[#270034] lg:font-semibold md:font-medium font-semibold">Spearker: <span className="text-[#0F75BC]">Sarah Kahan</span></h3>
+                  <h3 className="lg:text-3xl text-lg sm:text-xl text-[#270034] lg:font-semibold md:font-medium font-semibold">Speaker: <span className="text-[#0F75BC]">Sarah Kahan</span></h3>
                   <h3 className="lg:mt-3 md:mt-2 lg:text-3xl text-lg sm:text-xl text-[#270034] lg:font-semibold md:font-medium font-semibold">Lecture: <span className="text-[#0F75BC]">Q&A Session with Sarah Kahan LCSW</span></h3>
                 </div>
               </div>
