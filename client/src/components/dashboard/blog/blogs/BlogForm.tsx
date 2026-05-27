@@ -111,7 +111,7 @@ export default function CreateBlogForm({
     dispatch(
       addBlogField({
         ...BlogData,
-        tags: BlogData?.tags.join(","),
+        tags: BlogData?.tags?.join(","),
         thumbnail: null,
         category: BlogData?.category,
         existingThumbnail: BlogData?.thumbnail,

@@ -1,0 +1,23 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const createPaidSpeaker_1 = require("../controllers/paid-hotline/createPaidSpeaker");
+const deletePaidSpeaker_1 = require("../controllers/paid-hotline/deletePaidSpeaker");
+const getAllFilterPaidSpeaker_1 = require("../controllers/paid-hotline/getAllFilterPaidSpeaker");
+const getAllPaidSpeaker_1 = require("../controllers/paid-hotline/getAllPaidSpeaker");
+const getPaidSpeakerById_1 = require("../controllers/paid-hotline/getPaidSpeakerById");
+const updatePaidSpeaker_1 = require("../controllers/paid-hotline/updatePaidSpeaker");
+const multer_1 = require("../lib/multer");
+const paidHotlineSpeaker_1 = require("../middleware/paid-hotline-speaker/paidHotlineSpeaker");
+const singleFileUploader = (0, multer_1.multerUploader)("profile");
+const router = express_1.default.Router();
+router.post("/speaker", singleFileUploader.single("avatar"), paidHotlineSpeaker_1.paidHotlineSpeakerRules, paidHotlineSpeaker_1.validatePaidHotlineSpeaker, createPaidSpeaker_1.createPaidSpeaker);
+router.put("/speaker/:id", singleFileUploader.single("avatar"), paidHotlineSpeaker_1.paidHotlineSpeakerRules, paidHotlineSpeaker_1.validatePaidHotlineSpeaker, updatePaidSpeaker_1.updatePaidSpeaker);
+router.delete("/speaker/:id", deletePaidSpeaker_1.deletePaidSpeaker);
+router.get("/filter-by-speaker", getAllFilterPaidSpeaker_1.getAllFilterPaidSpeaker);
+router.get("/speaker", getAllPaidSpeaker_1.getAllPaidSpeaker);
+router.get("/speaker/:id", getPaidSpeakerById_1.getPaidSpeakerById);
+exports.default = router;
