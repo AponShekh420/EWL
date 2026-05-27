@@ -47,6 +47,18 @@ export const sidebar_links = [
   {
     id: 4,
     url: "",
+    name: "Blog-Management",
+    icon: "mdi:post-outline",
+    isDropdown: true,
+    isShowDropdown: false,
+    dropdownList: [
+      { id: 101, name: "Blog", url: "/dashboard/blog-management/blogs" },
+      { id: 102, name: "Categories", url: "/dashboard/blog-management/categories" },
+    ],
+  },
+  {
+    id: 5,
+    url: "",
     name: "Users",
     icon: "flowbite:users-outline",
     isDropdown: true,
@@ -54,7 +66,7 @@ export const sidebar_links = [
     dropdownList: [{ id: 101, name: "User list", url: "/dashboard/users" }],
   },
   {
-    id: 5,
+    id: 6,
     url: "",
     name: "Paid Hotline",
     icon: "raphael:speaker",

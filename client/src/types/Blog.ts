@@ -3,7 +3,7 @@ export type BlogType = {
   title: string;
   category: string;
   thumbnail: string;
-  tags: string[];
+  tags?: string[];
   status: string;
   slug: string;
   description: string;
