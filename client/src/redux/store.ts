@@ -3,6 +3,7 @@ import registerFormReducer from "@/redux/auth/registerFormSlice";
 import userSlice from "@/redux/auth/userSlice";
 import cartSlice from "@/redux/features/cart/cartSlice";
 import categoryFormReducer from "@/redux/features/category/categoryFormSlice";
+import blogCategoryFormReducer from "@/redux/features/blogCategory/blogCategoryFormSlice";
 import checkoutReducer from "@/redux/features/checkout/checkoutFormSlice";
 import courseCheckoutReducer from "@/redux/features/checkout/courseCheckoutFormSlice";
 import classCheckoutReducer from "@/redux/features/checkout/classCheckoutFormSlice";
@@ -10,6 +11,7 @@ import classFormReducer from "@/redux/features/class/classFormSlice";
 import courseFormReducer from "@/redux/features/course/courseFormSlice";
 import paidHotlineSpeakerReducer from "@/redux/features/paid-hotline-speaker/paidHotlinSpeaker";
 import productFormReducer from "@/redux/features/product/productFormSlice";
+import blogFormReducer from "@/redux/features/blog/blogFormSlice";
 import recordingReducer from "@/redux/features/recording/recordingSlice";
 import shippingFormReducer from "@/redux/features/shipping/shippingFormSlice";
 import sidebarReducer from "@/redux/features/sidebar/sidebarSlice";
@@ -25,7 +27,9 @@ export const store = configureStore({
     courseStepper: CourseStepperReducer,
     classStepper: ClassStepperReducer,
     productForm: productFormReducer,
+    blogForm: blogFormReducer,
     categoryForm: categoryFormReducer,
+    blogCategoryForm: blogCategoryFormReducer,
     shippingForm: shippingFormReducer,
     courseForm: courseFormReducer,
     recording: recordingReducer,

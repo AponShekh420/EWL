@@ -14,6 +14,7 @@ import ecommerceRouter from "./routes/ecommerceRouter";
 import paidHotlineSpeakerRouter from "./routes/paidHotlineSpeakerRouter";
 import userRouter from "./routes/userRouter";
 import classRouter from "./routes/e-learning/classRouter";
+import blogRouter from "./routes/blogRouter";
 
 dotenv.config();
 
@@ -68,6 +69,7 @@ app.use("/api/account", userRouter);
 
 // E-commerce
 app.use("/api/ecommerce", ecommerceRouter);
+app.use("/api/blog", blogRouter);
 // Paid speaker
 app.use("/api/paid-hotline", paidHotlineSpeakerRouter);
 

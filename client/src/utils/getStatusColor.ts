@@ -27,6 +27,15 @@ export const getProductStatusColor = (status: string) => {
     return "";
   }
 };
+export const getBlogStatusColor = (status: string) => {
+  if (status.toLowerCase() === "draft") {
+    return "text-red-500";
+  } else if (status.toLowerCase() === "publish") {
+    return "text-green-500";
+  } else {
+    return "";
+  }
+};
 export const getUserRoleColor = (status: string) => {
   if (status.toLowerCase() === "admin") {
     return "text-green-500";
