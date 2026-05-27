@@ -134,7 +134,7 @@ export default function CreateBlogForm({
             <div>
               <h5 className="font-bold text-lg">Blog information</h5>
               <p className=" text-gray-700 mt-2">
-                Add your blog description and necessary information from here
+                Add your blog description and necessary information from here 
               </p>
             </div>
             <div>
