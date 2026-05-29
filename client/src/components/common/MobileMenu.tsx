@@ -104,7 +104,7 @@ const MobileMenu = ({
             Get Involved
           </Link>
           <Link
-            href="/blogs"
+            href="/blog"
             className="px-2.5 py-2 hover:bg-[#0F75BC] text-[#270034] hover:text-white duration-150 border-b"
             onClick={() => setToggle(false)}
           >
