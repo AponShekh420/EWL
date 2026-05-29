@@ -29,7 +29,25 @@ export default async function ProductDetails({
           className="w-full h-auto rounded-lg"
         />
       </div>
-      <div className="prose max-w-none mt-10" dangerouslySetInnerHTML={{ __html: blog.description }} />
+      <div
+        className="
+          prose 
+          max-w-none 
+          mt-10
+
+          prose-p:my-2
+          prose-p:leading-normal
+
+          prose-li:my-1
+          prose-ul:my-2
+          prose-ol:my-2
+
+          prose-headings:my-3
+
+          prose-img:my-3
+        "
+        dangerouslySetInnerHTML={{ __html: blog.description }}
+      />
     </main>
   );
 }
