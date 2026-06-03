@@ -2,9 +2,17 @@ import Footer from "@/components/common/Footer";
 import Wrapper from "@/components/common/wrapper";
 import ReduxStoreProvider from "@/context-provider/ReduxStoreProvider";
 import type { Metadata } from "next";
-import { Inter, Roboto, Roboto_Slab } from "next/font/google";
 import { Toaster } from "react-hot-toast";
-
+import {
+  Inter,
+  Playfair_Display,
+  Cormorant_Garamond,
+  Montserrat,
+  Merriweather,
+  Source_Serif_4,
+  Roboto_Slab,
+  Roboto,
+} from "next/font/google";
 
 export const metadata: Metadata = {
   title: 'Ohel Miriam',
@@ -38,6 +46,31 @@ export const robotoSlab = Roboto_Slab({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   variable: "--font-roboto-slab",
 });
+export const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-playfair",
+});
+
+export const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  variable: "--font-cormorant",
+});
+
+export const montserrat = Montserrat({
+  subsets: ["latin"],
+  variable: "--font-montserrat",
+});
+
+export const merriweather = Merriweather({
+  subsets: ["latin"],
+  weight: ["300", "400", "700"],
+  variable: "--font-merriweather",
+});
+
+export const sourceSerif = Source_Serif_4({
+  subsets: ["latin"],
+  variable: "--font-source-serif",
+});
 
 export default function RootLayout({
   children,
@@ -47,7 +80,15 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.className}  antialiased`}
+        className={`
+          ${inter.className}
+          ${playfair.variable}
+          ${cormorant.variable}
+          ${montserrat.variable}
+          ${merriweather.variable}
+          ${sourceSerif.variable}
+          antialiased
+        `}
         suppressHydrationWarning
       >
         <Toaster />

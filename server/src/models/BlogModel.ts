@@ -7,6 +7,10 @@ const blogSchema = new Schema(
       type: String,
       required: true,
     },
+    subtitle: {
+      type: String,
+      required: false,
+    },
     slug: { type: String, required: true },
     category: {
       type: String,
