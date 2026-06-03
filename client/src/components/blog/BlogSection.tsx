@@ -5,9 +5,9 @@ import { BlogType } from "@/types/Blog";
 import Link from "next/link";
 // import { useRouter } from "next/navigation";
 // import { useState } from "react";
-import ScrollArea from "../common/ScrollArea";
 import { useSearchParams } from "next/navigation";
 import { PostBox } from "./PostBox";
+import { Button } from "../ui/button";
 
 export default function ShopSection({
   blogs,
@@ -28,63 +28,38 @@ export default function ShopSection({
   // );
 
   return (
-    <section className="mt-6 grid lg:grid-cols-[280px_1fr] xl:grid-cols-[300px_1fr] gap-x-6">
-      <aside className="">
-        <div className="border p-4">
-          <h5 className="font-medium text-lg">Blog categories</h5>
-          <hr className="mt-2 mb-3" />
-          <ScrollArea className="h-70">
-            <ul className="space-y-2">
-              <li className="flex justify-between items-center text-sm">
-                <Link
-                  href="/blog"
-                  className={`capitalize hover:text-teal ${
-                    !activeCategory ? "text-teal" : "text-gray-500"
-                  }`}
-                >
-                  All
-                </Link>
-              </li>
+    <section className="mt-6">
+      <div className="flex gap-2 w-full overflow-x-auto">
+        <Button variant={"outline"} className={`group flex hover:bg-violet-cs ${!activeCategory ? "text-white bg-violet-cs" : "text-violet-cs"} hover:text-white text-sm`}>
+          <Link
+            href="/blog"
+            className={`capitalize hover:text-white group-hover:text-white ${
+              !activeCategory ? "text-white" : "text-violet-cs"
+            }`}
+          >
+            All
+          </Link>
+        </Button>
 
-              {categories.map((category) => {
-                const isActive = activeCategory === category.slug;
+        {categories.map((category) => {
+          const isActive = activeCategory === category.slug;
 
-                return (
-                  <li
-                    key={category._id}
-                    className="flex justify-between items-center text-sm"
-                  >
-                    <Link
-                      href={`/blog?category=${category.slug}`}
-                      className={`capitalize hover:text-teal ${
-                        isActive ? "text-teal" : "text-gray-500"
-                      }`}
-                    >
-                      {category.name}
-                    </Link>
-
-                    <span>({category.blogs.length})</span>
-                  </li>
-                );
-              })}
-            </ul>
-          </ScrollArea>
-        </div>
-        
-        {/* <div className="border p-4 my-8 hidden">
-          <h4 className="uppercase font-medium">Popular Tags</h4>
-          <hr className="mt-2 mb-3" />
-          <div className="flex flex-wrap gap-2 py-2">
-            {tags.map((tag, index) => (
-              <Link href={`/blog?tag=${tag.replaceAll(" ", "-")}`} key={index}>
-                <Button variant="outline" className="capitalize">
-                  {tag}
-                </Button>
+          return (
+            <Button variant={"outline"} className={`group flex hover:bg-violet-cs ${isActive ? "text-white bg-violet-cs" : "text-violet-cs"} hover:text-white text-sm`}
+              key={category._id}
+            >
+              <Link
+                href={`/blog?category=${category.slug}`}
+                className={`capitalize hover:text-white group-hover:text-white ${
+                  isActive ? "text-white" : "text-violet-cs"
+                }`}
+              >
+                {category.name}
               </Link>
-            ))}
-          </div>
-        </div> */}
-      </aside>
+            </Button>
+          );
+        })}
+      </div>
       <div>
         <div className="grid grid-cols-2 xl:grid-cols-4 md:grid-cols-3 gap-4 mt-2">
           {blogs?.map((blog) => (

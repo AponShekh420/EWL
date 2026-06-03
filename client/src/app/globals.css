@@ -50,6 +50,15 @@
   --color-darkPink: #260034;
   --color-lightRed: #f8f0f4;
   --breakpoint-xs: 390px;
+  --color-purple-cs: #2f078e;
+  --color-violet-cs: #5f1578;
+  --color-orange-light: #fbf7f6;
+  --font-playfair: "Playfair Display", serif;
+  --font-cormorant: "Cormorant Garamond", serif;
+  --font-montserrat: "Montserrat", sans-serif;
+  --font-merriweather: "Merriweather", serif;
+  --font-source-serif: "Source Serif 4", serif;
+  --font-lora: "Lora", serif;
 }
 
 :root {
@@ -85,6 +94,12 @@
   --sidebar-accent-foreground: oklch(0.21 0.034 264.665);
   --sidebar-border: oklch(0.928 0.006 264.531);
   --sidebar-ring: oklch(0.707 0.022 261.325);
+  --font-playfair: "Playfair Display", serif;
+  --font-cormorant: "Cormorant Garamond", serif;
+  --font-montserrat: "Montserrat", sans-serif;
+  --font-merriweather: "Merriweather", serif;
+  --font-source-serif: "Source Serif 4", serif;
+  --font-lora: "Lora", serif;
 }
 
 .dark {
@@ -200,4 +215,233 @@
 
 .ql-indent-3 {
   padding-left: 9em;
+}
+
+
+
+
+/* editor fonts */
+.ql-font-playfair {
+  font-family: var(--font-playfair);
+}
+
+.ql-font-cormorant {
+  font-family: var(--font-cormorant);
+}
+
+.ql-font-montserrat {
+  font-family: var(--font-montserrat);
+}
+
+.ql-font-merriweather {
+  font-family: var(--font-merriweather);
+}
+
+.ql-font-source-serif {
+  font-family: var(--font-source-serif);
+}
+.loraFont {
+  font-family: var(--font-lora);
+}
+
+.ql-snow .ql-picker.ql-font {
+  width: 180px;
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="playfair"]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="playfair"]::before {
+  content: "Playfair Display";
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="cormorant"]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="cormorant"]::before {
+  content: "Cormorant Garamond";
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="montserrat"]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="montserrat"]::before {
+  content: "Montserrat";
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="merriweather"]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="merriweather"]::before {
+  content: "Merriweather";
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="source-serif"]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="source-serif"]::before {
+  content: "Source Serif 4";
+}
+
+
+/* preset sizes */
+.ql-size-small {
+  font-size: 12px;
+}
+
+.ql-size-large {
+  font-size: 20px;
+}
+
+.ql-size-huge {
+  font-size: 28px;
+}
+
+.prose p {
+  margin: 0 0 8px;
+  line-height: 1.1;
+}
+
+/* pixel sizes */
+.ql-size-small { font-size: 12px; }
+.ql-size-large { font-size: 20px; }
+.ql-size-huge { font-size: 28px; }
+
+.ql-size-12px { font-size: 12px; }
+.ql-size-14px { font-size: 14px; }
+.ql-size-16px { font-size: 16px; }
+.ql-size-18px { font-size: 18px; }
+.ql-size-20px { font-size: 20px; }
+.ql-size-22px { font-size: 22px; }
+.ql-size-24px { font-size: 24px; }
+.ql-size-30px { font-size: 30px; }
+.ql-size-34px { font-size: 34px; }
+.ql-size-48px { font-size: 48px; }
+
+
+/* Normal */
+.ql-snow .ql-picker.ql-size .ql-picker-label:not([data-value])::before,
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value=""]::before {
+  content: "Normal" !important;
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="12px"]::before {
+  content: "12px" !important;
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="14px"]::before {
+  content: "14px" !important;
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="16px"]::before {
+  content: "16px" !important;
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="18px"]::before {
+  content: "18px" !important;
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="20px"]::before {
+  content: "20px" !important;
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="22px"]::before {
+  content: "22px" !important;
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="24px"]::before {
+  content: "24px" !important;
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="30px"]::before {
+  content: "30px" !important;
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="34px"]::before {
+  content: "34px" !important;
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="48px"]::before {
+  content: "48px" !important;
+}
+
+
+.ql-snow .ql-picker.ql-size .ql-picker-label::before {
+  content: attr(data-value) !important;
+}
+
+
+/* solve editor problem */
+.quillEditorTextHandler ul {
+  list-style-type: disc !important; /* Ensure bullet points */
+}
+
+.quillEditorTextHandler ol {
+  list-style-type:decimal !important; /* Ensure numbering */
+}
+
+.quillEditorTextHandler li {
+  margin-bottom: 5px !important;
+}
+
+.quillEditorTextHandler img {
+  max-width: 100% !important;
+}
+.quillEditorTextHandler [data-list="bullet"] {
+  list-style-type: disc !important;
+}
+.quillEditorTextHandler [data-list="ordered"] {
+  list-style-type: decimal !important;
+}
+
+.quillEditorTextHandler * {
+  white-space: normal; /* This forces line breaks to behave more like inline elements */
+  margin: 0;
+}
+
+.quillEditorTextHandler p {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+  line-height: 1.5 !important; /* Fine-tune as needed */
+}
+
+.quillEditorTextHandler br {
+  line-height: 0;
+}
+
+
+.quillEditorTextHandler div {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.5 !important;
+}
+
+.quillEditorTextHandler span {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+
+/* font */
+
+/* .quillEditorTextHandler .ql-font-arial {
+  font-family: Arial, sans-serif;
+}
+.quillEditorTextHandler .ql-font-comic-sans {
+  font-family: "Comic Sans MS", cursive, sans-serif;
+}
+.quillEditorTextHandler .ql-font-courier-new {
+  font-family: "Courier New", Courier, monospace;
+}
+.quillEditorTextHandler .ql-font-georgia {
+  font-family: Georgia, serif;
+}
+.quillEditorTextHandler .ql-font-helvetica {
+  font-family: Helvetica, sans-serif;
+}
+.quillEditorTextHandler .ql-font-lucida {
+  font-family: "Lucida Grande", "Lucida Sans Unicode", sans-serif;
+} */
+
+
+.quillEditorTextHandler .ql-size-small {
+  font-size: 0.75em !important;
+}
+
+.quillEditorTextHandler .ql-size-large {
+  font-size: 1.5em !important;
+}
+
+.quillEditorTextHandler .ql-size-huge {
+  font-size: 2.5em !important;
 }

@@ -7,6 +7,7 @@ export const stepBlogFields = {
 };
 const initialState: BlogFormState = {
   title: "",
+  subtitle: "",
   category: "",
   slug: "",
   tags: "",
