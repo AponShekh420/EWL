@@ -14,7 +14,7 @@ import {
   Roboto,
 } from "next/font/google";
 
-import { GoogleTagManager } from '@next/third-parties/google'
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 
 
@@ -83,7 +83,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <GoogleTagManager gtmId="G-XJ7PVJWJYL" />
       <body
         className={`
           ${inter.className}
@@ -105,6 +104,7 @@ export default function RootLayout({
           </Wrapper>
         </ReduxStoreProvider>
       </body>
+      <GoogleAnalytics gaId="G-XJ7PVJWJYL" />
     </html>
   );
 }
