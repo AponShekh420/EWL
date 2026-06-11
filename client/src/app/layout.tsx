@@ -14,6 +14,10 @@ import {
   Roboto,
 } from "next/font/google";
 
+import { GoogleTagManager } from '@next/third-parties/google'
+
+
+
 export const metadata: Metadata = {
   title: 'Ohel Miriam',
   description: `Ohel Miriam strengthens couples in building marriages grounded in kedusha, shalom, and simcha. Through this journey, you'll gain four essential gifts for deeper`,
@@ -79,6 +83,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <GoogleTagManager gtmId="G-XJ7PVJWJYL" />
       <body
         className={`
           ${inter.className}
