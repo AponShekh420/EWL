@@ -1,16 +1,12 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
-@import 'quill/dist/quill.snow.css';
-
+@import "quill/dist/quill.snow.css";
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-inter: "Inter", sans-serif;
-  --font-lexend-deca: "Lexend Deca", sans-serif;
-  --font-roboto: "Roboto", sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -59,6 +55,10 @@
   --font-merriweather: "Merriweather", serif;
   --font-source-serif: "Source Serif 4", serif;
   --font-lora: "Lora", serif;
+  --font-inter: "Inter", sans-serif;
+  --font-lexend-deca: "Lexend Deca", sans-serif;
+  --font-roboto: "Roboto", sans-serif;
+  --font-playfair-display: var(--font-playfair-display);
 }
 
 :root {
@@ -135,6 +135,7 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.551 0.027 264.364);
 }
+
 @custom-variant hover (&:hover);
 @utility container {
   @apply mx-auto max-w-none 2xl:max-w-[1440px] px-4 md:!px-10 lg:px-8;
@@ -183,7 +184,6 @@
   background: transparent;
 }
 
-
 .prose * {
   text-align: inherit !important;
 }
@@ -217,8 +217,27 @@
   padding-left: 9em;
 }
 
-
-
+.font-inter {
+  font-family: var(--font-inter);
+}
+.font-playfair-display {
+  font-family: var(--font-playfair-display);
+}
+.font-roboto {
+  font-family: var(--font-roboto);
+}
+.font-roboto-slab {
+  font-family: var(--font-roboto-slab);
+}
+.font-montserrat {
+  font-family: var(--font-montserrat);
+}
+.font-lora {
+  font-family: var(--font-lora);
+}
+.font-lexend-deca {
+  font-family: var(--font-lexend-deca);
+}
 
 /* editor fonts */
 .ql-font-playfair {
@@ -264,15 +283,18 @@
 }
 
 .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="merriweather"]::before,
-.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="merriweather"]::before {
+.ql-snow
+  .ql-picker.ql-font
+  .ql-picker-label[data-value="merriweather"]::before {
   content: "Merriweather";
 }
 
 .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="source-serif"]::before,
-.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="source-serif"]::before {
+.ql-snow
+  .ql-picker.ql-font
+  .ql-picker-label[data-value="source-serif"]::before {
   content: "Source Serif 4";
 }
-
 
 /* preset sizes */
 .ql-size-small {
@@ -293,21 +315,46 @@
 }
 
 /* pixel sizes */
-.ql-size-small { font-size: 12px; }
-.ql-size-large { font-size: 20px; }
-.ql-size-huge { font-size: 28px; }
+.ql-size-small {
+  font-size: 12px;
+}
+.ql-size-large {
+  font-size: 20px;
+}
+.ql-size-huge {
+  font-size: 28px;
+}
 
-.ql-size-12px { font-size: 12px; }
-.ql-size-14px { font-size: 14px; }
-.ql-size-16px { font-size: 16px; }
-.ql-size-18px { font-size: 18px; }
-.ql-size-20px { font-size: 20px; }
-.ql-size-22px { font-size: 22px; }
-.ql-size-24px { font-size: 24px; }
-.ql-size-30px { font-size: 30px; }
-.ql-size-34px { font-size: 34px; }
-.ql-size-48px { font-size: 48px; }
-
+.ql-size-12px {
+  font-size: 12px;
+}
+.ql-size-14px {
+  font-size: 14px;
+}
+.ql-size-16px {
+  font-size: 16px;
+}
+.ql-size-18px {
+  font-size: 18px;
+}
+.ql-size-20px {
+  font-size: 20px;
+}
+.ql-size-22px {
+  font-size: 22px;
+}
+.ql-size-24px {
+  font-size: 24px;
+}
+.ql-size-30px {
+  font-size: 30px;
+}
+.ql-size-34px {
+  font-size: 34px;
+}
+.ql-size-48px {
+  font-size: 48px;
+}
 
 /* Normal */
 .ql-snow .ql-picker.ql-size .ql-picker-label:not([data-value])::before,
@@ -355,11 +402,9 @@
   content: "48px" !important;
 }
 
-
 .ql-snow .ql-picker.ql-size .ql-picker-label::before {
   content: attr(data-value) !important;
 }
-
 
 /* solve editor problem */
 .quillEditorTextHandler ul {
@@ -367,7 +412,7 @@
 }
 
 .quillEditorTextHandler ol {
-  list-style-type:decimal !important; /* Ensure numbering */
+  list-style-type: decimal !important; /* Ensure numbering */
 }
 
 .quillEditorTextHandler li {
@@ -399,7 +444,6 @@
   line-height: 0;
 }
 
-
 .quillEditorTextHandler div {
   margin: 0 !important;
   padding: 0 !important;
@@ -410,7 +454,6 @@
   margin: 0 !important;
   padding: 0 !important;
 }
-
 
 /* font */
 
@@ -432,7 +475,6 @@
 .quillEditorTextHandler .ql-font-lucida {
   font-family: "Lucida Grande", "Lucida Sans Unicode", sans-serif;
 } */
-
 
 .quillEditorTextHandler .ql-size-small {
   font-size: 0.75em !important;
