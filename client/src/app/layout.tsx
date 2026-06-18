@@ -3,16 +3,24 @@ import Header from "@/components/common/Header";
 import Wrapper from "@/components/common/wrapper";
 import ReduxStoreProvider from "@/context-provider/ReduxStoreProvider";
 import type { Metadata } from "next";
+
+import { Toaster } from "react-hot-toast";
+
 import {
-  Inter,
   Lexend_Deca,
   Lora,
-  Montserrat,
+  Inter,
   Playfair_Display,
-  Roboto,
+  Cormorant_Garamond,
+  Montserrat,
+  Merriweather,
+  Source_Serif_4,
   Roboto_Slab,
+  Roboto,
 } from "next/font/google";
-import { Toaster } from "react-hot-toast";
+
+import { GoogleAnalytics } from "@next/third-parties/google";
+
 import "swiper/css";
 import "./globals.css";
 
@@ -67,6 +75,26 @@ export const lora = Lora({
   display: "swap",
   variable: "--font-lora",
 });
+export const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-playfair",
+});
+
+export const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  variable: "--font-cormorant",
+});
+
+export const merriweather = Merriweather({
+  subsets: ["latin"],
+  weight: ["300", "400", "700"],
+  variable: "--font-merriweather",
+});
+
+export const sourceSerif = Source_Serif_4({
+  subsets: ["latin"],
+  variable: "--font-source-serif",
+});
 
 export default function RootLayout({
   children,
@@ -76,10 +104,20 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${lexend_deca.variable} ${lora.variable}  ${montserrat.variable} ${roboto.variable} ${robotoSlab.variable} ${playfair_display.variable}`}
+      className={`${inter.variable} ${lexend_deca.variable} ${lora.variable}  ${montserrat.variable} ${roboto.variable} ${robotoSlab.variable} ${inter.className}
+          ${playfair.variable}
+          ${cormorant.variable}
+          ${merriweather.variable}
+          ${sourceSerif.variable}`}
       suppressHydrationWarning
     >
-      <body className={` antialiased`} suppressHydrationWarning>
+      <body
+        className={`
+          
+          antialiased
+        `}
+        suppressHydrationWarning
+      >
         <Toaster />
         <ReduxStoreProvider>
           <Wrapper>
@@ -89,6 +127,7 @@ export default function RootLayout({
           </Wrapper>
         </ReduxStoreProvider>
       </body>
+      <GoogleAnalytics gaId="G-XJ7PVJWJYL" />
     </html>
   );
 }

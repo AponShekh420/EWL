@@ -1,6 +1,7 @@
 export type BlogType = {
   _id: string;
   title: string;
+  subtitle: string;
   category: string;
   thumbnail: string;
   tags?: string[];
@@ -12,6 +13,7 @@ export type BlogType = {
 export type BlogFormState = {
   // 1st tab
   title: string;
+  subtitle: string;
   category: string;
   slug: string;
   tags: string;

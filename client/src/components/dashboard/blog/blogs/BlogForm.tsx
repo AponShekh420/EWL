@@ -149,6 +149,16 @@ export default function CreateBlogForm({
                   }
                   error={errors?.title?.msg}
                 />
+                <InputBox
+                  name="subtitle"
+                  label="Subtitle *"
+                  placeholder="Blog subtitle"
+                  value={blogForm.subtitle}
+                  onChange={(e) =>
+                    dispatch(addBlogField({ subtitle: e.target.value }))
+                  }
+                  error={errors?.title?.msg}
+                />
 
                 <SelectBox
                   name="category"

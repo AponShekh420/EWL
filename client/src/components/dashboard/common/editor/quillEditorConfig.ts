@@ -1,6 +1,34 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import ImageResize from "quill-image-resize-module-react";
 import { Quill } from "react-quill-new";
+const Font = Quill.import("formats/font") as any;
+const Size = Quill.import("formats/size") as any;
+
+Size.whitelist = [
+  "12px",
+  "14px",
+  "16px",
+  "18px",
+  "20px",
+  "22px",
+  "24px",
+  "30px",
+  "34px",
+  "48px",
+];
+
+Quill.register(Size, true);
+
+Font.whitelist = [
+  "playfair",
+  "cormorant",
+  "montserrat",
+  "merriweather",
+  "source-serif",
+];
+
+Quill.register(Font, true);
 // Register module
 Quill.register("modules/imageResize", ImageResize);
 // Register the module
@@ -14,8 +42,21 @@ if (
 export const modules = {
   toolbar: [
     [{ header: [1, 2, 3, 4, 5, 6, false] }],
-    [{ font: [] }], // Use the registered fonts
-    [{ size: ["small", false, "large", "huge"] }], // Custom sizes
+    [{ font: Font.whitelist }], // Use the registered fonts
+    // ✅ FIXED
+    [{ size: [
+      false, 
+      "12px",
+      "14px",
+      "16px",
+      "18px",
+      "20px",
+      "22px",
+      "24px",
+      "30px",
+      "34px",
+      "48px",
+    ]}],
     ["bold", "italic", "underline", "strike", "blockquote"],
     [{ list: "ordered" }, { list: "bullet" }],
     [{ script: "sub" }, { script: "super" }],

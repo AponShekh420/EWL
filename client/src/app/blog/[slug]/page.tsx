@@ -17,9 +17,10 @@ export default async function ProductDetails({
   const { data: blog } = await getBlogBySlug(slug);
 
   return (
-    <main className="container min-h-screen">
+    <main className="container min-h-screen max-w-[700px] mb-6">
       <div>
-        <h1 className="text-4xl font-bold mt-10 mb-6">{blog.title}</h1>
+        <h1 className="ql-font-playfair md:text-[44px] sm:text-4xl text-3xl font-semibold leading-tight mt-10">{blog.title}</h1>
+        {blog?.subtitle && <p className="ql-font-cormorant text-[22px] font-semibold text-gray-500 mt-[30px] mb-[30px]">{blog.subtitle}</p>}
         <Image
           src={getImageUrl(blog.thumbnail, "blogs")}
           alt={blog.title}
@@ -31,6 +32,7 @@ export default async function ProductDetails({
       </div>
       <div
         className="
+          quillEditorTextHandler
           prose 
           max-w-none 
           mt-10
