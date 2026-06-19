@@ -20,6 +20,7 @@ import CourseStepperReducer from "@/redux/features/stepper/courseStepperSlice";
 import stepperReducer from "@/redux/features/stepper/stepperSlice";
 import userFormReducer from "@/redux/features/user/userFormSlice";
 import { configureStore } from "@reduxjs/toolkit";
+import courseCartSlice from "./features/cart/courseCartSlice";
 export const store = configureStore({
   reducer: {
     sidebar: sidebarReducer,
@@ -39,6 +40,7 @@ export const store = configureStore({
     loginFrom: loginFormReducer,
     user: userSlice,
     cart: cartSlice,
+    courseCart: courseCartSlice,
     checkout: checkoutReducer,
     courseCheckout: courseCheckoutReducer,
     classCheckout: classCheckoutReducer,

@@ -1,17 +1,32 @@
 "use client"
-import React from 'react';
+import React, { useEffect } from 'react';
 import BreadcrumbPath from "@/components/common/BreadcrumbPath";
 import {Elements}
 from "@stripe/react-stripe-js";
 
 import {stripePromise}
 from "@/lib/stripe";
-import { CourseCartType } from '@/types/CourseCart';
 import CheckoutForm from './CheckoutForm';
 import CheckoutDetails from './CheckoutDetails';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
+import {useRouter } from "next/dist/client/components/navigation";
 
 
-const CheckoutContent = ({ cart }: {cart: CourseCartType}) => {
+const CheckoutContent = () => {
+    const courseCart = useSelector((state: RootState) => state.courseCart);
+    const router = useRouter();
+    // 1. Handle Redirect safely inside an effect
+    useEffect(() => {
+        const courseObj = courseCart?.items[0]?.course;
+
+        // Check if courseObj doesn't exist, OR if it's an empty object {}
+        const isCourseEmpty = !courseObj || Object.keys(courseObj).length === 0;
+
+        if (isCourseEmpty) {
+            router.push("/courses");
+        }
+    }, [courseCart, router]);
     return (
         <Elements stripe={stripePromise}>
             <div className="grid lg:grid-cols-2">
@@ -30,7 +45,7 @@ const CheckoutContent = ({ cart }: {cart: CourseCartType}) => {
                     <CheckoutForm/>
                 </div>
 
-                <CheckoutDetails cart={cart} />
+                <CheckoutDetails />
             </div>
         </Elements>
     );

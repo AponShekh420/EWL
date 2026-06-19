@@ -35,6 +35,8 @@ const createRecording = async (req, res, next) => {
         };
         if (body.gender)
             recordingsObj.gender = body.gender;
+        if (body.module)
+            recordingsObj.module = body.module;
         if (body.speakerId)
             recordingsObj.speaker = body.speakerId;
         if (body.courseId)

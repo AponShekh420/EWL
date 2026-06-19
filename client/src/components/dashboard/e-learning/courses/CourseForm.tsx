@@ -50,7 +50,14 @@ export default function CreateCourseForm({
 
   const onHandleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const formData = createFormData(courseForm);
+    // Transform the form data so 'modules' is a string
+    const localizedForm = {
+      ...courseForm,
+      modules: JSON.stringify(courseForm.modules) 
+    };
+
+    // Now TypeScript will be happy if FormDataValue accepts string
+    const formData = createFormData(localizedForm);
     setLoading(true);
 
     if (path.includes("edit")) {

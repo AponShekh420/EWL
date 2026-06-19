@@ -11,7 +11,7 @@ const stripe = new stripe_1.default(process.env.STRIPE_SECRET_KEY);
 const createCourseOrder = async (req, res) => {
     try {
         const body = req.body;
-        const { subtotal } = body;
+        const { subtotal, modules, orderId } = body;
         const latestOrder = await CourseOrderModel_1.CourseOrderModel.findOne().sort({ orderId: -1 }).exec();
         // const subtotal=
         // products.reduce(
@@ -20,12 +20,35 @@ const createCourseOrder = async (req, res) => {
         // 0
         // );
         const totalPrice = Number(subtotal);
-        const createdOrder = await CourseOrderModel_1.CourseOrderModel.create({
-            ...body,
-            customer: req?.user && req?.user?._id,
-            totalPrice: totalPrice,
-            orderId: latestOrder ? latestOrder.orderId + 1 : 100,
-        });
+        let createdOrder;
+        if (orderId) {
+            const existingOrder = await CourseOrderModel_1.CourseOrderModel.findOne({ _id: orderId });
+            if (existingOrder) {
+                existingOrder.totalPrice += totalPrice;
+                existingOrder.subtotal += totalPrice;
+                // Safely push the new modules into the existing Mongoose DocumentArray
+                if (modules && modules.length > 0) {
+                    existingOrder.modules.push(...modules);
+                }
+                createdOrder = existingOrder;
+            }
+            else {
+                createdOrder = await CourseOrderModel_1.CourseOrderModel.create({
+                    ...body,
+                    customer: req?.user && req?.user?._id,
+                    totalPrice: totalPrice,
+                    orderId: latestOrder ? latestOrder.orderId + 1 : 100,
+                });
+            }
+        }
+        else {
+            createdOrder = await CourseOrderModel_1.CourseOrderModel.create({
+                ...body,
+                customer: req?.user && req?.user?._id,
+                totalPrice: totalPrice,
+                orderId: latestOrder ? latestOrder.orderId + 1 : 100,
+            });
+        }
         const paymentIntent = await stripe.paymentIntents.create({
             amount: Math.round(totalPrice * 100),
             currency: "usd",

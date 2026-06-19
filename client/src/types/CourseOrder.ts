@@ -59,6 +59,11 @@ export type CourseOrderType = {
   stripePaymentIntentId: string,
   paymentStatus: string,
   courses: CoursesPros[],
+  modules?: {
+    name: string;
+    price: number;
+    id: string;
+  }[];
   createdAt: string;
   updatedAt: string;
   __v: number;

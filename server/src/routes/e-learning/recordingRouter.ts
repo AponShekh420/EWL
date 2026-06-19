@@ -12,6 +12,8 @@ import {
 } from "../../middleware/recording/recordingValidator";
 import { getPrivateRecords } from "../../controllers/e-learning/recording/getPrivateRecords";
 import authCheck from "../../middleware/common/authCheck";
+import getCoursePrivateRecords from "../../controllers/e-learning/recording/getCoursePrivateRecords";
+import getModules from "../../controllers/e-learning/recording/getModules";
 const router = Router();
 
 const multiFileUploader = multerUploader(
@@ -41,5 +43,7 @@ router.delete("/recording/:id", deleteRecording);
 
 // get private
 router.post("/private/records", authCheck, getPrivateRecords)
+router.post("/course-private/records", authCheck, getCoursePrivateRecords)
+router.post("/course-modules", authCheck, getModules)
 
 export default router;

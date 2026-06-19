@@ -18,6 +18,7 @@ const getCourseBySlug = async (req, res, next) => {
         if (!course) {
             return next((0, http_errors_1.default)(400, "Not found course"));
         }
+        let orderedCourse = null;
         // this is checking if the user is order this product then i should not allow him or her for order again
         if (req.user) {
             const order = await CourseOrderModel_1.CourseOrderModel.findOne({
@@ -26,13 +27,15 @@ const getCourseBySlug = async (req, res, next) => {
             });
             if (order) {
                 ordered = true;
+                orderedCourse = order;
             }
         }
         return res.status(200).json({
             success: true,
             data: course,
             message: "Course fetched by slug successfully",
-            ordered
+            ordered,
+            orderedCourse,
         });
     }
     catch (error) {

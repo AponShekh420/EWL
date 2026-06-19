@@ -14,6 +14,7 @@ interface CreateRecordingBody {
   heading: string;
   recordingCategory: string;
   gender?: string;
+  module: string;
   speakerId?: string;
   courseId?: string;
   classId?: string;
@@ -54,6 +55,7 @@ export const createRecording = async (
       recordingCategory: string;
       recordings: typeof recordings;
       gender?: string;
+      module?: string;
       speaker?: string;
       course?: string;
       class?: string;
@@ -64,6 +66,7 @@ export const createRecording = async (
     };
 
     if (body.gender) recordingsObj.gender = body.gender;
+    if (body.module) recordingsObj.module = body.module;
     if (body.speakerId) recordingsObj.speaker = body.speakerId;
     if (body.courseId) recordingsObj.course = body.courseId;
     if (body.classId) recordingsObj.class = body.classId;

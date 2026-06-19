@@ -7,6 +7,7 @@ const recordingSchema = new mongoose_1.Schema({
     class: { type: mongoose_1.Schema.Types.ObjectId, ref: "Class" },
     heading: { type: String, required: true },
     gender: { type: String, enum: ["male", "female"] },
+    module: { type: String },
     recordingCategory: {
         type: String,
         enum: ["free", "class", "course", "course-demo"],
