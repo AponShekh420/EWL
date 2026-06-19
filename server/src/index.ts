@@ -8,14 +8,14 @@ import { errorHandler, notFoundHandler } from "./middleware/errorMiddleware";
 
 // routes
 import authRouter from "./routes/authRouter";
+import blogRouter from "./routes/blogRouter";
+import classRouter from "./routes/e-learning/classRouter";
 import courseRouter from "./routes/e-learning/courseRouter";
 import recordingRouter from "./routes/e-learning/recordingRouter";
 import ecommerceRouter from "./routes/ecommerceRouter";
 import paidHotlineSpeakerRouter from "./routes/paidHotlineSpeakerRouter";
+import resourceRouter from "./routes/ResourcesRouter";
 import userRouter from "./routes/userRouter";
-import classRouter from "./routes/e-learning/classRouter";
-import blogRouter from "./routes/blogRouter";
-
 dotenv.config();
 
 const app = express();
@@ -51,14 +51,16 @@ app.use(express.urlencoded({ extended: true, limit: "5000mb" }));
 // app.use(express.json());
 
 app.use((req, res, next) => {
-  if ((req.originalUrl === "/api/ecommerce/order/webhook") || (req.originalUrl === "/api/e-learning/class-order/webhook") || (req.originalUrl === "/api/e-learning/order/webhook")) {
+  if (
+    req.originalUrl === "/api/ecommerce/order/webhook" ||
+    req.originalUrl === "/api/e-learning/class-order/webhook" ||
+    req.originalUrl === "/api/e-learning/order/webhook"
+  ) {
     next();
   } else {
     express.json({ limit: "5000mb" })(req, res, next);
   }
 });
-
-
 
 // e-learning
 app.use("/api/e-learning", recordingRouter);
@@ -70,6 +72,7 @@ app.use("/api/account", userRouter);
 // E-commerce
 app.use("/api/ecommerce", ecommerceRouter);
 app.use("/api/blog", blogRouter);
+app.use("/api/resources-management", resourceRouter);
 // Paid speaker
 app.use("/api/paid-hotline", paidHotlineSpeakerRouter);
 
