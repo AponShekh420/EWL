@@ -1,80 +1,98 @@
+import { getResourcesByQueryWithVisible } from "@/actions/resources";
+import { getResourcesCategories } from "@/actions/resourcesCategory";
+import { ShopPagination } from "@/components/shop/ShopPagination";
 import { Button } from "@/components/ui/button";
+import { BlogCategoryType } from "@/types/BlogCategory";
+import { ResourcesType } from "@/types/Resources";
+import { getImageUrl } from "@/utils/getImageUrl";
+import { queryFormatter } from "@/utils/queryFormatter";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
-const categories = [
-  "All Categories",
-  "Child Safety",
-  "Abuse & Trauma Support",
-  "Marriage & Family",
-  "Women's Health & Guidance",
-  "Other Support",
-];
-const resources = [
-  {
-    id: 1,
-    title: "Ani Ledodi Helpline",
-    description:
-      "Anonymous guidance and support for women navigating intimate and personal questions.",
-    buttonText: "Ani Ledodi Helpline",
-    type: "organization",
-    image: "/images/resources/ani.png",
-  },
-  {
-    id: 2,
-    title: "Tahareinu",
-    description:
-      "Education, medical guidance, and resources related to tahara and reproductive health.",
-    buttonText: "Tahareinu",
-    type: "organization",
-    image: "/images/resources/tahareinku.png",
-  },
-  {
-    id: 3,
-    title: "The Comfort Zone",
-    description:
-      "Support, community, and hope for women seeking connection, encouragement, and growth.",
-    buttonText: "The Comfort Zone",
-    type: "organization",
-    image: "/images/resources/ani.png",
-  },
-  {
-    id: 4,
-    title: "Religious Resource",
-    description:
-      "A comprehensive halachic kuntres on the mitzvah of Niddah, including source material and responsa. Available only to approved rabbanim, dayanim, and chosson teachers.",
-    buttonText: "Request Access",
-    type: "resource",
-    image: "/images/resources/ani.png",
-  },
-  {
-    id: 5,
-    title: "Child Safety",
-    description:
-      "Agencies and organizations dedicated to protecting children and supporting families.",
-    buttonText: "View All",
-    type: "category",
-    image: "/images/resources/ani.png",
-  },
-  {
-    id: 6,
-    title: "Abuse & Trauma Support",
-    description:
-      "Resources for individuals and families experiencing abuse, trauma, and crisis.",
-    buttonText: "View All",
-    type: "category",
-    image: "/images/resources/ani.png",
-  },
-  {
-    id: 7,
-    title: "Marriage & Family Support",
-    description:
-      "Organizations that strengthen marriage, family relationships, and communication.",
-    buttonText: "View All",
-    image: "/images/resources/ani.png",
-    type: "category",
-  },
-];
-export default function Resources() {
+import Link from "next/link";
+// const categoriess = [
+//   "All Categories",
+//   "Child Safety",
+//   "Abuse & Trauma Support",
+//   "Marriage & Family",
+//   "Women's Health & Guidance",
+//   "Other Support",
+// ];
+// const resourcess = [
+//   {
+//     id: 1,
+//     title: "Ani Ledodi Helpline",
+//     description:
+//       "Anonymous guidance and support for women navigating intimate and personal questions.",
+//     buttonText: "Ani Ledodi Helpline",
+//     type: "organization",
+//     image: "/images/resources/ani.png",
+//   },
+//   {
+//     id: 2,
+//     title: "Tahareinu",
+//     description:
+//       "Education, medical guidance, and resources related to tahara and reproductive health.",
+//     buttonText: "Tahareinu",
+//     type: "organization",
+//     image: "/images/resources/tahareinku.png",
+//   },
+//   {
+//     id: 3,
+//     title: "The Comfort Zone",
+//     description:
+//       "Support, community, and hope for women seeking connection, encouragement, and growth.",
+//     buttonText: "The Comfort Zone",
+//     type: "organization",
+//     image: "/images/resources/ani.png",
+//   },
+//   {
+//     id: 4,
+//     title: "Religious Resource",
+//     description:
+//       "A comprehensive halachic kuntres on the mitzvah of Niddah, including source material and responsa. Available only to approved rabbanim, dayanim, and chosson teachers.",
+//     buttonText: "Request Access",
+//     type: "resource",
+//     image: "/images/resources/ani.png",
+//   },
+//   {
+//     id: 5,
+//     title: "Child Safety",
+//     description:
+//       "Agencies and organizations dedicated to protecting children and supporting families.",
+//     buttonText: "View All",
+//     type: "category",
+//     image: "/images/resources/ani.png",
+//   },
+//   {
+//     id: 6,
+//     title: "Abuse & Trauma Support",
+//     description:
+//       "Resources for individuals and families experiencing abuse, trauma, and crisis.",
+//     buttonText: "View All",
+//     type: "category",
+//     image: "/images/resources/ani.png",
+//   },
+//   {
+//     id: 7,
+//     title: "Marriage & Family Support",
+//     description:
+//       "Organizations that strengthen marriage, family relationships, and communication.",
+//     buttonText: "View All",
+//     image: "/images/resources/ani.png",
+//     type: "category",
+//   },
+// ];
+export default async function Resources({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  const q = await searchParams;
+  const query = await queryFormatter(searchParams);
+  const [resources, categories] = await Promise.all([
+    getResourcesByQueryWithVisible(query),
+    getResourcesCategories(),
+  ]);
   return (
     <main>
       <section className="bg-[url('/images/home/hero.png')] bg-cover bg-center bg-no-repeat bg-blend-overlay bg-black/15 min-h-100">
@@ -103,18 +121,33 @@ export default function Resources() {
       </section>
       <section className="container py-10">
         <div className="flex gap-2 md:gap-10 flex-wrap">
-          {categories.map((category) => (
+          <Link href={`/resources`}>
             <Button
-              key={category}
               variant="outline"
-              className={`transform transition duration-300 ${category === "All Categories" ? "text-white bg-purple-cs" : "bg-white text-purple-cs"} hover:bg-purple-cs hover:text-white`}
+              className={`transform transition duration-300 ${!q.category ? "text-white bg-purple-cs" : "bg-white text-purple-cs"} hover:bg-purple-cs hover:text-white capitalize`}
             >
-              {category}
+              All
             </Button>
+          </Link>
+          {categories?.data.map((category: BlogCategoryType) => (
+            <Link
+              href={`/resources?category=${category.name}`}
+              key={category._id}
+            >
+              <Button
+                variant="outline"
+                className={`transform transition duration-300 ${q.category === category.name ? "text-white bg-purple-cs" : "bg-white text-purple-cs"} hover:bg-purple-cs hover:text-white capitalize`}
+              >
+                {category.name}
+              </Button>
+            </Link>
           ))}
         </div>
         <div>
-          <button className="text-purple-cs mt-4 hover:underline flex items-center gap-1 justify-end w-full">
+          <Link
+            href="/resources?limit=100"
+            className="text-purple-cs mt-4 hover:underline flex items-center gap-1 justify-end w-full"
+          >
             View All
             <Icon
               icon="material-symbols:arrow-right-alt"
@@ -122,39 +155,48 @@ export default function Resources() {
               height={20}
               className="mr-2"
             />
-          </button>
+          </Link>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-6 mt-12">
-          {resources.map((resource) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-12">
+          {resources?.data.map((resource: ResourcesType) => (
             <div
-              key={resource.id}
-              className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col justify-between items-center"
+              key={resource._id}
+              className="bg-white rounded-lg shadow-[1px_1px_4px] shadow-black/20 overflow-hidden flex flex-col justify-between items-center"
             >
               <Image
-                src={resource.image}
+                src={getImageUrl(resource.thumbnail, "resources")}
                 alt={resource.title}
                 width={200}
                 height={200}
                 className="h-25 object-contain"
               />
-              <div className="p-4 flex-1 flex flex-col">
+              <div className="p-4 flex-1 flex flex-col text-center">
                 <h2 className="text-xl font-semibold mb-2">{resource.title}</h2>
                 <p className="text-gray-600 mb-4 flex-1 font-lora">
                   {resource.description}
                 </p>
-                <Button
-                  variant="outline"
-                  className={`mt-auto font-montserrat font-semibold text-purple-cs  hover:bg-purple-cs hover:text-white transform transition duration-300 ${resource.id === 1 ? "bg-purple-cs text-white" : "bg-white text-purple-cs"}`}
+                <a
+                  href={resource.link}
+                  target="_blank"
+                  className="block w-full"
                 >
-                  {resource.buttonText}
-                  <Icon
-                    icon="material-symbols:arrow-right-alt"
-                    className="mr-2"
-                  />
-                </Button>
+                  <Button
+                    variant="outline"
+                    className={`mt-auto flex w-full font-montserrat font-semibold text-purple-cs  hover:bg-purple-cs hover:text-white transform transition duration-300 `}
+                  >
+                    {resource.title}
+                    <Icon
+                      icon="material-symbols:arrow-right-alt"
+                      className="mr-2"
+                    />
+                  </Button>
+                </a>
               </div>
             </div>
           ))}
+        </div>
+        <div className="w-fit ml-auto py-8">
+          <ShopPagination pagination={resources.pagination} />
         </div>
       </section>
     </main>
