@@ -112,6 +112,13 @@ const orderSchema = new Schema(
     apartment: {
       type: String,
     },
+    modules: [
+      {
+        name: { type: String, required: true },
+        price: { type: Number },
+        id: { type: String, required: true },
+      },
+    ],
   },
   { timestamps: true },
 );

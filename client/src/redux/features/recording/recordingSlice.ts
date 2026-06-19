@@ -8,6 +8,7 @@ export interface RecordingState {
   speakerId: string;
   classId: string;
   courseId: string;
+  module: string;
   recordingCategory: "free" | "course" | "class" | "course-demo";
   recordings: IRecordingItem[];
   existingRecordings: IRecordingItem[];
@@ -20,6 +21,7 @@ const initialState: RecordingState = {
   speakerId: "",
   classId: "",
   courseId: "",
+  module: "",
   recordingCategory: "free",
   recordings: [],
   existingRecordings: [],

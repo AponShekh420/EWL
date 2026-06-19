@@ -27,6 +27,7 @@ import {
   resetRecordingFields,
 } from "@/redux/features/recording/recordingSlice";
 import { AppDispatch, RootState } from "@/redux/store";
+import { modulesType } from "@/types/Course";
 import {
   IRecording,
   IRecordingItem,
@@ -52,11 +53,13 @@ import { useDispatch, useSelector } from "react-redux";
 type dropdownType = {
   value: string;
   label: string;
+  modules: modulesType[];
 };
 export default function AddClassPage({ record }: { record?: IRecording }) {
   // Select States
   const [openClass, setOpenClass] = useState(false);
   const [openCourse, setOpenCourse] = useState(false);
+  const [openModule, setOpenModule] = useState(false);
   const [openSpeaker, setOpenSpeaker] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<RecordingValidationErrors>({});
@@ -65,6 +68,7 @@ export default function AddClassPage({ record }: { record?: IRecording }) {
   const [allSpeaker, setAllSpeaker] = useState<dropdownType[]>([]);
   const [allClass, setAllClass] = useState<dropdownType[]>([]);
   const [allCourse, setAllCourse] = useState<dropdownType[]>([]);
+  const [modules, setModules] = useState<modulesType[]>([])
   // Media States
   const [mediaType, setMediaType] = useState<"audio" | "video">("video");
 
@@ -81,6 +85,7 @@ export default function AddClassPage({ record }: { record?: IRecording }) {
     classId,
     courseId,
     gender,
+    module,
     speakerId,
     recordingCategory,
     recordings,
@@ -146,6 +151,8 @@ export default function AddClassPage({ record }: { record?: IRecording }) {
     }
     if (recordingCategory === "course" || recordingCategory === "course-demo") {
       formData.append("courseId", courseId);
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      (modules.length > 0) && formData.append("module", module);
     }
     if (recordingCategory === "free") {
       formData.append("gender", gender);
@@ -267,9 +274,10 @@ export default function AddClassPage({ record }: { record?: IRecording }) {
       getApiData(courseUrl)
         .then((data) => {
           const courses = data.data.map(
-            (item: { title: string; _id: string }) => ({
+            (item: { title: string; _id: string, modules: modulesType[] }) => ({
               label: item.title,
               value: item._id,
+              modules: item?.modules
             }),
           );
           setAllCourse(courses);
@@ -289,6 +297,13 @@ export default function AddClassPage({ record }: { record?: IRecording }) {
         .catch((err) => console.log(err));
     }
   }, [recordingCategory]);
+
+  useEffect(()=> {
+    console.log(allCourse.find((c) => c.value === record?.course)?.modules)
+    const modules = allCourse.find((c) => c.value === record?.course)?.modules
+    setModules(modules || [])
+  }, [record, allCourse])
+
   return (
     <div className="max-w-4xl mx-auto p-8 space-y-12 bg-white min-h-screen font-sans text-slate-900">
       <Button
@@ -473,61 +488,126 @@ export default function AddClassPage({ record }: { record?: IRecording }) {
             </div>
           )}
           {(recordingCategory === "course" || recordingCategory === "course-demo") && (
-            <div className="space-y-2 flex flex-col">
-              <Label className="text-slate-600 font-medium">
-                Select Course
-              </Label>
-              <Popover open={openCourse} onOpenChange={setOpenCourse}>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    className="w-full justify-between border-slate-200 h-11 hover:border-teal rounded-lg"
-                  >
-                    {courseId
-                      ? allCourse.find((c) => c.value === courseId)?.label
-                      : "Select or search course..."}
-                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-full p-0">
-                  <Command>
-                    <CommandInput
-                      placeholder="Search course..."
-                      className="h-9"
-                    />
-                    <CommandEmpty>No course found.</CommandEmpty>
-                    <CommandGroup>
-                      {allCourse.map((c) => (
-                        <CommandItem
-                          key={c.value}
-                          value={c.value}
-                          onSelect={(val) => {
-                            dispatch(addRecordingField({ courseId: val }));
-                            setOpenCourse(false);
-                          }}
-                        >
-                          <Check
-                            className={cn(
-                              "mr-2 h-4 w-4",
-                              courseId === c.value
-                                ? "opacity-100 text-teal"
-                                : "opacity-0",
-                            )}
-                          />
-                          {c.label}
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-              {errors?.courseId && (
-                <p className="text-xs pl-1.5 text-red-500">
-                  {errors?.courseId?.msg}
-                </p>
+            <>
+              <div className="space-y-2 flex flex-col">
+                <Label className="text-slate-600 font-medium">
+                  Select Course
+                </Label>
+                <Popover open={openCourse} onOpenChange={setOpenCourse}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      className="w-full justify-between border-slate-200 h-11 hover:border-teal rounded-lg"
+                    >
+                      {courseId
+                        ? allCourse.find((c) => c.value === courseId)?.label
+                        : "Select or search course..."}
+                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-full p-0">
+                    <Command>
+                      <CommandInput
+                        placeholder="Search course..."
+                        className="h-9"
+                      />
+                      <CommandEmpty>No course found.</CommandEmpty>
+                      <CommandGroup>
+                        {allCourse.map((c) => (
+                          <CommandItem
+                            key={c.value}
+                            value={c.value}
+                            onSelect={(val) => {
+                              dispatch(addRecordingField({ courseId: val }));
+                              setOpenCourse(false);
+                              console.log("course:", c.modules)
+                              setModules(c?.modules || [])
+                            }}
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                courseId === c.value
+                                  ? "opacity-100 text-teal"
+                                  : "opacity-0",
+                              )}
+                            />
+                            {c.label}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+                {errors?.courseId && (
+                  <p className="text-xs pl-1.5 text-red-500">
+                    {errors?.courseId?.msg}
+                  </p>
+                )}
+              </div>
+
+              {/* modules */}
+              {modules.length > 0 && (
+                <div className="space-y-2 flex flex-col">
+                <Label className="text-slate-600 font-medium">
+                  Select Module
+                </Label>
+                <Popover open={openModule} onOpenChange={setOpenModule}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      className="w-full justify-between border-slate-200 h-11 hover:border-teal rounded-lg"
+                    >
+                      {module
+                        ? module
+                        : "Select or search module..."}
+                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-full p-0">
+                    <Command>
+                      <CommandInput
+                        placeholder="Search module..."
+                        className="h-9"
+                      />
+                      <CommandEmpty>No module found.</CommandEmpty>
+                      <CommandGroup>
+                        {modules.map((c) => (
+                          <CommandItem
+                            key={c.name}
+                            value={c.name}
+                            onSelect={(val) => {
+                              dispatch(addRecordingField({ module: val }));
+                              setOpenModule(false);
+                              // console.log("course:", c.modules)
+                              // setModules(c?.modules || [])
+                            }}
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                module === c.name
+                                  ? "opacity-100 text-teal"
+                                  : "opacity-0",
+                              )}
+                            />
+                            {c.name}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+                {errors?.module && (
+                  <p className="text-xs pl-1.5 text-red-500">
+                    {errors?.module?.msg}
+                  </p>
+                )}
+              </div>
               )}
-            </div>
+            </>
           )}
         </div>
       </div>

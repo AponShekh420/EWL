@@ -7,6 +7,7 @@ const recordingSchema = new Schema(
     class: { type: Schema.Types.ObjectId, ref: "Class" },
     heading: { type: String, required: true },
     gender: { type: String, enum: ["male", "female"] },
+    module: { type: String},
     recordingCategory: {
       type: String,
       enum: ["free", "class", "course", "course-demo"],

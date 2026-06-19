@@ -8,6 +8,7 @@ const getFilterCourseBodyData = (req) => {
         price: Number(price),
         students: Number(students) || 0,
         module: Number(module) || 0,
+        modules: req.body.modules ? JSON.parse(req.body.modules) : [],
         installmentMonths: Number(installmentMonths) || 0,
         duration: Number(durationNumber) ? `${durationNumber} ${durationType}` : "",
         metaTitle: metaTitle || title,

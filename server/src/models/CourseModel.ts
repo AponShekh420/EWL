@@ -50,6 +50,13 @@ const courseSchema = new Schema(
     checkoutPageMessage: { type: String },
     metaTitle: { type: String },
     metaDescription: { type: String },
+    modules: [
+      {
+        name: { type: String, required: true },
+        price: { type: Number },
+        id: { type: String, required: true },
+      },
+    ],
   },
   { timestamps: true }
 );

@@ -59,6 +59,7 @@ const initialState: CourseFormState = {
   checkoutPageMessage: "",
   metaTitle: "",
   metaDescription: "",
+  modules: [],
 };
 
 export const courseFormSlice = createSlice({

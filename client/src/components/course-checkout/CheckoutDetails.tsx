@@ -21,9 +21,10 @@ import { addCourseCheckoutField, resetCourseCheckoutFields } from "@/redux/featu
 
 
 
-export default function CheckoutDetails({ cart }: { cart: CourseCartType }) {
+export default function CheckoutDetails() {
   const dispatch = useDispatch();
   const checkoutForm = useSelector((state: RootState) => state.courseCheckout);
+  const cart: CourseCartType = useSelector((state: RootState) => state.courseCart);
   // const router = useRouter();
 
   const stripe=useStripe();
@@ -124,6 +125,9 @@ export default function CheckoutDetails({ cart }: { cart: CourseCartType }) {
     console.log("cart apon:", cart)
   }, [cart])
 
+  useEffect(()=> {
+    console.log("order Id on checkout", cart.orderId)
+  }, [cart])
 
   return (
     <div className="px-8 py-20 bg-teal/5 mt-14 lg:mt-0 rounded-t-xl ">
@@ -157,7 +161,11 @@ export default function CheckoutDetails({ cart }: { cart: CourseCartType }) {
                     Quantity: {item.quantity}
                   </p>
                   <p className="font-medium mt-1">
-                    ${item.price * item.quantity}
+                    {item.modulesPrice > 0 ? (
+                      <span>${cart.totalPrice.toFixed(2)} For {cart.modules?.length || 0} Modules</span>
+                    ) : (
+                      <span>${item.price * item.quantity} (Full Course)</span>
+                    )}
                   </p>
                 </div>
               </div>

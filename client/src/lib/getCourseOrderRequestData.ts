@@ -1,6 +1,7 @@
+import { modulesType } from "@/types/Course";
 import { CourseCartType } from "@/types/CourseCart";
 
-const getCourseOrderRequestData = (cart: CourseCartType, checkoutForm: { fullName?: string; email?: string; spouseName?: string; howDidYouHearAboutUs?: string; country: {label: string, value: string}; streetAddress?: string; apartment?: string; state?: {label: string, value: string}; city?: string; zipCode?: string; phoneNumber?: string; otherPhoneNumber?: string; orderNotes?: string; isDifferentBillingAddress?: boolean; differentBillingAddress?: { firstName: string; lastName: string; email: string; spouseName: string; country: { label: string; value: string; }; streetAddress: string; apartment: string; state: {label: string, value: string}; city: string; zipCode: string; phoneNumber: string; otherPhoneNumber: string; } }) => {
+const getCourseOrderRequestData = (cart: CourseCartType, checkoutForm: { modules?: modulesType[]; fullName?: string; email?: string; spouseName?: string; howDidYouHearAboutUs?: string; country: {label: string, value: string}; streetAddress?: string; apartment?: string; state?: {label: string, value: string}; city?: string; zipCode?: string; phoneNumber?: string; otherPhoneNumber?: string; orderNotes?: string; isDifferentBillingAddress?: boolean; differentBillingAddress?: { firstName: string; lastName: string; email: string; spouseName: string; country: { label: string; value: string; }; streetAddress: string; apartment: string; state: {label: string, value: string}; city: string; zipCode: string; phoneNumber: string; otherPhoneNumber: string; } }) => {
 
     const orderRequestData = {
         fullName: checkoutForm.fullName,
@@ -21,12 +22,14 @@ const getCourseOrderRequestData = (cart: CourseCartType, checkoutForm: { fullNam
 
         totalCourse: cart.totalCourse,
         subtotal: cart.totalPrice,
+        modules: cart?.modules || [],
+        orderId: cart?.orderId,
 
         orderNotes: checkoutForm.orderNotes,
 
         courses: cart.items.map((item)=> (
             {
-                price: item.price,
+                price: cart.totalPrice,
                 _id: item.course._id,
                 quantity: item.quantity
             }

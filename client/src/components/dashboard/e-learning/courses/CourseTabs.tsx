@@ -9,6 +9,7 @@ import { addCourseField } from "@/redux/features/course/courseFormSlice";
 import { RootState } from "@/redux/store";
 import dynamic from "next/dynamic";
 import { useDispatch, useSelector } from "react-redux";
+import ModuleTab from "./ModuleTab";
 const Editor = dynamic(
   () => import("@/components/dashboard/common/editor/Editor"),
   {
@@ -25,6 +26,7 @@ export function CourseTabs() {
         <TabsList>
           {/* <TabsTrigger value="About">About</TabsTrigger> */}
           <TabsTrigger value="About">About</TabsTrigger>
+          <TabsTrigger value="Module">Modules</TabsTrigger>
           <TabsTrigger value="Course Topics">Course Topics</TabsTrigger>
           <TabsTrigger value="FAQs">FAQs</TabsTrigger>
           <TabsTrigger value="Speaker Profile">Speaker Profile</TabsTrigger>
@@ -36,6 +38,9 @@ export function CourseTabs() {
         </TabsContent> */}
         <TabsContent value="Takeaways">
           <Editor onChange={(val) => dispatch(addCourseField({ overviewTab: val }))} value={courseForm.overviewTab}/>
+        </TabsContent>
+        <TabsContent value="Module">
+          <ModuleTab />
         </TabsContent>
         <TabsContent value="Course Topics">
           <Editor onChange={(val) => dispatch(addCourseField({ courseTopicsTab: val }))} value={courseForm.courseTopicsTab}/>
