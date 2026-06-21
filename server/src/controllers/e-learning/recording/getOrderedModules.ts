@@ -5,7 +5,7 @@ import RecordingModel from "../../../models/RecordingModel";
 import createError from "http-errors";
 
 
-const getModules = async (req: Request, res: Response, next: NextFunction) => {
+const getOrderedModules = async (req: Request, res: Response, next: NextFunction) => {
     const {slug} = req.body;
     const course = await courseModel.findOne({slug});
     if(course) {
@@ -27,4 +27,4 @@ const getModules = async (req: Request, res: Response, next: NextFunction) => {
     }
 }
 
-export default getModules;
+export default getOrderedModules;

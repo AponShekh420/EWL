@@ -15,10 +15,12 @@ import {
   orderStatus,
   transactionsList,
 } from "@/constants/order-data";
+import { modulesType } from "@/types/Course";
 import { CourseOrderType, OrderedCourseType } from "@/types/CourseOrder";
 import { getImageUrl } from "@/utils/getImageUrl";
 import { GetTime } from "@/utils/getTime";
 import { Icon } from "@iconify/react";
+import moment from "moment";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -67,6 +69,40 @@ export default async function OrderDetails({
             <TableHeader className="bg-stone-100 ">
               <TableRow className="uppercase !h-11">
                 <TableHead className="w-[400px] space-x-5 font-bold text-gray-500">
+                  Modules Name
+                </TableHead>
+
+                <TableHead className="font-bold text-gray-500">
+                  Price
+                </TableHead>
+                <TableHead className="font-bold text-gray-500">
+                  Date
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+
+            <TableBody>
+              {order.packages?.map((moduleInfo: {modules: modulesType[], date: Date, packagePrice: number}, index: number) => (
+                <TableRow key={index}>
+                  <TableCell>
+                    {moduleInfo.modules.map((module, indexTwo)=> (
+                      <p key={module.name + index}><span className="font-semibold mt-2">{indexTwo + 1}</span> {module.name}</p>
+                    ))}
+                  </TableCell>
+                  <TableCell>${moduleInfo.packagePrice}</TableCell>
+                  <TableCell className="font-medium">
+                    {moment(moduleInfo.date).format("lll")}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+
+          <Table className=" !rounded-md overflow-hidden">
+            <TableCaption></TableCaption>
+            <TableHeader className="bg-stone-100 ">
+              <TableRow className="uppercase !h-11">
+                <TableHead className="w-[400px] space-x-5 font-bold text-gray-500">
                   Course
                 </TableHead>
 
@@ -102,10 +138,10 @@ export default async function OrderDetails({
                       </p>
                     </Link>
                   </TableCell>
-                  <TableCell>${courseInfo.price}</TableCell>
+                  <TableCell>${order.totalPrice}</TableCell>
                   <TableCell>{courseInfo.quantity}</TableCell>
                   <TableCell className="font-medium">
-                    ${Number(courseInfo.price) * Number(courseInfo.quantity)}
+                    ${Number(order.totalPrice)}
                   </TableCell>
                 </TableRow>
               ))}

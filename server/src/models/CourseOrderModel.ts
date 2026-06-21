@@ -1,6 +1,20 @@
 import { model, Schema } from "mongoose";
 
+const ModuleSchema = new Schema({
+  name: { type: String, required: true },
+  price: { type: Number, default: 0 },
+  id: {type: String, required: true}
+  // Add any other fields you expect in the object here
+}, { _id: false }); // Prevents Mongoose from auto-generating an _id for every module
 
+const PackageSchema = new Schema({
+  modules: [ModuleSchema], 
+  date: {
+    type: Date,
+    default: Date.now
+  },
+  packagePrice: Number,
+}, { _id: false });
 
 const courseSchema = new Schema(
   {
@@ -112,13 +126,8 @@ const orderSchema = new Schema(
     apartment: {
       type: String,
     },
-    modules: [
-      {
-        name: { type: String, required: true },
-        price: { type: Number },
-        id: { type: String, required: true },
-      },
-    ],
+    modules: [ModuleSchema],
+    packages: [PackageSchema]
   },
   { timestamps: true },
 );

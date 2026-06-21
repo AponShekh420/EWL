@@ -35,7 +35,8 @@ const CoursePage = async ({params}: {params: {slug: string}}) => {
   price,
   installmentMonths,
   module,
-  modules
+  modules,
+  _id,
   } = course;
 
   moreInfoTab && moreInfoTab != "<p><br></p>" && availableTabs.push("About");
@@ -126,7 +127,7 @@ const CoursePage = async ({params}: {params: {slug: string}}) => {
                   />
                 </TabsContent>
                 <TabsContent value="modules">
-                  <ModuleTabList modules={modules} orderedModules={orderedCourse?.modules} ordered={ordered}/>
+                  <ModuleTabList modules={modules} orderedModules={orderedCourse?.modules} ordered={ordered} price={price} course={course} order={orderedCourse} courseId={_id}/>
                 </TabsContent>
                 <TabsContent value="takeaways">
                   <div
@@ -185,6 +186,7 @@ const CoursePage = async ({params}: {params: {slug: string}}) => {
           duration={duration}
           course={course}
           order={orderedCourse}
+          modules={modules}
         />
 
       </main>

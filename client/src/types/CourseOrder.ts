@@ -1,5 +1,5 @@
 import { JSX } from "react";
-import { CourseType } from "./Course";
+import { CourseType, modulesType } from "./Course";
 
 type Customer = {
   _id: string;
@@ -64,6 +64,11 @@ export type CourseOrderType = {
     price: number;
     id: string;
   }[];
+  packages?: [{
+    modules: modulesType[],
+    date: Date,
+    packagePrice: number,
+  }]
   createdAt: string;
   updatedAt: string;
   __v: number;
