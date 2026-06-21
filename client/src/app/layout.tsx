@@ -31,7 +31,7 @@ import {
 import { GoogleAnalytics } from '@next/third-parties/google'
 
 
-import { GoogleAnalytics } from "@next/third-parties/google";
+// import { GoogleAnalytics } from "@next/third-parties/google";
 
 import "swiper/css";
 import "./globals.css";
