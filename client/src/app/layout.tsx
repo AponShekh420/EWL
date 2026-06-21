@@ -18,7 +18,7 @@ import type { Metadata } from "next";
 
 import { Toaster } from "react-hot-toast";
 
-import { GoogleAnalytics } from "@next/third-parties/google";
+// import { GoogleAnalytics } from "@next/third-parties/google";
 
 import "swiper/css";
 import "./globals.css";
