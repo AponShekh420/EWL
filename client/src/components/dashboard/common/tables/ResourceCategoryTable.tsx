@@ -57,7 +57,7 @@ export default function ResourceCategoriesTable({
       toast.error(errorMessage);
     }
   };
-  console.log(getImageUrl(categories[0].thumbnail, "resources-category"));
+  // console.log(getImageUrl(categories[0].thumbnail, "resources-category"));
   const debouncedSearch = useMemo(
     () =>
       debounce((value: string) => {

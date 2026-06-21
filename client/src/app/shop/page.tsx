@@ -1,6 +1,7 @@
 import { getCategories } from "@/actions/category";
 import { getProductByQueryWithVisible } from "@/actions/product";
 import BreadcrumbPath from "@/components/common/BreadcrumbPath";
+import FadeInSection from "@/components/common/FadeInSection";
 import { ShopPagination } from "@/components/shop/ShopPagination";
 import ShopSection from "@/components/shop/ShopSection";
 import { getSession } from "@/lib/authLib";
@@ -25,27 +26,30 @@ export default async function Shop({
   const { data: categories } = await getCategories();
 
   return (
-    <main className="container min-h-screen">
-      <div>
-        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-center py-8 sm:py-10  md:py-14 uppercase">
-          Shop All Products
-        </h1>
-        <BreadcrumbPath
-          breadcrumbList={[
-            { name: "Home", href: "/" },
-            { name: "Shop", href: "/shop" },
-          ]}
+    <main >
+      <section className="bg-[linear-gradient(rgba(0,120,200,0.4),rgba(0,120,200,0.4)),url('/images/volunteer/backlit-bird-clouds-755385.png')] bg-cover bg-center h-[200px] w-full grid place-items-center">
+        <FadeInSection
+          initial={{ opacity: 0, y: -50 }}
+          scrollTop={{ opacity: 1, y: 0 }}
+          scrollBottom={{ opacity: 0, y: -50 }}
+          margin="40px 0px -40px 0px"
+        >
+          <h1 className="text-white font-extrabold text-3xl lg:text-4xl text-center">
+            Shop
+          </h1>
+        </FadeInSection>
+      </section>
+      <section className="container min-h-screen">
+        <ShopSection
+          products={productsData}
+          categories={categories}
+          pagination={pagination}
+          price={price}
         />
-      </div>
-      <ShopSection
-        products={productsData}
-        categories={categories}
-        pagination={pagination}
-        price={price}
-      />
-      <div className="w-fit ml-auto py-8">
-        <ShopPagination pagination={pagination}/>
-      </div>
+        <div className="w-fit ml-auto py-8">
+          <ShopPagination pagination={pagination}/>
+        </div>
+      </section>
     </main>
   );
 }

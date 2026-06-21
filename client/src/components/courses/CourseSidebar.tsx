@@ -1,7 +1,7 @@
 "use client";
 import { addToCourseCart, resetCourseCartFields } from "@/redux/features/cart/courseCartSlice";
 import { RootState } from "@/redux/store";
-import { CourseType } from "@/types/Course";
+import { CourseType, modulesType } from "@/types/Course";
 import { CourseOrderType } from "@/types/CourseOrder";
 import { ChevronRight } from "lucide-react";
 import { useRouter } from "next/dist/client/components/navigation";
@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-const CourseSidebar = ({order, course, time, ordered, slug, price, module, offline, externalLink, installmentPricePerMonth, installmentMonths, lectures, date, duration}: {order: CourseOrderType, course: CourseType, time: string, ordered: boolean, slug: string, price: number, module: number, offline: boolean, externalLink: string, installmentPricePerMonth: number | string | null, installmentMonths: number, lectures: number, date: string, duration: string}) => {
+const CourseSidebar = ({order, course, time, ordered, slug, price, module, offline, externalLink, installmentPricePerMonth, installmentMonths, lectures, date, duration, modules}: {order: CourseOrderType, course: CourseType, time: string, ordered: boolean, slug: string, price: number, module: number, offline: boolean, externalLink: string, installmentPricePerMonth: number | string | null, installmentMonths: number, lectures: number, date: string, duration: string, modules: modulesType[]}) => {
     const courseCart = useSelector((state: RootState) => state.courseCart);
     const dispatch = useDispatch();
     const router = useRouter();
@@ -56,13 +56,24 @@ const CourseSidebar = ({order, course, time, ordered, slug, price, module, offli
     }
 
     const addToCartFullCourse = () => {
+        // 1. Extract the unique primitive values (names) from the incoming array
+        const incomingNames = modules.map(m => m.id);
+
+        // 2. Filter the course modules by checking against those names
+        let uniqueCourseModules: modulesType[] = []
+        if(course.modules) {
+          uniqueCourseModules = course?.modules.filter(
+            (courseModule) => !incomingNames.includes(courseModule.id)
+          ); 
+        }
+
         dispatch(addToCourseCart({
           _id: 'temp-id', // Temporary ID, replace with actual if available
           orderId: order?._id,
           createdAt: new Date(),
           totalPrice: course.price,
           totalCourse: 1,
-          modules: course.modules || [],
+          modules: uniqueCourseModules || [],
           items: [
             {
               price: course.price,

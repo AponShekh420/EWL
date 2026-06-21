@@ -3,6 +3,7 @@ import { getBlogCategories } from "@/actions/blogCategory";
 import { getProductByQueryWithVisible } from "@/actions/product";
 import BlogSection from "@/components/blog/BlogSection";
 import BreadcrumbPath from "@/components/common/BreadcrumbPath";
+import FadeInSection from "@/components/common/FadeInSection";
 import { ShopPagination } from "@/components/shop/ShopPagination";
 import ShopSection from "@/components/shop/ShopSection";
 // import { getSession } from "@/lib/authLib";
@@ -27,31 +28,29 @@ export default async function Shop({
   const { data: categories } = await getBlogCategories();
 
   return (
-    <main className="container min-h-screen">
-      <div className="w-full max-w-142 mx-auto mb-15">
-        <h1 className="uppercase text-3xl md:text-4xl lg:text-5xl font-semibold text-center py-6 sm:py-7  md:py-10">
-          Blog
-        </h1>
-        <div className="border-b-2 border-violet-cs my-0 relative w-full max-w-142">
-          <span className="text-4xl text-violet-cs absolute -top-4 left-1/2 transform -translate-x-1/2 bg-orange-light rounded-full px-1 py-0.5 inline-block w-fit h-fit">
-            <Icon icon="mdi:heart" className="size-7 " />
-          </span>
+    <main>
+      <section className="bg-[linear-gradient(rgba(0,120,200,0.4),rgba(0,120,200,0.4)),url('/images/volunteer/backlit-bird-clouds-755385.png')] bg-cover bg-center h-[200px] w-full grid place-items-center">
+        <FadeInSection
+          initial={{ opacity: 0, y: -50 }}
+          scrollTop={{ opacity: 1, y: 0 }}
+          scrollBottom={{ opacity: 0, y: -50 }}
+          margin="40px 0px -40px 0px"
+        >
+          <h1 className="text-white font-extrabold text-3xl lg:text-4xl text-center">
+            Blog
+          </h1>
+        </FadeInSection>
+      </section>
+      <section className="container min-h-screen">
+        <BlogSection
+          blogs={blogsData}
+          categories={categories}
+          pagination={pagination}
+        />
+        <div className="w-fit ml-auto py-8">
+          <ShopPagination pagination={pagination}/>
         </div>
-        <p className="text-center text-violet-cs text-lg mt-5 font-semibold">
-          Insights, Guidance & Torah Perspectives
-        </p>
-        <p className="text-center text-base mt-2">
-          Practical advice, real stories, and Torah wisdom on marriage, family, personal growth and women&apos;s health.
-        </p>
-      </div>
-      <BlogSection
-        blogs={blogsData}
-        categories={categories}
-        pagination={pagination}
-      />
-      <div className="w-fit ml-auto py-8">
-        <ShopPagination pagination={pagination}/>
-      </div>
+      </section>
     </main>
   );
 }

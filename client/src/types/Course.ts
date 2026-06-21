@@ -3,6 +3,14 @@ export type modulesType = {
   name: string;
   price: number;
   id: string;
+  recordsNumber: number | 0;
+};
+
+export type OldModulesType = {
+  name: string;
+  price: number;
+  id: string;
+  recordsNumber?: number | 0;
 };
 
 interface SpeakerType {
