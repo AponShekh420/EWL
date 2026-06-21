@@ -15,6 +15,8 @@ import {
   Roboto_Slab,
   Source_Serif_4,
 } from "next/font/google";
+
+// changed here
 import { Toaster } from "react-hot-toast";
 
 import { GoogleAnalytics } from "@next/third-parties/google";
