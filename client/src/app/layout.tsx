@@ -3,20 +3,19 @@ import Header from "@/components/common/Header";
 import Wrapper from "@/components/common/wrapper";
 import ReduxStoreProvider from "@/context-provider/ReduxStoreProvider";
 import type { Metadata } from "next";
-import {
-  Cormorant_Garamond,
-  Inter,
-  Lexend_Deca,
-  Lora,
-  Merriweather,
-  Montserrat,
-  Playfair_Display,
-  Roboto,
-  Roboto_Slab,
-  Source_Serif_4,
-} from "next/font/google";
+// import {
+//   Cormorant_Garamond,
+//   Inter,
+//   Lexend_Deca,
+//   Lora,
+//   Merriweather,
+//   Montserrat,
+//   Playfair_Display,
+//   Roboto,
+//   Roboto_Slab,
+//   Source_Serif_4,
+// } from "next/font/google";
 
-// changed here
 import { Toaster } from "react-hot-toast";
 import {
   Inter,
