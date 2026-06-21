@@ -1,4 +1,18 @@
 
+export type modulesType = {
+  name: string;
+  price: number;
+  id: string;
+  recordsNumber: number | 0;
+};
+
+export type OldModulesType = {
+  name: string;
+  price: number;
+  id: string;
+  recordsNumber?: number | 0;
+};
+
 interface SpeakerType {
   firstName: string;
   lastName: string;
@@ -45,7 +59,9 @@ export type CourseType = {
   durationNumber?: number;
   durationType?: string;
   module: number;
+  modules?: modulesType[]; // Add modules to the course type
 };
+
 
 export type CourseFormState = {
   // 1st tab
@@ -84,6 +100,7 @@ export type CourseFormState = {
   FAQsTab: string;
   testimonialsTab: string;
   moreInfoTab: string;
+  modules: modulesType[]; // Add modules to the state
 
   // 5th tab
   customMessage: string;

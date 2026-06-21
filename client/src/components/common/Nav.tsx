@@ -6,6 +6,7 @@ import { addToCart } from "@/redux/features/cart/cartSlice";
 import { RootState } from "@/redux/store";
 import { CartType } from "@/types/Cart";
 import { BASE_URL } from "@/utils/envVariable";
+import { getImageUrl } from "@/utils/getImageUrl";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,7 +17,6 @@ import { useDispatch, useSelector } from "react-redux";
 import CartModal from "./cart/CardModal";
 import LoginRegister from "./LoginRegister";
 import MobileMenu from "./MobileMenu";
-import { getImageUrl } from "@/utils/getImageUrl";
 
 const Nav = ({ cart }: { cart: CartType }) => {
   const [toggle, setToggle] = useState<boolean>(false);
@@ -85,7 +85,10 @@ const Nav = ({ cart }: { cart: CartType }) => {
                     <Image
                       width={25}
                       height={25}
-                      src={getImageUrl(userInfo?.avatar, "profile") || "/images/user.png"}
+                      src={
+                        getImageUrl(userInfo?.avatar, "profile") ||
+                        "/images/user.png"
+                      }
                       alt="avatar"
                       className="w-[22px] h-[22px] rounded-full object-cover"
                     />
@@ -115,33 +118,21 @@ const Nav = ({ cart }: { cart: CartType }) => {
                       href={"/profile/my-courses"}
                       className="flex items-center gap-[5px] rounded-md p-[8px] pr-[45px] py-[3px] text-[1rem] dark:text-[#abc2d3] dark:hover:bg-slate-900/50 text-gray-600 hover:bg-gray-50"
                     >
-                      <Icon
-                        icon="mage:book"
-                        width="24"
-                        height="24"
-                      />
+                      <Icon icon="mage:book" width="24" height="24" />
                       My Courses
                     </Link>
                     <Link
                       href={"/profile/my-classes"}
                       className="flex items-center gap-[5px] rounded-md p-[8px] pr-[45px] py-[3px] text-[1rem] dark:text-[#abc2d3] dark:hover:bg-slate-900/50 text-gray-600 hover:bg-gray-50"
                     >
-                      <Icon
-                        icon="ic:outline-class"
-                        width="24"
-                        height="24"
-                      />
+                      <Icon icon="ic:outline-class" width="24" height="24" />
                       My Classes
                     </Link>
                     <Link
                       href={"/profile/my-orders"}
                       className="flex items-center gap-[5px] rounded-md p-[8px] pr-[45px] py-[3px] text-[1rem] dark:text-[#abc2d3] dark:hover:bg-slate-900/50 text-gray-600 hover:bg-gray-50"
                     >
-                      <Icon
-                        icon="iconoir:cart"
-                        width="24"
-                        height="24"
-                      />
+                      <Icon icon="iconoir:cart" width="24" height="24" />
                       My Orders
                     </Link>
                     {userInfo?.role == "admin" && (
@@ -149,7 +140,11 @@ const Nav = ({ cart }: { cart: CartType }) => {
                         href={"/dashboard"}
                         className="flex items-center gap-[5px] rounded-md p-[8px] pr-[45px] py-[3px] text-[1rem] dark:text-[#abc2d3] dark:hover:bg-slate-900/50 text-gray-600 hover:bg-gray-50"
                       >
-                        <Icon icon="duo-icons:dashboard" width="24" height="24" />
+                        <Icon
+                          icon="duo-icons:dashboard"
+                          width="24"
+                          height="24"
+                        />
                         Dashboard
                       </Link>
                     )}
@@ -220,7 +215,7 @@ const Nav = ({ cart }: { cart: CartType }) => {
             >
               About
             </Link> */}
-            
+
             <div className="relative group px-2.5 py-1">
               {/* Parent Menu */}
               <Link
@@ -311,6 +306,12 @@ const Nav = ({ cart }: { cart: CartType }) => {
               className="px-2.5 py-1 text-[#270034] hover:text-[#0F75BC] transition-all duration-150"
             >
               Get Involved
+            </Link>
+            <Link
+              href={"/about"}
+              className="px-2.5 py-1 text-[#270034] hover:text-[#0F75BC] transition-all duration-150"
+            >
+              About Us
             </Link>
             <Link
               href={"/blog"}

@@ -1,18 +1,20 @@
 import loginFormReducer from "@/redux/auth/loginFormSlice";
 import registerFormReducer from "@/redux/auth/registerFormSlice";
 import userSlice from "@/redux/auth/userSlice";
+import blogFormReducer from "@/redux/features/blog/blogFormSlice";
+import blogCategoryFormReducer from "@/redux/features/blogCategory/blogCategoryFormSlice";
 import cartSlice from "@/redux/features/cart/cartSlice";
 import categoryFormReducer from "@/redux/features/category/categoryFormSlice";
-import blogCategoryFormReducer from "@/redux/features/blogCategory/blogCategoryFormSlice";
 import checkoutReducer from "@/redux/features/checkout/checkoutFormSlice";
-import courseCheckoutReducer from "@/redux/features/checkout/courseCheckoutFormSlice";
 import classCheckoutReducer from "@/redux/features/checkout/classCheckoutFormSlice";
+import courseCheckoutReducer from "@/redux/features/checkout/courseCheckoutFormSlice";
 import classFormReducer from "@/redux/features/class/classFormSlice";
 import courseFormReducer from "@/redux/features/course/courseFormSlice";
 import paidHotlineSpeakerReducer from "@/redux/features/paid-hotline-speaker/paidHotlinSpeaker";
 import productFormReducer from "@/redux/features/product/productFormSlice";
-import blogFormReducer from "@/redux/features/blog/blogFormSlice";
 import recordingReducer from "@/redux/features/recording/recordingSlice";
+import resourceFormReducer from "@/redux/features/resources/ResourcesFormSlice";
+import resourceCategoryFormReducer from "@/redux/features/resources/resourcesCategoryFormSlice";
 import shippingFormReducer from "@/redux/features/shipping/shippingFormSlice";
 import sidebarReducer from "@/redux/features/sidebar/sidebarSlice";
 import ClassStepperReducer from "@/redux/features/stepper/classStepperSlice";
@@ -20,6 +22,7 @@ import CourseStepperReducer from "@/redux/features/stepper/courseStepperSlice";
 import stepperReducer from "@/redux/features/stepper/stepperSlice";
 import userFormReducer from "@/redux/features/user/userFormSlice";
 import { configureStore } from "@reduxjs/toolkit";
+import courseCartSlice from "./features/cart/courseCartSlice";
 export const store = configureStore({
   reducer: {
     sidebar: sidebarReducer,
@@ -28,8 +31,10 @@ export const store = configureStore({
     classStepper: ClassStepperReducer,
     productForm: productFormReducer,
     blogForm: blogFormReducer,
+    resourceForm: resourceFormReducer,
     categoryForm: categoryFormReducer,
     blogCategoryForm: blogCategoryFormReducer,
+    resourceCategoryForm: resourceCategoryFormReducer,
     shippingForm: shippingFormReducer,
     courseForm: courseFormReducer,
     recording: recordingReducer,
@@ -39,6 +44,7 @@ export const store = configureStore({
     loginFrom: loginFormReducer,
     user: userSlice,
     cart: cartSlice,
+    courseCart: courseCartSlice,
     checkout: checkoutReducer,
     courseCheckout: courseCheckoutReducer,
     classCheckout: classCheckoutReducer,

@@ -107,5 +107,12 @@ const orderSchema = new mongoose_1.Schema({
     apartment: {
         type: String,
     },
+    modules: [
+        {
+            name: { type: String, required: true },
+            price: { type: Number },
+            id: { type: String, required: true },
+        },
+    ],
 }, { timestamps: true });
 exports.CourseOrderModel = (0, mongoose_1.model)("Course-Order", orderSchema);

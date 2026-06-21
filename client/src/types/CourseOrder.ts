@@ -1,5 +1,5 @@
 import { JSX } from "react";
-import { CourseType } from "./Course";
+import { CourseType, modulesType } from "./Course";
 
 type Customer = {
   _id: string;
@@ -59,6 +59,16 @@ export type CourseOrderType = {
   stripePaymentIntentId: string,
   paymentStatus: string,
   courses: CoursesPros[],
+  modules?: {
+    name: string;
+    price: number;
+    id: string;
+  }[];
+  packages?: [{
+    modules: modulesType[],
+    date: Date,
+    packagePrice: number,
+  }]
   createdAt: string;
   updatedAt: string;
   __v: number;

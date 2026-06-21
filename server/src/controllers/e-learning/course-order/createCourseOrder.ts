@@ -12,7 +12,7 @@ const stripe=new Stripe(
 const createCourseOrder = async(req: Request,res: Response) =>{
   try{
     const body = req.body;
-    const {subtotal} = body
+    const {subtotal, modules, orderId} = body
     const latestOrder = await CourseOrderModel.findOne().sort({ orderId: -1 }).exec();
 
     // const subtotal=
@@ -23,12 +23,58 @@ const createCourseOrder = async(req: Request,res: Response) =>{
     // );
     const totalPrice = Number(subtotal);
 
-    const createdOrder = await CourseOrderModel.create({
-      ...body,
-      customer: req?.user && req?.user?._id,
-      totalPrice: totalPrice,
-      orderId: latestOrder ? latestOrder.orderId + 1 : 100,
-    });
+    let createdOrder;
+
+   if (orderId) {
+      const existingOrder = await CourseOrderModel.findOne({ _id: orderId });
+      
+      if (existingOrder) {
+        existingOrder.totalPrice += totalPrice;
+        existingOrder.subtotal += totalPrice;
+        
+        // Safely push the new modules into the existing Mongoose DocumentArray
+        if (modules && modules.length > 0) {
+          existingOrder.modules.push(...modules);
+          existingOrder.packages.push({
+            modules: modules,
+            date: Date.now(),
+            packagePrice: totalPrice,
+          })
+        }
+        
+        createdOrder = existingOrder;
+      } else {
+        createdOrder = await CourseOrderModel.create({
+          ...body,
+          customer: req?.user && req?.user?._id,
+          totalPrice: totalPrice,
+          orderId: latestOrder ? latestOrder.orderId + 1 : 100,
+          packages: modules.length > 0 ? [
+            {
+              modules: modules,
+              date: Date.now(),
+              packagePrice: totalPrice,
+            }
+          ]: []
+        });
+      }
+    } else {
+      createdOrder = await CourseOrderModel.create({
+        ...body,
+        customer: req?.user && req?.user?._id,
+        totalPrice: totalPrice,
+        orderId: latestOrder ? latestOrder.orderId + 1 : 100,
+        packages: modules.length > 0 ? [
+          {
+            modules: modules,
+            date: Date.now(),
+            packagePrice: totalPrice,
+          }
+        ]: []
+      });
+    }
+
+
     const paymentIntent= await stripe.paymentIntents.create({
         amount:Math.round(totalPrice*100),
         currency:"usd",
