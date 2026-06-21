@@ -16,6 +16,19 @@ import {
   Source_Serif_4,
 } from "next/font/google";
 import { Toaster } from "react-hot-toast";
+import {
+  Inter,
+  Playfair_Display,
+  Cormorant_Garamond,
+  Montserrat,
+  Merriweather,
+  Source_Serif_4,
+  Roboto_Slab,
+  Roboto,
+} from "next/font/google";
+
+import { GoogleAnalytics } from '@next/third-parties/google'
+
 
 import { GoogleAnalytics } from "@next/third-parties/google";
 
