@@ -89,28 +89,30 @@ export default async function Resources({
 }) {
   const q = await searchParams;
   const query = await queryFormatter(searchParams);
-  let resources;
-  let categories;
+  // let resources;
+  // let categories;
+  const resources = await getResourcesByQueryWithVisible(query);
+  const categories = await getResourcesCategories();
 
-  try {
-      [resources, categories] = await Promise.all([
-          getResourcesByQueryWithVisible(query),
-          getResourcesCategories(),
-      ]);
+  // try {
+  //     [resources, categories] = await Promise.all([
+  //         getResourcesByQueryWithVisible(query),
+  //         getResourcesCategories(),
+  //     ]);
 
-      console.log(resources);
-      console.log(categories);
-  } catch (err) {
-      console.error(err);
-      throw err;
-  }
+  //     console.log(resources);
+  //     console.log(categories);
+  // } catch (err) {
+  //     console.error(err);
+  //     throw err;
+  // }
   return (
     <main>
       <section className="bg-[url('/images/home/hero.png')] bg-cover bg-center bg-no-repeat bg-blend-overlay bg-black/15 min-h-100">
         <div className="container h-full">
           <div className="pt-10 max-w-155 z-1 relative before:bg-orange-light before:absolute before:top-0 before:-left-40 before:-z-1 before:w-full sm:before:w-200  before:h-80 before:blur-[50px] ">
             <div className="w-fit">
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl   text-purple-cs font-bold ">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl   text-purple-cs font-bold font-playfair">
                 RESOURCES
               </h1>
               <div className="border-b-2 border-purple-cs/20 my-4 relative w-full">
@@ -135,7 +137,7 @@ export default async function Resources({
           <Link href={`/resources`}>
             <Button
               variant="outline"
-              className={`transform transition duration-300 ${!q.category ? "text-white bg-purple-cs" : "bg-white text-purple-cs"} hover:bg-purple-cs hover:text-white capitalize`}
+              className={`transform transition duration-300 ${!q?.category ? "text-white bg-purple-cs" : "bg-white text-purple-cs"} hover:bg-purple-cs hover:text-white capitalize`}
             >
               All
             </Button>
@@ -147,7 +149,7 @@ export default async function Resources({
             >
               <Button
                 variant="outline"
-                className={`transform transition duration-300 ${q.category === category?.name ? "text-white bg-purple-cs" : "bg-white text-purple-cs"} hover:bg-purple-cs hover:text-white capitalize`}
+                className={`transform transition duration-300 ${q?.category === category?.name ? "text-white bg-purple-cs" : "bg-white text-purple-cs"} hover:bg-purple-cs hover:text-white capitalize`}
               >
                 {category?.name}
               </Button>
@@ -175,17 +177,17 @@ export default async function Resources({
               className="bg-white rounded-lg shadow-[1px_1px_4px] shadow-black/20 overflow-hidden flex flex-col justify-between items-center"
             >
               <Image
-                src={resource.thumbnail
+                src={resource?.thumbnail
                   ? getImageUrl(resource?.thumbnail, "resources")
                   : "/images/resources/default.png"
                 }
-                alt={resource.title}
+                alt={resource?.title}
                 width={200}
                 height={200}
                 className="h-25 object-contain"
               />
               <div className="p-4 flex-1 flex flex-col text-center">
-                <h2 className="text-xl font-semibold mb-2">{resource?.title}</h2>
+                <h2 className="text-xl font-semibold mb-2 font-montserrat">{resource?.title}</h2>
                 <p className="text-gray-600 mb-4 flex-1 font-lora">
                   {resource?.description}
                 </p>
