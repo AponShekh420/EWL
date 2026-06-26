@@ -89,30 +89,17 @@ export default async function Resources({
 }) {
   const q = await searchParams;
   const query = await queryFormatter(searchParams);
-  // let resources;
-  // let categories;
-  const resources = await getResourcesByQueryWithVisible(query);
-  const categories = await getResourcesCategories();
-
-  // try {
-  //     [resources, categories] = await Promise.all([
-  //         getResourcesByQueryWithVisible(query),
-  //         getResourcesCategories(),
-  //     ]);
-
-  //     console.log(resources);
-  //     console.log(categories);
-  // } catch (err) {
-  //     console.error(err);
-  //     throw err;
-  // }
+  const [resources, categories] = await Promise.all([
+    getResourcesByQueryWithVisible(query),
+    getResourcesCategories(),
+  ]);
   return (
     <main>
       <section className="bg-[url('/images/home/hero.png')] bg-cover bg-center bg-no-repeat bg-blend-overlay bg-black/15 min-h-100">
         <div className="container h-full">
           <div className="pt-10 max-w-155 z-1 relative before:bg-orange-light before:absolute before:top-0 before:-left-40 before:-z-1 before:w-full sm:before:w-200  before:h-80 before:blur-[50px] ">
             <div className="w-fit">
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl   text-purple-cs font-bold font-playfair">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl   text-purple-cs font-bold ">
                 RESOURCES
               </h1>
               <div className="border-b-2 border-purple-cs/20 my-4 relative w-full">
@@ -137,21 +124,21 @@ export default async function Resources({
           <Link href={`/resources`}>
             <Button
               variant="outline"
-              className={`transform transition duration-300 ${!q?.category ? "text-white bg-purple-cs" : "bg-white text-purple-cs"} hover:bg-purple-cs hover:text-white capitalize`}
+              className={`transform transition duration-300 ${!q.category ? "text-white bg-purple-cs" : "bg-white text-purple-cs"} hover:bg-purple-cs hover:text-white capitalize`}
             >
               All
             </Button>
           </Link>
-          {categories?.data?.map((category: BlogCategoryType) => (
+          {categories?.data.map((category: BlogCategoryType) => (
             <Link
-              href={`/resources?category=${category?.name}`}
-              key={category?._id}
+              href={`/resources?category=${category.name}`}
+              key={category._id}
             >
               <Button
                 variant="outline"
-                className={`transform transition duration-300 ${q?.category === category?.name ? "text-white bg-purple-cs" : "bg-white text-purple-cs"} hover:bg-purple-cs hover:text-white capitalize`}
+                className={`transform transition duration-300 ${q.category === category.name ? "text-white bg-purple-cs" : "bg-white text-purple-cs"} hover:bg-purple-cs hover:text-white capitalize`}
               >
-                {category?.name}
+                {category.name}
               </Button>
             </Link>
           ))}
@@ -171,28 +158,25 @@ export default async function Resources({
           </Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-12">
-          {resources?.data?.map((resource: ResourcesType) => (
+          {resources?.data.map((resource: ResourcesType) => (
             <div
-              key={resource?._id}
+              key={resource._id}
               className="bg-white rounded-lg shadow-[1px_1px_4px] shadow-black/20 overflow-hidden flex flex-col justify-between items-center"
             >
               <Image
-                src={resource?.thumbnail
-                  ? getImageUrl(resource?.thumbnail, "resources")
-                  : "/images/resources/default.png"
-                }
-                alt={resource?.title}
+                src={getImageUrl(resource.thumbnail, "resources")}
+                alt={resource.title}
                 width={200}
                 height={200}
                 className="h-25 object-contain"
               />
               <div className="p-4 flex-1 flex flex-col text-center">
-                <h2 className="text-xl font-semibold mb-2 font-montserrat">{resource?.title}</h2>
+                <h2 className="text-xl font-semibold mb-2">{resource.title}</h2>
                 <p className="text-gray-600 mb-4 flex-1 font-lora">
-                  {resource?.description}
+                  {resource.description}
                 </p>
                 <a
-                  href={resource?.link}
+                  href={resource.link}
                   target="_blank"
                   className="block w-full"
                 >
@@ -200,7 +184,7 @@ export default async function Resources({
                     variant="outline"
                     className={`mt-auto flex w-full font-montserrat font-semibold text-purple-cs  hover:bg-purple-cs hover:text-white transform transition duration-300 `}
                   >
-                    {resource?.title}
+                    {resource.title}
                     <Icon
                       icon="material-symbols:arrow-right-alt"
                       className="mr-2"
@@ -211,11 +195,9 @@ export default async function Resources({
             </div>
           ))}
         </div>
-        {resources?.pagination && (
-            <div className="w-fit ml-auto py-8">
-                <ShopPagination pagination={resources?.pagination} />
-            </div>
-        )}
+        <div className="w-fit ml-auto py-8">
+          <ShopPagination pagination={resources.pagination} />
+        </div>
       </section>
     </main>
   );
