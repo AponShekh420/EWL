@@ -185,24 +185,24 @@ export default function ResourcesTable({
           </TableHeader>
           <TableBody>
             {resources?.map((resource) => (
-              <TableRow key={resource._id}>
+              <TableRow key={resource?._id}>
                 <TableCell>
                   <div className="flex gap-4 items-center">
                     <Checkbox className="checkbox-t" />
                     <div className="flex items-center gap-x-4">
                       <Image
-                        src={getImageUrl(resource.thumbnail, "resources")}
-                        alt={resource.title}
+                        src={getImageUrl(resource?.thumbnail, "resources")}
+                        alt={resource?.title}
                         width={50}
                         height={50}
                         className="size-12 object-cover rounded-md"
                       />
                       <div className="font-lexend-deca">
                         <h5 className="font-medium text-wrap">
-                          {resource.title}
+                          {resource?.title}
                         </h5>
                         <p className="text-gray-500  mt-0.5">
-                          {resource.category}
+                          {resource?.category}
                         </p>
                       </div>
                     </div>
@@ -212,9 +212,9 @@ export default function ResourcesTable({
                   <SelectBox
                     name="status"
                     label=""
-                    value={resource.status?.toLowerCase()}
+                    value={resource?.status?.toLowerCase()}
                     className={`w-[150px] ${getBlogStatusColor(
-                      resource.status as string,
+                      resource?.status as string,
                     )}`}
                     placeholder="Change status"
                     onChange={(val) => handleStatusChange(val, resource._id)}
