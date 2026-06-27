@@ -23,7 +23,7 @@ export const getResourcesByQuery = async (query: string) => {
     },
   );
   if (!res.ok) {
-    throw new Error("Failed to fetch blog by slug");
+    throw new Error("Failed to fetch resources by slug");
   }
   return res.json();
 };
@@ -38,7 +38,7 @@ export const getResourcesByQueryWithVisible = async (query: string) => {
     },
   );
   if (!res.ok) {
-    throw new Error("Failed to fetch blog by slug");
+    throw new Error("Failed to fetch resources by query visible");
   }
   return res.json();
 };
