@@ -1,5 +1,6 @@
 import { getResourcesByQueryWithVisible } from "@/actions/resources";
 import { getResourcesCategories } from "@/actions/resourcesCategory";
+import FadeInSection from "@/components/common/FadeInSection";
 import { ShopPagination } from "@/components/shop/ShopPagination";
 import { Button } from "@/components/ui/button";
 import { BlogCategoryType } from "@/types/BlogCategory";
@@ -95,9 +96,9 @@ export default async function Resources({
   ]);
   return (
     <main>
-      <section className="bg-[url('/images/home/hero.png')] bg-cover bg-center bg-no-repeat bg-blend-overlay bg-black/15 min-h-100">
+      {/* <section className="bg-[linear-gradient(rgba(0,120,200,0.4),rgba(0,120,200,0.4)),url('/images/volunteer/backlit-bird-clouds-755385.png')] bg-cover bg-center bg-no-repeat bg-blend-overlay bg-black/15 min-h-100">
         <div className="container h-full">
-          <div className="pt-10 max-w-155 z-1 relative before:bg-orange-light before:absolute before:top-0 before:-left-40 before:-z-1 before:w-full sm:before:w-200  before:h-80 before:blur-[50px] ">
+          <div className="pt-10 max-w-155 z-1 relative before:bg-orange-light before:absolute before:top-0 before:-left-40 before:-z-1 before:w-full sm:before:w-200  before:h-80 before:blur-[150px] ">
             <div className="w-fit">
               <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl   text-purple-cs font-bold ">
                 RESOURCES
@@ -118,6 +119,19 @@ export default async function Resources({
             </p>
           </div>
         </div>
+      </section> */}
+
+      <section className="bg-[linear-gradient(rgba(0,120,200,0.4),rgba(0,120,200,0.4)),url('/images/volunteer/backlit-bird-clouds-755385.png')] bg-cover bg-center h-[200px] w-full grid place-items-center">
+        <FadeInSection
+          initial={{ opacity: 0, y: -50 }}
+          scrollTop={{ opacity: 1, y: 0 }}
+          scrollBottom={{ opacity: 0, y: -50 }}
+          margin="40px 0px -40px 0px"
+        >
+          <h1 className="text-white font-extrabold text-3xl lg:text-4xl text-center">
+            Resources
+          </h1>
+        </FadeInSection>
       </section>
       <section className="container py-10">
         <div className="flex gap-2 md:gap-10 flex-wrap">
