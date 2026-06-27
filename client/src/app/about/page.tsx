@@ -1,3 +1,4 @@
+import FadeInSection from "@/components/common/FadeInSection";
 import { Icon } from "@iconify/react";
 
 const features = [
@@ -84,13 +85,25 @@ const howToCome = [
 export default function About() {
   return (
     <main className="bg-orange-light">
-      <section className="bg-[url('/images/home/hero.png')] bg-cover bg-center bg-no-repeat bg-blend-overlay bg-black/15 min-h-100">
+      <section className="bg-[linear-gradient(rgba(0,120,200,0.4),rgba(0,120,200,0.4)),url('/images/volunteer/backlit-bird-clouds-755385.png')] bg-cover bg-center h-[200px] w-full grid place-items-center">
+        <FadeInSection
+          initial={{ opacity: 0, y: -50 }}
+          scrollTop={{ opacity: 1, y: 0 }}
+          scrollBottom={{ opacity: 0, y: -50 }}
+          margin="40px 0px -40px 0px"
+        >
+          <h1 className="text-white font-extrabold text-3xl lg:text-4xl text-center">
+            About Us
+          </h1>
+        </FadeInSection>
+      </section>
+      <section className="bg-[url('/images/about/about-page.jpg')] bg-cover bg-center bg-no-repeat bg-blend-overlay bg-black/15 min-h-200 flex items-center mt-10">
         <div className="container h-full">
-          <div className="pt-10 max-w-155 z-1 relative before:bg-orange-light before:absolute before:top-0 before:-left-40 before:-z-1 before:w-full  sm:before:w-200 before:h-100 before:blur-[50px] ">
+          <div className="pt-10 max-w-155 z-1 relative before:absolute before:top-0 before:-left-40 before:-z-1 before:w-full  sm:before:w-200 before:h-100 before:blur-[50px] ">
             <h1 className="text-3xl font-playfair-display sm:text-4xl lg:text-5xl text-purple-cs font-bold">
               Sometimes Everything Looks Right..
             </h1>
-            <p className="text-violet-cs font-bold text-2xl mt-4 mb-6 font-lora">
+            <p className="text-violet-cs font-bold text-2xl mt-4 mb-6 font-lora italic">
               and still something in the marriage feels painful or distant.
             </p>
             <p className="text-xl text-purple-cs font-lora">
@@ -105,7 +118,7 @@ export default function About() {
           </div>
         </div>
       </section>
-      <section className="container pt-10 sm:pt-16 lg:pt-20 ">
+      <section className="container -mt-20">
         <div className="max-w-200">
           <div className="w-fit ">
             <h2 className="text-2xl font-playfair-display font-semibold mb-4 text-violet-cs ">
@@ -124,9 +137,9 @@ export default function About() {
             family harmony through courses, recordings, lectures, and practical
             resources.
           </p>
-          <p className="text-lg text-violet-cs font-lora">
+          <p className="text-lg text-violet-cs font-lora font-bold">
             Thousands of individuals and families have benefited from Ohel
-            Miriam's compassionate and practical approach to building stronger
+            Miriam&apos;s compassionate and practical approach to building stronger
             Jewish homes.
           </p>
         </div>
@@ -210,7 +223,7 @@ export default function About() {
               <Icon icon="ic:outline-mail" width="32" height="32" />
             </div>
             <p className="text-white/90 font-lora">
-              You don't have to navigate it alone. <br /> We're here to support,
+              You don&apos;t have to navigate it alone. <br /> We&apos;re here to support,
               guide, and strengthen.
             </p>
           </div>
