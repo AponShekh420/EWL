@@ -15,7 +15,6 @@ export const createResources = async (
   next: NextFunction,
 ) => {
   try {
-    console.log("Creating Resources with data:", req.body);
     const { thumbnail } = req.files as MulterFile;
     const body = getFilterBlogBodyData(req);
     // Remove special characters and make the slug
