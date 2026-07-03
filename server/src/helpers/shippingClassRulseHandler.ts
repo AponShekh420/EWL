@@ -59,7 +59,8 @@ const shippingClassRulseHandler = async (req: Request, res: Response, next: Next
                 price: Number(product.salePrice),
                 shippingClass: product.shippingClass,
                 category: product.category,
-                name: product.title
+                name: product.title,
+                taxStatus: product?.taxStatus,
             };
         } else {
             // Handle case where product is not found (optional)

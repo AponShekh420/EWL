@@ -145,12 +145,12 @@ export default async function Resources({
           </Link>
           {categories?.data.map((category: BlogCategoryType) => (
             <Link
-              href={`/resources?category=${category.name}`}
+              href={`/resources?category=${category.slug}`}
               key={category._id}
             >
               <Button
                 variant="outline"
-                className={`transform transition duration-300 ${q.category === category.name ? "text-white bg-purple-cs" : "bg-white text-purple-cs"} hover:bg-purple-cs hover:text-white capitalize`}
+                className={`transform transition duration-300 ${q.category === category.slug ? "text-white bg-purple-cs" : "bg-white text-purple-cs"} hover:bg-purple-cs hover:text-white capitalize`}
               >
                 {category.name}
               </Button>
@@ -185,7 +185,9 @@ export default async function Resources({
                 className="h-25 object-contain"
               />
               <div className="p-4 flex-1 flex flex-col text-center">
-                <h2 className="text-xl font-semibold mb-2">{resource.title}</h2>
+                <h2 className="text-xl font-semibold mb-2 capitalize">
+                  {resource.title}
+                </h2>
                 <p className="text-gray-600 mb-4 flex-1 font-lora">
                   {resource.description}
                 </p>
@@ -198,10 +200,10 @@ export default async function Resources({
                     variant="outline"
                     className={`mt-auto flex w-full font-montserrat font-semibold text-purple-cs  hover:bg-purple-cs hover:text-white transform transition duration-300 `}
                   >
-                    {resource.title}
+                    Visit
                     <Icon
-                      icon="material-symbols:arrow-right-alt"
-                      className="mr-2"
+                      icon="material-symbols:arrow-right-alt-rounded"
+                      className="mr-2 "
                     />
                   </Button>
                 </a>
