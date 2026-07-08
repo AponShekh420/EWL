@@ -33,6 +33,9 @@ const orderSuccess = async (req: Request,res: Response)=>{
     {
     paymentStatus:"paid",
     status:"processing"
+    },
+    {
+      new:true
     }
     ).populate([
       {
