@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
 import dotenv from "dotenv"
 import { CourseOrderModel } from "../../../models/CourseOrderModel";
+import CourseOrderEmail from "../../../emails/CourseOrderEmail";
 dotenv.config()
 
-const courseOrderSuccess = (req: Request,res: Response)=>{
+const courseOrderSuccess = async (req: Request,res: Response)=>{
     console.log("The success has called")
     const stripe=require("stripe")(
     process.env.STRIPE_SECRET_KEY
@@ -27,14 +28,21 @@ const courseOrderSuccess = (req: Request,res: Response)=>{
     const orderId=
     paymentIntent.metadata.orderId;
 
-    CourseOrderModel.findByIdAndUpdate(
+    const createdOrder = await CourseOrderModel.findByIdAndUpdate(
     orderId,
     {
     paymentStatus:"paid",
     status:"processing"
     }
-    ).exec();
-
+    ).populate([
+      {
+        path: "customer",
+      },
+      {
+        path: "courses._id",
+      },
+    ]).exec();
+    await CourseOrderEmail(createdOrder);
     }
 
     res.json({received:true});
