@@ -192,21 +192,21 @@ export default function OrderTable({
                     <div className="font-lexend-deca flex items-center gap-1">
                       <h5 className="font-medium">#{order.orderId}</h5>
                       <p className="text-gray-500  mt-0.5 capitalize">
-                        {order.customer.firstName +
+                        {order?.customer?.firstName +
                           " " +
-                          order.customer.lastName}
+                          order?.customer?.lastName}
                       </p>
                     </div>
                   </div>
                 </div>
               </TableCell>
-              <TableCell>{order.customer.email}</TableCell>
-              <TableCell>{GetTime(order.createdAt as string, true)}</TableCell>
+              <TableCell>{order?.customer?.email}</TableCell>
+              <TableCell>{GetTime(order?.createdAt as string, true)}</TableCell>
 
               <TableCell>
                 <div className="flex gap-2 items-start flex-col text-wrap">
-                  <span>{order?.products[0]?._id.title}</span>
-                  <span className="text-red-400">{order.products[0]?._id?.category}</span>
+                  <span>{order?.products[0]?._id?.title || "N/A"}</span>
+                  <span className="text-red-400">{order?.products[0]?._id?.category || "N/A"}</span>
                 </div>
               </TableCell>
               <TableCell className="font-medium">${(order.totalPrice).toFixed(2)}</TableCell>
