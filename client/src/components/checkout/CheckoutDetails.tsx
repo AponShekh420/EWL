@@ -305,6 +305,8 @@ export default function CheckoutDetails({ cart }: { cart: CartType }) {
                           dispatch(
                             addCheckoutField({
                               shipping: {
+                                rateId: option.objectId,
+                                shipmentId: option.shipment,
                                 methodName: "usps",
                                 cost: option.amount,
                                 boxUsed: shippingAndTaxDetails.shipping.usps.boxUsed || "",
