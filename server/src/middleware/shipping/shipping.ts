@@ -67,7 +67,9 @@ const shipping = async (req: Request, res: Response, next: NextFunction) => {
       city: "SPRING VALLEY",
       state: "NY",
       zip: "10977-7215",
-      country: "US"
+      country: "US",
+      phone: "+18456594795",
+      email: "cjamps@gmail.com"
     };
 
     const addressTo: AddressCreateRequest = {
@@ -77,6 +79,8 @@ const shipping = async (req: Request, res: Response, next: NextFunction) => {
       state: shippingAddress.state,
       zip: shippingAddress.postal_code,
       country: shippingAddress.country || "US",
+      email: shippingAddress.email || "",
+      phone: shippingAddress.phone || ""
     };
 
 

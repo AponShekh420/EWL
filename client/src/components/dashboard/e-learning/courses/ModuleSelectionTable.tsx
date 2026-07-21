@@ -10,6 +10,8 @@ import { Input } from "@/components/ui/input"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "@/redux/store"
 import { addCourseField } from "@/redux/features/course/courseFormSlice"
+import { Icon } from "@iconify/react";
+
 
 // Initial state data
 const initialCourses = [
@@ -135,6 +137,24 @@ export default function CourseSelectionTable() {
                   >
                     deselect
                   </Button>)}
+                </TableCell>
+                <TableCell className="py-4 text-right align-middle w-[100px]">
+                  <Button 
+                    type="button"
+                    className="bg-[#29af15] hover:bg-[#18710a] text-white font-medium rounded text-sm capitalize"
+                    onClick={() => handleDeselect(course)}
+                  >
+                    <Icon icon="mdi:pencil-outline" width="20" height="20" />edit
+                  </Button>
+                </TableCell>
+                <TableCell className="py-4 text-right align-middle w-[100px]">
+                  <Button 
+                    type="button"
+                    className="bg-[#cc1800] hover:bg-[#a40000] text-white font-medium rounded text-sm capitalize"
+                    onClick={() => handleDeselect(course)}
+                  >
+                    <Icon icon="material-symbols:delete-outline" width="20" height="20" />Delete
+                  </Button>
                 </TableCell>
               </TableRow>
             )

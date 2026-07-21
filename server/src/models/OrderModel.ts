@@ -107,6 +107,30 @@ const shippingSchema = new Schema(
       type: String,
       default: "",
     },
+    rateId: {
+      type: String,
+      default: "",
+    },
+    shipmentId: {
+      type: String,
+      default: "",
+    },
+    transactionId: {
+      type: String,
+      default: "",
+    },
+    trackingNumber: {
+      type: String,
+      default: "",
+    },
+    labelUrl: {
+      type: String,
+      default: "",
+    },
+    status: {
+      type: String,
+      default: "pending",
+    },
   },
   { _id: false }
 );
