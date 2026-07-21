@@ -1,5 +1,7 @@
 import { getOrderById } from "@/actions/order";
 import PageHeading from "@/components/dashboard/common/PageHeading";
+import CreateShippingLabel from "@/components/dashboard/ecommerce/orders/CreateShippingLabel";
+import ShippingLabelCard from "@/components/dashboard/ecommerce/orders/ShippingLabelDetails";
 import { EmptyItemIcon } from "@/components/svg";
 import { Button } from "@/components/ui/button";
 import {
@@ -206,6 +208,33 @@ export default async function OrderDetails({
               ))}
             </div>
           </div>
+          
+          <div className="mt-10">
+            <h5 className="text-xl font-bold">Shipping Label</h5>
+            <div className="flex justify-between items-center p-5 shadow border rounded-lg mt-8">
+              <CreateShippingLabel orderId={order._id} />
+            </div>
+            <div>
+              {order.shipping ? (
+                <ShippingLabelCard shipping={order.shipping} />
+              ) : (
+                <p className="text-gray-500">No shipping label available.</p>
+              )}
+            </div>
+          </div>
+
+          {/* create shipping label */}
+          {/* <div>
+            <h5 className="text-xl font-bold mt-10">Transactions</h5>
+            <div>
+                <div
+                  className="flex justify-between items-center p-5 shadow border rounded-lg mt-8"
+                >
+                  <CreateShippingLabel/>
+                </div>
+            </div>
+          </div> */}
+          {/* create shipping label */}
         </div>
         <div className="sm:px-5 py-5 lg:px-8 lg:py-8  mt-8 lg:mt-0">
           <h5 className="font-bold text-lg font-lexend-deca">Order Status</h5>

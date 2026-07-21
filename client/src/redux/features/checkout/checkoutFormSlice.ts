@@ -106,6 +106,8 @@ const initialState = {
       boxUsed: "",
       finalWeightOz: 0,
       servicelevel: "",
+      rateId: "",
+      shipmentId: "",
   },
   errors: orderErrors,
   loading: false

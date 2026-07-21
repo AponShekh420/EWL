@@ -85,6 +85,7 @@ import { deleteCartItems } from "../controllers/ecommerce/cart/deleteCartItems";
 import { getPrivateOrderById } from "../controllers/ecommerce/order/getPrivateOrderById";
 import { getAllPrivateOrder } from "../controllers/ecommerce/order/getAllPrivateOrders";
 import { exportProducts } from "../controllers/ecommerce/product/exportProducts";
+import createShippingLabel from "../controllers/ecommerce/order/createShippingLabel";
 /* 
 Developed by:Shipon islam 
 Date: 31-10-2025
@@ -143,6 +144,9 @@ router.post("/cart/tax-shipping", shippingClassRulseHandler, shipping, getTaxAnd
 
 router.put("/usps/boxes/bulk-update", createBox);
 router.get("/usps/boxes", getBoxes);
+
+// create shipping label route
+router.post("/usps/shipping-label/create/:id", createShippingLabel);
 
 
 //cart routes
