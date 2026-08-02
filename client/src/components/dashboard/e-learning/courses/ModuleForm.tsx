@@ -11,71 +11,126 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { BASE_URL } from "@/utils/envVariable";
+import toast from "react-hot-toast";
 
-type Module = {
-  id?: string;
+interface Module {
+  id: string;
   _id?: string;
-  title: string;
+  name: string;
+  price?: number;
 };
 
 interface ModuleFormProps {
   module?: Module | null;
+  moduleStatus: number;
+  setModuleStatus: React.Dispatch<React.SetStateAction<number>>;
+  setSelectedModule: React.Dispatch<React.SetStateAction<Module | null>>;
 }
 
 export default function ModuleForm({
   module,
+  setModuleStatus,
+  setSelectedModule,
 }: ModuleFormProps) {
-  const [title, setTitle] = useState("");
+  const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
 
 
-  const onCreate = (data: Module) => {
+  const onCreate = async (data: Omit<Module, "id">) => {
     setLoading(true);
     // Simulate API call
-    setTimeout(() => {
-      console.log("Module created:", data);
+    try {
+      const response = await fetch(BASE_URL + "/api/e-learning/courses/modules/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include", // Include cookies for authentication
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create module");
+      }
+
+      const result = await response.json();
+      // console.log("Module created:", result);
+      toast.success("Module created successfully");
+      setName(""); // Clear the name input after successful creation
+      setModuleStatus(Math.random()); // Reset module status to create mode
+      setSelectedModule(null); // Clear the selected module after creation
+    } catch (error) {
+      console.error("Error creating module:", error);
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   const onUpdate = (data: Module) => {
     setLoading(true);
     // Simulate API call
-    setTimeout(() => {
-      console.log("Module updated:", data);
-      setLoading(false);
-    }, 1000);
+    fetch(BASE_URL + "/api/e-learning/courses/modules/update", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include", // Include cookies for authentication
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to update module");
+        }
+        return response.json();
+      })
+      .then((result) => {
+        // console.log("Module updated:", result);
+        toast.success("Module updated successfully");
+        setName(""); // Clear the name input after successful update
+        setModuleStatus(Math.random()); // Reset module status to create mode
+        setSelectedModule(null); // Clear the selected module after update
+      })
+      .catch((error) => {
+        console.error("Error updating module:", error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const onCancel = () => {
-    setTitle("");
+    setName("");
+    setModuleStatus(Math.random()); // Reset module status to create mode
+    setSelectedModule(null); // Clear the selected module on cancel
   };
 
 
   useEffect(() => {
     if (module) {
-      setTitle(module.title);
+      setName(module.name);
     } else {
-      setTitle("");
+      setName("");
     }
   }, [module]);
 
   const handleSubmit = () => {
-    if (!title.trim()) return;
-
-    const data = {
-      id: module?.id,
-      _id: module?._id,
-      title: title.trim(),
-    };
+    if (!name.trim()) return;
 
     if (module?._id) {
+      const data = {
+        id: module?.id,
+        _id: module?._id,
+        name: name.trim(),
+      };
       // Update API call
       onUpdate(data);
     } else {
+      const data = {
+        name: name.trim(),
+      };
       // Create API call
       onCreate(data);
-      setTitle("");
     }
   };
 
@@ -88,15 +143,15 @@ export default function ModuleForm({
       </CardHeader>
 
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="title">Module Title</Label>
+            <Label htmlFor="name">Module Name</Label>
 
             <Input
-              id="title"
-              placeholder="Enter module title..."
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              id="name"
+              placeholder="Enter module name..."
+              value={name}
+              onChange={(e) => setName(e.target.value)}
             />
           </div>
 
@@ -106,7 +161,7 @@ export default function ModuleForm({
                 type="button"
                 variant="outline"
                 onClick={() => {
-                  setTitle("");
+                  setName("");
                   onCancel?.();
                 }}
               >
@@ -114,7 +169,7 @@ export default function ModuleForm({
               </Button>
             )}
 
-            <Button type="button" disabled={loading || !title.trim()} onClick={handleSubmit}>
+            <Button type="button" onClick={handleSubmit}  disabled={loading || !name.trim()}>
               {loading
                 ? module
                   ? "Updating..."
@@ -124,7 +179,7 @@ export default function ModuleForm({
                 : "Create Module"}
             </Button>
           </div>
-        </form>
+        </div>
       </CardContent>
     </Card>
   );
