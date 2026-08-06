@@ -6,8 +6,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.findBestBoxForCart = void 0;
 const UspsBoxModel_1 = __importDefault(require("../models/UspsBoxModel"));
-const findBestBoxForCart = async (items) => {
+const findBestBoxForCart = async (items, uspsProducts) => {
     const boxes = await UspsBoxModel_1.default.find({ isActive: true });
+    if (uspsProducts.length === 1 && uspsProducts[0].category === "card-game") {
+        const cardGameBox = boxes.find(box => box.name === "Card Game Box");
+        return {
+            box: cardGameBox || null,
+            type: "BOX"
+        };
+    }
     // console.log("Available boxes:", boxes);
     if (!boxes.length) {
         return null; // no boxes configured

@@ -14,7 +14,8 @@ const recordingValidator_1 = require("../../middleware/recording/recordingValida
 const getPrivateRecords_1 = require("../../controllers/e-learning/recording/getPrivateRecords");
 const authCheck_1 = __importDefault(require("../../middleware/common/authCheck"));
 const getCoursePrivateRecords_1 = __importDefault(require("../../controllers/e-learning/recording/getCoursePrivateRecords"));
-const getModules_1 = __importDefault(require("../../controllers/e-learning/recording/getModules"));
+const getOrderedModules_1 = __importDefault(require("../../controllers/e-learning/recording/getOrderedModules"));
+const getModulesInfo_1 = __importDefault(require("../../controllers/e-learning/course/getModulesInfo"));
 const router = (0, express_1.Router)();
 const multiFileUploader = (0, multer_1.multerUploader)("recording", ["audio/mpeg", "audio/wav", "audio/ogg", "video/mp4", "video/webm"], 100 * 1024 * 1024); // 100MB limit
 router.post("/recording", multiFileUploader.any(), recordingValidator_1.recordingValidationRules, recordingValidator_1.validateRecording, createRecording_1.createRecording);
@@ -25,5 +26,6 @@ router.delete("/recording/:id", deleteRecording_1.deleteRecording);
 // get private
 router.post("/private/records", authCheck_1.default, getPrivateRecords_1.getPrivateRecords);
 router.post("/course-private/records", authCheck_1.default, getCoursePrivateRecords_1.default);
-router.post("/course-modules", authCheck_1.default, getModules_1.default);
+router.post("/course-modules", authCheck_1.default, getOrderedModules_1.default);
+router.post("/course-modules-new", authCheck_1.default, getModulesInfo_1.default);
 exports.default = router;

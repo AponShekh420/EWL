@@ -29,6 +29,11 @@ const createCourseOrder = async (req, res) => {
                 // Safely push the new modules into the existing Mongoose DocumentArray
                 if (modules && modules.length > 0) {
                     existingOrder.modules.push(...modules);
+                    existingOrder.packages.push({
+                        modules: modules,
+                        date: Date.now(),
+                        packagePrice: totalPrice,
+                    });
                 }
                 createdOrder = existingOrder;
             }
@@ -38,6 +43,13 @@ const createCourseOrder = async (req, res) => {
                     customer: req?.user && req?.user?._id,
                     totalPrice: totalPrice,
                     orderId: latestOrder ? latestOrder.orderId + 1 : 100,
+                    packages: modules.length > 0 ? [
+                        {
+                            modules: modules,
+                            date: Date.now(),
+                            packagePrice: totalPrice,
+                        }
+                    ] : []
                 });
             }
         }
@@ -47,6 +59,13 @@ const createCourseOrder = async (req, res) => {
                 customer: req?.user && req?.user?._id,
                 totalPrice: totalPrice,
                 orderId: latestOrder ? latestOrder.orderId + 1 : 100,
+                packages: modules.length > 0 ? [
+                    {
+                        modules: modules,
+                        date: Date.now(),
+                        packagePrice: totalPrice,
+                    }
+                ] : []
             });
         }
         const paymentIntent = await stripe.paymentIntents.create({

@@ -65,6 +65,7 @@ const express_2 = __importDefault(require("express"));
 const deleteCartItems_1 = require("../controllers/ecommerce/cart/deleteCartItems");
 const getPrivateOrderById_1 = require("../controllers/ecommerce/order/getPrivateOrderById");
 const getAllPrivateOrders_1 = require("../controllers/ecommerce/order/getAllPrivateOrders");
+const createShippingLabel_1 = __importDefault(require("../controllers/ecommerce/order/createShippingLabel"));
 /*
 Developed by:Shipon islam
 Date: 31-10-2025
@@ -105,6 +106,8 @@ router.get("/cart-list", authCheck_1.default, getAllCart_1.getAllCart);
 router.post("/cart/tax-shipping", shippingClassRulseHandler_1.default, shipping_1.default, getTaxAndShipping_1.getTaxAndShipping);
 router.put("/usps/boxes/bulk-update", createBox_1.default);
 router.get("/usps/boxes", getBoxes_1.getBoxes);
+// create shipping label route
+router.post("/usps/shipping-label/create/:id", createShippingLabel_1.default);
 //cart routes
 router.post("/wishlist", authCheck_1.default, addToWishlist_1.addToWishlist);
 router.delete("/wishlist/:productId", authCheck_1.default, deleteWishlist_1.deleteWishlist);

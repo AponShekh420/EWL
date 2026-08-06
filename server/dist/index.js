@@ -12,13 +12,14 @@ const path_1 = __importDefault(require("path"));
 const errorMiddleware_1 = require("./middleware/errorMiddleware");
 // routes
 const authRouter_1 = __importDefault(require("./routes/authRouter"));
+const blogRouter_1 = __importDefault(require("./routes/blogRouter"));
+const classRouter_1 = __importDefault(require("./routes/e-learning/classRouter"));
 const courseRouter_1 = __importDefault(require("./routes/e-learning/courseRouter"));
 const recordingRouter_1 = __importDefault(require("./routes/e-learning/recordingRouter"));
 const ecommerceRouter_1 = __importDefault(require("./routes/ecommerceRouter"));
 const paidHotlineSpeakerRouter_1 = __importDefault(require("./routes/paidHotlineSpeakerRouter"));
+const ResourcesRouter_1 = __importDefault(require("./routes/ResourcesRouter"));
 const userRouter_1 = __importDefault(require("./routes/userRouter"));
-const classRouter_1 = __importDefault(require("./routes/e-learning/classRouter"));
-const blogRouter_1 = __importDefault(require("./routes/blogRouter"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 app.use((req, res, next) => {
@@ -44,7 +45,9 @@ app.use(express_1.default.static(path_1.default.join(__dirname, "../public")));
 app.use(express_1.default.urlencoded({ extended: true, limit: "5000mb" }));
 // app.use(express.json());
 app.use((req, res, next) => {
-    if ((req.originalUrl === "/api/ecommerce/order/webhook") || (req.originalUrl === "/api/e-learning/class-order/webhook") || (req.originalUrl === "/api/e-learning/order/webhook")) {
+    if (req.originalUrl === "/api/ecommerce/order/webhook" ||
+        req.originalUrl === "/api/e-learning/class-order/webhook" ||
+        req.originalUrl === "/api/e-learning/order/webhook") {
         next();
     }
     else {
@@ -60,6 +63,7 @@ app.use("/api/account", userRouter_1.default);
 // E-commerce
 app.use("/api/ecommerce", ecommerceRouter_1.default);
 app.use("/api/blog", blogRouter_1.default);
+app.use("/api/resources-management", ResourcesRouter_1.default);
 // Paid speaker
 app.use("/api/paid-hotline", paidHotlineSpeakerRouter_1.default);
 // e-learning

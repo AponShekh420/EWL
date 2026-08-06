@@ -24,7 +24,7 @@ const shipping = async (req: Request, res: Response, next: NextFunction) => {
     const totalWeight = getTotalWeight(items);
 
     // 3. find best box
-    const result = await findBestBoxForCart(items);
+    const result = await findBestBoxForCart(items, shippingResultAndProducts.uspsProducts);
 
     let parcel: any;
     let finalWeightLbs;

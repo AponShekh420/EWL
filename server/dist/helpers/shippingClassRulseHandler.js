@@ -23,7 +23,8 @@ const shippingClassRulseHandler = async (req, res, next) => {
                 price: Number(product.salePrice),
                 shippingClass: product.shippingClass,
                 category: product.category,
-                name: product.title
+                name: product.title,
+                taxStatus: product?.taxStatus,
             };
         }
         else {
