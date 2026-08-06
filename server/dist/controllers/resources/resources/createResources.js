@@ -11,7 +11,6 @@ const catchErrorSend_1 = require("../../../utils/catchErrorSend");
 const getFilterBlogBodyDatacopy_1 = require("../../../utils/getFilterBlogBodyDatacopy");
 const createResources = async (req, res, next) => {
     try {
-        console.log("Creating Resources with data:", req.body);
         const { thumbnail } = req.files;
         const body = (0, getFilterBlogBodyDatacopy_1.getFilterBlogBodyData)(req);
         // Remove special characters and make the slug
