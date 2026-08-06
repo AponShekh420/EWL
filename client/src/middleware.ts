@@ -16,3 +16,10 @@ export const config = {
   matcher: ["/dashboard/:path*"], // Apply middleware to dashboard routes
 };
 
+
+
+
+
+
+
+
