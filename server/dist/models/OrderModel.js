@@ -101,6 +101,30 @@ const shippingSchema = new mongoose_1.Schema({
         type: String,
         default: "",
     },
+    rateId: {
+        type: String,
+        default: "",
+    },
+    shipmentId: {
+        type: String,
+        default: "",
+    },
+    transactionId: {
+        type: String,
+        default: "",
+    },
+    trackingNumber: {
+        type: String,
+        default: "",
+    },
+    labelUrl: {
+        type: String,
+        default: "",
+    },
+    status: {
+        type: String,
+        default: "pending",
+    },
 }, { _id: false });
 const productSchema = new mongoose_1.Schema({
     _id: {

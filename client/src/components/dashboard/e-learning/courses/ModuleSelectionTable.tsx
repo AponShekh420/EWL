@@ -1,4 +1,5 @@
-import React, { useState } from "react"
+"use client"
+import React, { useEffect, useState } from "react"
 import {
   Table,
   TableBody,
@@ -11,48 +12,28 @@ import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "@/redux/store"
 import { addCourseField } from "@/redux/features/course/courseFormSlice"
 import { Icon } from "@iconify/react";
+import { BASE_URL } from "@/utils/envVariable"
+import DeleteModule from "./DeleteModule"
 
 
-// Initial state data
-const initialCourses = [
-  {
-    id: "1",
-    name: "Female Orgasm Difficulty (FOD)",
-    price: 0,
-  },
-  {
-    id: "2",
-    name: "Male Premature Ejaculation (PE)",
-    price: 0,
-  },
-  {
-    id: "3",
-    name: "Male Erectile Dysfunction (ED)",
-    price: 0,
-  },
-  {
-    id: "4",
-    name: "Sexual Desire Discrepancy (SDD)",
-    price: 0,
-  },
-  {
-    id: "5",
-    name: "Technical Difficulties (TD)",
-    price: 0,
-  },
-  {
-    id: "6",
-    name: "Interpersonal/Emotional Misalignments (EC)",
-    price: 0,
-  },
-  {
-    id: "7",
-    name: "Keeping It Fresh and Alive / Non-Standard Activities (FA)",
-    price: 0,
-  },
-]
 
-export default function CourseSelectionTable() {
+interface initialCoursesProps {
+  _id?: string;
+  id: string;
+  name: string;
+  price?: number;
+}
+
+
+interface Props {
+    moduleStatus: number;
+    selectedModule: initialCoursesProps | null;
+    setSelectedModule: React.Dispatch<React.SetStateAction<initialCoursesProps | null>>;
+    setModuleStatus: React.Dispatch<React.SetStateAction<number>>;
+}
+
+export default function CourseSelectionTable({ moduleStatus, selectedModule, setSelectedModule, setModuleStatus }: Props) {
+  const [initialCourses, setInitialCourses] = useState<initialCoursesProps[]>([]);
   const {modules} = useSelector((state: RootState) => state.courseForm);
   // Read: "Keep the course if it is NOT found in the modules array"
   const unmatchedModules = initialCourses.filter(
@@ -61,6 +42,18 @@ export default function CourseSelectionTable() {
   const dispatch = useDispatch();
   // Handle the table data via state
   const [courses, setCourses] = useState([...unmatchedModules, ...modules]);
+
+
+  const initialModulesFunction = () => {
+    const unmatchedModules = initialCourses.filter(
+      (course) => !modules.some((module) => module.id === course.id)
+    );
+    setCourses([...unmatchedModules, ...modules]);
+  }
+
+  useEffect(() => {
+    initialModulesFunction()
+  }, [initialCourses, modules]);
 
   // Handler to update price dynamically
   const handlePriceChange = (id: string, newPrice: number) => {
@@ -83,6 +76,38 @@ export default function CourseSelectionTable() {
       modules: modules.filter(module => module.id !== course.id) // Remove the deselected course from the modules array
     }));
   }
+
+  const handleEdit = (course: typeof initialCourses[0]) => {
+    setSelectedModule(course);
+    setModuleStatus(Math.random()); // Set to edit mode
+  }
+  
+
+  const getAllModules = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/api/e-learning/courses/modules`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include", // Include cookies for authentication
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch modules");
+      }
+
+      const data = await response.json();
+      setInitialCourses(data.modules); // Assuming the API returns an object with a 'modules' array
+    } catch (error) {
+      console.error("Error fetching modules:", error);
+    }
+  }
+
+  useEffect(() => {
+    getAllModules()
+  }, [modules, moduleStatus]);
+
 
   return (
     <div>
@@ -142,19 +167,13 @@ export default function CourseSelectionTable() {
                   <Button 
                     type="button"
                     className="bg-[#29af15] hover:bg-[#18710a] text-white font-medium rounded text-sm capitalize"
-                    onClick={() => handleDeselect(course)}
+                    onClick={() => handleEdit(course)}
                   >
                     <Icon icon="mdi:pencil-outline" width="20" height="20" />edit
                   </Button>
                 </TableCell>
                 <TableCell className="py-4 text-right align-middle w-[100px]">
-                  <Button 
-                    type="button"
-                    className="bg-[#cc1800] hover:bg-[#a40000] text-white font-medium rounded text-sm capitalize"
-                    onClick={() => handleDeselect(course)}
-                  >
-                    <Icon icon="material-symbols:delete-outline" width="20" height="20" />Delete
-                  </Button>
+                  <DeleteModule course={course} />
                 </TableCell>
               </TableRow>
             )

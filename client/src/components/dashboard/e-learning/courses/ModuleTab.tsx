@@ -4,16 +4,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import InputBox from "@/components/common/InputBox";
 import ModuleForm from "./ModuleForm";
+import { useState } from "react";
 
-const fakeModule = {
-    id: "1",
-  _id: "665f8c9a1b2c3d4e5f678901",
-  title: "Advanced React Patterns",
+interface fakeModule {
+    id: string;
+  _id?: string;
+  name: string;
 };
 
 const ModuleTab = () => {
   const courseForm = useSelector((state: RootState) => state.courseForm);
     const dispatch = useDispatch();
+    const [selectedModule, setSelectedModule] = useState<fakeModule | null>(null);
+    const [moduleStatus, setModuleStatus] = useState<number>(0); // 0 for create, 1 for update
     return (
         <>
             {
@@ -38,12 +41,12 @@ const ModuleTab = () => {
                         dispatch(addCourseField({ module: e.target.value, installmentMonths: 0 }))
                     }
                 />
-                <ModuleSelectionTable />
+                <ModuleSelectionTable selectedModule={selectedModule} setSelectedModule={setSelectedModule} moduleStatus={moduleStatus} setModuleStatus={setModuleStatus} />
             </div>
 
             <div>
                 <ModuleForm
-                module={fakeModule}
+                module={selectedModule} setSelectedModule={setSelectedModule} moduleStatus={moduleStatus} setModuleStatus={setModuleStatus}
                 />
             </div>
         </>

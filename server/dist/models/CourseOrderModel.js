@@ -2,6 +2,20 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CourseOrderModel = void 0;
 const mongoose_1 = require("mongoose");
+const ModuleSchema = new mongoose_1.Schema({
+    name: { type: String, required: true },
+    price: { type: Number, default: 0 },
+    id: { type: String, required: true }
+    // Add any other fields you expect in the object here
+}, { _id: false }); // Prevents Mongoose from auto-generating an _id for every module
+const PackageSchema = new mongoose_1.Schema({
+    modules: [ModuleSchema],
+    date: {
+        type: Date,
+        default: Date.now
+    },
+    packagePrice: Number,
+}, { _id: false });
 const courseSchema = new mongoose_1.Schema({
     _id: {
         type: mongoose_1.Schema.Types.ObjectId,
@@ -107,12 +121,7 @@ const orderSchema = new mongoose_1.Schema({
     apartment: {
         type: String,
     },
-    modules: [
-        {
-            name: { type: String, required: true },
-            price: { type: Number },
-            id: { type: String, required: true },
-        },
-    ],
+    modules: [ModuleSchema],
+    packages: [PackageSchema]
 }, { timestamps: true });
 exports.CourseOrderModel = (0, mongoose_1.model)("Course-Order", orderSchema);

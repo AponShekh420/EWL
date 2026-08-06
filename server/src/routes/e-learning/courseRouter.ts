@@ -29,6 +29,10 @@ import  exportCourseOrders  from "../../controllers/e-learning/course-order/expo
 import { getPrivateCourseBySlug } from "../../controllers/e-learning/course/getPrivateCourseById";
 import authCheckToAddUser from "../../middleware/common/authCheckToAddUser";
 import { getCourseByFilterFrontEnd } from "../../controllers/e-learning/course/getCourseByFilterFrontEnd";
+import createModule from "../../controllers/e-learning/course/module/createModule";
+import updateModule from "../../controllers/e-learning/course/module/updateModule";
+import deleteModule from "../../controllers/e-learning/course/module/deleteModule";
+import getAllModules from "../../controllers/e-learning/course/module/getAllModules";
 const router = Router();
 
 const multiFileUploader = multerUploader("courses");
@@ -78,6 +82,13 @@ router.get("/orders", getAllCourseOrder);
 // private orders
 router.get("/my-orders/:id", authCheck, getPrivateCourseOrderById);
 router.get("/my-orders", authCheck, getAllPrivateCourseOrder);
+
+
+// module handle router
+router.post("/courses/modules/create", authCheck, createModule);
+router.put("/courses/modules/update", authCheck, updateModule);
+router.delete("/courses/modules/delete", authCheck, deleteModule);
+router.get("/courses/modules", authCheck, getAllModules);
 
 
 // export all course to database
