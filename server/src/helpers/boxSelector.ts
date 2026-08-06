@@ -2,9 +2,19 @@
 
 import UspsBoxModel from "../models/UspsBoxModel";
 
-export const findBestBoxForCart = async (items: { weight: number }[]) => {
+export const findBestBoxForCart = async (items: { weight: number }[], uspsProducts: any[]) => {
 
   const boxes = await UspsBoxModel.find({ isActive: true });
+
+  if(uspsProducts.length === 1 && uspsProducts[0].category === "card-game") { 
+    const cardGameBox = boxes.find(box => box.name === "Card Game Box");
+    return {
+      box: cardGameBox || null,
+      type: "BOX"
+    };
+  }
+
+
   // console.log("Available boxes:", boxes);
     if (!boxes.length) {
     return null; // no boxes configured

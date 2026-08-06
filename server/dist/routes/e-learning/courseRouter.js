@@ -27,6 +27,10 @@ const getAllPrivateCourseOrders_1 = require("../../controllers/e-learning/course
 const getPrivateCourseById_1 = require("../../controllers/e-learning/course/getPrivateCourseById");
 const authCheckToAddUser_1 = __importDefault(require("../../middleware/common/authCheckToAddUser"));
 const getCourseByFilterFrontEnd_1 = require("../../controllers/e-learning/course/getCourseByFilterFrontEnd");
+const createModule_1 = __importDefault(require("../../controllers/e-learning/course/module/createModule"));
+const updateModule_1 = __importDefault(require("../../controllers/e-learning/course/module/updateModule"));
+const deleteModule_1 = __importDefault(require("../../controllers/e-learning/course/module/deleteModule"));
+const getAllModules_1 = __importDefault(require("../../controllers/e-learning/course/module/getAllModules"));
 const router = (0, express_1.Router)();
 const multiFileUploader = (0, multer_1.multerUploader)("courses");
 router.post("/course", multiFileUploader.fields([
@@ -55,6 +59,11 @@ router.get("/orders", getAllCourseOrders_1.getAllCourseOrder);
 // private orders
 router.get("/my-orders/:id", authCheck_1.default, getPrivateCourseOrderById_1.getPrivateCourseOrderById);
 router.get("/my-orders", authCheck_1.default, getAllPrivateCourseOrders_1.getAllPrivateCourseOrder);
+// module handle router
+router.post("/courses/modules/create", authCheck_1.default, createModule_1.default);
+router.put("/courses/modules/update", authCheck_1.default, updateModule_1.default);
+router.delete("/courses/modules/delete", authCheck_1.default, deleteModule_1.default);
+router.get("/courses/modules", authCheck_1.default, getAllModules_1.default);
 // export all course to database
 // router.post("/courses/export", exportCourses);
 // router.post("/course/orders/export", exportCourseOrders);

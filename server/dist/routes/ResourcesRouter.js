@@ -1,0 +1,38 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const createResourceCategory_1 = require("../controllers/resources/category/createResourceCategory");
+const deleteResourceCategory_1 = require("../controllers/resources/category/deleteResourceCategory");
+const getAlResourceCategories_1 = require("../controllers/resources/category/getAlResourceCategories");
+const getResourceCategoriesByFilters_1 = require("../controllers/resources/category/getResourceCategoriesByFilters");
+const getResourceCategoryBySlug_1 = require("../controllers/resources/category/getResourceCategoryBySlug");
+const updateResourceCategory_1 = require("../controllers/resources/category/updateResourceCategory");
+const createResources_1 = require("../controllers/resources/resources/createResources");
+const deleteResources_1 = require("../controllers/resources/resources/deleteResources");
+const getAllResources_1 = require("../controllers/resources/resources/getAllResources");
+const getResourcesByFilter_1 = require("../controllers/resources/resources/getResourcesByFilter");
+const getResourcesBySlug_1 = require("../controllers/resources/resources/getResourcesBySlug");
+const updateResources_1 = require("../controllers/resources/resources/updateResources");
+const updateResourcesStatus_1 = require("../controllers/resources/resources/updateResourcesStatus");
+const multer_1 = require("../lib/multer");
+const resourcesCategoryValidator_1 = require("../middleware/resources/resourcesCategoryValidator");
+const resourcesValidator_1 = require("../middleware/resources/resourcesValidator");
+const router = (0, express_1.Router)();
+const multiFileUploader = (0, multer_1.multerUploader)("resources");
+const singleFileUploader = (0, multer_1.multerUploader)("resources-category");
+// Resources routes
+router.post("/resources", multiFileUploader.fields([{ name: "thumbnail", maxCount: 1 }]), resourcesValidator_1.resourcesValidationRules, resourcesValidator_1.validateResources, createResources_1.createResources);
+router.put("/resources/:id", multiFileUploader.fields([{ name: "thumbnail", maxCount: 1 }]), resourcesValidator_1.resourcesValidationRules, resourcesValidator_1.validateUpdateResources, updateResources_1.updateResources);
+router.put("/resources-status/:id", updateResourcesStatus_1.updateResourcesStatus);
+router.delete("/resources/:id", deleteResources_1.deleteResources);
+router.get("/resources/:slug", getResourcesBySlug_1.getResourcesBySlug);
+router.get("/resources", getAllResources_1.getAllResources);
+router.get("/resources-by-filter", getResourcesByFilter_1.getResourcesByFilter);
+//category routes
+router.post("/category", singleFileUploader.single("thumbnail"), resourcesCategoryValidator_1.resourcesCategoryValidationRules, resourcesCategoryValidator_1.validateResourcesCategory, createResourceCategory_1.createResourceCategory);
+router.put("/categories/:id", singleFileUploader.single("thumbnail"), updateResourceCategory_1.updateResourceCategory);
+router.delete("/categories/:id", deleteResourceCategory_1.deleteResourceCategory);
+router.get("/categories/:slug", getResourceCategoryBySlug_1.getResourceCategoryBySlug);
+router.get("/categories", getAlResourceCategories_1.getAllResourceCategories);
+router.get("/categories-by-filter", getResourceCategoriesByFilters_1.getResourceCategoriesByFilters);
+exports.default = router;

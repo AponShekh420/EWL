@@ -20,7 +20,7 @@ const shipping = async (req, res, next) => {
         // 2. total weight (lbs)
         const totalWeight = (0, calcWeight_1.getTotalWeight)(items);
         // 3. find best box
-        const result = await (0, boxSelector_1.findBestBoxForCart)(items);
+        const result = await (0, boxSelector_1.findBestBoxForCart)(items, shippingResultAndProducts.uspsProducts);
         let parcel;
         let finalWeightLbs;
         if (result?.type === "BOX") {
@@ -55,7 +55,9 @@ const shipping = async (req, res, next) => {
             city: "SPRING VALLEY",
             state: "NY",
             zip: "10977-7215",
-            country: "US"
+            country: "US",
+            phone: "+18456594795",
+            email: "cjamps@gmail.com"
         };
         const addressTo = {
             name: shippingAddress?.name || "Anonymous",
@@ -64,6 +66,8 @@ const shipping = async (req, res, next) => {
             state: shippingAddress.state,
             zip: shippingAddress.postal_code,
             country: shippingAddress.country || "US",
+            email: shippingAddress.email || "",
+            phone: shippingAddress.phone || ""
         };
         // 6. create shipment
         const shipment = await shippo_1.default.shipments.create({
