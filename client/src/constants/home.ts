@@ -1,8 +1,3 @@
-import { getSession } from "@/lib/authLib";
-
-
-const user = await getSession();
-
 export const coupleFacesData = [
   {
     id: 1,
@@ -76,27 +71,27 @@ export const strengthenYourMarriageData = [
     category: "Free Classes",
     title: "Start with a Taste — Free Demo Line",
     desc: " Short, accessible recordings that give you practical tools and inspiration to begin improving your shalom bayis and intimacy right away.",
-    url: user ? "/free-demos" : "/login?redirect=/free-demos",
+    url: "/free-demos",
   },
   {
     id: 2,
     category: "Membership Infoline",
     title: "  In Depth Guidance — Paid Info Line",
     desc: "A library of trusted shiurim and mini-courses on marital harmony and kedushas habayis, available anytime, to support you in building a stronger marriage.",
-    url: user ? "/membership-infoline" : "/login?redirect=/membership-infoline",
+    url: "/membership-infoline",
   },
   {
     id: 3,
     category: "Courses",
     title: "  Learn & Grow — Step-by-Step Courses",
     desc: "Structured programs with expert speakers to help you deepen connection, increase understanding, and here’s how to strengthen you marriage through Torah-based guidance.",
-    url: user ? "/courses" : "/login?redirect=/courses",
+    url: "/courses",
   },
   {
     id: 4,
     category: "Products",
     title: "Practical Tools — Products for Connection",
     desc: "Games, guides, and supportive items created to make intimacy and harmony more accessible, practical, and meaningful in your home.",
-    url: user ? "/shop" : "/login?redirect=/shop",
+    url: "/shop",
   },
 ];
