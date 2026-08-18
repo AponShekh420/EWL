@@ -3,6 +3,7 @@ import { getResourcesCategories } from "@/actions/resourcesCategory";
 import FadeInSection from "@/components/common/FadeInSection";
 import { ShopPagination } from "@/components/shop/ShopPagination";
 import { Button } from "@/components/ui/button";
+import { getSession } from "@/lib/authLib";
 import { BlogCategoryType } from "@/types/BlogCategory";
 import { ResourcesType } from "@/types/Resources";
 import { getImageUrl } from "@/utils/getImageUrl";
@@ -10,6 +11,8 @@ import { queryFormatter } from "@/utils/queryFormatter";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+
 // const categoriess = [
 //   "All Categories",
 //   "Child Safety",
@@ -88,6 +91,10 @@ export default async function Resources({
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
+  const user = await getSession();
+  if(!user) {
+    return redirect("/login")
+  }
   const q = await searchParams;
   const query = await queryFormatter(searchParams);
   const [resources, categories] = await Promise.all([
