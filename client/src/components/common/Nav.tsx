@@ -51,6 +51,24 @@ const Nav = ({ cart }: { cart: CartType }) => {
     }
   };
 
+
+  const handleServicesClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    if (pathname === "/") {
+      // already on home page — just scroll
+      document.getElementById("services-section")?.scrollIntoView({ behavior: "smooth" });
+    } else {
+      // navigate home, then scroll once it's ready
+      router.push("/");
+      setTimeout(() => {
+        document.getElementById("services-section")?.scrollIntoView({ behavior: "smooth" });
+      }, 100); // Adjust the timeout as needed
+    }
+  };
+
+
+
   return (
     <header className="header !max-w-screen">
       {/* top header */}
@@ -219,7 +237,9 @@ const Nav = ({ cart }: { cart: CartType }) => {
             <div className="relative group px-2.5 py-1">
               {/* Parent Menu */}
               <Link
-                href="/services"
+                href="/#services-section"
+                scroll={false}
+                onClick={handleServicesClick}
                 className="text-[#270034] hover:text-[#0F75BC] transition-all duration-150"
               >
                 Services
