@@ -1,5 +1,6 @@
 import { strengthenYourMarriageData } from "@/constants/home";
 import FadeInSection from "../common/FadeInSection";
+import Link from "next/link";
 
 export default function StrengthenYourMarriage() {
   return (
@@ -32,23 +33,24 @@ export default function StrengthenYourMarriage() {
         </div>
         <div className="grid sm:grid-cols-2 gap-6 lg:gap-8  xl:gap-10 mt-14">
           {strengthenYourMarriageData.map((data, index) => (
-            <FadeInSection
-              key={data.id}
-              initial={{ opacity: 0, y: 50 }}
-              scrollTop={{ opacity: 1, y: 0 }}
-              scrollBottom={{ opacity: 0, y: 50 }}
-              margin="40px 0px -40px 0px"
-              delay={index == 0 ? 0 : (index/10) * 2}
-              className="border border-teal rounded overflow-hidden"
-            >
-              <h1 className="text-2xl font-medium bg-teal px-8 py-0.5 w-full left-0 text-white font-mono border-x-4 border-teal">
-                {data.category}
-              </h1>
-              <div className="p-8">
-                <h2 className="font-bold text-lg">{data.title}</h2>
-                <p>{data.desc}</p>
-              </div>
-            </FadeInSection>
+            <Link href={data.url} key={data.id} className="hover:scale-[1.02] transition-all duration-150 border border-teal rounded overflow-hidden">
+              <FadeInSection
+                key={data.id}
+                initial={{ opacity: 0, y: 50 }}
+                scrollTop={{ opacity: 1, y: 0 }}
+                scrollBottom={{ opacity: 0, y: 50 }}
+                margin="40px 0px -40px 0px"
+                delay={index == 0 ? 0 : (index/10) * 2}
+              >
+                <h1 className="text-2xl font-medium bg-teal px-8 py-0.5 w-full left-0 text-white font-mono border-x-4 border-teal">
+                  {data.category}
+                </h1>
+                <div className="p-8">
+                  <h2 className="font-bold text-lg">{data.title}</h2>
+                  <p>{data.desc}</p>
+                </div>
+              </FadeInSection>
+            </Link>
           ))}
         </div>
         <div className="w-full flex justify-center mt-12">
