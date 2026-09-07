@@ -15,7 +15,7 @@ export const getRecordingByFilters = async (
   console.log("filter");
   if (query.search) {
     searchQuery = {
-      $or: [{ name: { $regex: query.search, $options: "i" } }],
+      $or: [{ heading: { $regex: query.search, $options: "i" } }],
     };
   }
   try {

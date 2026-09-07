@@ -63,7 +63,7 @@ export default function RecordTable({
   const debouncedSearch = useMemo(
     () =>
       debounce((value: string) => {
-        router.push(`/dashboard/ecommerce/orders?search=${value}`);
+        router.push(`/dashboard/e-learning/records?search=${value}`);
       }, 500),
     [router],
   );
