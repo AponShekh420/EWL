@@ -26,6 +26,7 @@ const courseSchema = new Schema(
     speaker: { type: Schema.Types.ObjectId, ref: "User", required: true },
     externalLink: { type: String },
     offline: { type: Boolean, required: true },
+    notify: { type: Boolean, required: true, default: false },
     category: {
       type: String,
       required: true,

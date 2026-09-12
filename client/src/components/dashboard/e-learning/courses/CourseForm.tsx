@@ -438,6 +438,19 @@ export default function CreateCourseForm({
                 error={errors?.externalLink?.msg}
                 />
               </div>
+
+              <div className={`${courseForm?.notify ? "-space-y-1.5" : "space-y-6"}`}>
+                <div className="flex items-center gap-x-2">
+                  <Checkbox
+                    className="size-5 checkbox-t"
+                    checked={courseForm.notify}
+                    onCheckedChange={(val) =>
+                      dispatch(addCourseField({ notify: val }))
+                    }
+                  />
+                  <Label>Enable notification</Label>
+                </div>
+              </div>
             </div>
           </div>
         )}

@@ -37,6 +37,7 @@ const CoursePage = async ({params}: {params: {slug: string}}) => {
   module,
   modules,
   _id,
+  notify
   } = course;
 
   moreInfoTab && moreInfoTab != "<p><br></p>" && availableTabs.push("About");
@@ -179,6 +180,7 @@ const CoursePage = async ({params}: {params: {slug: string}}) => {
           module={module}
           offline={offline}
           externalLink={externalLink}
+          notify={notify}
           installmentPricePerMonth={installmentPricePerMonth}
           installmentMonths={installmentMonths}
           lectures={lectures}
