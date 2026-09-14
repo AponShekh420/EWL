@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-const CourseSidebar = ({order, course, time, ordered, slug, price, module, offline, externalLink, installmentPricePerMonth, installmentMonths, lectures, date, duration, modules}: {order: CourseOrderType, course: CourseType, time: string, ordered: boolean, slug: string, price: number, module: number, offline: boolean, externalLink: string, installmentPricePerMonth: number | string | null, installmentMonths: number, lectures: number, date: string, duration: string, modules: modulesType[]}) => {
+const CourseSidebar = ({order, course, time, ordered, slug, price, module, offline, externalLink, notify, installmentPricePerMonth, installmentMonths, lectures, date, duration, modules}: {order: CourseOrderType, course: CourseType, time: string, ordered: boolean, slug: string, price: number, module: number, offline: boolean, notify: boolean, externalLink: string, installmentPricePerMonth: number | string | null, installmentMonths: number, lectures: number, date: string, duration: string, modules: modulesType[]}) => {
     const courseCart = useSelector((state: RootState) => state.courseCart);
     const dispatch = useDispatch();
     const router = useRouter();
@@ -83,7 +83,7 @@ const CourseSidebar = ({order, course, time, ordered, slug, price, module, offli
             }
           ]
         }));
-        router.push(ordered ? `/course/private/${slug}` : offline ? externalLink : `/course/checkout/`);
+        router.push(notify ? "/course/notify-checkout/" : ordered ? `/course/private/${slug}` : offline ? externalLink : `/course/checkout/`);
     }
 
      useEffect(() => {

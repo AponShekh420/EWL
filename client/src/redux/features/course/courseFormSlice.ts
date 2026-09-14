@@ -4,7 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const stepCourseFields = {
   step1: ["title", "category", "headline", "bio", "speaker", "status", "date", "time", "lectures", "durationNumber", "durationType"],
   step2: ["thumbnail"],
-  step3: ["price", "installmentMonths", "module", "offline", "externalLink"],
+  step3: ["price", "installmentMonths", "module", "offline", "externalLink", "notify"],
   step4: [
     "aboutTab",
     "overviewTab",
@@ -54,6 +54,8 @@ const initialState: CourseFormState = {
   price: "0",
   offline: false,
   externalLink: "",
+  notify: false,
+  // end 3rd tab
   customMessage: "",
   attachment: null,
   checkoutPageMessage: "",

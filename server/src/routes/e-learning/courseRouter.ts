@@ -33,6 +33,7 @@ import createModule from "../../controllers/e-learning/course/module/createModul
 import updateModule from "../../controllers/e-learning/course/module/updateModule";
 import deleteModule from "../../controllers/e-learning/course/module/deleteModule";
 import getAllModules from "../../controllers/e-learning/course/module/getAllModules";
+import createNotify from "../../controllers/e-learning/course-notification/createNotify";
 const router = Router();
 
 const multiFileUploader = multerUploader("courses");
@@ -90,6 +91,10 @@ router.put("/courses/modules/update", authCheck, updateModule);
 router.delete("/courses/modules/delete", authCheck, deleteModule);
 router.get("/courses/modules", authCheck, getAllModules);
 
+
+
+
+router.post("/courses/notify", authCheck, courseOrderValidationRules, validateCourseOrder, createNotify);
 
 // export all course to database
 // router.post("/courses/export", exportCourses);

@@ -104,4 +104,16 @@ export const sidebar_links = [
       { id: 101, name: "Paid Speaker", url: "/dashboard/paid-hotline-speaker" },
     ],
   },
+  {
+    id: 7,
+    url: "",
+    name: "Home Page",
+    icon: "arcticons:smart-home",
+    isDropdown: true,
+    isShowDropdown: false,
+    dropdownList: [
+      { id: 101, name: "Conferences", url: "/dashboard/home/conferences" },
+      { id: 102, name: "Counter", url: "/dashboard/home/counter" },
+    ],
+  },
 ];
