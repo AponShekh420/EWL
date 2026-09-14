@@ -43,6 +43,7 @@ export type CourseType = {
   testimonialsTab?: string,
   moreInfoTab?: string,
   offline?: boolean;
+  notify?: boolean;
   externalLink?: string;
   _id?: string;
   title: string;
@@ -90,6 +91,7 @@ export type CourseFormState = {
   price: string;
   offline: boolean;
   externalLink: string;
+  notify: boolean;
   module: string;
 
   // 4th tab
